@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/action-about-qt.png</file>
+        <file>icons/action-exit.png</file>
+        <file>icons/qookmarks.png</file>
+        <file>icons/action-configure.png</file>
+    </qresource>
+</RCC>

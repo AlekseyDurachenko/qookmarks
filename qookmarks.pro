@@ -36,10 +36,12 @@ HEADERS        +=                                           \
     src/global.h                                            \
     src/cmainwindow.h                                       \
     src/caboutdialog.h                                      \
+    src/ctagitem.h                                          \
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
     src/caboutdialog.cpp                                    \
+    src/ctagitem.cpp                                        \
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \

@@ -21,7 +21,7 @@ class CTagItem : public QObject
 {
     Q_OBJECT
 public:
-    enum Type {Normal = 0, Unlabeled }
+    enum Type { Normal = 0, Unlabeled };
     explicit CTagItem(Type type, int row, QObject *parent = 0);
 
     inline Type type() const;
@@ -32,7 +32,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     QVariant data(int column, int role) const;
     CTagItem *child(int row);
-    void add(CTagItem *item);
+    CTagItem *add(const QString &tagName);
 
     inline const QString &tagName() const;
     void setTagName(const QString &tagName);
@@ -42,7 +42,7 @@ signals:
     void changed(CTagItem *parent, int first, int last);
 private:
     Type m_type;
-    int m_row;
+    int m_row;    
     QList<CTagItem *> m_childList;
     QString m_tagName;
 };

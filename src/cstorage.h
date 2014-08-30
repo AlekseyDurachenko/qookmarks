@@ -12,26 +12,21 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include "cstorage.h"
-#include "global.h"
-#include <QApplication>
-#include <QSettings>
-#include <QDebug>
+#ifndef CSTORAGE_H
+#define CSTORAGE_H
 
-int main(int argc, char *argv[])
+#include "ctagitem.h"
+#include <QtSql>
+
+class CStorage
 {
-    QApplication app(argc, argv);
+public:
+    static bool open(const QString &fileName);
+    // returns the last_insert_id, or -1 if failed
+    static int insertTag(int parentId, const QString &tagName, CTagItem::Type type);
+private:
+    static QString m_dbFileName;
+    static QSqlDatabase m_db;
+};
 
-    G_SETTINGS_INIT();
-    QString dbFileName = QFileInfo(settings.fileName()).absolutePath()
-            + QDir::separator() + "bookmarks.db";
-    qDebug() << "filename: " << dbFileName;
-    qDebug() << "open db : " << CStorage::open(dbFileName);
-    CTagItem::create("test 123");
-
-    CMainWindow mainWindow;
-    mainWindow.show();
-
-    return app.exec();
-}
+#endif // CSTORAGE_H

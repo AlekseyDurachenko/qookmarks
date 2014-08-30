@@ -21,40 +21,67 @@ class CTagItem : public QObject
 {
     Q_OBJECT
 public:
-    enum Type { Normal = 0, Unlabeled };
-    explicit CTagItem(Type type, int row, QObject *parent = 0);
-
-    inline Type type() const;
+    enum Type
+    {
+        Normal      = 0,
+        Untagged    = 1,
+        ReadLater   = 2,
+        Favorites   = 3
+    };
+private:
+    CTagItem(int id, Type type, const QString &tagName, QObject *parent = 0);
+public:
     inline int row() const;
+    inline int id() const;
+    inline Type type() const;
+
+    inline const QString &tagName() const;
+    void setTagName(const QString &tagName);
 
     inline int columnCount() const;
     inline int childCount() const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     QVariant data(int column, int role) const;
     CTagItem *child(int row);
-    CTagItem *add(const QString &tagName);
-
-    inline const QString &tagName() const;
-    void setTagName(const QString &tagName);
+    void add(CTagItem *item);
+public:
+    static CTagItem *create(const QString &tagName, CTagItem *parent = 0);
+    // This method creates the root item (without a parent),
+    // if root item is present in the database, tag will be readed
+    // from the database (if type == Normal, all tag tree will be readed)
+    static CTagItem *create(CTagItem::Type type);
 signals:
     void inserted(CTagItem *parent, int first, int last);
     void removed(CTagItem *parent, int first, int last);
     void changed(CTagItem *parent, int first, int last);
 private:
+    void setRow(int row);
+private:
+    int m_row;
+    int m_id;
     Type m_type;
-    int m_row;    
-    QList<CTagItem *> m_childList;
     QString m_tagName;
+    QList<CTagItem *> m_childList;
 };
+
+int CTagItem::row() const
+{
+    return m_row;
+}
+
+int CTagItem::id() const
+{
+    return m_id;
+}
 
 CTagItem::Type CTagItem::type() const
 {
     return m_type;
 }
 
-int CTagItem::row() const
+const QString &CTagItem::tagName() const
 {
-    return m_row;
+    return m_tagName;
 }
 
 int CTagItem::columnCount() const
@@ -65,11 +92,6 @@ int CTagItem::columnCount() const
 int CTagItem::childCount() const
 {
     return m_childList.count();
-}
-
-const QString &CTagItem::tagName() const
-{
-    return m_tagName;
 }
 
 #endif // CTAGITEM_H

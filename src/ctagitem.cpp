@@ -13,12 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitem.h"
+#include "cstorage.h"
 #include <QVariant>
 
-CTagItem::CTagItem(Type type, int row, QObject *parent) : QObject(parent)
+CTagItem::CTagItem(int id, Type type, const QString &tagName,
+        QObject *parent) : QObject(parent)
 {
-    m_row = row;
+    m_row = -1;
+    m_id = id;
     m_type = type;
+    m_tagName = tagName;
+}
+
+void CTagItem::setTagName(const QString &tagName)
+{
+    m_tagName = tagName;
+    // TODO: update database
+    emit changed(qobject_cast<CTagItem *>(parent()), row(), row());
 }
 
 QVariant CTagItem::headerData(int section,
@@ -53,17 +64,28 @@ CTagItem *CTagItem::child(int row)
     return m_childList[row];
 }
 
-CTagItem *CTagItem::add(const QString &tagName)
+void CTagItem::add(CTagItem *item)
 {
-    CTagItem *item = new CTagItem(Normal, m_childList.count(), this);
-    item->setTagName(tagName);
+    int row = m_childList.count();
+    item->setRow(row);
     m_childList.push_back(item);
-    emit inserted(this, item->row(), item->row());
-    return item;
+    emit inserted(this, row, row);
 }
 
-void CTagItem::setTagName(const QString &tagName)
+CTagItem *CTagItem::create(const QString &tagName, CTagItem *parent)
 {
-    m_tagName = tagName;
-    emit changed(qobject_cast<CTagItem *>(parent()), row(), row());
+    int parentId = ((parent) ? (parent->id()) : (-1));
+    int id = CStorage::insertTag(parentId, tagName, Normal);
+    return new CTagItem(id, Normal, tagName, parent);
+}
+
+CTagItem *CTagItem::create(CTagItem::Type type)
+{
+    Q_UNUSED(type)
+    return 0;
+}
+
+void CTagItem::setRow(int row)
+{
+    m_row = row;
 }

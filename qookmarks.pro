@@ -37,11 +37,13 @@ HEADERS        +=                                           \
     src/cmainwindow.h                                       \
     src/caboutdialog.h                                      \
     src/ctagitem.h                                          \
+    src/cstorage.h                                          \
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
     src/caboutdialog.cpp                                    \
     src/ctagitem.cpp                                        \
+    src/cstorage.cpp                                        \
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \
@@ -50,6 +52,7 @@ FORMS          +=                                           \
 RESOURCES      +=                                           \
     qrc/icons.qrc                                           \
     qrc/about.qrc                                           \
+    qrc/sql.qrc                                             \
 
 OTHER_FILES    +=                                           \
     AUTHORS                                                 \

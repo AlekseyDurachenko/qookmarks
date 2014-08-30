@@ -28,7 +28,8 @@ int main(int argc, char *argv[])
             + QDir::separator() + "bookmarks.db";
     qDebug() << "filename: " << dbFileName;
     qDebug() << "open db : " << CStorage::open(dbFileName);
-    CTagItem::create("test 123");
+    CTagItem *item = CTagItem::create("tag");
+    item->setTagName("renamed tag");
 
     CMainWindow mainWindow;
     mainWindow.show();

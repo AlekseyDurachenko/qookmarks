@@ -28,7 +28,7 @@ CTagItem::CTagItem(int id, Type type, const QString &tagName,
 void CTagItem::setTagName(const QString &tagName)
 {
     m_tagName = tagName;
-    // TODO: update database
+    CStorage::updateTagName(m_id, tagName);
     emit changed(qobject_cast<CTagItem *>(parent()), row(), row());
 }
 

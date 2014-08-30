@@ -50,3 +50,12 @@ int CStorage::insertTag(int parentId, const QString &tagName,
 
     return -1;
 }
+
+bool CStorage::updateTagName(int id, const QString &tagName)
+{
+    QSqlQuery query(m_db);
+    query.prepare("UPDATE TTag SET tagName = :tagName WHERE id = :id");
+    query.bindValue("tagname", tagName);
+    query.bindValue("id", id);
+    return query.exec();
+}

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>825</width>
-    <height>335</height>
+    <width>816</width>
+    <height>424</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,14 +18,18 @@
     <normaloff>:/icons/qookmarks.png</normaloff>:/icons/qookmarks.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout"/>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTreeView" name="treeView_tags"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>825</width>
+     <width>816</width>
      <height>20</height>
     </rect>
    </property>

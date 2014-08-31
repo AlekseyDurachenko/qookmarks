@@ -38,12 +38,14 @@ HEADERS        +=                                           \
     src/caboutdialog.h                                      \
     src/ctagitem.h                                          \
     src/cstorage.h                                          \
+    src/ctagitemmodel.h                                     \
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
     src/caboutdialog.cpp                                    \
     src/ctagitem.cpp                                        \
     src/cstorage.cpp                                        \
+    src/ctagitemmodel.cpp                                   \
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \

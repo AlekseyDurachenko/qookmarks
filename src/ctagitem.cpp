@@ -29,7 +29,7 @@ void CTagItem::setTagName(const QString &tagName)
 {
     m_tagName = tagName;
     CStorage::updateTagName(m_id, tagName);
-    emit changed(qobject_cast<CTagItem *>(parent()), row(), row());
+    emit dataChanged(qobject_cast<CTagItem *>(parent()), row(), row());
 }
 
 QVariant CTagItem::headerData(int section,
@@ -69,12 +69,16 @@ void CTagItem::add(CTagItem *item)
     int row = m_childList.count();
     item->setRow(row);
     m_childList.push_back(item);
-    emit inserted(this, row, row);
+    emit rowInserted(this, row, row);
 }
 
-CTagItem *CTagItem::create(const QString &tagName, CTagItem *parent)
+CTagItem *CTagItem::create(const QString &tagName, QObject *parent)
 {
-    int parentId = ((parent) ? (parent->id()) : (-1));
+    int parentId = -1;
+    if (parent && parent->metaObject()->className() == QByteArray("CTagItem"))
+    {
+        parentId = qobject_cast<CTagItem *>(parent)->id();
+    }
     int id = CStorage::insertTag(parentId, tagName, Normal);
     return new CTagItem(id, Normal, tagName, parent);
 }

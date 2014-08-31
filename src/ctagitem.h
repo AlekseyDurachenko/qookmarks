@@ -45,15 +45,15 @@ public:
     CTagItem *child(int row);
     void add(CTagItem *item);
 public:
-    static CTagItem *create(const QString &tagName, CTagItem *parent = 0);
+    static CTagItem *create(const QString &tagName, QObject *parent = 0);
     // This method creates the root item (without a parent),
     // if root item is present in the database, tag will be readed
     // from the database (if type == Normal, all tag tree will be readed)
     static CTagItem *create(CTagItem::Type type);
 signals:
-    void inserted(CTagItem *parent, int first, int last);
-    void removed(CTagItem *parent, int first, int last);
-    void changed(CTagItem *parent, int first, int last);
+    void rowInserted(CTagItem *parent, int first, int last);
+    void rowRemoved(CTagItem *parent, int first, int last);
+    void dataChanged(CTagItem *parent, int first, int last);
 private:
     void setRow(int row);
 private:

@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cmainwindow.h"
 #include "ui_cmainwindow.h"
+#include "ctagitemmodel.h"
 #include "caboutdialog.h"
 #include "global.h"
 
@@ -22,6 +23,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(G_SHORT_PROGRAM_NAME());
+    ui->treeView_tags->setModel(new CTagItemModel(this));
 }
 
 CMainWindow::~CMainWindow()

@@ -25,6 +25,7 @@ public:
     // returns the last_insert_id, or -1 if failed
     static int insertTag(int parentId, const QString &tagName, CTagItem::Type type);
     static bool updateTagName(int id, const QString &tagName);
+    static QSqlQuery selectTags(CTagItem::Type type, int parentId = -1);
 private:
     static QString m_dbFileName;
     static QSqlDatabase m_db;

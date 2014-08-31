@@ -59,3 +59,14 @@ bool CStorage::updateTagName(int id, const QString &tagName)
     query.bindValue("id", id);
     return query.exec();
 }
+
+QSqlQuery CStorage::selectTags(CTagItem::Type type, int parentId)
+{
+    QSqlQuery query(m_db);
+    query.prepare("SELECT id, tagName FROM TTag "
+                  "WHERE type = :type and parentId = :parentid");
+    query.bindValue(":type", static_cast<int>(type));
+    query.bindValue(":parentid", parentId);
+    query.exec();
+    return query;
+}

@@ -52,6 +52,24 @@ QVariant CTagItem::data(int column, int role) const
     {
         if (column == 0)
         {
+            if (parent()
+                    && parent()->metaObject()->className() == QByteArray("CTagItem")
+                    && qobject_cast<CTagItem *>(parent())->id() == -1)
+            {
+                switch(m_type)
+                {
+                case RootItem:
+                    return tr("/");
+                case Normal:
+                    return tr("Tags");
+                case Untagged:
+                    return tr("Untagged");
+                case ReadLater:
+                    return tr("Read it later");
+                case Favorites:
+                    return tr("Favorites");
+                }
+            }
             return m_tagName;
         }
     }
@@ -83,10 +101,37 @@ CTagItem *CTagItem::create(const QString &tagName, QObject *parent)
     return new CTagItem(id, Normal, tagName, parent);
 }
 
-CTagItem *CTagItem::create(CTagItem::Type type)
+void CTagItem::createItemTree(CTagItem::Type type, CTagItem *parent)
 {
-    Q_UNUSED(type)
-    return 0;
+    QSqlQuery query = CStorage::selectTags(type, parent->id());
+    while (query.next())
+    {
+        int id = query.value(0).toInt();
+        QString tagName = query.value(1).toString();
+        CTagItem *item = new CTagItem(id, type, tagName, parent);
+        parent->add(item);
+        createItemTree(type, item);
+    }
+}
+
+CTagItem *CTagItem::create(CTagItem::Type type, QObject *parent)
+{
+    if (type == RootItem)
+    {
+        return new CTagItem(-1, type, "", parent);
+    }
+
+    QSqlQuery query = CStorage::selectTags(type);
+    if (query.next())
+    {
+        int id = query.value(0).toInt();
+        CTagItem *item = new CTagItem(id, type, "", parent);
+        createItemTree(type, item);
+        return item;
+    }
+
+    int id = CStorage::insertTag(-1, "", type);
+    return new CTagItem(id, type, "", parent);
 }
 
 void CTagItem::setRow(int row)

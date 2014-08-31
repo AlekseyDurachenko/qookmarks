@@ -23,6 +23,7 @@ class CTagItem : public QObject
 public:
     enum Type
     {
+        RootItem    = -1,
         Normal      = 0,
         Untagged    = 1,
         ReadLater   = 2,
@@ -49,13 +50,14 @@ public:
     // This method creates the root item (without a parent),
     // if root item is present in the database, tag will be readed
     // from the database (if type == Normal, all tag tree will be readed)
-    static CTagItem *create(CTagItem::Type type);
+    static CTagItem *create(CTagItem::Type type, QObject *parent = 0);
 signals:
     void rowInserted(CTagItem *parent, int first, int last);
     void rowRemoved(CTagItem *parent, int first, int last);
     void dataChanged(CTagItem *parent, int first, int last);
 private:
     void setRow(int row);
+    static void createItemTree(CTagItem::Type type, CTagItem *parent);
 private:
     int m_row;
     int m_id;

@@ -18,7 +18,11 @@
 CTagItemModel::CTagItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
-    m_rootItem = CTagItem::create("/", this);
+    m_rootItem = CTagItem::create(CTagItem::RootItem, this);
+    m_rootItem->add(CTagItem::create(CTagItem::Normal, m_rootItem));
+    m_rootItem->add(CTagItem::create(CTagItem::Untagged, m_rootItem));
+    m_rootItem->add(CTagItem::create(CTagItem::ReadLater, m_rootItem));
+    m_rootItem->add(CTagItem::create(CTagItem::Favorites, m_rootItem));
     connect(m_rootItem, SIGNAL(rowInserted(CTagItem *,int,int)),
             this, SLOT(slot_rowInserted(CTagItem *,int,int)));
     connect(m_rootItem, SIGNAL(rowRemoved(CTagItem *,int,int)),

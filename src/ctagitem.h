@@ -15,11 +15,11 @@
 #ifndef CTAGITEM_H
 #define CTAGITEM_H
 
-#include <QObject>
+#include "ctagitemcallbackinterface.h"
+#include <QVariant>
 
-class CTagItem : public QObject
+class CTagItem
 {
-    Q_OBJECT
 public:
     enum Type
     {
@@ -30,11 +30,15 @@ public:
         Favorites   = 3
     };
 private:
-    CTagItem(int id, Type type, const QString &tagName, QObject *parent = 0);
+    CTagItem(int id, Type type, const QString &tagName,
+            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
 public:
+    virtual ~CTagItem();
+
     inline int row() const;
     inline int id() const;
     inline Type type() const;
+    inline CTagItem *parent() const;
 
     inline const QString &tagName() const;
     void setTagName(const QString &tagName);
@@ -46,23 +50,24 @@ public:
     CTagItem *child(int row);
     void add(CTagItem *item);
 public:
-    static CTagItem *create(const QString &tagName, QObject *parent = 0);
+    static CTagItem *create(const QString &tagName,
+            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
     // This method creates the root item (without a parent),
     // if root item is present in the database, tag will be readed
     // from the database (if type == Normal, all tag tree will be readed)
-    static CTagItem *create(CTagItem::Type type, QObject *parent = 0);
-signals:
-    void rowInserted(CTagItem *parent, int first, int last);
-    void rowRemoved(CTagItem *parent, int first, int last);
-    void dataChanged(CTagItem *parent, int first, int last);
+    static CTagItem *create(CTagItem::Type type,
+            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
 private:
     void setRow(int row);
-    static void createItemTree(CTagItem::Type type, CTagItem *parent);
+    static void createItemTree(CTagItem::Type type,
+            CTagItemCallBackInterface *callback, CTagItem *parent);
 private:
     int m_row;
     int m_id;
     Type m_type;
     QString m_tagName;
+    CTagItemCallBackInterface *m_callback;
+    CTagItem *m_parent;
     QList<CTagItem *> m_childList;
 };
 
@@ -79,6 +84,11 @@ int CTagItem::id() const
 CTagItem::Type CTagItem::type() const
 {
     return m_type;
+}
+
+CTagItem *CTagItem::parent() const
+{
+    return m_parent;
 }
 
 const QString &CTagItem::tagName() const

@@ -17,19 +17,29 @@
 #include <QVariant>
 
 CTagItem::CTagItem(int id, Type type, const QString &tagName,
-        QObject *parent) : QObject(parent)
+        CTagItemCallBackInterface *callback, CTagItem *parent)
 {
     m_row = -1;
     m_id = id;
     m_type = type;
     m_tagName = tagName;
+    m_callback = callback;
+    m_parent = parent;
+}
+
+CTagItem::~CTagItem()
+{
+    foreach (CTagItem *item, m_childList)
+    {
+        delete item;
+    }
 }
 
 void CTagItem::setTagName(const QString &tagName)
 {
     m_tagName = tagName;
     CStorage::updateTagName(m_id, tagName);
-    emit dataChanged(qobject_cast<CTagItem *>(parent()), row(), row());
+    m_callback->rowChange(m_parent, m_row, m_row);
 }
 
 QVariant CTagItem::headerData(int section,
@@ -39,7 +49,7 @@ QVariant CTagItem::headerData(int section,
     {
         if (section == 0)
         {
-            return tr("Tag name");
+            return QObject::tr("Tag name");
         }
     }
 
@@ -52,24 +62,23 @@ QVariant CTagItem::data(int column, int role) const
     {
         if (column == 0)
         {
-            if (parent()
-                    && parent()->metaObject()->className() == QByteArray("CTagItem")
-                    && qobject_cast<CTagItem *>(parent())->id() == -1)
+            if (m_parent && m_parent->id() == -1)
             {
                 switch(m_type)
                 {
                 case RootItem:
-                    return tr("/");
+                    return QObject::tr("/");
                 case Normal:
-                    return tr("Tags");
+                    return QObject::tr("Tags");
                 case Untagged:
-                    return tr("Untagged");
+                    return QObject::tr("Untagged");
                 case ReadLater:
-                    return tr("Read it later");
+                    return QObject::tr("Read it later");
                 case Favorites:
-                    return tr("Favorites");
+                    return QObject::tr("Favorites");
                 }
             }
+
             return m_tagName;
         }
     }
@@ -87,51 +96,50 @@ void CTagItem::add(CTagItem *item)
     int row = m_childList.count();
     item->setRow(row);
     m_childList.push_back(item);
-    emit rowInserted(this, row, row);
+    m_callback->rowInsert(this, row, row);
 }
 
-CTagItem *CTagItem::create(const QString &tagName, QObject *parent)
+CTagItem *CTagItem::create(const QString &tagName,
+        CTagItemCallBackInterface *callback, CTagItem *parent)
 {
-    int parentId = -1;
-    if (parent && parent->metaObject()->className() == QByteArray("CTagItem"))
-    {
-        parentId = qobject_cast<CTagItem *>(parent)->id();
-    }
+    int parentId = ((parent) ? (parent->id()) : (-1));
     int id = CStorage::insertTag(parentId, tagName, Normal);
-    return new CTagItem(id, Normal, tagName, parent);
+    return new CTagItem(id, Normal, tagName, callback, parent);
 }
 
-void CTagItem::createItemTree(CTagItem::Type type, CTagItem *parent)
+void CTagItem::createItemTree(CTagItem::Type type,
+        CTagItemCallBackInterface *callback, CTagItem *parent)
 {
     QSqlQuery query = CStorage::selectTags(type, parent->id());
     while (query.next())
     {
         int id = query.value(0).toInt();
         QString tagName = query.value(1).toString();
-        CTagItem *item = new CTagItem(id, type, tagName, parent);
+        CTagItem *item = new CTagItem(id, type, tagName, callback, parent);
         parent->add(item);
-        createItemTree(type, item);
+        createItemTree(type, callback, item);
     }
 }
 
-CTagItem *CTagItem::create(CTagItem::Type type, QObject *parent)
+CTagItem *CTagItem::create(CTagItem::Type type,
+        CTagItemCallBackInterface *callback, CTagItem *parent)
 {
     if (type == RootItem)
     {
-        return new CTagItem(-1, type, "", parent);
+        return new CTagItem(-1, type, "", callback, parent);
     }
 
     QSqlQuery query = CStorage::selectTags(type);
     if (query.next())
     {
         int id = query.value(0).toInt();
-        CTagItem *item = new CTagItem(id, type, "", parent);
-        createItemTree(type, item);
+        CTagItem *item = new CTagItem(id, type, "", callback, parent);
+        createItemTree(type, callback, item);
         return item;
     }
 
     int id = CStorage::insertTag(-1, "", type);
-    return new CTagItem(id, type, "", parent);
+    return new CTagItem(id, type, "", callback, parent);
 }
 
 void CTagItem::setRow(int row)

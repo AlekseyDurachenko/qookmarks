@@ -16,13 +16,15 @@
 #define CTAGITEMMODEL_H
 
 #include "ctagitem.h"
+#include "ctagitemcallbackinterface.h"
 #include <QAbstractItemModel>
 
-class CTagItemModel : public QAbstractItemModel
+class CTagItemModel : public QAbstractItemModel, CTagItemCallBackInterface
 {
     Q_OBJECT
 public:
     explicit CTagItemModel(QObject *parent = 0);
+    virtual ~CTagItemModel();
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -31,12 +33,13 @@ public:
     virtual QModelIndex parent(const QModelIndex &index) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-private slots:
-    void slot_rowInserted(CTagItem *parent, int first, int last);
-    void slot_rowRemoved(CTagItem *parent, int first, int last);
-    void slot_dataChanged(CTagItem *parent, int first, int last);
+
+    virtual void rowInsert(CTagItem *parent, int first, int last);
+    virtual void rowRemove(CTagItem *parent, int first, int last);
+    virtual void rowChange(CTagItem *parent, int first, int last);
 private:
     CTagItem *m_rootItem;
+    bool m_init;
 };
 
 #endif // CTAGITEMMODEL_H

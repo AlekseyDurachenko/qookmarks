@@ -39,6 +39,7 @@ HEADERS        +=                                           \
     src/ctagitem.h                                          \
     src/cstorage.h                                          \
     src/ctagitemmodel.h                                     \
+    src/ctagitemcallbackinterface.h                         \
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
@@ -46,6 +47,7 @@ SOURCES        +=                                           \
     src/ctagitem.cpp                                        \
     src/cstorage.cpp                                        \
     src/ctagitemmodel.cpp                                   \
+    src/ctagitemcallbackinterface.cpp                       \
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \

@@ -18,17 +18,18 @@
 CTagItemModel::CTagItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
-    m_rootItem = CTagItem::create(CTagItem::RootItem, this);
-    m_rootItem->add(CTagItem::create(CTagItem::Normal, m_rootItem));
-    m_rootItem->add(CTagItem::create(CTagItem::Untagged, m_rootItem));
-    m_rootItem->add(CTagItem::create(CTagItem::ReadLater, m_rootItem));
-    m_rootItem->add(CTagItem::create(CTagItem::Favorites, m_rootItem));
-    connect(m_rootItem, SIGNAL(rowInserted(CTagItem *,int,int)),
-            this, SLOT(slot_rowInserted(CTagItem *,int,int)));
-    connect(m_rootItem, SIGNAL(rowRemoved(CTagItem *,int,int)),
-            this, SLOT(slot_rowRemoved(CTagItem *,int,int)));
-    connect(m_rootItem, SIGNAL(dataChanged(CTagItem *,int,int)),
-            this, SLOT(slot_dataChanged(CTagItem *,int,int)));
+    m_init = true; // hack, disable call the callback functions
+    m_rootItem = CTagItem::create(CTagItem::RootItem, this, 0);
+    m_rootItem->add(CTagItem::create(CTagItem::Normal, this, m_rootItem));
+    m_rootItem->add(CTagItem::create(CTagItem::Untagged, this, m_rootItem));
+    m_rootItem->add(CTagItem::create(CTagItem::ReadLater, this, m_rootItem));
+    m_rootItem->add(CTagItem::create(CTagItem::Favorites, this, m_rootItem));
+    m_init = false;
+}
+
+CTagItemModel::~CTagItemModel()
+{
+    delete m_rootItem;
 }
 
 QVariant CTagItemModel::data(const QModelIndex &index, int role) const
@@ -129,8 +130,13 @@ int CTagItemModel::columnCount(const QModelIndex &parent) const
     return static_cast<CTagItem *>(parent.internalPointer())->columnCount();
 }
 
-void CTagItemModel::slot_rowInserted(CTagItem *parent, int first, int last)
+void CTagItemModel::rowInsert(CTagItem *parent, int first, int last)
 {
+    if (m_init)
+    {
+        return;
+    }
+
     if (parent == m_rootItem)
     {
         beginInsertRows(QModelIndex(), first, last);
@@ -142,8 +148,13 @@ void CTagItemModel::slot_rowInserted(CTagItem *parent, int first, int last)
     endInsertRows();
 }
 
-void CTagItemModel::slot_rowRemoved(CTagItem *parent, int first, int last)
+void CTagItemModel::rowRemove(CTagItem *parent, int first, int last)
 {
+    if (m_init)
+    {
+        return;
+    }
+
     if (parent == m_rootItem)
     {
         beginRemoveRows(QModelIndex(), first, last);
@@ -155,8 +166,13 @@ void CTagItemModel::slot_rowRemoved(CTagItem *parent, int first, int last)
     endRemoveRows();
 }
 
-void CTagItemModel::slot_dataChanged(CTagItem *parent, int first, int last)
+void CTagItemModel::rowChange(CTagItem *parent, int first, int last)
 {
+    if (m_init)
+    {
+        return;
+    }
+
     emit dataChanged(createIndex(first, 0, parent->parent()),
             createIndex(last, parent->columnCount(), parent->parent()));
 }

@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitemmodel.h"
+#include <QIcon>
 #include <QDebug>
 
 CTagItemModel::CTagItemModel(QObject *parent) :
@@ -39,8 +40,54 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    return static_cast<CTagItem *>
-            (index.internalPointer())->data(index.column(), role);
+    CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
+
+    if (role == Qt::DisplayRole)
+    {
+        if (index.column() == 0)
+        {
+            if (item->parent() && item->parent()->id() == -1)
+            {
+                switch(item->type())
+                {
+                case CTagItem::RootItem:
+                    return QObject::tr("/");
+                case CTagItem::Tag:
+                    return QObject::tr("Tags");
+                case CTagItem::Untagged:
+                    return QObject::tr("Untagged");
+                case CTagItem::ReadLater:
+                    return QObject::tr("Read it later");
+                case CTagItem::Favorites:
+                    return QObject::tr("Favorites");
+                }
+            }
+
+            return item->tagName();
+        }
+    }
+
+    if (role == Qt::DecorationRole)
+    {
+        if (index.column() == 0)
+        {
+            switch(item->type())
+            {
+            case CTagItem::Tag:
+                return QIcon(":/icons/bookmark-tag.png");
+            case CTagItem::Untagged:
+                return QIcon(":/icons/bookmark-untagged.png");
+            case CTagItem::ReadLater:
+                return QIcon(":/icons/bookmark-readlater.png");
+            case CTagItem::Favorites:
+                return QIcon(":/icons/bookmark-favorites.png");
+            default:
+                ;
+            }
+        }
+    }
+
+    return QVariant();
 }
 
 Qt::ItemFlags CTagItemModel::flags(const QModelIndex &index) const
@@ -56,12 +103,15 @@ Qt::ItemFlags CTagItemModel::flags(const QModelIndex &index) const
 QVariant CTagItemModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
-    if (!m_rootItem)
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
-        return QVariant();
+        if (section == 0)
+        {
+            return QObject::tr("Tag name");
+        }
     }
 
-    return m_rootItem->headerData(section, orientation, role);
+    return QVariant();
 }
 
 QModelIndex CTagItemModel::index(int row, int column,
@@ -115,19 +165,9 @@ int CTagItemModel::rowCount(const QModelIndex &parent) const
     return parentItem->childCount();
 }
 
-int CTagItemModel::columnCount(const QModelIndex &parent) const
+int CTagItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    if (!m_rootItem)
-    {
-        return 0;
-    }
-
-    if (!parent.isValid())
-    {
-        return m_rootItem->columnCount();
-    }
-
-    return static_cast<CTagItem *>(parent.internalPointer())->columnCount();
+    return 1;
 }
 
 void CTagItemModel::rowInsert(CTagItem *parent, int first, int last)
@@ -174,5 +214,5 @@ void CTagItemModel::rowChange(CTagItem *parent, int first, int last)
     }
 
     emit dataChanged(createIndex(first, 0, parent->parent()),
-            createIndex(last, parent->columnCount(), parent->parent()));
+            createIndex(last, 1, parent->parent()));
 }

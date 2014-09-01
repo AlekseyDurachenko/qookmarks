@@ -14,7 +14,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitem.h"
 #include "cstorage.h"
-#include <QVariant>
 
 CTagItem::CTagItem(int id, Type type, const QString &tagName,
         CTagItemCallBackInterface *callback, CTagItem *parent)
@@ -40,70 +39,6 @@ void CTagItem::setTagName(const QString &tagName)
     m_tagName = tagName;
     CStorage::updateTagName(m_id, tagName);
     m_callback->rowChange(m_parent, m_row, m_row);
-}
-
-QVariant CTagItem::headerData(int section,
-        Qt::Orientation orientation, int role) const
-{
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-    {
-        if (section == 0)
-        {
-            return QObject::tr("Tag name");
-        }
-    }
-
-    return QVariant();
-}
-
-QVariant CTagItem::data(int column, int role) const
-{
-    if (role == Qt::DisplayRole)
-    {
-        if (column == 0)
-        {
-            if (m_parent && m_parent->id() == -1)
-            {
-                switch(m_type)
-                {
-                case RootItem:
-                    return QObject::tr("/");
-                case Tag:
-                    return QObject::tr("Tags");
-                case Untagged:
-                    return QObject::tr("Untagged");
-                case ReadLater:
-                    return QObject::tr("Read it later");
-                case Favorites:
-                    return QObject::tr("Favorites");
-                }
-            }
-
-            return m_tagName;
-        }
-    }
-
-    if (role == Qt::DecorationRole)
-    {
-        if (column == 0)
-        {
-            switch(m_type)
-            {
-            case Tag:
-                return QIcon(":/icons/bookmark-tag.png");
-            case Untagged:
-                return QIcon(":/icons/bookmark-untagged.png");
-            case ReadLater:
-                return QIcon(":/icons/bookmark-readlater.png");
-            case Favorites:
-                return QIcon(":/icons/bookmark-favorites.png");
-            default:
-                ;
-            }
-        }
-    }
-
-    return QVariant();
 }
 
 CTagItem *CTagItem::child(int row)

@@ -16,7 +16,8 @@
 #define CTAGITEM_H
 
 #include "ctagitemcallbackinterface.h"
-#include <QVariant>
+#include <QString>
+#include <QList>
 
 class CTagItem
 {
@@ -43,10 +44,7 @@ public:
     inline const QString &tagName() const;
     void setTagName(const QString &tagName);
 
-    inline int columnCount() const;
     inline int childCount() const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    QVariant data(int column, int role) const;
     CTagItem *child(int row);
     void add(CTagItem *item);
 public:
@@ -94,11 +92,6 @@ CTagItem *CTagItem::parent() const
 const QString &CTagItem::tagName() const
 {
     return m_tagName;
-}
-
-int CTagItem::columnCount() const
-{
-    return 1;
 }
 
 int CTagItem::childCount() const

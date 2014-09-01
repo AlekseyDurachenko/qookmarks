@@ -127,7 +127,7 @@ CTagItem *CTagItem::create(const QString &tagName,
     return new CTagItem(id, Tag, tagName, callback, parent);
 }
 
-void CTagItem::createItemTree(CTagItem::Type type,
+void CTagItem::readItemTree(CTagItem::Type type,
         CTagItemCallBackInterface *callback, CTagItem *parent)
 {
     QSqlQuery query = CStorage::selectTags(type, parent->id());
@@ -135,9 +135,11 @@ void CTagItem::createItemTree(CTagItem::Type type,
     {
         int id = query.value(0).toInt();
         QString tagName = query.value(1).toString();
+
         CTagItem *item = new CTagItem(id, type, tagName, callback, parent);
+        readItemTree(type, callback, item);
+
         parent->add(item);
-        createItemTree(type, callback, item);
     }
 }
 
@@ -153,8 +155,10 @@ CTagItem *CTagItem::create(CTagItem::Type type,
     if (query.next())
     {
         int id = query.value(0).toInt();
+
         CTagItem *item = new CTagItem(id, type, "", callback, parent);
-        createItemTree(type, callback, item);
+        readItemTree(type, callback, item);
+
         return item;
     }
 

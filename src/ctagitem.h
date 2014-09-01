@@ -24,10 +24,10 @@ public:
     enum Type
     {
         RootItem    = -1,
-        Tag      = 0,
-        Untagged    = 1,
-        ReadLater   = 2,
-        Favorites   = 3
+        Tag         =  0,
+        Untagged    =  1,
+        ReadLater   =  2,
+        Favorites   =  3
     };
 private:
     CTagItem(int id, Type type, const QString &tagName,
@@ -59,7 +59,7 @@ public:
             CTagItemCallBackInterface *callback, CTagItem *parent = 0);
 private:
     void setRow(int row);
-    static void createItemTree(CTagItem::Type type,
+    static void readItemTree(CTagItem::Type type,
             CTagItemCallBackInterface *callback, CTagItem *parent);
 private:
     int m_row;

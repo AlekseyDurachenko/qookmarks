@@ -20,7 +20,7 @@ CTagItemModel::CTagItemModel(QObject *parent) :
 {
     m_init = true; // hack, disable call the callback functions
     m_rootItem = CTagItem::create(CTagItem::RootItem, this, 0);
-    m_rootItem->add(CTagItem::create(CTagItem::Normal, this, m_rootItem));
+    m_rootItem->add(CTagItem::create(CTagItem::Tag, this, m_rootItem));
     m_rootItem->add(CTagItem::create(CTagItem::Untagged, this, m_rootItem));
     m_rootItem->add(CTagItem::create(CTagItem::ReadLater, this, m_rootItem));
     m_rootItem->add(CTagItem::create(CTagItem::Favorites, this, m_rootItem));

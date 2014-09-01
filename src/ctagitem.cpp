@@ -68,7 +68,7 @@ QVariant CTagItem::data(int column, int role) const
                 {
                 case RootItem:
                     return QObject::tr("/");
-                case Normal:
+                case Tag:
                     return QObject::tr("Tags");
                 case Untagged:
                     return QObject::tr("Untagged");
@@ -103,8 +103,8 @@ CTagItem *CTagItem::create(const QString &tagName,
         CTagItemCallBackInterface *callback, CTagItem *parent)
 {
     int parentId = ((parent) ? (parent->id()) : (-1));
-    int id = CStorage::insertTag(parentId, tagName, Normal);
-    return new CTagItem(id, Normal, tagName, callback, parent);
+    int id = CStorage::insertTag(parentId, tagName, Tag);
+    return new CTagItem(id, Tag, tagName, callback, parent);
 }
 
 void CTagItem::createItemTree(CTagItem::Type type,

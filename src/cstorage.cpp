@@ -28,7 +28,16 @@ bool CStorage::open(const QString &fileName)
         QSqlQuery query(m_db);
         QFile file(":/sql/createtables.sql");
         file.open(QIODevice::ReadOnly);
-        return query.exec(file.readAll());
+        foreach(QString statement,
+                QString::fromUtf8(file.readAll()).split("---NEXT---"))
+        {
+            if (!query.exec(statement))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     return false;

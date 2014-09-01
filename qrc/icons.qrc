@@ -4,5 +4,9 @@
         <file>icons/action-exit.png</file>
         <file>icons/qookmarks.png</file>
         <file>icons/action-configure.png</file>
+        <file>icons/bookmark-favorites.png</file>
+        <file>icons/bookmark-readlater.png</file>
+        <file>icons/bookmark-tag.png</file>
+        <file>icons/bookmark-untagged.png</file>
     </qresource>
 </RCC>

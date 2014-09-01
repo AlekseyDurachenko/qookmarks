@@ -83,6 +83,26 @@ QVariant CTagItem::data(int column, int role) const
         }
     }
 
+    if (role == Qt::DecorationRole)
+    {
+        if (column == 0)
+        {
+            switch(m_type)
+            {
+            case Tag:
+                return QIcon(":/icons/bookmark-tag.png");
+            case Untagged:
+                return QIcon(":/icons/bookmark-untagged.png");
+            case ReadLater:
+                return QIcon(":/icons/bookmark-readlater.png");
+            case Favorites:
+                return QIcon(":/icons/bookmark-favorites.png");
+            default:
+                ;
+            }
+        }
+    }
+
     return QVariant();
 }
 

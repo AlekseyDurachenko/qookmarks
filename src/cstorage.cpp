@@ -79,3 +79,33 @@ QSqlQuery CStorage::selectTags(CTagItem::Type type, int parentId)
     query.exec();
     return query;
 }
+
+int CStorage::insertBookmark(const QString &title, const QString &link)
+{
+    QSqlQuery query(m_db);
+    query.prepare("INSERT INTO TBookmark(title, link) "
+                  "VALUES(:title, :link)");
+    query.bindValue("title", title);
+    query.bindValue("link", link);
+    if (query.exec())
+    {
+        return query.lastInsertId().toInt();
+    }
+
+    return -1;
+}
+
+int CStorage::insertBookmarkTag(int bookmarkId, int tagId)
+{
+    QSqlQuery query(m_db);
+    query.prepare("INSERT INTO TBookmarkTag(TBookmarkId, TTagId) "
+                  "VALUES(:TBookmarkId, :TTagId)");
+    query.bindValue("TBookmarkId", bookmarkId);
+    query.bindValue("TTagId", tagId);
+    if (query.exec())
+    {
+        return query.lastInsertId().toInt();
+    }
+
+    return -1;
+}

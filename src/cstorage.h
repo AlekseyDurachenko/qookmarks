@@ -26,6 +26,8 @@ public:
     static int insertTag(int parentId, const QString &tagName, CTagItem::Type type);
     static bool updateTagName(int id, const QString &tagName);
     static QSqlQuery selectTags(CTagItem::Type type, int parentId = -1);
+    static int insertBookmark(const QString &title, const QString &link);
+    static int insertBookmarkTag(int bookmarkId, int tagId);
 private:
     static QString m_dbFileName;
     static QSqlDatabase m_db;

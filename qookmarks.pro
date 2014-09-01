@@ -40,6 +40,7 @@ HEADERS        +=                                           \
     src/cstorage.h                                          \
     src/ctagitemmodel.h                                     \
     src/ctagitemcallbackinterface.h                         \
+    src/cbookmarkitem.h                                     \
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
@@ -48,6 +49,7 @@ SOURCES        +=                                           \
     src/cstorage.cpp                                        \
     src/ctagitemmodel.cpp                                   \
     src/ctagitemcallbackinterface.cpp                       \
+    src/cbookmarkitem.cpp                                   \
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \

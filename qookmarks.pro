@@ -41,6 +41,7 @@ HEADERS        +=                                           \
     src/ctagitemmodel.h                                     \
     src/ctagitemcallbackinterface.h                         \
     src/cbookmarkitem.h                                     \
+    src/cbookmarkmgr.h                                      \
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
@@ -50,6 +51,7 @@ SOURCES        +=                                           \
     src/ctagitemmodel.cpp                                   \
     src/ctagitemcallbackinterface.cpp                       \
     src/cbookmarkitem.cpp                                   \
+    src/cbookmarkmgr.cpp                                    \
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \

@@ -44,7 +44,7 @@ public:
 
     inline int childCount() const;
     inline CBookmarkItem *childAt(int row) const;
-    void add(CBookmarkItem *item);
+    void addChild(CBookmarkItem *item);
     void remove(int row);
 private:
     void setRow(int row);

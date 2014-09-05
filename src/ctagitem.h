@@ -49,8 +49,8 @@ public:
 
     inline int childCount() const;
     CTagItem *childAt(int row) const;
-    void add(CTagItem *item);
-    CTagItem *takeAt(int row);
+    void addChild(CTagItem *item);
+    CTagItem *takeChild(int row);
 public:
     static CTagItem *create(const QString &title,
             CTagItemCallBackInterface *callback, CTagItem *parent = 0);

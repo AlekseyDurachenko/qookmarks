@@ -61,7 +61,7 @@ CTagItem *CTagItem::childAt(int row) const
     return m_childList[row];
 }
 
-void CTagItem::add(CTagItem *item)
+void CTagItem::addChild(CTagItem *item)
 {
     int row = m_childList.count();
     item->setRow(row);
@@ -69,7 +69,7 @@ void CTagItem::add(CTagItem *item)
     //m_callback->rowInsert(this, row, row);
 }
 
-CTagItem *CTagItem::takeAt(int row)
+CTagItem *CTagItem::takeChild(int row)
 {
     CTagItem *item = m_childList.takeAt(row);
     item->setParent(0);
@@ -102,7 +102,7 @@ void CTagItem::readItemTree(CTagItem::Type type,
         CTagItem *item = new CTagItem(id, type, tagName, callback, parent);
         readItemTree(type, callback, item);
 
-        parent->add(item);
+        parent->addChild(item);
     }
 }
 

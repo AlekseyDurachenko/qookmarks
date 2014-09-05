@@ -60,7 +60,7 @@ void CBookmarkItem::tagRemove(CTagItem *item)
     m_tagList.removeAll(item);
 }
 
-void CBookmarkItem::add(CBookmarkItem *item)
+void CBookmarkItem::addChild(CBookmarkItem *item)
 {
     m_childList.push_back(item);
 }

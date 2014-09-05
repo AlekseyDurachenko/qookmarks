@@ -34,7 +34,7 @@ public:
         Favorites   =  3
     };
 private:
-    CTagItem(int id, Type type, const QString &tagName,
+    CTagItem(int id, Type type, const QString &title,
             CTagItemCallBackInterface *callback, CTagItem *parent = 0);
 public:
     virtual ~CTagItem();
@@ -44,15 +44,15 @@ public:
     inline Type type() const;
     inline CTagItem *parent() const;
 
-    inline const QString &tagName() const;
-    void setTagName(const QString &tagName);
+    inline const QString &title() const;
+    void setTitle(const QString &title);
 
     inline int childCount() const;
-    CTagItem *child(int row) const;
+    CTagItem *childAt(int row) const;
     void add(CTagItem *item);
     CTagItem *takeAt(int row);
 public:
-    static CTagItem *create(const QString &tagName,
+    static CTagItem *create(const QString &title,
             CTagItemCallBackInterface *callback, CTagItem *parent = 0);
     // This method creates the root item (without a parent),
     // if root item is present in the database, tag will be readed
@@ -98,7 +98,7 @@ CTagItem *CTagItem::parent() const
     return m_parent;
 }
 
-const QString &CTagItem::tagName() const
+const QString &CTagItem::title() const
 {
     return m_tagName;
 }

@@ -48,14 +48,14 @@ bool CBookmarkItem::tagContains(CTagItem *item) const
 
 void CBookmarkItem::tagAdd(CTagItem *item)
 {
-    qDebug() << title() << "CBookmarkItem::tagAdd" << item->tagName();
+    qDebug() << title() << "CBookmarkItem::tagAdd" << item->title();
     item->bookmarkAdd(this);
     m_tagList.push_back(item);
 }
 
 void CBookmarkItem::tagRemove(CTagItem *item)
 {
-    qDebug() << title() << "CBookmarkItem::tagRemove" << item->tagName();
+    qDebug() << title() << "CBookmarkItem::tagRemove" << item->title();
     item->bookmarkRemove(this);
     m_tagList.removeAll(item);
 }

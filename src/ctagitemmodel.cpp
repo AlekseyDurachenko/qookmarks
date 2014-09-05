@@ -63,7 +63,7 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
                 }
             }
 
-            return item->tagName();
+            return item->title();
         }
     }
 
@@ -128,7 +128,7 @@ QModelIndex CTagItemModel::index(int row, int column,
         parentItem = static_cast<CTagItem *>(parent.internalPointer());
     }
 
-    return createIndex(row, column, parentItem->child(row));
+    return createIndex(row, column, parentItem->childAt(row));
 }
 
 QModelIndex CTagItemModel::parent(const QModelIndex &index) const

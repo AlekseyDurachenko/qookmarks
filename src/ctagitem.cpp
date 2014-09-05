@@ -37,7 +37,7 @@ CTagItem::~CTagItem()
         delete item;
 }
 
-void CTagItem::setTagName(const QString &tagName)
+void CTagItem::setTitle(const QString &tagName)
 {
     m_tagName = tagName;
     CStorage::updateTagName(m_id, tagName);
@@ -46,17 +46,17 @@ void CTagItem::setTagName(const QString &tagName)
 
 void CTagItem::bookmarkAdd(CBookmarkItem *item)
 {
-    qDebug() << tagName() << "CTagItem::bookMarkAdd" << item->title();
+    qDebug() << title() << "CTagItem::bookMarkAdd" << item->title();
     m_bookmarkList.push_back(item);
 }
 
 void CTagItem::bookmarkRemove(CBookmarkItem *item)
 {
-    qDebug() << tagName() << "CTagItem::bookMarkRemove" << item->title();
+    qDebug() << title() << "CTagItem::bookMarkRemove" << item->title();
     m_bookmarkList.removeAll(item);
 }
 
-CTagItem *CTagItem::child(int row) const
+CTagItem *CTagItem::childAt(int row) const
 {
     return m_childList[row];
 }

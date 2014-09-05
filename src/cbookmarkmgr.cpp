@@ -31,8 +31,9 @@ CBookmarkMgr::CBookmarkMgr(QObject *parent) :
     m_bookmarkRoot->childAt(1)->tagAdd(m_tagRoot->child(1));
     m_bookmarkRoot->childAt(1)->tagAdd(m_tagRoot->child(2));
 
-    m_bookmarkRoot->childAt(1)->tagRemove(m_tagRoot->child(0));
-    m_tagRoot->remove(1);
+    //m_bookmarkRoot->childAt(1)->tagRemove(m_tagRoot->child(0));
+    //m_tagRoot->removeAt(1);
+    delete m_tagRoot;
 }
 
 CBookmarkMgr::~CBookmarkMgr()

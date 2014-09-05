@@ -44,11 +44,6 @@ void CTagItem::setTagName(const QString &tagName)
     //m_callback->rowChange(m_parent, m_row, m_row);
 }
 
-bool CTagItem::bookmarkContains(CBookmarkItem *item) const
-{
-    return m_bookmarkList.contains(item);
-}
-
 void CTagItem::bookmarkAdd(CBookmarkItem *item)
 {
     qDebug() << tagName() << "CTagItem::bookMarkAdd" << item->title();
@@ -61,7 +56,7 @@ void CTagItem::bookmarkRemove(CBookmarkItem *item)
     m_bookmarkList.removeAll(item);
 }
 
-CTagItem *CTagItem::child(int row)
+CTagItem *CTagItem::child(int row) const
 {
     return m_childList[row];
 }
@@ -74,7 +69,14 @@ void CTagItem::add(CTagItem *item)
     //m_callback->rowInsert(this, row, row);
 }
 
-void CTagItem::remove(int row)
+CTagItem *CTagItem::takeAt(int row)
+{
+    CTagItem *item = m_childList.takeAt(row);
+    item->setParent(0);
+    return item;
+}
+
+void CTagItem::removeAt(int row)
 {
     delete m_childList[row];
     m_childList.removeAt(row);
@@ -125,6 +127,11 @@ CTagItem *CTagItem::create(CTagItem::Type type,
 
     int id = CStorage::insertTag(-1, "", type);
     return new CTagItem(id, type, "", callback, parent);
+}
+
+void CTagItem::setParent(CTagItem *parent)
+{
+    m_parent = parent;
 }
 
 void CTagItem::setRow(int row)

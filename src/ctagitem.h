@@ -23,6 +23,7 @@ class CBookmarkItem;
 class CTagItem
 {
     friend class CBookmarkMgr;
+    friend class CBookmarkItem;
 public:
     enum Type
     {
@@ -46,16 +47,10 @@ public:
     inline const QString &tagName() const;
     void setTagName(const QString &tagName);
 
-    inline int bookmarkCount() const;
-    inline CBookmarkItem *bookmarkAt(int i) const;
-    bool bookmarkContains(CBookmarkItem *item) const;
-    void bookmarkAdd(CBookmarkItem *item);
-    void bookmarkRemove(CBookmarkItem *item);
-
     inline int childCount() const;
-    CTagItem *child(int row);
+    CTagItem *child(int row) const;
     void add(CTagItem *item);
-    void remove(int row);
+    CTagItem *takeAt(int row);
 public:
     static CTagItem *create(const QString &tagName,
             CTagItemCallBackInterface *callback, CTagItem *parent = 0);
@@ -65,6 +60,10 @@ public:
     static CTagItem *create(CTagItem::Type type,
             CTagItemCallBackInterface *callback, CTagItem *parent = 0);
 private:
+    void setParent(CTagItem *parent);
+    void removeAt(int row);
+    void bookmarkAdd(CBookmarkItem *item);
+    void bookmarkRemove(CBookmarkItem *item);
     void setRow(int row);
     static void readItemTree(CTagItem::Type type,
             CTagItemCallBackInterface *callback, CTagItem *parent);
@@ -104,15 +103,6 @@ const QString &CTagItem::tagName() const
     return m_tagName;
 }
 
-int CTagItem::bookmarkCount() const
-{
-    return m_bookmarkList.count();
-}
-
-CBookmarkItem *CTagItem::bookmarkAt(int i) const
-{
-    return m_bookmarkList[i];
-}
 
 int CTagItem::childCount() const
 {

@@ -38,8 +38,9 @@ public:
 
     inline int tagCount() const;
     inline CTagItem *tagAt(int i) const;
-    void addTag(CTagItem *tagItem);
-    void removeTag(CTagItem *tagItem);
+    bool tagContains(CTagItem *item) const;
+    void tagAdd(CTagItem *item);
+    void tagRemove(CTagItem *item);
 
     inline int childCount() const;
     inline CBookmarkItem *childAt(int row) const;

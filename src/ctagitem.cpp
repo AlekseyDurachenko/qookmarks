@@ -14,6 +14,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitem.h"
 #include "cstorage.h"
+#include "cbookmarkitem.h"
+#include <QDebug>
 
 CTagItem::CTagItem(int id, Type type, const QString &tagName,
         CTagItemCallBackInterface *callback, CTagItem *parent)
@@ -28,17 +30,35 @@ CTagItem::CTagItem(int id, Type type, const QString &tagName,
 
 CTagItem::~CTagItem()
 {
+    while (m_bookmarkList.count())
+        m_bookmarkList.first()->tagRemove(this);
+
     foreach (CTagItem *item, m_childList)
-    {
         delete item;
-    }
 }
 
 void CTagItem::setTagName(const QString &tagName)
 {
     m_tagName = tagName;
     CStorage::updateTagName(m_id, tagName);
-    m_callback->rowChange(m_parent, m_row, m_row);
+    //m_callback->rowChange(m_parent, m_row, m_row);
+}
+
+bool CTagItem::bookmarkContains(CBookmarkItem *item) const
+{
+    return m_bookmarkList.contains(item);
+}
+
+void CTagItem::bookmarkAdd(CBookmarkItem *item)
+{
+    qDebug() << tagName() << "CTagItem::bookMarkAdd" << item->title();
+    m_bookmarkList.push_back(item);
+}
+
+void CTagItem::bookmarkRemove(CBookmarkItem *item)
+{
+    qDebug() << tagName() << "CTagItem::bookMarkRemove" << item->title();
+    m_bookmarkList.removeAll(item);
 }
 
 CTagItem *CTagItem::child(int row)
@@ -51,7 +71,13 @@ void CTagItem::add(CTagItem *item)
     int row = m_childList.count();
     item->setRow(row);
     m_childList.push_back(item);
-    m_callback->rowInsert(this, row, row);
+    //m_callback->rowInsert(this, row, row);
+}
+
+void CTagItem::remove(int row)
+{
+    delete m_childList[row];
+    m_childList.removeAt(row);
 }
 
 CTagItem *CTagItem::create(const QString &tagName,

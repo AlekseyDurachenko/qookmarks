@@ -17,4 +17,25 @@
 CBookmarkMgr::CBookmarkMgr(QObject *parent) :
     QObject(parent)
 {
+    m_bookmarkRoot = new CBookmarkItem(-1, "", this, 0);
+    m_tagRoot = new CTagItem(-1, CTagItem::RootItem, "", 0, 0);
+
+    m_tagRoot->add(new CTagItem(100, CTagItem::Tag, "tag100", 0, m_tagRoot));
+    m_tagRoot->add(new CTagItem(200, CTagItem::Tag, "tag200", 0, m_tagRoot));
+    m_tagRoot->add(new CTagItem(300, CTagItem::Tag, "tag300", 0, m_tagRoot));
+
+    m_bookmarkRoot->add(new CBookmarkItem(400, "bookmark400", this, m_bookmarkRoot));
+    m_bookmarkRoot->add(new CBookmarkItem(500, "bookmark500", this, m_bookmarkRoot));
+
+    m_bookmarkRoot->childAt(1)->tagAdd(m_tagRoot->child(0));
+    m_bookmarkRoot->childAt(1)->tagAdd(m_tagRoot->child(1));
+    m_bookmarkRoot->childAt(1)->tagAdd(m_tagRoot->child(2));
+
+    m_bookmarkRoot->childAt(1)->tagRemove(m_tagRoot->child(0));
+    m_tagRoot->remove(1);
+}
+
+CBookmarkMgr::~CBookmarkMgr()
+{
+    delete m_bookmarkRoot;
 }

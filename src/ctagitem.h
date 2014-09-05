@@ -19,8 +19,10 @@
 #include <QString>
 #include <QList>
 
+class CBookmarkItem;
 class CTagItem
 {
+    friend class CBookmarkMgr;
 public:
     enum Type
     {
@@ -44,9 +46,16 @@ public:
     inline const QString &tagName() const;
     void setTagName(const QString &tagName);
 
+    inline int bookmarkCount() const;
+    inline CBookmarkItem *bookmarkAt(int i) const;
+    bool bookmarkContains(CBookmarkItem *item) const;
+    void bookmarkAdd(CBookmarkItem *item);
+    void bookmarkRemove(CBookmarkItem *item);
+
     inline int childCount() const;
     CTagItem *child(int row);
     void add(CTagItem *item);
+    void remove(int row);
 public:
     static CTagItem *create(const QString &tagName,
             CTagItemCallBackInterface *callback, CTagItem *parent = 0);
@@ -67,6 +76,7 @@ private:
     CTagItemCallBackInterface *m_callback;
     CTagItem *m_parent;
     QList<CTagItem *> m_childList;
+    QList<CBookmarkItem *> m_bookmarkList;
 };
 
 int CTagItem::row() const
@@ -92,6 +102,16 @@ CTagItem *CTagItem::parent() const
 const QString &CTagItem::tagName() const
 {
     return m_tagName;
+}
+
+int CTagItem::bookmarkCount() const
+{
+    return m_bookmarkList.count();
+}
+
+CBookmarkItem *CTagItem::bookmarkAt(int i) const
+{
+    return m_bookmarkList[i];
 }
 
 int CTagItem::childCount() const

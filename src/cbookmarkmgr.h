@@ -24,6 +24,10 @@ class CBookmarkMgr : public QObject
     Q_OBJECT
 public:
     explicit CBookmarkMgr(QObject *parent = 0);
+    virtual ~CBookmarkMgr();
+
+    inline CBookmarkItem *bookmarkRoot() const;
+    inline CTagItem *tagRoot() const;
 signals:
     void tagInserted(CTagItem *parent, int first, int last);
     void tagRemoved(CTagItem *parent, int first, int last);
@@ -33,6 +37,19 @@ signals:
     void bookmarkRemoved(CBookmarkItem *parent, int first, int last);
     void bookmarkDataChanged(CBookmarkItem *parent, int first, int last);
 public slots:
+private:
+    CBookmarkItem *m_bookmarkRoot;
+    CTagItem *m_tagRoot;
 };
+
+CBookmarkItem *CBookmarkMgr::bookmarkRoot() const
+{
+    return m_bookmarkRoot;
+}
+
+CTagItem *CBookmarkMgr::tagRoot() const
+{
+    return m_tagRoot;
+}
 
 #endif // CBOOKMARKMGR_H

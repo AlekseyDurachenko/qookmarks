@@ -15,6 +15,7 @@
 #include "cbookmarkitem.h"
 #include "cbookmarkmgr.h"
 #include "ctagitem.h"
+#include <QDebug>
 
 CBookmarkItem::CBookmarkItem(int id, const QString &title, CBookmarkMgr *mgr,
         CBookmarkItem *parent)
@@ -28,6 +29,11 @@ CBookmarkItem::CBookmarkItem(int id, const QString &title, CBookmarkMgr *mgr,
 
 CBookmarkItem::~CBookmarkItem()
 {
+    foreach (CTagItem *item, m_tagList)
+        item->bookmarkRemove(this);
+
+    foreach (CBookmarkItem *item, m_childList)
+        delete item;
 }
 
 void CBookmarkItem::setTitle(const QString &title)
@@ -35,14 +41,23 @@ void CBookmarkItem::setTitle(const QString &title)
     m_title = title;
 }
 
-void CBookmarkItem::addTag(CTagItem *tagItem)
+bool CBookmarkItem::tagContains(CTagItem *item) const
 {
-    m_tagList.push_back(tagItem);
+    return m_tagList.contains(item);
 }
 
-void CBookmarkItem::removeTag(CTagItem *tagItem)
+void CBookmarkItem::tagAdd(CTagItem *item)
 {
-    m_tagList.removeAll(tagItem);
+    qDebug() << title() << "CBookmarkItem::tagAdd" << item->tagName();
+    item->bookmarkAdd(this);
+    m_tagList.push_back(item);
+}
+
+void CBookmarkItem::tagRemove(CTagItem *item)
+{
+    qDebug() << title() << "CBookmarkItem::tagRemove" << item->tagName();
+    item->bookmarkRemove(this);
+    m_tagList.removeAll(item);
 }
 
 void CBookmarkItem::add(CBookmarkItem *item)

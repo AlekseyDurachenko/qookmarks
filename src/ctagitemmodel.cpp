@@ -20,11 +20,11 @@ CTagItemModel::CTagItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_init = true; // hack, disable call the callback functions
-    m_rootItem = CTagItem::create(CTagItem::RootItem, this, 0);
-    m_rootItem->addChild(CTagItem::create(CTagItem::Tag, this, m_rootItem));
-    m_rootItem->addChild(CTagItem::create(CTagItem::Untagged, this, m_rootItem));
-    m_rootItem->addChild(CTagItem::create(CTagItem::ReadLater, this, m_rootItem));
-    m_rootItem->addChild(CTagItem::create(CTagItem::Favorites, this, m_rootItem));
+//    m_rootItem = CTagItem::create(CTagItem::RootItem, this, 0);
+//    m_rootItem->addChild(CTagItem::create(CTagItem::Tag, this, m_rootItem));
+//    m_rootItem->addChild(CTagItem::create(CTagItem::Untagged, this, m_rootItem));
+//    m_rootItem->addChild(CTagItem::create(CTagItem::ReadLater, this, m_rootItem));
+//    m_rootItem->addChild(CTagItem::create(CTagItem::Favorites, this, m_rootItem));
     m_init = false;
 }
 

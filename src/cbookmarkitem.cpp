@@ -29,6 +29,9 @@ CBookmarkItem::CBookmarkItem(int id, const QString &title, CBookmarkMgr *mgr,
 
 CBookmarkItem::~CBookmarkItem()
 {
+    if (m_parent)
+        m_parent->removeAt(m_row);
+
     foreach (CTagItem *item, m_tagList)
         item->bookmarkRemove(this);
 
@@ -48,14 +51,12 @@ bool CBookmarkItem::tagContains(CTagItem *item) const
 
 void CBookmarkItem::tagAdd(CTagItem *item)
 {
-    qDebug() << title() << "CBookmarkItem::tagAdd" << item->title();
     item->bookmarkAdd(this);
     m_tagList.push_back(item);
 }
 
 void CBookmarkItem::tagRemove(CTagItem *item)
 {
-    qDebug() << title() << "CBookmarkItem::tagRemove" << item->title();
     item->bookmarkRemove(this);
     m_tagList.removeAll(item);
 }
@@ -65,13 +66,22 @@ void CBookmarkItem::addChild(CBookmarkItem *item)
     m_childList.push_back(item);
 }
 
-void CBookmarkItem::remove(int row)
+void CBookmarkItem::removeChild(CBookmarkItem *item)
+{
+    delete item;
+}
+
+void CBookmarkItem::removeAt(int row)
 {
     m_childList.removeAt(row);
+}
+
+CBookmarkItem *CBookmarkItem::takeAt(int row)
+{
+    return m_childList.takeAt(row);
 }
 
 void CBookmarkItem::setRow(int row)
 {
     m_row = row;
 }
-

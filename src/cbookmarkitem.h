@@ -24,8 +24,8 @@ class CBookmarkItem
 {
     friend class CBookmarkMgr;
 private:
-    CBookmarkItem(int id, const QString &title, CBookmarkMgr *mgr,
-            CBookmarkItem *parent = 0);
+    CBookmarkItem(int id, const QString &title,
+            CBookmarkMgr *mgr, CBookmarkItem *parent = 0);
 public:
     ~CBookmarkItem();
 
@@ -45,7 +45,9 @@ public:
     inline int childCount() const;
     inline CBookmarkItem *childAt(int row) const;
     void addChild(CBookmarkItem *item);
-    void remove(int row);
+    void removeChild(CBookmarkItem *item);
+    void removeAt(int row);
+    CBookmarkItem *takeAt(int row);
 private:
     void setRow(int row);
 private:

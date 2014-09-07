@@ -24,7 +24,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(G_SHORT_PROGRAM_NAME());
-    ui->treeView_tags->setModel(new CTagItemModel(this));
+    //ui->treeView_tags->setModel(new CTagItemModel(this));
 
     CBookmarkMgr *mgr = new CBookmarkMgr(this);
 }

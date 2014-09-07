@@ -19,6 +19,7 @@
 #include <QString>
 #include <QList>
 
+class CBookmarkMgr;
 class CBookmarkItem;
 class CTagItem
 {
@@ -35,14 +36,14 @@ public:
     };
 private:
     CTagItem(int id, Type type, const QString &title,
-            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
+            CBookmarkMgr *mgr, CTagItem *parent = 0);
 public:
-    virtual ~CTagItem();
+    ~CTagItem();
 
+    inline CTagItem *parent() const;
     inline int row() const;
     inline int id() const;
     inline Type type() const;
-    inline CTagItem *parent() const;
 
     inline const QString &title() const;
     void setTitle(const QString &title);
@@ -52,31 +53,37 @@ public:
     void addChild(CTagItem *item);
     CTagItem *takeChild(int row);
 public:
-    static CTagItem *create(const QString &title,
-            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
-    // This method creates the root item (without a parent),
-    // if root item is present in the database, tag will be readed
-    // from the database (if type == Normal, all tag tree will be readed)
-    static CTagItem *create(CTagItem::Type type,
-            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
+//    static CTagItem *create(const QString &title,
+//            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
+//    // This method creates the root item (without a parent),
+//    // if root item is present in the database, tag will be readed
+//    // from the database (if type == Normal, all tag tree will be readed)
+//    static CTagItem *create(CTagItem::Type type,
+//            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
 private:
     void setParent(CTagItem *parent);
     void removeAt(int row);
     void bookmarkAdd(CBookmarkItem *item);
     void bookmarkRemove(CBookmarkItem *item);
     void setRow(int row);
-    static void readItemTree(CTagItem::Type type,
-            CTagItemCallBackInterface *callback, CTagItem *parent);
+//    static void readItemTree(CTagItem::Type type,
+//            CTagItemCallBackInterface *callback, CTagItem *parent);
 private:
     int m_row;
     int m_id;
     Type m_type;
-    QString m_tagName;
+    QString m_title;
     CTagItemCallBackInterface *m_callback;
     CTagItem *m_parent;
     QList<CTagItem *> m_childList;
     QList<CBookmarkItem *> m_bookmarkList;
+    CBookmarkMgr *m_mgr;
 };
+
+CTagItem *CTagItem::parent() const
+{
+    return m_parent;
+}
 
 int CTagItem::row() const
 {
@@ -93,14 +100,9 @@ CTagItem::Type CTagItem::type() const
     return m_type;
 }
 
-CTagItem *CTagItem::parent() const
-{
-    return m_parent;
-}
-
 const QString &CTagItem::title() const
 {
-    return m_tagName;
+    return m_title;
 }
 
 

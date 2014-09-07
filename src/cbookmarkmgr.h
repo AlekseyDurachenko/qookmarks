@@ -28,6 +28,9 @@ public:
 
     inline CBookmarkItem *bookmarkRoot() const;
     inline CTagItem *tagRoot() const;
+    inline CTagItem *tagReadLater() const;
+    inline CTagItem *tagFavorites() const;
+private:
 signals:
     void tagInserted(CTagItem *parent, int first, int last);
     void tagRemoved(CTagItem *parent, int first, int last);
@@ -40,6 +43,8 @@ public slots:
 private:
     CBookmarkItem *m_bookmarkRoot;
     CTagItem *m_tagRoot;
+    CTagItem *m_tagReadLater;
+    CTagItem *m_tagFavorites;
 };
 
 CBookmarkItem *CBookmarkMgr::bookmarkRoot() const
@@ -50,6 +55,16 @@ CBookmarkItem *CBookmarkMgr::bookmarkRoot() const
 CTagItem *CBookmarkMgr::tagRoot() const
 {
     return m_tagRoot;
+}
+
+CTagItem *CBookmarkMgr::tagReadLater() const
+{
+    return m_tagReadLater;
+}
+
+CTagItem *CBookmarkMgr::tagFavorites() const
+{
+    return m_tagFavorites;
 }
 
 #endif // CBOOKMARKMGR_H

@@ -22,6 +22,7 @@ class CStorage
 {
 public:
     static bool open(const QString &fileName);
+
     // returns the last_insert_id, or -1 if failed
     static int insertTag(int parentId, const QString &tagName, CTagItem::Type type);
     static bool updateTagName(int id, const QString &tagName);

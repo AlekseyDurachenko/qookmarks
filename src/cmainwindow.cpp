@@ -71,7 +71,10 @@ void CMainWindow::on_action_About_triggered()
 
 void CMainWindow::on_pushButton_clicked()
 {
-    mgr->bookmarkAdd(CBookmarkItemData());
+    static int n = 10;
+    CBookmarkItemData data;
+    data.setTitle(QString::number(++n));
+    mgr->bookmarkAdd(data);
 }
 
 void CMainWindow::on_pushButton_2_clicked()

@@ -48,17 +48,17 @@ CBookmarkItem *CBookmarkMgr::bookmarkAt(int index) const
 
 CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
 {
+    int row = m_bookmarkList.count();
     int id = CStorage::bookmarkInsert(data);
-    CBookmarkItem *bookmark =
-            new CBookmarkItem(m_bookmarkList.count(), id, data, this);
+    CBookmarkItem *bookmark = new CBookmarkItem(id, data, this);
     m_bookmarkList.push_back(bookmark);
-    emit bookmarkInserted(bookmark->row(), bookmark->row());
+    emit bookmarkInserted(row, row);
     return bookmark;
 }
 
 void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 {
-    int row = bookmark->row();
+    int row = m_bookmarkList.indexOf(bookmark);
     CStorage::bookmarkDelete(bookmark->id());
     delete m_bookmarkList.takeAt(row);
     emit bookmarkRemoved(row, row);
@@ -66,8 +66,9 @@ void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 
 void CBookmarkMgr::callbackBookmarkDataChanged(CBookmarkItem *bookmark)
 {
+    int row = m_bookmarkList.indexOf(bookmark);
     CStorage::bookmarkUpdate(bookmark->id(), bookmark->data());
-    emit bookmarkDataChanged(bookmark->row(), bookmark->row());
+    emit bookmarkDataChanged(row, row);
 }
 
 void CBookmarkMgr::callbackTagDataChanged(CTagItem *tag)
@@ -100,9 +101,7 @@ void CBookmarkMgr::bookmarkInit()
             data.setTitle(query.value(1).toString());
             data.setUrl(query.value(2).toUrl());
 
-            CBookmarkItem *bookmark =
-                    new CBookmarkItem(m_bookmarkList.count(), id, data, this);
-            m_bookmarkList.push_back(bookmark);
+            m_bookmarkList.push_back(new CBookmarkItem(id, data, this));
         }
     }
 }

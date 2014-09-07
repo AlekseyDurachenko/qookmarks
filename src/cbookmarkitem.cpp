@@ -18,7 +18,6 @@
 
 CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
 {
-    m_row = -1;
     m_id = -1;
     m_data = data;
     m_mgr = mgr;
@@ -27,16 +26,6 @@ CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
 CBookmarkItem::CBookmarkItem(int id, const CBookmarkItemData &data,
         CBookmarkMgr *mgr)
 {
-    m_row = -1;
-    m_id = id;
-    m_data = data;
-    m_mgr = mgr;
-}
-
-CBookmarkItem::CBookmarkItem(int row, int id, const CBookmarkItemData &data,
-        CBookmarkMgr *mgr)
-{
-    m_row = row;
     m_id = id;
     m_data = data;
     m_mgr = mgr;
@@ -47,11 +36,6 @@ void CBookmarkItem::setData(const CBookmarkItemData &data)
     m_data = data;
     if (m_mgr)
         m_mgr->callbackBookmarkDataChanged(this);
-}
-
-void CBookmarkItem::setRow(int row)
-{
-    m_row = row;
 }
 
 void CBookmarkItem::setId(int id)

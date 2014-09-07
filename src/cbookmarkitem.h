@@ -28,20 +28,15 @@ class CBookmarkItem
 private:
     CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr);
     CBookmarkItem(int id, const CBookmarkItemData &data, CBookmarkMgr *mgr);
-    CBookmarkItem(int row, int id, const CBookmarkItemData &data,
-        CBookmarkMgr *mgr);
 public:
     inline CBookmarkMgr *mgr() const;
-    inline int row() const;
     inline int id() const;
 
     inline const CBookmarkItemData &data() const;
     void setData(const CBookmarkItemData &data);
 private:
-    void setRow(int row);
     void setId(int id);
 private:
-    int m_row;
     int m_id;
     CBookmarkItemData m_data;
     CBookmarkMgr *m_mgr;
@@ -50,11 +45,6 @@ private:
 CBookmarkMgr *CBookmarkItem::mgr() const
 {
     return m_mgr;
-}
-
-int CBookmarkItem::row() const
-{
-    return m_row;
 }
 
 int CBookmarkItem::id() const

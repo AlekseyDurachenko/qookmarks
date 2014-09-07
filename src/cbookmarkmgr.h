@@ -16,55 +16,42 @@
 #define CBOOKMARKMGR_H
 
 #include "cbookmarkitem.h"
-#include "ctagitem.h"
 #include <QObject>
+
 
 class CBookmarkMgr : public QObject
 {
     Q_OBJECT
+    friend class CBookmarkItem;
+    friend class CTagItem;
 public:
     explicit CBookmarkMgr(QObject *parent = 0);
     virtual ~CBookmarkMgr();
 
-    inline CBookmarkItem *bookmarkRoot() const;
-    inline CTagItem *tagRoot() const;
-    inline CTagItem *tagReadLater() const;
-    inline CTagItem *tagFavorites() const;
+    CTagItem *tagRootItem() const;
+
+    int bookmarkCount() const;
+    CBookmarkItem *bookmarkAt(int index) const;
+    CBookmarkItem *bookmarkAdd(const CBookmarkItemData &data);
+    void bookmarkRemove(CBookmarkItem *bookmark);
+protected:
+    virtual void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
+    virtual void callbackTagDataChanged(CTagItem *tag);
 private:
+    void tagInit();
+    void bookmarkInit();
 signals:
+    void bookmarkInserted(int first, int last);
+    void bookmarkRemoved(int first, int last);
+    void bookmarkDataChanged(int first, int last);
+
     void tagInserted(CTagItem *parent, int first, int last);
     void tagRemoved(CTagItem *parent, int first, int last);
     void tagDataChanged(CTagItem *parent, int first, int last);
-
-    void bookmarkInserted(CBookmarkItem *parent, int first, int last);
-    void bookmarkRemoved(CBookmarkItem *parent, int first, int last);
-    void bookmarkDataChanged(CBookmarkItem *parent, int first, int last);
-public slots:
 private:
-    CBookmarkItem *m_bookmarkRoot;
-    CTagItem *m_tagRoot;
-    CTagItem *m_tagReadLater;
-    CTagItem *m_tagFavorites;
+    QList<CBookmarkItem *> m_bookmarkList;
+    CTagItem *m_tagRootItem;
 };
 
-CBookmarkItem *CBookmarkMgr::bookmarkRoot() const
-{
-    return m_bookmarkRoot;
-}
-
-CTagItem *CBookmarkMgr::tagRoot() const
-{
-    return m_tagRoot;
-}
-
-CTagItem *CBookmarkMgr::tagReadLater() const
-{
-    return m_tagReadLater;
-}
-
-CTagItem *CBookmarkMgr::tagFavorites() const
-{
-    return m_tagFavorites;
-}
 
 #endif // CBOOKMARKMGR_H

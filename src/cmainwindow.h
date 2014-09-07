@@ -16,6 +16,7 @@
 #define CMAINWINDOW_H
 
 #include <QMainWindow>
+class CBookmarkMgr;
 
 namespace Ui {
 class CMainWindow;
@@ -32,8 +33,13 @@ private slots:
     void on_action_Quit_triggered();
     void on_action_AboutQt_triggered();
     void on_action_About_triggered();
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::CMainWindow *ui;
+    CBookmarkMgr *mgr;
 };
 
 #endif // CMAINWINDOW_H

@@ -12,25 +12,27 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include "global.h"
-#include "cstorage.h"
-#include <QApplication>
-#include <QSettings>
-#include <QDebug>
+#ifndef CTAGITEMDATA_H
+#define CTAGITEMDATA_H
 
-int main(int argc, char *argv[])
+#include <QString>
+#include <QUrl>
+
+class CTagItemData
 {
-    QApplication app(argc, argv);
+public:
+    CTagItemData();
 
-    G_SETTINGS_INIT();
-    QString dbFileName = QFileInfo(settings.fileName()).absolutePath()
-            + QDir::separator() + "bookmarks.db";
-    qDebug() << "filename: " << dbFileName;
-    qDebug() << "open db : " << CStorage::open(dbFileName);
+    inline const QString &title() const;
+    void setTitle(const QString &title);
+private:
+    QString m_title;
+};
 
-    CMainWindow mainWindow;
-    mainWindow.show();
-
-    return app.exec();
+const QString &CTagItemData::title() const
+{
+    return m_title;
 }
+
+
+#endif // CTAGITEMDATA_H

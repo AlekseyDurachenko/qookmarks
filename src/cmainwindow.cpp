@@ -14,19 +14,38 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cmainwindow.h"
 #include "ui_cmainwindow.h"
-#include "cbookmarkmgr.h"
+#include "cbookmarkitemmodel.h"
 #include "ctagitemmodel.h"
+#include "cbookmarkmgr.h"
 #include "caboutdialog.h"
 #include "global.h"
+#include <QDebug>
 
 CMainWindow::CMainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::CMainWindow)
 {
     ui->setupUi(this);
     setWindowTitle(G_SHORT_PROGRAM_NAME());
-    //ui->treeView_tags->setModel(new CTagItemModel(this));
 
-    CBookmarkMgr *mgr = new CBookmarkMgr(this);
+    mgr = new CBookmarkMgr(this);
+    for (int i = 0; i < mgr->bookmarkCount(); ++i)
+        qDebug() << mgr->bookmarkAt(i)->data().title();
+
+    ui->treeView_tags->setModel(new CTagItemModel(mgr, this));
+    ui->treeView_bookmarks->setModel(new CBookmarkItemModel(mgr, this));
+
+//    CBookmarkItemData data;
+//    data.setTitle("one");
+//    data.setUrl(QUrl("http://one.url/"));
+//    mgr->bookmarkAdd(data);
+
+//    data.setTitle("two");
+//    data.setUrl(QUrl("http://two.url/"));
+//    mgr->bookmarkAdd(data);
+
+//    data.setTitle("three");
+//    data.setUrl(QUrl("http://three.url/"));
+//    mgr->bookmarkAdd(data);
 }
 
 CMainWindow::~CMainWindow()
@@ -48,4 +67,14 @@ void CMainWindow::on_action_About_triggered()
 {
     CAboutDialog dlg(this);
     dlg.exec();
+}
+
+void CMainWindow::on_pushButton_clicked()
+{
+    mgr->bookmarkAdd(CBookmarkItemData());
+}
+
+void CMainWindow::on_pushButton_2_clicked()
+{
+    mgr->bookmarkRemove(mgr->bookmarkAt(1));
 }

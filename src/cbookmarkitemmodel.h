@@ -12,18 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CTAGITEMMODEL_H
-#define CTAGITEMMODEL_H
+#ifndef CBOOKMARKITEMMODEL_H
+#define CBOOKMARKITEMMODEL_H
 
-#include "ctagitem.h"
+#include "cbookmarkitem.h"
 #include <QAbstractItemModel>
 
-class CTagItemModel : public QAbstractItemModel
+
+class CBookmarkItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    explicit CTagItemModel(QObject *parent = 0);
-    explicit CTagItemModel(CBookmarkMgr *mgr, QObject *parent = 0);
+    explicit CBookmarkItemModel(QObject *parent = 0);
+    explicit CBookmarkItemModel(CBookmarkMgr *mgr, QObject *parent = 0);
 
     inline CBookmarkMgr *mgr() const;
     void setBookmarkMgr(CBookmarkMgr *mgr);
@@ -36,16 +37,17 @@ public:
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 private slots:
-    void onTagInserted(CTagItem *parent,int first, int last);
-    void onTagRemoved(CTagItem *parent,int first, int last);
-    void onTagDataChanged(CTagItem *parent,int first, int last);
+    void onBookmarkInserted(int first, int last);
+    void onBookmarkRemoved(int first, int last);
+    void onBookmarkDataChanged(int first, int last);
 private:
     CBookmarkMgr *m_mgr;
 };
 
-CBookmarkMgr *CTagItemModel::mgr() const
+CBookmarkMgr *CBookmarkItemModel::mgr() const
 {
     return m_mgr;
 }
 
-#endif // CTAGITEMMODEL_H
+
+#endif // CBOOKMARKITEMMODEL_H

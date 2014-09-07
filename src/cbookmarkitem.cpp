@@ -14,74 +14,47 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkitem.h"
 #include "cbookmarkmgr.h"
-#include "ctagitem.h"
 #include <QDebug>
 
-CBookmarkItem::CBookmarkItem(int id, const QString &title, CBookmarkMgr *mgr,
-        CBookmarkItem *parent)
+CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
+{
+    m_row = -1;
+    m_id = -1;
+    m_data = data;
+    m_mgr = mgr;
+}
+
+CBookmarkItem::CBookmarkItem(int id, const CBookmarkItemData &data,
+        CBookmarkMgr *mgr)
 {
     m_row = -1;
     m_id = id;
-    m_title = title;
+    m_data = data;
     m_mgr = mgr;
-    m_parent = parent;
 }
 
-CBookmarkItem::~CBookmarkItem()
+CBookmarkItem::CBookmarkItem(int row, int id, const CBookmarkItemData &data,
+        CBookmarkMgr *mgr)
 {
-    if (m_parent)
-        m_parent->removeAt(m_row);
-
-    foreach (CTagItem *item, m_tagList)
-        item->bookmarkRemove(this);
-
-    foreach (CBookmarkItem *item, m_childList)
-        delete item;
+    m_row = row;
+    m_id = id;
+    m_data = data;
+    m_mgr = mgr;
 }
 
-void CBookmarkItem::setTitle(const QString &title)
+void CBookmarkItem::setData(const CBookmarkItemData &data)
 {
-    m_title = title;
-}
-
-bool CBookmarkItem::tagContains(CTagItem *item) const
-{
-    return m_tagList.contains(item);
-}
-
-void CBookmarkItem::tagAdd(CTagItem *item)
-{
-    item->bookmarkAdd(this);
-    m_tagList.push_back(item);
-}
-
-void CBookmarkItem::tagRemove(CTagItem *item)
-{
-    item->bookmarkRemove(this);
-    m_tagList.removeAll(item);
-}
-
-void CBookmarkItem::addChild(CBookmarkItem *item)
-{
-    m_childList.push_back(item);
-}
-
-void CBookmarkItem::removeChild(CBookmarkItem *item)
-{
-    delete item;
-}
-
-void CBookmarkItem::removeAt(int row)
-{
-    m_childList.removeAt(row);
-}
-
-CBookmarkItem *CBookmarkItem::takeAt(int row)
-{
-    return m_childList.takeAt(row);
+    m_data = data;
+    if (m_mgr)
+        m_mgr->callbackBookmarkDataChanged(this);
 }
 
 void CBookmarkItem::setRow(int row)
 {
     m_row = row;
+}
+
+void CBookmarkItem::setId(int id)
+{
+    m_id = id;
 }

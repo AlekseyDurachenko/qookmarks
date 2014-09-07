@@ -12,25 +12,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include "global.h"
-#include "cstorage.h"
-#include <QApplication>
-#include <QSettings>
-#include <QDebug>
+#include "cbookmarkitemdata.h"
+#include <QObject>
 
-int main(int argc, char *argv[])
+CBookmarkItemData::CBookmarkItemData()
 {
-    QApplication app(argc, argv);
+    m_title = QObject::tr("untitled");
+}
 
-    G_SETTINGS_INIT();
-    QString dbFileName = QFileInfo(settings.fileName()).absolutePath()
-            + QDir::separator() + "bookmarks.db";
-    qDebug() << "filename: " << dbFileName;
-    qDebug() << "open db : " << CStorage::open(dbFileName);
+void CBookmarkItemData::setTitle(const QString &title)
+{
+    m_title = title;
+}
 
-    CMainWindow mainWindow;
-    mainWindow.show();
-
-    return app.exec();
+void CBookmarkItemData::setUrl(const QUrl &url)
+{
+    m_url = url;
 }

@@ -15,70 +15,63 @@
 #ifndef CTAGITEM_H
 #define CTAGITEM_H
 
-#include "ctagitemcallbackinterface.h"
+#include "ctagitemdata.h"
 #include <QString>
 #include <QList>
 
 class CBookmarkMgr;
-class CBookmarkItem;
 class CTagItem
 {
     friend class CBookmarkMgr;
-    friend class CBookmarkItem;
 public:
     enum Type
     {
         RootItem    = -1,
         Tag         =  0,
-        Untagged    =  1,
         ReadLater   =  2,
         Favorites   =  3
     };
 private:
-    CTagItem(int id, Type type, const QString &title,
+    CTagItem(Type type, const CTagItemData &data, CBookmarkMgr *mgr,
+            CTagItem *parent = 0);
+    CTagItem(int id, Type type, const CTagItemData &data, CBookmarkMgr *mgr,
+            CTagItem *parent = 0);
+    CTagItem(int row, int id, Type type, const CTagItemData &data,
             CBookmarkMgr *mgr, CTagItem *parent = 0);
 public:
     ~CTagItem();
 
+    inline CBookmarkMgr *mgr() const;
     inline CTagItem *parent() const;
     inline int row() const;
     inline int id() const;
     inline Type type() const;
 
-    inline const QString &title() const;
-    void setTitle(const QString &title);
+    inline const CTagItemData &data() const;
+    void setData(const CTagItemData &data);
 
-    inline int childCount() const;
+    int childCount() const;
     CTagItem *childAt(int row) const;
     void addChild(CTagItem *item);
     CTagItem *takeChild(int row);
-public:
-//    static CTagItem *create(const QString &title,
-//            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
-//    // This method creates the root item (without a parent),
-//    // if root item is present in the database, tag will be readed
-//    // from the database (if type == Normal, all tag tree will be readed)
-//    static CTagItem *create(CTagItem::Type type,
-//            CTagItemCallBackInterface *callback, CTagItem *parent = 0);
 private:
     void setParent(CTagItem *parent);
-    void removeAt(int row);
-    void bookmarkAdd(CBookmarkItem *item);
-    void bookmarkRemove(CBookmarkItem *item);
     void setRow(int row);
-//    static void readItemTree(CTagItem::Type type,
-//            CTagItemCallBackInterface *callback, CTagItem *parent);
+    void setId(int id);
 private:
     int m_row;
     int m_id;
     Type m_type;
-    QString m_title;
-    CTagItemCallBackInterface *m_callback;
+    CTagItemData m_data;
+    CBookmarkMgr *m_mgr;
     CTagItem *m_parent;
     QList<CTagItem *> m_childList;
-    QList<CBookmarkItem *> m_bookmarkList;
-    CBookmarkMgr *m_mgr;
 };
+
+CBookmarkMgr *CTagItem::mgr() const
+{
+    return m_mgr;
+}
 
 CTagItem *CTagItem::parent() const
 {
@@ -100,15 +93,9 @@ CTagItem::Type CTagItem::type() const
     return m_type;
 }
 
-const QString &CTagItem::title() const
+const CTagItemData &CTagItem::data() const
 {
-    return m_title;
-}
-
-
-int CTagItem::childCount() const
-{
-    return m_childList.count();
+    return m_data;
 }
 
 #endif // CTAGITEM_H

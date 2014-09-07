@@ -8,5 +8,6 @@
         <file>icons/bookmark-readlater.png</file>
         <file>icons/bookmark-tag.png</file>
         <file>icons/bookmark-untagged.png</file>
+        <file>icons/bookmark-item.png</file>
     </qresource>
 </RCC>

@@ -13,34 +13,96 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkmgr.h"
+#include "cstorage.h"
 #include <QDebug>
 
 CBookmarkMgr::CBookmarkMgr(QObject *parent) :
     QObject(parent)
 {
-    m_bookmarkRoot = new CBookmarkItem(-1, "", this, 0);
-    m_tagRoot = new CTagItem(-1, CTagItem::RootItem, "", 0, 0);
-
-
-//    m_tagRoot->addChild(new CTagItem(100, CTagItem::Tag, "tag100", 0, m_tagRoot));
-//    m_tagRoot->addChild(new CTagItem(200, CTagItem::Tag, "tag200", 0, m_tagRoot));
-//    m_tagRoot->addChild(new CTagItem(300, CTagItem::Tag, "tag300", 0, m_tagRoot));
-
-//    m_bookmarkRoot->addChild(new CBookmarkItem(400, "bookmark400", this, m_bookmarkRoot));
-//    m_bookmarkRoot->addChild(new CBookmarkItem(500, "bookmark500", this, m_bookmarkRoot));
-
-//    m_bookmarkRoot->childAt(1)->tagAdd(m_tagRoot->childAt(0));
-//    m_bookmarkRoot->childAt(1)->tagAdd(m_tagRoot->childAt(1));
-//    m_bookmarkRoot->childAt(1)->tagAdd(m_tagRoot->childAt(2));
-
-//    qDebug() << "ok";
-//    m_bookmarkRoot->childAt(1)->tagRemove(m_tagRoot->childAt(0));
-//    m_tagRoot->removeAt(1);
-
-    delete m_tagRoot;
+    tagInit();
+    bookmarkInit();
 }
 
 CBookmarkMgr::~CBookmarkMgr()
 {
-    delete m_bookmarkRoot;
+    foreach (CBookmarkItem *item, m_bookmarkList)
+        delete item;
+
+    delete m_tagRootItem;
+}
+
+CTagItem *CBookmarkMgr::tagRootItem() const
+{
+    return m_tagRootItem;
+}
+
+int CBookmarkMgr::bookmarkCount() const
+{
+    return m_bookmarkList.count();
+}
+
+CBookmarkItem *CBookmarkMgr::bookmarkAt(int index) const
+{
+    return m_bookmarkList.at(index);
+}
+
+CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
+{
+    int id = CStorage::bookmarkInsert(data);
+    CBookmarkItem *bookmark =
+            new CBookmarkItem(m_bookmarkList.count(), id, data, this);
+    m_bookmarkList.push_back(bookmark);
+    emit bookmarkInserted(bookmark->row(), bookmark->row());
+    return bookmark;
+}
+
+void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
+{
+    int row = bookmark->row();
+    CStorage::bookmarkDelete(bookmark->id());
+    delete m_bookmarkList.takeAt(row);
+    emit bookmarkRemoved(row, row);
+}
+
+void CBookmarkMgr::callbackBookmarkDataChanged(CBookmarkItem *bookmark)
+{
+    CStorage::bookmarkUpdate(bookmark->id(), bookmark->data());
+    emit bookmarkDataChanged(bookmark->row(), bookmark->row());
+}
+
+void CBookmarkMgr::callbackTagDataChanged(CTagItem *tag)
+{
+    int parentId = (tag->parent()) ? (tag->parent()->id()) : (-1);
+    CStorage::tagUpdate(tag->id(), parentId, tag->type(), tag->data());
+    emit tagDataChanged(tag->parent(), tag->row(), tag->row());
+}
+
+void CBookmarkMgr::tagInit()
+{
+    m_tagRootItem = new CTagItem(CTagItem::RootItem, CTagItemData(), this, 0);
+    // HACK:
+    m_tagRootItem->addChild(new CTagItem(CTagItem::Tag, CTagItemData(), this));
+    m_tagRootItem->addChild(new CTagItem(CTagItem::ReadLater, CTagItemData(), this));
+    m_tagRootItem->addChild(new CTagItem(CTagItem::Favorites, CTagItemData(), this));
+}
+
+void CBookmarkMgr::bookmarkInit()
+{
+    QSqlQuery query = CStorage::createQuery();
+    query.prepare("SELECT id, title, url FROM TBookmark");
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            int id = query.value(0).toInt();
+
+            CBookmarkItemData data;
+            data.setTitle(query.value(1).toString());
+            data.setUrl(query.value(2).toUrl());
+
+            CBookmarkItem *bookmark =
+                    new CBookmarkItem(m_bookmarkList.count(), id, data, this);
+            m_bookmarkList.push_back(bookmark);
+        }
+    }
 }

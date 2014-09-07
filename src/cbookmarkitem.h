@@ -15,54 +15,41 @@
 #ifndef CBOOKMARKITEM_H
 #define CBOOKMARKITEM_H
 
+#include "cbookmarkitemdata.h"
 #include <QString>
 #include <QList>
 class CTagItem;
 class CBookmarkMgr;
 
+
 class CBookmarkItem
 {
     friend class CBookmarkMgr;
 private:
-    CBookmarkItem(int id, const QString &title,
-            CBookmarkMgr *mgr, CBookmarkItem *parent = 0);
+    CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr);
+    CBookmarkItem(int id, const CBookmarkItemData &data, CBookmarkMgr *mgr);
+    CBookmarkItem(int row, int id, const CBookmarkItemData &data,
+        CBookmarkMgr *mgr);
 public:
-    ~CBookmarkItem();
-
-    inline CBookmarkItem *parent() const;
+    inline CBookmarkMgr *mgr() const;
     inline int row() const;
     inline int id() const;
 
-    inline const QString &title() const;
-    void setTitle(const QString &title);
-
-    inline int tagCount() const;
-    inline CTagItem *tagAt(int i) const;
-    bool tagContains(CTagItem *item) const;
-    void tagAdd(CTagItem *item);
-    void tagRemove(CTagItem *item);
-
-    inline int childCount() const;
-    inline CBookmarkItem *childAt(int row) const;
-    void addChild(CBookmarkItem *item);
-    void removeChild(CBookmarkItem *item);
-    void removeAt(int row);
-    CBookmarkItem *takeAt(int row);
+    inline const CBookmarkItemData &data() const;
+    void setData(const CBookmarkItemData &data);
 private:
     void setRow(int row);
+    void setId(int id);
 private:
     int m_row;
     int m_id;
-    QString m_title;
+    CBookmarkItemData m_data;
     CBookmarkMgr *m_mgr;
-    CBookmarkItem *m_parent;
-    QList<CBookmarkItem *> m_childList;
-    QList<CTagItem *> m_tagList;
 };
 
-CBookmarkItem *CBookmarkItem::parent() const
+CBookmarkMgr *CBookmarkItem::mgr() const
 {
-    return m_parent;
+    return m_mgr;
 }
 
 int CBookmarkItem::row() const
@@ -75,29 +62,10 @@ int CBookmarkItem::id() const
     return m_id;
 }
 
-const QString &CBookmarkItem::title() const
+const CBookmarkItemData &CBookmarkItem::data() const
 {
-    return m_title;
+    return m_data;
 }
 
-int CBookmarkItem::tagCount() const
-{
-    return m_tagList.count();
-}
-
-CTagItem *CBookmarkItem::tagAt(int i) const
-{
-    return m_tagList[i];
-}
-
-int CBookmarkItem::childCount() const
-{
-    return m_childList.count();
-}
-
-CBookmarkItem *CBookmarkItem::childAt(int row) const
-{
-    return m_childList[row];
-}
 
 #endif // CBOOKMARKITEM_H

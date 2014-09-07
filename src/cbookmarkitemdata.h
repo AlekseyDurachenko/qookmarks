@@ -12,17 +12,35 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CTAGITEMCALLBACKINTERFACE_H
-#define CTAGITEMCALLBACKINTERFACE_H
+#ifndef CBOOKMARKITEMDATA_H
+#define CBOOKMARKITEMDATA_H
 
-class CTagItem;
-class CTagItemCallBackInterface
+#include <QString>
+#include <QUrl>
+
+class CBookmarkItemData
 {
 public:
-    CTagItemCallBackInterface();
-    virtual void rowInsert(CTagItem *parent, int first, int last) = 0;
-    virtual void rowRemove(CTagItem *parent, int first, int last) = 0;
-    virtual void rowChange(CTagItem *parent, int first, int last) = 0;
+    CBookmarkItemData();
+
+    inline const QString &title() const;
+    void setTitle(const QString &title);
+
+    inline const QUrl &url() const;
+    void setUrl(const QUrl &url);
+private:
+    QString m_title;
+    QUrl m_url;
 };
 
-#endif // CTAGITEMCALLBACKINTERFACE_H
+const QString &CBookmarkItemData::title() const
+{
+    return m_title;
+}
+
+const QUrl &CBookmarkItemData::url() const
+{
+    return m_url;
+}
+
+#endif // CBOOKMARKITEMDATA_H

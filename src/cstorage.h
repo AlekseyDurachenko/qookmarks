@@ -15,6 +15,8 @@
 #ifndef CSTORAGE_H
 #define CSTORAGE_H
 
+#include "cbookmarkitemdata.h"
+#include "ctagitemdata.h"
 #include "ctagitem.h"
 #include <QtSql>
 
@@ -22,11 +24,24 @@ class CStorage
 {
 public:
     static bool open(const QString &fileName);
+    static void close();
+    static QSqlQuery createQuery();
+
+    static int bookmarkInsert(const CBookmarkItemData &data);
+    static bool bookmarkUpdate(int id, const CBookmarkItemData &data);
+    static bool bookmarkDelete(int id);
+    static bool bookmarkDeleteAll();
+
+    static bool tagUpdate(int id, int parentId, CTagItem::Type type,
+            const CTagItemData &data);
+
+    // old code
+    static QSqlQuery bookmarkSelectAll();
 
     // returns the last_insert_id, or -1 if failed
-    static int insertTag(int parentId, const QString &tagName, CTagItem::Type type);
+//    static int insertTag(int parentId, const QString &tagName, CTagItem::Type type);
     static bool updateTagName(int id, const QString &tagName);
-    static QSqlQuery selectTags(CTagItem::Type type, int parentId = -1);
+//    static QSqlQuery selectTags(CTagItem::Type type, int parentId = -1);
     static int insertBookmark(const QString &title, const QString &link);
     static int insertBookmarkTag(int bookmarkId, int tagId);
 private:

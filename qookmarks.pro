@@ -36,22 +36,26 @@ HEADERS        +=                                           \
     src/global.h                                            \
     src/cmainwindow.h                                       \
     src/caboutdialog.h                                      \
-    src/ctagitem.h                                          \
-    src/cstorage.h                                          \
-    src/ctagitemmodel.h                                     \
-    src/ctagitemcallbackinterface.h                         \
     src/cbookmarkitem.h                                     \
     src/cbookmarkmgr.h                                      \
+    src/cbookmarkitemdata.h                                 \
+    src/cstorage.h                                          \
+    src/cbookmarkitemmodel.h                                \
+    src/ctagitem.h                                          \
+    src/ctagitemdata.h                                      \
+    src/ctagitemmodel.h                                     \
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
     src/caboutdialog.cpp                                    \
-    src/ctagitem.cpp                                        \
-    src/cstorage.cpp                                        \
-    src/ctagitemmodel.cpp                                   \
-    src/ctagitemcallbackinterface.cpp                       \
     src/cbookmarkitem.cpp                                   \
     src/cbookmarkmgr.cpp                                    \
+    src/cbookmarkitemdata.cpp                               \
+    src/cstorage.cpp                                        \
+    src/cbookmarkitemmodel.cpp                              \
+    src/ctagitem.cpp                                        \
+    src/ctagitemdata.cpp                                    \
+    src/ctagitemmodel.cpp                                   \
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \

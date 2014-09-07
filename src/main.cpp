@@ -30,7 +30,11 @@ int main(int argc, char *argv[])
     qDebug() << "open db : " << CStorage::open(dbFileName);
 
     CMainWindow mainWindow;
-    mainWindow.show();
+    mainWindow.show();    
 
-    return app.exec();
+    int ret = app.exec();
+
+    CStorage::close();
+
+    return ret;
 }

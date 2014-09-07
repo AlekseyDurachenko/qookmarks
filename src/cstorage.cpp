@@ -37,14 +37,22 @@ bool CStorage::open(const QString &fileName)
             }
         }
 
+        m_db.transaction();
         return true;
     }
 
     return false;
 }
 
+void CStorage::flush()
+{
+    m_db.commit();
+    m_db.transaction();
+}
+
 void CStorage::close()
 {
+    m_db.commit();
     m_db.close();
 }
 

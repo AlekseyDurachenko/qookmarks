@@ -24,7 +24,9 @@ class CStorage
 {
 public:
     static bool open(const QString &fileName);
+    static void flush();
     static void close();
+
     static QSqlQuery createQuery();
 
     static int bookmarkInsert(const CBookmarkItemData &data);

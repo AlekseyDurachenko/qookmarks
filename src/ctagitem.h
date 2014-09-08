@@ -27,11 +27,13 @@ public:
     enum Type
     {
         RootItem    = -1,
-        Tag         =  0,
+        TagRoot     =  0,
+        Tag         =  1,
         ReadLater   =  2,
         Favorites   =  3
     };
 private:
+    CTagItem(Type type, CBookmarkMgr *mgr, CTagItem *parent = 0);
     CTagItem(Type type, const CTagItemData &data, CBookmarkMgr *mgr,
             CTagItem *parent = 0);
     CTagItem(int id, Type type, const CTagItemData &data, CBookmarkMgr *mgr,

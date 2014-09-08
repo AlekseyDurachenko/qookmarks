@@ -68,16 +68,16 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
                 {
                 case CTagItem::RootItem:
                     return QObject::tr("/");
-                case CTagItem::Tag:
+                case CTagItem::TagRoot:
                     return QObject::tr("Tags");
                 case CTagItem::ReadLater:
                     return QObject::tr("Read it later");
                 case CTagItem::Favorites:
                     return QObject::tr("Favorites");
+                default:
+                    return item->data().title();
                 }
             }
-
-            return item->data().title();
         }
     }
 
@@ -87,6 +87,7 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
         {
             switch(item->type())
             {
+            case CTagItem::TagRoot:
             case CTagItem::Tag:
                 return QIcon(":/icons/bookmark-tag.png");
             case CTagItem::ReadLater:

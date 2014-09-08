@@ -16,6 +16,15 @@
 #include "cbookmarkmgr.h"
 #include <QDebug>
 
+CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
+{
+    m_id = -1;
+    m_type = type;
+    m_data = CTagItemData();
+    m_mgr = mgr;
+    m_parent = parent;
+}
+
 CTagItem::CTagItem(CTagItem::Type type, const CTagItemData &data,
         CBookmarkMgr *mgr, CTagItem *parent)
 {

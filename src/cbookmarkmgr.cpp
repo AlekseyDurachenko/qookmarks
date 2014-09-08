@@ -80,11 +80,11 @@ void CBookmarkMgr::callbackTagDataChanged(CTagItem *tag)
 
 void CBookmarkMgr::tagInit()
 {
-    m_tagRootItem = new CTagItem(CTagItem::RootItem, CTagItemData(), this, 0);
+    m_tagRootItem = new CTagItem(CTagItem::RootItem, this);
     // HACK:
-    m_tagRootItem->addChild(new CTagItem(CTagItem::Tag, CTagItemData(), this));
-    m_tagRootItem->addChild(new CTagItem(CTagItem::ReadLater, CTagItemData(), this));
-    m_tagRootItem->addChild(new CTagItem(CTagItem::Favorites, CTagItemData(), this));
+    m_tagRootItem->addChild(new CTagItem(CTagItem::TagRoot, this));
+    m_tagRootItem->addChild(new CTagItem(CTagItem::ReadLater, this));
+    m_tagRootItem->addChild(new CTagItem(CTagItem::Favorites, this));
 }
 
 void CBookmarkMgr::bookmarkInit()

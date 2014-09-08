@@ -19,7 +19,6 @@
 CTagItem::CTagItem(CTagItem::Type type, const CTagItemData &data,
         CBookmarkMgr *mgr, CTagItem *parent)
 {
-    m_row = -1;
     m_id = -1;
     m_type = type;
     m_data = data;
@@ -30,18 +29,6 @@ CTagItem::CTagItem(CTagItem::Type type, const CTagItemData &data,
 CTagItem::CTagItem(int id, CTagItem::Type type, const CTagItemData &data,
         CBookmarkMgr *mgr, CTagItem *parent)
 {
-    m_row = -1;
-    m_id = id;
-    m_type = type;
-    m_data = data;
-    m_mgr = mgr;
-    m_parent = parent;
-}
-
-CTagItem::CTagItem(int row, int id, CTagItem::Type type,
-        const CTagItemData &data, CBookmarkMgr *mgr, CTagItem *parent)
-{
-    m_row = row;
     m_id = id;
     m_type = type;
     m_data = data;
@@ -53,6 +40,14 @@ CTagItem::~CTagItem()
 {
     foreach (CTagItem *item, m_childList)
         delete item;
+}
+
+int CTagItem::row() const
+{
+    if (m_parent)
+        return m_parent->childIndexOf(const_cast<CTagItem *>(this));
+
+    return -1;
 }
 
 void CTagItem::setData(const CTagItemData &data)
@@ -74,7 +69,6 @@ CTagItem *CTagItem::childAt(int row) const
 
 void CTagItem::addChild(CTagItem *item)
 {
-    item->setRow(m_childList.count());
     item->setParent(this);
     m_childList.push_back(item);
 }
@@ -84,14 +78,14 @@ CTagItem *CTagItem::takeChild(int row)
     return m_childList.takeAt(row);
 }
 
+int CTagItem::childIndexOf(CTagItem *item) const
+{
+    return m_childList.indexOf(item);
+}
+
 void CTagItem::setParent(CTagItem *parent)
 {
     m_parent = parent;
-}
-
-void CTagItem::setRow(int row)
-{
-    m_row = row;
 }
 
 void CTagItem::setId(int id)

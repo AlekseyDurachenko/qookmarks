@@ -36,16 +36,14 @@ private:
             CTagItem *parent = 0);
     CTagItem(int id, Type type, const CTagItemData &data, CBookmarkMgr *mgr,
             CTagItem *parent = 0);
-    CTagItem(int row, int id, Type type, const CTagItemData &data,
-            CBookmarkMgr *mgr, CTagItem *parent = 0);
 public:
     ~CTagItem();
 
     inline CBookmarkMgr *mgr() const;
     inline CTagItem *parent() const;
-    inline int row() const;
     inline int id() const;
     inline Type type() const;
+    int row() const;
 
     inline const CTagItemData &data() const;
     void setData(const CTagItemData &data);
@@ -55,11 +53,10 @@ public:
     void addChild(CTagItem *item);
     CTagItem *takeChild(int row);
 private:
+    int childIndexOf(CTagItem *item) const;
     void setParent(CTagItem *parent);
-    void setRow(int row);
     void setId(int id);
 private:
-    int m_row;
     int m_id;
     Type m_type;
     CTagItemData m_data;
@@ -76,11 +73,6 @@ CBookmarkMgr *CTagItem::mgr() const
 CTagItem *CTagItem::parent() const
 {
     return m_parent;
-}
-
-int CTagItem::row() const
-{
-    return m_row;
 }
 
 int CTagItem::id() const

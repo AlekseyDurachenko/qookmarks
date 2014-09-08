@@ -38,16 +38,6 @@ public:
             const CTagItemData &data);
     static bool tagUpdate(int id, int parentId, CTagItem::Type type,
             const CTagItemData &data);
-
-    // old code
-    static QSqlQuery bookmarkSelectAll();
-
-    // returns the last_insert_id, or -1 if failed
-//    static int insertTag(int parentId, const QString &tagName, CTagItem::Type type);
-    static bool updateTagName(int id, const QString &tagName);
-//    static QSqlQuery selectTags(CTagItem::Type type, int parentId = -1);
-    static int insertBookmark(const QString &title, const QString &link);
-    static int insertBookmarkTag(int bookmarkId, int tagId);
 private:
     static QString m_dbFileName;
     static QSqlDatabase m_db;

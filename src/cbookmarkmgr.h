@@ -29,7 +29,10 @@ public:
     explicit CBookmarkMgr(QObject *parent = 0);
     virtual ~CBookmarkMgr();
 
-    CTagItem *tagRootItem() const;    
+    CTagItem *tagRootItem() const;
+    CTagItem *tagTagRootItem() const;
+    CTagItem *tagReadLaterItem() const;
+    CTagItem *tagFavoritesItem() const;
 
     int bookmarkCount() const;
     CBookmarkItem *bookmarkAt(int index) const;
@@ -53,6 +56,9 @@ signals:
 private:
     QList<CBookmarkItem *> m_bookmarkList;
     CTagItem *m_tagRootItem;
+    CTagItem *m_tagTagRootItem;
+    CTagItem *m_tagReadLaterItem;
+    CTagItem *m_tagFavoritesItem;
 };
 
 

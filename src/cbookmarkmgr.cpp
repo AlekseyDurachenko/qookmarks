@@ -36,6 +36,21 @@ CTagItem *CBookmarkMgr::tagRootItem() const
     return m_tagRootItem;
 }
 
+CTagItem *CBookmarkMgr::tagTagRootItem() const
+{
+    return m_tagTagRootItem;
+}
+
+CTagItem *CBookmarkMgr::tagReadLaterItem() const
+{
+    return m_tagReadLaterItem;
+}
+
+CTagItem *CBookmarkMgr::tagFavoritesItem() const
+{
+    return m_tagFavoritesItem;
+}
+
 int CBookmarkMgr::bookmarkCount() const
 {
     return m_bookmarkList.count();
@@ -81,9 +96,12 @@ void CBookmarkMgr::callbackTagDataChanged(CTagItem *tag)
 void CBookmarkMgr::tagInit()
 {
     m_tagRootItem = new CTagItem(CTagItem::RootItem, this);
-    m_tagRootItem->addChild(createTopLevelTag(CTagItem::TagRoot));
-    m_tagRootItem->addChild(createTopLevelTag(CTagItem::ReadLater));
-    m_tagRootItem->addChild(createTopLevelTag(CTagItem::Favorites));
+    m_tagTagRootItem = createTopLevelTag(CTagItem::TagRoot);
+    m_tagReadLaterItem = createTopLevelTag(CTagItem::ReadLater);
+    m_tagFavoritesItem = createTopLevelTag(CTagItem::Favorites);
+    m_tagRootItem->addChild(m_tagTagRootItem);
+    m_tagRootItem->addChild(m_tagReadLaterItem);
+    m_tagRootItem->addChild(m_tagFavoritesItem);
 }
 
 CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)

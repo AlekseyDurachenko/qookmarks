@@ -50,9 +50,9 @@ public:
 
     int childCount() const;
     CTagItem *childAt(int row) const;
+private:
     void addChild(CTagItem *item);
     CTagItem *takeChild(int row);
-private:
     int childIndexOf(CTagItem *item) const;
     void setParent(CTagItem *parent);
     void setId(int id);

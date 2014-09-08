@@ -28,7 +28,7 @@ public:
     explicit CBookmarkMgr(QObject *parent = 0);
     virtual ~CBookmarkMgr();
 
-    CTagItem *tagRootItem() const;
+    CTagItem *tagRootItem() const;    
 
     int bookmarkCount() const;
     CBookmarkItem *bookmarkAt(int index) const;

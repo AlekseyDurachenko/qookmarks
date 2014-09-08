@@ -109,6 +109,21 @@ bool CStorage::bookmarkDeleteAll()
     return query.exec();
 }
 
+int CStorage::tagInsert(CTagItem::Type type, int parentId,
+        const CTagItemData &data)
+{
+    QSqlQuery query(m_db);
+    query.prepare("INSERT INTO TTag(title, type, parentId)"
+            " VALUES(:title, :type, :parentid)");
+    query.bindValue("title", data.title());
+    query.bindValue("type", type);
+    query.bindValue("parentid", parentId);
+    if (query.exec())
+        return query.lastInsertId().toInt();
+
+    return -1;
+}
+
 bool CStorage::tagUpdate(int id, int parentId, CTagItem::Type type,
         const CTagItemData &data)
 {

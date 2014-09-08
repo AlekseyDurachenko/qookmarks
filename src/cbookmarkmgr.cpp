@@ -81,10 +81,25 @@ void CBookmarkMgr::callbackTagDataChanged(CTagItem *tag)
 void CBookmarkMgr::tagInit()
 {
     m_tagRootItem = new CTagItem(CTagItem::RootItem, this);
-    // HACK:
-    m_tagRootItem->addChild(new CTagItem(CTagItem::TagRoot, this));
-    m_tagRootItem->addChild(new CTagItem(CTagItem::ReadLater, this));
-    m_tagRootItem->addChild(new CTagItem(CTagItem::Favorites, this));
+    m_tagRootItem->addChild(createTopLevelTag(CTagItem::TagRoot));
+    m_tagRootItem->addChild(createTopLevelTag(CTagItem::ReadLater));
+    m_tagRootItem->addChild(createTopLevelTag(CTagItem::Favorites));
+}
+
+CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)
+{
+    QSqlQuery query = CStorage::createQuery();
+    query.prepare("SELECT id, title FROM TTag "
+            " WHERE parentId = -1 AND type = :type");
+    query.bindValue(":type", type);
+
+    int id = -1;
+    if (query.exec() && query.next())
+        id = query.value(0).toInt();
+    else
+        id = CStorage::tagInsert(type, -1, CTagItemData());
+
+    return new CTagItem(id, type, CTagItemData(), this);
 }
 
 void CBookmarkMgr::bookmarkInit()

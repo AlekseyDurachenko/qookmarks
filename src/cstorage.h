@@ -34,6 +34,8 @@ public:
     static bool bookmarkDelete(int id);
     static bool bookmarkDeleteAll();
 
+    static int tagInsert(CTagItem::Type type, int parentId,
+            const CTagItemData &data);
     static bool tagUpdate(int id, int parentId, CTagItem::Type type,
             const CTagItemData &data);
 

@@ -27,8 +27,8 @@ public:
     enum Type
     {
         RootItem    = -1,
-        TagRoot     =  0,
-        Tag         =  1,
+        Tag         =  0,
+        TagRoot     =  1,
         ReadLater   =  2,
         Favorites   =  3
     };

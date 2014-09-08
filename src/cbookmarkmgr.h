@@ -16,6 +16,7 @@
 #define CBOOKMARKMGR_H
 
 #include "cbookmarkitem.h"
+#include "ctagitem.h"
 #include <QObject>
 
 
@@ -39,6 +40,7 @@ protected:
     virtual void callbackTagDataChanged(CTagItem *tag);
 private:
     void tagInit();
+    CTagItem *createTopLevelTag(CTagItem::Type type);
     void bookmarkInit();
 signals:
     void bookmarkInserted(int first, int last);

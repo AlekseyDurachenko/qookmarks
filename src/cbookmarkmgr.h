@@ -18,7 +18,7 @@
 #include "cbookmarkitem.h"
 #include "ctagitem.h"
 #include <QObject>
-
+#include <QHash>
 
 class CBookmarkMgr : public QObject
 {
@@ -56,6 +56,7 @@ private:
     CTagItem *createTopLevelTag(CTagItem::Type type);
     void recursiveTagRead(CTagItem *parent);
     void bookmarkInit();
+    QSet<CTagItem *> bookmarkTagsInit(CBookmarkItem *bookmark);
 signals:
     void bookmarkInserted(int first, int last);
     void bookmarkRemoved(int first, int last);
@@ -70,6 +71,7 @@ private:
     CTagItem *m_tagTagRootItem;
     CTagItem *m_tagReadLaterItem;
     CTagItem *m_tagFavoritesItem;
+    QHash<int, CTagItem *> m_tmpTagCache;
 };
 
 

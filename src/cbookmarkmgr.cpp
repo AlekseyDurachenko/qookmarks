@@ -21,6 +21,7 @@ CBookmarkMgr::CBookmarkMgr(QObject *parent) :
 {
     tagInit();
     bookmarkInit();
+    m_tmpTagCache.clear();
 }
 
 CBookmarkMgr::~CBookmarkMgr()
@@ -175,6 +176,9 @@ void CBookmarkMgr::tagInit()
     m_tagRootItem->addChild(m_tagTagRootItem);
     m_tagRootItem->addChild(m_tagReadLaterItem);
     m_tagRootItem->addChild(m_tagFavoritesItem);
+    m_tmpTagCache[m_tagTagRootItem->id()] = m_tagTagRootItem;
+    m_tmpTagCache[m_tagReadLaterItem->id()] = m_tagReadLaterItem;
+    m_tmpTagCache[m_tagFavoritesItem->id()] = m_tagFavoritesItem;
 }
 
 CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)
@@ -210,6 +214,7 @@ void CBookmarkMgr::recursiveTagRead(CTagItem *parentItem)
             data.setTitle(query.value(2).toString());
 
             CTagItem *item = new CTagItem(id, type, data, this, parentItem);
+            m_tmpTagCache[item->id()] = item;
             recursiveTagRead(item);
             parentItem->addChild(item);
         }
@@ -230,7 +235,24 @@ void CBookmarkMgr::bookmarkInit()
             data.setTitle(query.value(1).toString());
             data.setUrl(query.value(2).toUrl());
 
-            m_bookmarkList.push_back(new CBookmarkItem(id, data, this));
+            CBookmarkItem *item = new CBookmarkItem(id, data, this);
+            foreach (CTagItem *tag, bookmarkTagsInit(item))
+                item->pTags()->insert(tag);
+            m_bookmarkList.push_back(item);
         }
     }
+}
+
+QSet<CTagItem *> CBookmarkMgr::bookmarkTagsInit(CBookmarkItem *bookmark)
+{
+    QSet<CTagItem *> set;
+
+    QSqlQuery query = CStorage::createQuery();
+    query.prepare("SELECT TTagId FROM TBookmarkTag WHERE TBookmarkId = :id");
+    query.bindValue(":id", bookmark->id());
+    if (query.exec())
+        while (query.next())
+            set.insert(m_tmpTagCache[query.value(0).toInt()]);
+
+    return set;
 }

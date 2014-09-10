@@ -23,10 +23,10 @@ class CTagItemModel : public QAbstractItemModel
     Q_OBJECT
 public:
     explicit CTagItemModel(QObject *parent = 0);
-    explicit CTagItemModel(CBookmarkMgr *mgr, QObject *parent = 0);
+    explicit CTagItemModel(CTagItem *rootItem, QObject *parent = 0);
 
-    inline CBookmarkMgr *mgr() const;
-    void setBookmarkMgr(CBookmarkMgr *mgr);
+    inline CTagItem *rootItem() const;
+    void setRootItem(CTagItem *rootItem);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -40,12 +40,13 @@ private slots:
     void onTagRemoved(CTagItem *parent,int first, int last);
     void onTagDataChanged(CTagItem *parent,int first, int last);
 private:
+    CTagItem *m_rootItem;
     CBookmarkMgr *m_mgr;
 };
 
-CBookmarkMgr *CTagItemModel::mgr() const
+CTagItem *CTagItemModel::rootItem() const
 {
-    return m_mgr;
+    return m_rootItem;
 }
 
 #endif // CTAGITEMMODEL_H

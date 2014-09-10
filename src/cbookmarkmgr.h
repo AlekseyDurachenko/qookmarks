@@ -34,6 +34,8 @@ public:
     CTagItem *tagReadLaterItem() const;
     CTagItem *tagFavoritesItem() const;
 
+    CTagItem *tagAdd(CTagItem *parent, const CTagItemData &data);
+
     int bookmarkCount() const;
     CBookmarkItem *bookmarkAt(int index) const;
     CBookmarkItem *bookmarkAdd(const CBookmarkItemData &data);

@@ -31,7 +31,9 @@ CMainWindow::CMainWindow(QWidget *parent) :
     for (int i = 0; i < mgr->bookmarkCount(); ++i)
         qDebug() << mgr->bookmarkAt(i)->data().title();
 
-    ui->treeView_tags->setModel(new CTagItemModel(mgr, this));
+    //mgr->tagAdd(mgr->tagTagRootItem(), CTagItemData());
+
+    ui->treeView_tags->setModel(new CTagItemModel(mgr->tagTagRootItem(), this));
     ui->treeView_bookmarks->setModel(new CBookmarkItemModel(mgr, this));
 
 //    CBookmarkItemData data;

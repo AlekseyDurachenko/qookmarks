@@ -51,6 +51,14 @@ CTagItem *CBookmarkMgr::tagFavoritesItem() const
     return m_tagFavoritesItem;
 }
 
+CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
+{
+    int id = CStorage::tagInsert(CTagItem::Tag, parent->id(), data);
+    CTagItem *item = new CTagItem(id, CTagItem::Tag, data, this, parent);
+    parent->addChild(item);
+    return item;
+}
+
 int CBookmarkMgr::bookmarkCount() const
 {
     return m_bookmarkList.count();

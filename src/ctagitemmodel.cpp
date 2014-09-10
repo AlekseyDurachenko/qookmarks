@@ -21,24 +21,32 @@
 CTagItemModel::CTagItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
+    m_rootItem = 0;
     m_mgr = 0;
+    setRootItem(0);
 }
 
-CTagItemModel::CTagItemModel(CBookmarkMgr *mgr, QObject *parent) :
+CTagItemModel::CTagItemModel(CTagItem *rootItem, QObject *parent) :
     QAbstractItemModel(parent)
 {
+    m_rootItem = 0;
     m_mgr = 0;
-    setBookmarkMgr(mgr);
+    setRootItem(rootItem);
 }
 
-void CTagItemModel::setBookmarkMgr(CBookmarkMgr *mgr)
+void CTagItemModel::setRootItem(CTagItem *rootItem)
 {
     beginResetModel();
 
     if (m_mgr)
         disconnect(m_mgr, 0, this, 0);
 
-    m_mgr = mgr;
+    m_rootItem = rootItem;
+    if (m_rootItem)
+        m_mgr = m_rootItem->mgr();
+    else
+        m_mgr = 0;
+
     if (m_mgr)
     {
         connect(m_mgr, SIGNAL(tagInserted(CTagItem *,int,int)),
@@ -54,7 +62,7 @@ void CTagItemModel::setBookmarkMgr(CBookmarkMgr *mgr)
 
 QVariant CTagItemModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || !m_mgr)
+    if (!index.isValid() || !m_rootItem)
         return QVariant();
 
     CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
@@ -129,10 +137,10 @@ QVariant CTagItemModel::headerData(int section,
 QModelIndex CTagItemModel::index(int row, int column,
         const QModelIndex &parent) const
 {
-    if (!hasIndex(row, column, parent) || !m_mgr)
+    if (!hasIndex(row, column, parent) || !m_rootItem)
         return QModelIndex();
 
-    CTagItem *parentItem = m_mgr->tagRootItem();
+    CTagItem *parentItem = m_rootItem;
     if (parent.isValid())
         parentItem = static_cast<CTagItem *>(parent.internalPointer());
 
@@ -141,13 +149,13 @@ QModelIndex CTagItemModel::index(int row, int column,
 
 QModelIndex CTagItemModel::parent(const QModelIndex &index) const
 {
-    if (!index.isValid() || !m_mgr)
+    if (!index.isValid() || !m_rootItem)
         return QModelIndex();
 
     CTagItem *childItem = static_cast<CTagItem*>(index.internalPointer());
     CTagItem *parentItem = static_cast<CTagItem*>(childItem->parent());
 
-    if (parentItem == m_mgr->tagRootItem())
+    if (parentItem == m_rootItem)
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
@@ -155,10 +163,10 @@ QModelIndex CTagItemModel::parent(const QModelIndex &index) const
 
 int CTagItemModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.column() > 0 || !m_mgr)
+    if (parent.column() > 0 || !m_rootItem)
         return 0;
 
-    CTagItem *parentItem = m_mgr->tagRootItem();
+    CTagItem *parentItem = m_rootItem;
     if (parent.isValid())
         parentItem = static_cast<CTagItem *>(parent.internalPointer());
 
@@ -172,7 +180,7 @@ int CTagItemModel::columnCount(const QModelIndex &/*parent*/) const
 
 void CTagItemModel::onTagInserted(CTagItem *parent, int first, int last)
 {
-    if (parent == m_mgr->tagRootItem())
+    if (parent == m_rootItem)
         beginInsertRows(QModelIndex(), first, last);
     else
         beginInsertRows(createIndex(parent->row(), 0, parent), first, last);
@@ -181,7 +189,7 @@ void CTagItemModel::onTagInserted(CTagItem *parent, int first, int last)
 
 void CTagItemModel::onTagRemoved(CTagItem *parent, int first, int last)
 {
-    if (parent == m_mgr->tagRootItem())
+    if (parent == m_rootItem)
         beginRemoveRows(QModelIndex(), first, last);
     else
         beginRemoveRows(createIndex(parent->row(), 0, parent), first, last);

@@ -82,4 +82,5 @@ void CMainWindow::on_pushButton_clicked()
 void CMainWindow::on_pushButton_2_clicked()
 {
     mgr->bookmarkRemove(mgr->bookmarkAt(1));
+    //mgr->tagMove(mgr->tagReadLaterItem(), mgr->tagTagRootItem()->childAt(0));
 }

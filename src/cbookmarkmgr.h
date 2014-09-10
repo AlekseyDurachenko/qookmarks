@@ -35,7 +35,7 @@ public:
     CTagItem *tagFavoritesItem() const;
 
     CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
-    void tagMove(CTagItem *oldParent, CTagItem *newParent, CTagItem *item);
+    void tagMove(CTagItem *newParent, CTagItem *item);
 
     int bookmarkCount() const;
     CBookmarkItem *bookmarkAt(int index) const;

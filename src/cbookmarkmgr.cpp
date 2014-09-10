@@ -59,9 +59,9 @@ CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
     return item;
 }
 
-void CBookmarkMgr::tagMove(CTagItem *oldParent, CTagItem *newParent,
-        CTagItem *item)
+void CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
 {
+    CTagItem *oldParent = item->parent();
     newParent->addChild(oldParent->takeChild(oldParent->childIndexOf(item)));
     CStorage::tagMove(item->id(), newParent->id());
 }

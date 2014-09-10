@@ -18,6 +18,7 @@
 #include "cbookmarkitemdata.h"
 #include <QString>
 #include <QList>
+#include <QSet>
 class CTagItem;
 class CBookmarkMgr;
 
@@ -35,11 +36,13 @@ public:
     inline const CBookmarkItemData &data() const;
     void setData(const CBookmarkItemData &data);
 private:
-    void setId(int id);
+    void setId(int id);    
+    inline QSet<CTagItem *> *tags();
 private:
     int m_id;
     CBookmarkItemData m_data;
     CBookmarkMgr *m_mgr;
+    QSet<CTagItem *> m_tags;
 };
 
 CBookmarkMgr *CBookmarkItem::mgr() const
@@ -55,6 +58,11 @@ int CBookmarkItem::id() const
 const CBookmarkItemData &CBookmarkItem::data() const
 {
     return m_data;
+}
+
+QSet<CTagItem *> *CBookmarkItem::tags()
+{
+    return &m_tags;
 }
 
 

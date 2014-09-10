@@ -72,8 +72,10 @@ void CBookmarkMgr::tagRemove(CTagItem *item)
     item->parent()->takeChild(item->parent()->childIndexOf(item));
     for (int row = 0; row < item->childCount(); ++row)
         tagRemove(item->childAt(row));
-    delete item;
+    foreach (CBookmarkItem *bookmark, m_bookmarkList)
+        bookmark->tags()->remove(item);
     CStorage::tagDelete(id);
+    delete item;
 }
 
 int CBookmarkMgr::bookmarkCount() const

@@ -137,3 +137,12 @@ bool CStorage::tagUpdate(int id, int parentId, CTagItem::Type type,
     query.bindValue("id", id);
     return query.exec();
 }
+
+bool CStorage::tagMove(int id, int parentId)
+{
+    QSqlQuery query(m_db);
+    query.prepare("UPDATE TTag SET parentId = :parentId WHERE id = :id");
+    query.bindValue("parentId", parentId);
+    query.bindValue("id", id);
+    return query.exec();
+}

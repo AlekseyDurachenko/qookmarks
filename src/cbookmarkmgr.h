@@ -34,7 +34,8 @@ public:
     CTagItem *tagReadLaterItem() const;
     CTagItem *tagFavoritesItem() const;
 
-    CTagItem *tagAdd(CTagItem *parent, const CTagItemData &data);
+    CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
+    void tagMove(CTagItem *oldParent, CTagItem *newParent, CTagItem *item);
 
     int bookmarkCount() const;
     CBookmarkItem *bookmarkAt(int index) const;
@@ -43,6 +44,8 @@ public:
 protected:
     virtual void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
     virtual void callbackTagDataChanged(CTagItem *tag);
+    virtual void callbackTagInserted(CTagItem *parent, int first, int last);
+    virtual void callbackTagRemoved(CTagItem *parent, int first, int last);
 private:
     void tagInit();
     CTagItem *createTopLevelTag(CTagItem::Type type);

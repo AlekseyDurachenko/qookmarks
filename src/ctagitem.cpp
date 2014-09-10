@@ -78,13 +78,19 @@ CTagItem *CTagItem::childAt(int row) const
 
 void CTagItem::addChild(CTagItem *item)
 {
+    int row = m_childList.count();
     item->setParent(this);
     m_childList.push_back(item);
+    if (m_mgr)
+        m_mgr->callbackTagInserted(this, row, row);
 }
 
 CTagItem *CTagItem::takeChild(int row)
 {
-    return m_childList.takeAt(row);
+    CTagItem *item = m_childList.takeAt(row);
+    if (m_mgr)
+        m_mgr->callbackTagRemoved(this, row, row);
+    return item;
 }
 
 int CTagItem::childIndexOf(CTagItem *item) const

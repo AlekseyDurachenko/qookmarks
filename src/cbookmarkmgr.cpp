@@ -59,6 +59,13 @@ CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
     return item;
 }
 
+void CBookmarkMgr::tagMove(CTagItem *oldParent, CTagItem *newParent,
+        CTagItem *item)
+{
+    newParent->addChild(oldParent->takeChild(oldParent->childIndexOf(item)));
+    CStorage::tagMove(item->id(), newParent->id());
+}
+
 int CBookmarkMgr::bookmarkCount() const
 {
     return m_bookmarkList.count();
@@ -99,6 +106,16 @@ void CBookmarkMgr::callbackTagDataChanged(CTagItem *tag)
     int parentId = (tag->parent()) ? (tag->parent()->id()) : (-1);
     CStorage::tagUpdate(tag->id(), parentId, tag->type(), tag->data());
     emit tagDataChanged(tag->parent(), tag->row(), tag->row());
+}
+
+void CBookmarkMgr::callbackTagInserted(CTagItem *parent, int first, int last)
+{
+    emit tagInserted(parent, first, last);
+}
+
+void CBookmarkMgr::callbackTagRemoved(CTagItem *parent, int first, int last)
+{
+    emit tagRemoved(parent, first, last);
 }
 
 void CBookmarkMgr::tagInit()

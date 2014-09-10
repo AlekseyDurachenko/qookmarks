@@ -66,6 +66,13 @@ void CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
     CStorage::tagMove(item->id(), newParent->id());
 }
 
+void CBookmarkMgr::tagRemove(CTagItem *item)
+{
+    int id = item->id();
+    delete item->parent()->takeChild(item->parent()->childIndexOf(item));
+    CStorage::tagDelete(id);
+}
+
 int CBookmarkMgr::bookmarkCount() const
 {
     return m_bookmarkList.count();

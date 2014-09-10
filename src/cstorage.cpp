@@ -146,3 +146,16 @@ bool CStorage::tagMove(int id, int parentId)
     query.bindValue("id", id);
     return query.exec();
 }
+
+bool CStorage::tagDelete(int id)
+{
+    QSqlQuery query(m_db);
+    query.prepare("DELETE FROM TBookmarkTag WHERE TTagId = :id");
+    query.bindValue(":id", id);
+    if (!query.exec())
+        return false;
+
+    query.prepare("DELETE FROM TTag WHERE id = :id");
+    query.bindValue(":id", id);
+    return query.exec();
+}

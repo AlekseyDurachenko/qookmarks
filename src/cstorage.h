@@ -39,6 +39,7 @@ public:
     static bool tagUpdate(int id, int parentId, CTagItem::Type type,
             const CTagItemData &data);
     static bool tagMove(int id, int parentId);
+    static bool tagDelete(int id);
 private:
     static QString m_dbFileName;
     static QSqlDatabase m_db;

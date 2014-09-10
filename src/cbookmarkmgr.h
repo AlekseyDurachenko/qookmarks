@@ -36,6 +36,7 @@ public:
 
     CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
     void tagMove(CTagItem *newParent, CTagItem *item);
+    void tagRemove(CTagItem *item);
 
     int bookmarkCount() const;
     CBookmarkItem *bookmarkAt(int index) const;

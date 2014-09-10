@@ -69,7 +69,10 @@ void CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
 void CBookmarkMgr::tagRemove(CTagItem *item)
 {
     int id = item->id();
-    delete item->parent()->takeChild(item->parent()->childIndexOf(item));
+    item->parent()->takeChild(item->parent()->childIndexOf(item));
+    for (int row = 0; row < item->childCount(); ++row)
+        tagRemove(item->childAt(row));
+    delete item;
     CStorage::tagDelete(id);
 }
 

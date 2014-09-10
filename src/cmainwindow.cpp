@@ -19,6 +19,7 @@
 #include "cbookmarkmgr.h"
 #include "caboutdialog.h"
 #include "global.h"
+#include "cbookmarktagproxymodel.h"
 #include <QDebug>
 
 CMainWindow::CMainWindow(QWidget *parent) :
@@ -34,7 +35,15 @@ CMainWindow::CMainWindow(QWidget *parent) :
     //mgr->tagAdd(mgr->tagTagRootItem(), CTagItemData());
 
     ui->treeView_tags->setModel(new CTagItemModel(mgr->tagRootItem(), this));
-    ui->treeView_bookmarks->setModel(new CBookmarkItemModel(mgr, this));
+
+    CBookmarkItemModel *model = new CBookmarkItemModel(mgr, this);
+    CBookmarkTagProxyModel *proxy = new CBookmarkTagProxyModel(this);
+    proxy->setSourceModel(model);
+    proxy->setTags(QSet<CTagItem *>() << mgr->tagReadLaterItem());
+    //mgr->bookmarkAddTag(mgr->bookmarkAt(0), mgr->tagReadLaterItem());
+    ui->treeView_bookmarks->setModel(proxy);
+
+    //ui->treeView_bookmarks->setModel(new CBookmarkItemModel(mgr, this));
 
 //    CBookmarkItemData data;
 //    data.setTitle("one");

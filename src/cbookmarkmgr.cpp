@@ -75,9 +75,9 @@ void CBookmarkMgr::tagRemove(CTagItem *item)
 
     foreach (CBookmarkItem *bookmark, m_bookmarkList)
     {
-        if (bookmark->tags()->contains(item))
+        if (bookmark->pTags()->contains(item))
         {
-            bookmark->tags()->remove(item);
+            bookmark->pTags()->remove(item);
             int row = m_bookmarkList.indexOf(bookmark);
             emit bookmarkDataChanged(row, row);
         }
@@ -117,7 +117,7 @@ void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 
 void CBookmarkMgr::bookmarkAddTag(CBookmarkItem *bookmark, CTagItem *tag)
 {
-    bookmark->tags()->insert(tag);
+    bookmark->pTags()->insert(tag);
     CStorage::bookmarkTagAdd(bookmark->id(), tag->id());
     int row = m_bookmarkList.indexOf(bookmark);
     emit bookmarkDataChanged(row, row);
@@ -125,7 +125,7 @@ void CBookmarkMgr::bookmarkAddTag(CBookmarkItem *bookmark, CTagItem *tag)
 
 void CBookmarkMgr::bookmarkRemoveTag(CBookmarkItem *bookmark, CTagItem *tag)
 {
-    bookmark->tags()->remove(tag);
+    bookmark->pTags()->remove(tag);
     CStorage::bookmarkTagRemove(bookmark->id(), tag->id());
     int row = m_bookmarkList.indexOf(bookmark);
     emit bookmarkDataChanged(row, row);
@@ -133,7 +133,7 @@ void CBookmarkMgr::bookmarkRemoveTag(CBookmarkItem *bookmark, CTagItem *tag)
 
 void CBookmarkMgr::bookmarkClearTag(CBookmarkItem *bookmark)
 {
-    bookmark->tags()->clear();
+    bookmark->pTags()->clear();
     CStorage::bookmarkTagClear(bookmark->id());
     int row = m_bookmarkList.indexOf(bookmark);
     emit bookmarkDataChanged(row, row);

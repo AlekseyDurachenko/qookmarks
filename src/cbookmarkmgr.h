@@ -42,6 +42,10 @@ public:
     CBookmarkItem *bookmarkAt(int index) const;
     CBookmarkItem *bookmarkAdd(const CBookmarkItemData &data);
     void bookmarkRemove(CBookmarkItem *bookmark);
+
+    void bookmarkAddTag(CBookmarkItem *bookmark, CTagItem *tag);
+    void bookmarkRemoveTag(CBookmarkItem *bookmark, CTagItem *tag);
+    void bookmarkClearTag(CBookmarkItem *bookmark);
 protected:
     virtual void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
     virtual void callbackTagDataChanged(CTagItem *tag);

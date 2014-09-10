@@ -40,6 +40,10 @@ public:
             const CTagItemData &data);
     static bool tagMove(int id, int parentId);
     static bool tagDelete(int id);
+
+    static int bookmarkTagAdd(int bookmarkId, int tagId);
+    static bool bookmarkTagRemove(int bookmarkId, int tagId);
+    static bool bookmarkTagClear(int bookmarkId);
 private:
     static QString m_dbFileName;
     static QSqlDatabase m_db;

@@ -65,8 +65,8 @@ int CStorage::bookmarkInsert(const CBookmarkItemData &data)
 {
     QSqlQuery query(m_db);
     query.prepare("INSERT INTO TBookmark(title, url) VALUES(:title, :url)");
-    query.bindValue("title", data.title());
-    query.bindValue("url", data.url());
+    query.bindValue(":title", data.title());
+    query.bindValue(":url", data.url());
     if (query.exec())
         return query.lastInsertId().toInt();
 
@@ -79,9 +79,9 @@ bool CStorage::bookmarkUpdate(int id, const CBookmarkItemData &data)
     query.prepare("UPDATE TBookmark"
             " SET title = :title, url = :url"
             " WHERE id = :id");
-    query.bindValue("title", data.title());
-    query.bindValue("url", data.url());
-    query.bindValue("id", id);
+    query.bindValue(":title", data.title());
+    query.bindValue(":url", data.url());
+    query.bindValue(":id", id);
     return query.exec();
 }
 
@@ -115,9 +115,9 @@ int CStorage::tagInsert(CTagItem::Type type, int parentId,
     QSqlQuery query(m_db);
     query.prepare("INSERT INTO TTag(title, type, parentId)"
             " VALUES(:title, :type, :parentid)");
-    query.bindValue("title", data.title());
-    query.bindValue("type", type);
-    query.bindValue("parentid", parentId);
+    query.bindValue(":title", data.title());
+    query.bindValue(":type", type);
+    query.bindValue(":parentid", parentId);
     if (query.exec())
         return query.lastInsertId().toInt();
 
@@ -131,10 +131,10 @@ bool CStorage::tagUpdate(int id, int parentId, CTagItem::Type type,
     query.prepare("UPDATE TTag"
             " SET title = :title, parentId = :parentId, type = :type"
             " WHERE id = :id");
-    query.bindValue("title", data.title());
-    query.bindValue("parentId", parentId);
-    query.bindValue("type", type);
-    query.bindValue("id", id);
+    query.bindValue(":title", data.title());
+    query.bindValue(":parentId", parentId);
+    query.bindValue(":type", type);
+    query.bindValue(":id", id);
     return query.exec();
 }
 
@@ -142,8 +142,8 @@ bool CStorage::tagMove(int id, int parentId)
 {
     QSqlQuery query(m_db);
     query.prepare("UPDATE TTag SET parentId = :parentId WHERE id = :id");
-    query.bindValue("parentId", parentId);
-    query.bindValue("id", id);
+    query.bindValue(":parentId", parentId);
+    query.bindValue(":id", id);
     return query.exec();
 }
 
@@ -157,5 +157,36 @@ bool CStorage::tagDelete(int id)
 
     query.prepare("DELETE FROM TTag WHERE id = :id");
     query.bindValue(":id", id);
+    return query.exec();
+}
+
+int CStorage::bookmarkTagAdd(int bookmarkId, int tagId)
+{
+    QSqlQuery query(m_db);
+    query.prepare("INSERT INTO TBookmarkTag(TBookmarkId, TTagId)"
+            " VALUES(:bookmarkId, :tagId)");
+    query.bindValue(":bookmarkId", bookmarkId);
+    query.bindValue(":tagId", tagId);
+    if (query.exec())
+        return query.lastInsertId().toInt();
+
+    return -1;
+}
+
+bool CStorage::bookmarkTagRemove(int bookmarkId, int tagId)
+{
+    QSqlQuery query(m_db);
+    query.prepare("DELETE FROM TBookmarkTag"
+            " WHERE TBookmarkId = :bookmarkId AND TTagId = :tagId");
+    query.bindValue(":bookmarkId", bookmarkId);
+    query.bindValue(":tagId", tagId);
+    return query.exec();
+}
+
+bool CStorage::bookmarkTagClear(int bookmarkId)
+{
+    QSqlQuery query(m_db);
+    query.prepare("DELETE FROM TBookmarkTag WHERE TBookmarkId = :bookmarkId");
+    query.bindValue(":bookmarkId", bookmarkId);
     return query.exec();
 }

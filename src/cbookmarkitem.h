@@ -37,6 +37,7 @@ public:
     void setData(const CBookmarkItemData &data);
 
     inline const QSet<CTagItem *> &tags() const;
+    bool isTagsIntersected(const QSet<CTagItem *> &tags) const;
 private:
     void setId(int id);
     void insertTag(CTagItem *tag);

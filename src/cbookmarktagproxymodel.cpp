@@ -46,5 +46,5 @@ bool CBookmarkTagProxyModel::filterAcceptsRow(int sourceRow,
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
     CBookmarkItem *item = static_cast<CBookmarkItem *>(index.internalPointer());
 
-    return (item->tags() & m_tags).count();
+    return item->isTagsIntersected(m_tags);
 }

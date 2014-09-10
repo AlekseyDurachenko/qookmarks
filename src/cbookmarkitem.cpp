@@ -38,6 +38,15 @@ void CBookmarkItem::setData(const CBookmarkItemData &data)
         m_mgr->callbackBookmarkDataChanged(this);
 }
 
+bool CBookmarkItem::isTagsIntersected(const QSet<CTagItem *> &tags) const
+{
+    foreach (CTagItem *tag, tags)
+        if (m_tags.contains(tag))
+            return true;
+
+    return false;
+}
+
 void CBookmarkItem::setId(int id)
 {
     m_id = id;

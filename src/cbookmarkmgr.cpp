@@ -107,10 +107,12 @@ void CBookmarkMgr::tagInit()
     m_tagTagRootItem = createTopLevelTag(CTagItem::TagRoot);
     m_tagReadLaterItem = createTopLevelTag(CTagItem::ReadLater);
     m_tagFavoritesItem = createTopLevelTag(CTagItem::Favorites);
+    recursiveTagRead(m_tagTagRootItem);
+    recursiveTagRead(m_tagReadLaterItem);
+    recursiveTagRead(m_tagFavoritesItem);
     m_tagRootItem->addChild(m_tagTagRootItem);
     m_tagRootItem->addChild(m_tagReadLaterItem);
     m_tagRootItem->addChild(m_tagFavoritesItem);
-    recursiveTagRead(m_tagTagRootItem);
 }
 
 CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)

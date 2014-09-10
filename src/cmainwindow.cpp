@@ -33,7 +33,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
     //mgr->tagAdd(mgr->tagTagRootItem(), CTagItemData());
 
-    ui->treeView_tags->setModel(new CTagItemModel(mgr->tagTagRootItem(), this));
+    ui->treeView_tags->setModel(new CTagItemModel(mgr->tagRootItem(), this));
     ui->treeView_bookmarks->setModel(new CBookmarkItemModel(mgr, this));
 
 //    CBookmarkItemData data;

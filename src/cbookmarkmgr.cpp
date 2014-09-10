@@ -110,6 +110,7 @@ void CBookmarkMgr::tagInit()
     m_tagRootItem->addChild(m_tagTagRootItem);
     m_tagRootItem->addChild(m_tagReadLaterItem);
     m_tagRootItem->addChild(m_tagFavoritesItem);
+    recursiveTagRead(m_tagTagRootItem);
 }
 
 CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)
@@ -126,6 +127,29 @@ CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)
         id = CStorage::tagInsert(type, -1, CTagItemData());
 
     return new CTagItem(id, type, CTagItemData(), this);
+}
+
+void CBookmarkMgr::recursiveTagRead(CTagItem *parentItem)
+{
+    QSqlQuery query = CStorage::createQuery();
+    query.prepare("SELECT id, type, title FROM TTag WHERE parentId = :id");
+    query.bindValue(":id", parentItem->id());
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            int id = query.value(0).toInt();
+            CTagItem::Type type =
+                    static_cast<CTagItem::Type>(query.value(1).toInt());
+
+            CTagItemData data;
+            data.setTitle(query.value(2).toString());
+
+            CTagItem *item = new CTagItem(id, type, data, this, parentItem);
+            recursiveTagRead(item);
+            parentItem->addChild(item);
+        }
+    }
 }
 
 void CBookmarkMgr::bookmarkInit()

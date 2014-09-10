@@ -46,6 +46,7 @@ protected:
 private:
     void tagInit();
     CTagItem *createTopLevelTag(CTagItem::Type type);
+    void recursiveTagRead(CTagItem *parent);
     void bookmarkInit();
 signals:
     void bookmarkInserted(int first, int last);

@@ -236,14 +236,14 @@ void CBookmarkMgr::bookmarkInit()
             data.setUrl(query.value(2).toUrl());
 
             CBookmarkItem *item = new CBookmarkItem(id, data, this);
-            foreach (CTagItem *tag, bookmarkTagsInit(item))
+            foreach (CTagItem *tag, bookmarkTagRead(item))
                 item->pTags()->insert(tag);
             m_bookmarkList.push_back(item);
         }
     }
 }
 
-QSet<CTagItem *> CBookmarkMgr::bookmarkTagsInit(CBookmarkItem *bookmark)
+QSet<CTagItem *> CBookmarkMgr::bookmarkTagRead(CBookmarkItem *bookmark)
 {
     QSet<CTagItem *> set;
 

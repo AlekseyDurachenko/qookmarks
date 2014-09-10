@@ -56,7 +56,7 @@ private:
     CTagItem *createTopLevelTag(CTagItem::Type type);
     void recursiveTagRead(CTagItem *parent);
     void bookmarkInit();
-    QSet<CTagItem *> bookmarkTagsInit(CBookmarkItem *bookmark);
+    QSet<CTagItem *> bookmarkTagRead(CBookmarkItem *bookmark);
 signals:
     void bookmarkInserted(int first, int last);
     void bookmarkRemoved(int first, int last);

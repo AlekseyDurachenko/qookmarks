@@ -38,8 +38,10 @@ public:
 
     inline const QSet<CTagItem *> &tags() const;
 private:
-    void setId(int id);    
-    inline QSet<CTagItem *> *pTags();
+    void setId(int id);
+    void insertTag(CTagItem *tag);
+    void removeTag(CTagItem *tag);
+    void clearTags();
 private:
     int m_id;
     CBookmarkItemData m_data;
@@ -66,11 +68,5 @@ const QSet<CTagItem *> &CBookmarkItem::tags() const
 {
     return m_tags;
 }
-
-QSet<CTagItem *> *CBookmarkItem::pTags()
-{
-    return &m_tags;
-}
-
 
 #endif // CBOOKMARKITEM_H

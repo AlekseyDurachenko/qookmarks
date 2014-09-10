@@ -42,3 +42,18 @@ void CBookmarkItem::setId(int id)
 {
     m_id = id;
 }
+
+void CBookmarkItem::insertTag(CTagItem *tag)
+{
+    m_tags.insert(tag);
+}
+
+void CBookmarkItem::removeTag(CTagItem *tag)
+{
+    m_tags.remove(tag);
+}
+
+void CBookmarkItem::clearTags()
+{
+    m_tags.clear();
+}

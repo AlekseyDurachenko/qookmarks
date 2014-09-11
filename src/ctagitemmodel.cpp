@@ -108,6 +108,9 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
         }
     }
 
+    if (role == Qt::UserRole)
+        return qVariantFromValue(index.internalPointer());
+
     return QVariant();
 }
 

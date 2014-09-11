@@ -19,7 +19,6 @@
 CBookmarkTagProxyModel::CBookmarkTagProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
-    m_includeChildren = false;
 }
 
 void CBookmarkTagProxyModel::setTags(const QSet<CTagItem *> &tags)
@@ -27,15 +26,6 @@ void CBookmarkTagProxyModel::setTags(const QSet<CTagItem *> &tags)
     if (m_tags != tags)
     {
         m_tags = tags;
-        invalidateFilter();
-    }
-}
-
-void CBookmarkTagProxyModel::setIncludeChildren(bool state)
-{
-    if (m_includeChildren != state)
-    {
-        m_includeChildren = state;
         invalidateFilter();
     }
 }

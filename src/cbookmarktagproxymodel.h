@@ -25,12 +25,10 @@ class CBookmarkTagProxyModel : public QSortFilterProxyModel
 public:
     explicit CBookmarkTagProxyModel(QObject *parent = 0);
     void setTags(const QSet<CTagItem *> &tags);
-    void setIncludeChildren(bool state);
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 private:
     QSet<CTagItem *> m_tags;
-    bool m_includeChildren;
 };
 
 #endif // CBOOKMARKTAGPROXYMODEL_H

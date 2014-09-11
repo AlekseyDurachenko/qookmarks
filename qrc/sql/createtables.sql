@@ -18,5 +18,8 @@ CREATE TABLE  IF NOT EXISTS TBookmark(
 CREATE TABLE  IF NOT EXISTS TBookmarkTag(
     id integer primary key,
     TBookmarkId integer,
-    TTagId integer
+    TTagId integer,
+    UNIQUE (TBookmarkId, TTagId),
+    FOREIGN KEY(TBookmarkId) REFERENCES TBookmark(id),
+    FOREIGN KEY(TTagId) REFERENCES TTag(id)
 );

@@ -37,6 +37,9 @@ bool CStorage::open(const QString &fileName)
             }
         }
 
+        // automatic integrity check
+        m_db.exec("PRAGMA foreign_keys = ON;");
+
         m_db.transaction();
         return true;
     }

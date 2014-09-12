@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarktagproxymodel.h"
+#include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
 #include <QDebug>
 
@@ -35,6 +36,10 @@ bool CBookmarkTagProxyModel::filterAcceptsRow(int sourceRow,
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
     CBookmarkItem *item = static_cast<CBookmarkItem *>(index.internalPointer());
+
+    if (m_tags.contains(item->mgr()->tagUntaggedItem())
+            && item->tags().isEmpty())
+        return true;
 
     return item->isTagsIntersected(m_tags);
 }

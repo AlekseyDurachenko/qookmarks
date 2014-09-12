@@ -30,7 +30,8 @@ public:
     virtual ~CBookmarkMgr();
 
     CTagItem *tagRootItem() const;
-    CTagItem *tagTagRootItem() const;
+    CTagItem *tagOtherItem() const;
+    CTagItem *tagUntaggedItem() const;
     CTagItem *tagReadLaterItem() const;
     CTagItem *tagFavoritesItem() const;
 
@@ -68,7 +69,8 @@ signals:
 private:
     QList<CBookmarkItem *> m_bookmarkList;
     CTagItem *m_tagRootItem;
-    CTagItem *m_tagTagRootItem;
+    CTagItem *m_tagOtherItem;
+    CTagItem *m_tagUntaggedItem;
     CTagItem *m_tagReadLaterItem;
     CTagItem *m_tagFavoritesItem;
     QHash<int, CTagItem *> m_tmpTagCache;

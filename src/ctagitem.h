@@ -28,9 +28,10 @@ public:
     {
         RootItem    = -1,
         Tag         =  0,
-        TagRoot     =  1,
-        ReadLater   =  2,
-        Favorites   =  3
+        Other       =  1,
+        Untagged    =  2,
+        ReadLater   =  3,
+        Favorites   =  4
     };
 private:
     CTagItem(Type type, CBookmarkMgr *mgr, CTagItem *parent = 0);

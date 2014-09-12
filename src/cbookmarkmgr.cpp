@@ -37,9 +37,14 @@ CTagItem *CBookmarkMgr::tagRootItem() const
     return m_tagRootItem;
 }
 
-CTagItem *CBookmarkMgr::tagTagRootItem() const
+CTagItem *CBookmarkMgr::tagOtherItem() const
 {
-    return m_tagTagRootItem;
+    return m_tagOtherItem;
+}
+
+CTagItem *CBookmarkMgr::tagUntaggedItem() const
+{
+    return m_tagUntaggedItem;
 }
 
 CTagItem *CBookmarkMgr::tagReadLaterItem() const
@@ -167,16 +172,20 @@ void CBookmarkMgr::callbackTagRemoved(CTagItem *parent, int first, int last)
 void CBookmarkMgr::tagInit()
 {
     m_tagRootItem = new CTagItem(CTagItem::RootItem, this);
-    m_tagTagRootItem = createTopLevelTag(CTagItem::TagRoot);
+    m_tagOtherItem = createTopLevelTag(CTagItem::Other);
+    m_tagUntaggedItem = createTopLevelTag(CTagItem::Untagged);
     m_tagReadLaterItem = createTopLevelTag(CTagItem::ReadLater);
     m_tagFavoritesItem = createTopLevelTag(CTagItem::Favorites);
-    recursiveTagRead(m_tagTagRootItem);
+    recursiveTagRead(m_tagOtherItem);
+    recursiveTagRead(m_tagUntaggedItem);
     recursiveTagRead(m_tagReadLaterItem);
     recursiveTagRead(m_tagFavoritesItem);
-    m_tagRootItem->addChild(m_tagTagRootItem);
+    m_tagRootItem->addChild(m_tagOtherItem);
+    m_tagRootItem->addChild(m_tagUntaggedItem);
     m_tagRootItem->addChild(m_tagReadLaterItem);
     m_tagRootItem->addChild(m_tagFavoritesItem);
-    m_tmpTagCache[m_tagTagRootItem->id()] = m_tagTagRootItem;
+    m_tmpTagCache[m_tagOtherItem->id()] = m_tagOtherItem;
+    m_tmpTagCache[m_tagUntaggedItem->id()] = m_tagUntaggedItem;
     m_tmpTagCache[m_tagReadLaterItem->id()] = m_tagReadLaterItem;
     m_tmpTagCache[m_tagFavoritesItem->id()] = m_tagFavoritesItem;
 }

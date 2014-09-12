@@ -76,8 +76,10 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
                 {
                 case CTagItem::RootItem:
                     return QObject::tr("/");
-                case CTagItem::TagRoot:
-                    return QObject::tr("Tags");
+                case CTagItem::Other:
+                    return QObject::tr("Other bookmarks");
+                case CTagItem::Untagged:
+                    return QObject::tr("Without a label");
                 case CTagItem::ReadLater:
                     return QObject::tr("Read it later");
                 case CTagItem::Favorites:
@@ -95,9 +97,11 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
         {
             switch(item->type())
             {
-            case CTagItem::TagRoot:
+            case CTagItem::Other:
             case CTagItem::Tag:
                 return QIcon(":/icons/bookmark-tag.png");
+            case CTagItem::Untagged:
+                return QIcon(":/icons/bookmark-untagged.png");
             case CTagItem::ReadLater:
                 return QIcon(":/icons/bookmark-readlater.png");
             case CTagItem::Favorites:

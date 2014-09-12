@@ -39,7 +39,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     CBookmarkItemModel *model = new CBookmarkItemModel(mgr, this);
     CBookmarkTagProxyModel *proxy = new CBookmarkTagProxyModel(this);
     proxy->setSourceModel(model);
-    proxy->setTags(QSet<CTagItem *>() << mgr->tagReadLaterItem());
+    proxy->setTags(QSet<CTagItem *>() << mgr->tagUntaggedItem());
     //mgr->bookmarkAddTag(mgr->bookmarkAt(0), mgr->tagReadLaterItem());
     ui->treeView_bookmarks->setModel(proxy);
 

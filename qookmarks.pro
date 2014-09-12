@@ -44,7 +44,8 @@ HEADERS        +=                                           \
     src/ctagitem.h                                          \
     src/ctagitemdata.h                                      \
     src/ctagitemmodel.h                                     \
-    src/cbookmarktagproxymodel.h
+    src/cbookmarktagproxymodel.h \
+    src/ctagtreeview.h
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
@@ -57,7 +58,8 @@ SOURCES        +=                                           \
     src/ctagitem.cpp                                        \
     src/ctagitemdata.cpp                                    \
     src/ctagitemmodel.cpp                                   \
-    src/cbookmarktagproxymodel.cpp
+    src/cbookmarktagproxymodel.cpp \
+    src/ctagtreeview.cpp
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \

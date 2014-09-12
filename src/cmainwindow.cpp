@@ -35,6 +35,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     //mgr->tagAdd(mgr->tagTagRootItem(), CTagItemData());
 
     ui->treeView_tags->setModel(new CTagItemModel(mgr->tagRootItem(), this));
+    ui->treeView_bookmarks->setSortingEnabled(true);
 
     CBookmarkItemModel *model = new CBookmarkItemModel(mgr, this);
     CBookmarkTagProxyModel *proxy = new CBookmarkTagProxyModel(this);

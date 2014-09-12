@@ -22,7 +22,6 @@ CTagItemModel::CTagItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_rootItem = 0;
-    m_mgr = 0;
     setRootItem(0);
 }
 
@@ -30,7 +29,6 @@ CTagItemModel::CTagItemModel(CTagItem *rootItem, QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_rootItem = 0;
-    m_mgr = 0;
     setRootItem(rootItem);
 }
 
@@ -38,23 +36,20 @@ void CTagItemModel::setRootItem(CTagItem *rootItem)
 {
     beginResetModel();
 
-    if (m_mgr)
-        disconnect(m_mgr, 0, this, 0);
+    if (m_rootItem)
+        disconnect(m_rootItem->mgr(), 0, this, 0);
 
     m_rootItem = rootItem;
     if (m_rootItem)
-        m_mgr = m_rootItem->mgr();
-    else
-        m_mgr = 0;
-
-    if (m_mgr)
     {
-        connect(m_mgr, SIGNAL(tagInserted(CTagItem *,int,int)),
+        connect(m_rootItem->mgr(), SIGNAL(tagInserted(CTagItem *,int,int)),
                 this, SLOT(onTagInserted(CTagItem *,int,int)));
-        connect(m_mgr, SIGNAL(tagRemoved(CTagItem *,int,int)),
+        connect(m_rootItem->mgr(), SIGNAL(tagRemoved(CTagItem *,int,int)),
                 this, SLOT(onTagRemoved(CTagItem *,int,int)));
-        connect(m_mgr, SIGNAL(tagDataChanged(CTagItem *,int,int)),
+        connect(m_rootItem->mgr(), SIGNAL(tagDataChanged(CTagItem *,int,int)),
                 this, SLOT(onTagDataChanged(CTagItem *,int,int)));
+        connect(m_rootItem->mgr(), SIGNAL(destroyed()),
+                this, SLOT(onMgrDestroyed()));
     }
 
     endResetModel();
@@ -207,4 +202,9 @@ void CTagItemModel::onTagDataChanged(CTagItem *parent, int first, int last)
 {
     emit dataChanged(createIndex(first, 0, parent->parent()),
                      createIndex(last,  1, parent->parent()));
+}
+
+void CTagItemModel::onMgrDestroyed()
+{
+    m_rootItem = 0;
 }

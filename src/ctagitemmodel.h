@@ -39,9 +39,9 @@ private slots:
     void onTagInserted(CTagItem *parent,int first, int last);
     void onTagRemoved(CTagItem *parent,int first, int last);
     void onTagDataChanged(CTagItem *parent,int first, int last);
+    void onMgrDestroyed();
 private:
     CTagItem *m_rootItem;
-    CBookmarkMgr *m_mgr;
 };
 
 CTagItem *CTagItemModel::rootItem() const

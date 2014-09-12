@@ -51,7 +51,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QTreeView" name="treeView_tags"/>
+     <widget class="CTagTreeView" name="treeView_tags"/>
     </item>
     <item>
      <widget class="QTreeView" name="treeView_bookmarks"/>
@@ -113,6 +113,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CTagTreeView</class>
+   <extends>QTreeView</extends>
+   <header>ctagtreeview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../qrc/icons.qrc"/>
  </resources>

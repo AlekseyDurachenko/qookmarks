@@ -73,7 +73,7 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
             return QIcon(":/icons/bookmark-item.png");
 
     if (role == Qt::UserRole)
-        return qVariantFromValue((void *)m_mgr->bookmarkAt(index.row()));
+        return QVariant::fromValue((void *)m_mgr->bookmarkAt(index.row()));
 
     return QVariant();
 }

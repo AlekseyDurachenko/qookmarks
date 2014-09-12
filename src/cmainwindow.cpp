@@ -32,17 +32,21 @@ CMainWindow::CMainWindow(QWidget *parent) :
     for (int i = 0; i < mgr->bookmarkCount(); ++i)
         qDebug() << mgr->bookmarkAt(i)->data().title();
 
-    //mgr->tagAdd(mgr->tagTagRootItem(), CTagItemData());
-
-    ui->treeView_tags->setModel(new CTagItemModel(mgr->tagRootItem(), this));
-    ui->treeView_bookmarks->setSortingEnabled(true);
-
     CBookmarkItemModel *model = new CBookmarkItemModel(mgr, this);
     CBookmarkTagProxyModel *proxy = new CBookmarkTagProxyModel(this);
     proxy->setSourceModel(model);
-    proxy->setTags(QSet<CTagItem *>() << mgr->tagUntaggedItem());
-    //mgr->bookmarkAddTag(mgr->bookmarkAt(0), mgr->tagReadLaterItem());
+    ui->treeView_bookmarks->setSortingEnabled(true);
     ui->treeView_bookmarks->setModel(proxy);
+
+    //mgr->tagAdd(mgr->tagTagRootItem(), CTagItemData());
+
+    //ui->treeView_tags->setModel(new CTagItemModel(mgr->tagRootItem(), this));
+    ui->treeView_tags->setBookmarkMgr(mgr);
+    connect(ui->treeView_tags, SIGNAL(currentTagChanged(QSet<CTagItem*>)),
+            proxy, SLOT(setTagFilter(QSet<CTagItem*>)));
+
+    //proxy->setTagFilter(QSet<CTagItem *>() << mgr->tagUntaggedItem());
+    //mgr->bookmarkAddTag(mgr->bookmarkAt(0), mgr->tagReadLaterItem());
 
     //ui->treeView_bookmarks->setModel(new CBookmarkItemModel(mgr, this));
 

@@ -22,7 +22,7 @@ CBookmarkTagProxyModel::CBookmarkTagProxyModel(QObject *parent) :
 {
 }
 
-void CBookmarkTagProxyModel::setTags(const QSet<CTagItem *> &tags)
+void CBookmarkTagProxyModel::setTagFilter(const QSet<CTagItem *> &tags)
 {
     if (m_tags != tags)
     {

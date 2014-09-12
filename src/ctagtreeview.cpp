@@ -13,12 +13,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagtreeview.h"
+#include <QDebug>
+
 
 CTagTreeView::CTagTreeView(QWidget *parent) :
     QTreeView(parent)
 {
     m_mgr = 0;
     m_model = new CTagItemModel(this);
+    setModel(m_model);
 }
 
 void CTagTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
@@ -40,4 +43,14 @@ void CTagTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
 void CTagTreeView::onMgrDestroyed()
 {
     m_mgr = 0;
+}
+
+void CTagTreeView::currentChanged(const QModelIndex &current,
+        const QModelIndex & /*previous*/)
+{
+    CTagItem *tag = static_cast<CTagItem *>
+            (current.data(Qt::UserRole).value<void *>());
+
+    emit currentTagChanged(tag);
+    emit currentTagChanged(tag->subtags().toSet());
 }

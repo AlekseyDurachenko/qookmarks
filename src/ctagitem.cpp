@@ -14,7 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitem.h"
 #include "cbookmarkmgr.h"
-#include <QDebug>
+
 
 CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
 {
@@ -74,6 +74,17 @@ int CTagItem::childCount() const
 CTagItem *CTagItem::childAt(int row) const
 {
     return m_childList.at(row);
+}
+
+QList<CTagItem *> CTagItem::subtags() const
+{
+    QList<CTagItem *> tagList;
+
+    foreach (CTagItem *item, m_childList)
+        tagList += (item->subtags());
+    tagList.push_back(const_cast<CTagItem *>(this));
+
+    return tagList;
 }
 
 void CTagItem::addChild(CTagItem *item)

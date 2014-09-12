@@ -28,9 +28,14 @@ public:
     inline CBookmarkMgr *mgr() const;
     void setBookmarkMgr(CBookmarkMgr *mgr);
 signals:
+    void currentTagChanged(CTagItem *tag);
+    void currentTagChanged(const QSet<CTagItem *> &tags);
 public slots:
 private slots:
     void onMgrDestroyed();
+protected:
+    virtual void currentChanged(const QModelIndex &current,
+                                const QModelIndex &previous);
 private:
     CBookmarkMgr *m_mgr;
     CTagItemModel *m_model;

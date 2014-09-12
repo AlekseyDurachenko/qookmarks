@@ -19,16 +19,25 @@
 #include <QSortFilterProxyModel>
 #include <QSet>
 
+
 class CBookmarkTagProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
     explicit CBookmarkTagProxyModel(QObject *parent = 0);
-    void setTags(const QSet<CTagItem *> &tags);
+    inline const QSet<CTagItem *> &tagFilter() const;
+public slots:
+    void setTagFilter(const QSet<CTagItem *> &tagFilter);
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 private:
     QSet<CTagItem *> m_tags;
 };
+
+const QSet<CTagItem *> &CBookmarkTagProxyModel::tagFilter() const
+{
+    return m_tags;
+}
+
 
 #endif // CBOOKMARKTAGPROXYMODEL_H

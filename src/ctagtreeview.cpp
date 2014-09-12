@@ -20,8 +20,8 @@ CTagTreeView::CTagTreeView(QWidget *parent) :
     QTreeView(parent)
 {
     m_mgr = 0;
-    m_model = new CTagItemModel(this);
-    setModel(m_model);
+    m_tagModel = new CTagItemModel(this);
+    setModel(m_tagModel);
 }
 
 void CTagTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
@@ -29,14 +29,14 @@ void CTagTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
     if (m_mgr)
     {
         disconnect(m_mgr, 0, this, 0);
-        m_model->setRootItem(0);
+        m_tagModel->setRootItem(0);
     }
 
     m_mgr = mgr;
     if (m_mgr)
     {
         connect(m_mgr, SIGNAL(destroyed()), this, SLOT(onMgrDestroyed()));
-        m_model->setRootItem(m_mgr->tagRootItem());
+        m_tagModel->setRootItem(m_mgr->tagRootItem());
     }
 }
 

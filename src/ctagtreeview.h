@@ -38,7 +38,7 @@ protected:
                                 const QModelIndex &previous);
 private:
     CBookmarkMgr *m_mgr;
-    CTagItemModel *m_model;
+    CTagItemModel *m_tagModel;
 };
 
 CBookmarkMgr *CTagTreeView::mgr() const

@@ -74,7 +74,7 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
                 case CTagItem::Other:
                     return QObject::tr("Other bookmarks");
                 case CTagItem::Untagged:
-                    return QObject::tr("Without a label");
+                    return QObject::tr("Without a tag");
                 case CTagItem::ReadLater:
                     return QObject::tr("Read it later");
                 case CTagItem::Favorites:
@@ -129,7 +129,7 @@ QVariant CTagItemModel::headerData(int section,
         switch (section)
         {
         case 0:
-            return QObject::tr("Title");
+            return QObject::tr("Tag name");
         }
     }
 

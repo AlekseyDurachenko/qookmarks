@@ -13,15 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagtreeview.h"
+#include <QMenu>
 #include <QDebug>
 
 
 CTagTreeView::CTagTreeView(QWidget *parent) :
     QTreeView(parent)
 {
+    // configure context menu
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(onCustomContextMenuRequested(QPoint)));
+
+    m_actionTagAdd = new QAction(tr("Add..."), this);
+    m_actionTagRemove = new QAction(tr("Remove..."), this);
+
     m_mgr = 0;
     m_tagModel = new CTagItemModel(this);
     setModel(m_tagModel);
+
+    updateActions();
 }
 
 void CTagTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
@@ -38,11 +49,21 @@ void CTagTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
         connect(m_mgr, SIGNAL(destroyed()), this, SLOT(onMgrDestroyed()));
         m_tagModel->setRootItem(m_mgr->tagRootItem());
     }
+
+    updateActions();
 }
 
 void CTagTreeView::onMgrDestroyed()
 {
     m_mgr = 0;
+}
+
+void CTagTreeView::onCustomContextMenuRequested(const QPoint &pos)
+{
+    QMenu menu(this);
+    menu.addAction(m_actionTagAdd);
+    menu.addAction(m_actionTagRemove);
+    menu.exec(viewport()->mapToGlobal(pos));
 }
 
 void CTagTreeView::currentChanged(const QModelIndex &current,
@@ -53,4 +74,32 @@ void CTagTreeView::currentChanged(const QModelIndex &current,
 
     emit currentTagChanged(tag);
     emit currentTagChanged(tag->subtags().toSet());
+
+    updateActions();
+}
+
+void CTagTreeView::updateActions()
+{
+    if (m_mgr)
+    {
+        if (currentIndex().isValid())
+        {
+            CTagItem *tag = static_cast<CTagItem *>
+                    (currentIndex().data(Qt::UserRole).value<void *>());
+
+            m_actionTagAdd->setEnabled(tag->type() == CTagItem::Tag
+                                    || tag->type() == CTagItem::Other);
+            m_actionTagRemove->setEnabled(tag->type() == CTagItem::Tag);
+        }
+        else
+        {
+            m_actionTagAdd->setEnabled(false);
+            m_actionTagRemove->setEnabled(false);
+        }
+    }
+    else
+    {
+        m_actionTagAdd->setEnabled(false);
+        m_actionTagRemove->setEnabled(false);
+    }
 }

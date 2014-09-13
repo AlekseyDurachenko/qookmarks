@@ -24,6 +24,8 @@ MOC_DIR         = build/release_moc
 UI_DIR          = build/release_ui
 RCC_DIR         = build/release_rcc
 
+include($$PWD/libs/qt-json/qt-json.pri)
+
 DEFINES        +=                                           \
 
 INCLUDEPATH    +=                                           \

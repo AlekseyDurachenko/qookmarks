@@ -80,8 +80,12 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
                 case CTagItem::Favorites:
                     return QObject::tr("Favorites");
                 default:
-                    return item->data().title();
+                    ;
                 }
+            }
+            else
+            {
+                return item->data().title();
             }
         }
     }

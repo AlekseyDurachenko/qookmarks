@@ -20,6 +20,7 @@
 #include "caboutdialog.h"
 #include "global.h"
 #include "cbookmarktagproxymodel.h"
+#include <QSettings>
 #include <QDebug>
 
 CMainWindow::CMainWindow(QWidget *parent) :
@@ -33,11 +34,45 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->treeView_bookmarks->setBookmarkMgr(m_bookmarkMgr);
     connect(ui->treeView_tags, SIGNAL(currentTagChanged(QSet<CTagItem*>)),
             ui->treeView_bookmarks, SLOT(setTagFilter(QSet<CTagItem*>)));
+
+    loadSettings();
 }
 
 CMainWindow::~CMainWindow()
 {
+    saveSettings();
+
     delete ui;
+}
+
+void CMainWindow::saveSettings()
+{
+    G_SETTINGS_INIT();
+    settings.setValue("CMainWindow/geometry", saveGeometry());
+    settings.setValue("CMainWindow/state", saveState());
+
+    settings.setValue("CMainWindow/splitter_tagBookmark/geometry",
+            ui->splitter_tagBookmark->saveGeometry());
+    settings.setValue("CMainWindow/splitter_tagBookmark/state",
+            ui->splitter_tagBookmark->saveState());
+}
+
+void CMainWindow::loadSettings()
+{
+    G_SETTINGS_INIT();
+    restoreGeometry
+            (settings.value
+                ("CMainWindow/geometry", saveGeometry()).toByteArray());
+    restoreState
+            (settings.value
+                ("CMainWindow/state", saveState()).toByteArray());
+
+    ui->splitter_tagBookmark->restoreGeometry
+            (settings.value("CMainWindow/splitter_tagBookmark/geometry",
+                    ui->splitter_tagBookmark->saveGeometry()).toByteArray());
+    ui->splitter_tagBookmark->restoreState
+            (settings.value("CMainWindow/splitter_tagBookmark/state",
+                    ui->splitter_tagBookmark->saveState()).toByteArray());
 }
 
 void CMainWindow::on_action_Quit_triggered()

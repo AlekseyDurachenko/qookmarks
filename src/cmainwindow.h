@@ -26,7 +26,6 @@ class CMainWindow;
 class CMainWindow : public QMainWindow
 {
     Q_OBJECT
-    
 public:
     explicit CMainWindow(QWidget *parent = 0);
     virtual ~CMainWindow();
@@ -34,6 +33,9 @@ private slots:
     void on_action_Quit_triggered();
     void on_action_AboutQt_triggered();
     void on_action_About_triggered();
+private:
+    void saveSettings();
+    void loadSettings();
 private:
     Ui::CMainWindow *ui;
     CBookmarkMgr *m_bookmarkMgr;

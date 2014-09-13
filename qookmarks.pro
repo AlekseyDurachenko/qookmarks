@@ -50,7 +50,8 @@ HEADERS        +=                                           \
     src/ctagtreeview.h \
     src/ctageditdialog.h \
     src/cbookmarktreeview.h \
-    src/cbookmarkeditdialog.h
+    src/cbookmarkeditdialog.h \
+    src/cimportbookmarkdialog.h
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
@@ -67,13 +68,15 @@ SOURCES        +=                                           \
     src/ctagtreeview.cpp \
     src/ctageditdialog.cpp \
     src/cbookmarktreeview.cpp \
-    src/cbookmarkeditdialog.cpp
+    src/cbookmarkeditdialog.cpp \
+    src/cimportbookmarkdialog.cpp
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \
     src/caboutdialog.ui \
     src/ctageditdialog.ui \
-    src/cbookmarkeditdialog.ui
+    src/cbookmarkeditdialog.ui \
+    src/cimportbookmarkdialog.ui
 
 RESOURCES      +=                                           \
     qrc/icons.qrc                                           \

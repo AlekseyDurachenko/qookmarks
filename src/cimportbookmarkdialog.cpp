@@ -12,35 +12,30 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CMAINWINDOW_H
-#define CMAINWINDOW_H
-
-#include <QMainWindow>
-class CBookmarkMgr;
+#include "cimportbookmarkdialog.h"
+#include "ui_cimportbookmarkdialog.h"
+#include <QPushButton>
 
 
-namespace Ui {
-class CMainWindow;
+CImportBookmarkDialog::CImportBookmarkDialog(QWidget *parent) :
+    QDialog(parent), ui(new Ui::CImportBookmarkDialog)
+{
+    ui->setupUi(this);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }
 
-class CMainWindow : public QMainWindow
+CImportBookmarkDialog::~CImportBookmarkDialog()
 {
-    Q_OBJECT
-public:
-    explicit CMainWindow(QWidget *parent = 0);
-    virtual ~CMainWindow();
-private slots:
-    void on_action_Quit_triggered();
-    void on_action_AboutQt_triggered();
-    void on_action_About_triggered();
-    void on_action_ImportBookmarks_triggered();
-private:
-    void saveSettings();
-    void loadSettings();
-private:
-    Ui::CMainWindow *ui;
-    CBookmarkMgr *m_bookmarkMgr;
-};
+    delete ui;
+}
 
+void CImportBookmarkDialog::accept()
+{
+    QDialog::accept();
+}
 
-#endif // CMAINWINDOW_H
+void CImportBookmarkDialog::on_listWidget_systemBrowsers_currentRowChanged(
+        int currentRow)
+{
+     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(currentRow != -1);
+}

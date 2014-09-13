@@ -14,10 +14,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cmainwindow.h"
 #include "ui_cmainwindow.h"
+#include "caboutdialog.h"
+#include "cimportbookmarkdialog.h"
 #include "cbookmarkitemmodel.h"
 #include "ctagitemmodel.h"
 #include "cbookmarkmgr.h"
-#include "caboutdialog.h"
 #include "global.h"
 #include "cbookmarktagproxymodel.h"
 #include <QSettings>
@@ -88,5 +89,11 @@ void CMainWindow::on_action_AboutQt_triggered()
 void CMainWindow::on_action_About_triggered()
 {
     CAboutDialog dlg(this);
+    dlg.exec();
+}
+
+void CMainWindow::on_action_ImportBookmarks_triggered()
+{
+    CImportBookmarkDialog dlg(this);
     dlg.exec();
 }

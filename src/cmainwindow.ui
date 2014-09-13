@@ -44,6 +44,8 @@
      <string>&amp;File</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="action_ImportBookmarks"/>
+    <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
@@ -82,6 +84,11 @@
    </property>
    <property name="text">
     <string>About &amp;Qt...</string>
+   </property>
+  </action>
+  <action name="action_ImportBookmarks">
+   <property name="text">
+    <string>&amp;Import bookmarks...</string>
    </property>
   </action>
  </widget>

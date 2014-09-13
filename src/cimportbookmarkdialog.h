@@ -12,35 +12,29 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CMAINWINDOW_H
-#define CMAINWINDOW_H
+#ifndef CIMPORTBOOKMARKDIALOG_H
+#define CIMPORTBOOKMARKDIALOG_H
 
-#include <QMainWindow>
-class CBookmarkMgr;
+#include <QDialog>
 
 
 namespace Ui {
-class CMainWindow;
+class CImportBookmarkDialog;
 }
 
-class CMainWindow : public QMainWindow
+class CImportBookmarkDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CMainWindow(QWidget *parent = 0);
-    virtual ~CMainWindow();
+    explicit CImportBookmarkDialog(QWidget *parent = 0);
+    virtual ~CImportBookmarkDialog();
+public slots:
+    virtual void accept();
 private slots:
-    void on_action_Quit_triggered();
-    void on_action_AboutQt_triggered();
-    void on_action_About_triggered();
-    void on_action_ImportBookmarks_triggered();
-private:
-    void saveSettings();
-    void loadSettings();
-private:
-    Ui::CMainWindow *ui;
-    CBookmarkMgr *m_bookmarkMgr;
+    void on_listWidget_systemBrowsers_currentRowChanged(int currentRow);
+    private:
+    Ui::CImportBookmarkDialog *ui;
 };
 
 
-#endif // CMAINWINDOW_H
+#endif // CIMPORTBOOKMARKDIALOG_H

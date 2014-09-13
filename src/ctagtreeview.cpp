@@ -28,9 +28,12 @@ CTagTreeView::CTagTreeView(QWidget *parent) :
             this, SLOT(onCustomContextMenuRequested(QPoint)));
 
     m_actionTagAdd = new QAction(tr("Add..."), this);
+    m_actionTagEdit = new QAction(tr("Edit..."), this);
     m_actionTagRemove = new QAction(tr("Remove..."), this);
     connect(m_actionTagAdd, SIGNAL(triggered()),
             this, SLOT(onActionTagAddTriggered()));
+    connect(m_actionTagEdit, SIGNAL(triggered()),
+            this, SLOT(onActionTagEditTriggered()));
     connect(m_actionTagRemove, SIGNAL(triggered()),
             this, SLOT(onActionTagRemoveTriggered()));
 
@@ -68,6 +71,7 @@ void CTagTreeView::onCustomContextMenuRequested(const QPoint &pos)
 {
     QMenu menu(this);
     menu.addAction(m_actionTagAdd);
+    menu.addAction(m_actionTagEdit);
     menu.addAction(m_actionTagRemove);
     menu.exec(viewport()->mapToGlobal(pos));
 }
@@ -82,6 +86,18 @@ void CTagTreeView::onActionTagAddTriggered()
                 (currentIndex().data(Qt::UserRole).value<void *>());
         m_mgr->tagAdd(tag, dlg.toData());
     }
+}
+
+void CTagTreeView::onActionTagEditTriggered()
+{
+    CTagItem *tag = static_cast<CTagItem *>
+            (currentIndex().data(Qt::UserRole).value<void *>());
+
+    CTagEditDialog dlg(this);
+    dlg.setWindowTitle(tr("Create new tag"));
+    dlg.setData(tag->data());
+    if (dlg.exec() == QDialog::Accepted)
+        tag->setData(dlg.toData());
 }
 
 void CTagTreeView::onActionTagRemoveTriggered()
@@ -119,17 +135,20 @@ void CTagTreeView::updateActions()
 
             m_actionTagAdd->setEnabled(tag->type() == CTagItem::Tag
                                     || tag->type() == CTagItem::Other);
+            m_actionTagEdit->setEnabled(tag->type() == CTagItem::Tag);
             m_actionTagRemove->setEnabled(tag->type() == CTagItem::Tag);
         }
         else
         {
             m_actionTagAdd->setEnabled(false);
+            m_actionTagEdit->setEnabled(false);
             m_actionTagRemove->setEnabled(false);
         }
     }
     else
     {
         m_actionTagAdd->setEnabled(false);
+        m_actionTagEdit->setEnabled(false);
         m_actionTagRemove->setEnabled(false);
     }
 }

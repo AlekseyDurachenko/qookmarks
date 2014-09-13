@@ -30,8 +30,8 @@ public:
     explicit CTagEditDialog(QWidget *parent = 0);
     virtual ~CTagEditDialog();
 
-    QString name() const;
     CTagItemData toData() const;
+    void setData(const CTagItemData &data);
 private:
     Ui::CTagEditDialog *ui;
 };

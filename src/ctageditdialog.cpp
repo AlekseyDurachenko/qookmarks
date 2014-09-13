@@ -27,14 +27,14 @@ CTagEditDialog::~CTagEditDialog()
     delete ui;
 }
 
-QString CTagEditDialog::name() const
-{
-    return ui->lineEdit_name->text();
-}
-
 CTagItemData CTagEditDialog::toData() const
 {
     CTagItemData data;
     data.setName(ui->lineEdit_name->text());
     return data;
+}
+
+void CTagEditDialog::setData(const CTagItemData &data)
+{
+    ui->lineEdit_name->setText(data.name());
 }

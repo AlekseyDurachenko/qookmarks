@@ -29,6 +29,7 @@ public:
     void setBookmarkMgr(CBookmarkMgr *mgr);
 
     inline QAction *actionTagAdd() const;
+    inline QAction *actionTagEdit() const;
     inline QAction *actionTagRemove() const;
 signals:
     void currentTagChanged(CTagItem *tag);
@@ -38,6 +39,7 @@ private slots:
     void onMgrDestroyed();
     void onCustomContextMenuRequested(const QPoint &pos);
     void onActionTagAddTriggered();
+    void onActionTagEditTriggered();
     void onActionTagRemoveTriggered();
 protected:
     virtual void currentChanged(const QModelIndex &current,
@@ -48,6 +50,7 @@ private:
     CBookmarkMgr *m_mgr;
     CTagItemModel *m_tagModel;
     QAction *m_actionTagAdd;
+    QAction *m_actionTagEdit;
     QAction *m_actionTagRemove;
 };
 
@@ -59,6 +62,11 @@ CBookmarkMgr *CTagTreeView::mgr() const
 QAction *CTagTreeView::actionTagAdd() const
 {
     return m_actionTagAdd;
+}
+
+QAction *CTagTreeView::actionTagEdit() const
+{
+    return m_actionTagEdit;
 }
 
 QAction *CTagTreeView::actionTagRemove() const

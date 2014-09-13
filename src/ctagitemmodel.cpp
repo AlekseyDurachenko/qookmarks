@@ -150,7 +150,11 @@ QModelIndex CTagItemModel::index(int row, int column,
     if (parent.isValid())
         parentItem = static_cast<CTagItem *>(parent.internalPointer());
 
-    return createIndex(row, column, parentItem->childAt(row));
+    CTagItem *childItem = parentItem->childAt(row);
+    if (childItem)
+        return createIndex(row, column, childItem);
+
+    return QModelIndex();
 }
 
 QModelIndex CTagItemModel::parent(const QModelIndex &index) const
@@ -159,7 +163,7 @@ QModelIndex CTagItemModel::parent(const QModelIndex &index) const
         return QModelIndex();
 
     CTagItem *childItem = static_cast<CTagItem*>(index.internalPointer());
-    CTagItem *parentItem = static_cast<CTagItem*>(childItem->parent());
+    CTagItem *parentItem = childItem->parent();
 
     if (parentItem == m_rootItem)
         return QModelIndex();
@@ -204,8 +208,8 @@ void CTagItemModel::onTagRemoved(CTagItem *parent, int first, int last)
 
 void CTagItemModel::onTagDataChanged(CTagItem *parent, int first, int last)
 {
-    emit dataChanged(createIndex(first, 0, parent->parent()),
-                     createIndex(last,  1, parent->parent()));
+    emit dataChanged(createIndex(first, 0, parent),
+                     createIndex(last,  1, parent));
 }
 
 void CTagItemModel::onMgrDestroyed()

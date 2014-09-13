@@ -94,7 +94,7 @@ void CTagTreeView::onActionTagEditTriggered()
             (currentIndex().data(Qt::UserRole).value<void *>());
 
     CTagEditDialog dlg(this);
-    dlg.setWindowTitle(tr("Create new tag"));
+    dlg.setWindowTitle(tr("Edit tag"));
     dlg.setData(tag->data());
     if (dlg.exec() == QDialog::Accepted)
         tag->setData(dlg.toData());

@@ -46,7 +46,9 @@ HEADERS        +=                                           \
     src/ctagitemmodel.h                                     \
     src/cbookmarktagproxymodel.h \
     src/ctagtreeview.h \
-    src/ctageditdialog.h
+    src/ctageditdialog.h \
+    src/cbookmarktreeview.h \
+    src/cbookmarkeditdialog.h
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
@@ -61,12 +63,15 @@ SOURCES        +=                                           \
     src/ctagitemmodel.cpp                                   \
     src/cbookmarktagproxymodel.cpp \
     src/ctagtreeview.cpp \
-    src/ctageditdialog.cpp
+    src/ctageditdialog.cpp \
+    src/cbookmarktreeview.cpp \
+    src/cbookmarkeditdialog.cpp
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \
     src/caboutdialog.ui \
-    src/ctageditdialog.ui
+    src/ctageditdialog.ui \
+    src/cbookmarkeditdialog.ui
 
 RESOURCES      +=                                           \
     qrc/icons.qrc                                           \

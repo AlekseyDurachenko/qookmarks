@@ -28,40 +28,11 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(G_SHORT_PROGRAM_NAME());
 
-    mgr = new CBookmarkMgr(this);
-    for (int i = 0; i < mgr->bookmarkCount(); ++i)
-        qDebug() << mgr->bookmarkAt(i)->data().title();
-
-    CBookmarkItemModel *model = new CBookmarkItemModel(mgr, this);
-    CBookmarkTagProxyModel *proxy = new CBookmarkTagProxyModel(this);
-    proxy->setSourceModel(model);
-    ui->treeView_bookmarks->setSortingEnabled(true);
-    ui->treeView_bookmarks->setModel(proxy);
-
-    //mgr->tagAdd(mgr->tagTagRootItem(), CTagItemData());
-
-    //ui->treeView_tags->setModel(new CTagItemModel(mgr->tagRootItem(), this));
-    ui->treeView_tags->setBookmarkMgr(mgr);
+    m_bookmarkMgr = new CBookmarkMgr(this);
+    ui->treeView_tags->setBookmarkMgr(m_bookmarkMgr);
+    ui->treeView_bookmarks->setBookmarkMgr(m_bookmarkMgr);
     connect(ui->treeView_tags, SIGNAL(currentTagChanged(QSet<CTagItem*>)),
-            proxy, SLOT(setTagFilter(QSet<CTagItem*>)));
-
-    //proxy->setTagFilter(QSet<CTagItem *>() << mgr->tagUntaggedItem());
-    //mgr->bookmarkAddTag(mgr->bookmarkAt(0), mgr->tagReadLaterItem());
-
-    //ui->treeView_bookmarks->setModel(new CBookmarkItemModel(mgr, this));
-
-//    CBookmarkItemData data;
-//    data.setTitle("one");
-//    data.setUrl(QUrl("http://one.url/"));
-//    mgr->bookmarkAdd(data);
-
-//    data.setTitle("two");
-//    data.setUrl(QUrl("http://two.url/"));
-//    mgr->bookmarkAdd(data);
-
-//    data.setTitle("three");
-//    data.setUrl(QUrl("http://three.url/"));
-//    mgr->bookmarkAdd(data);
+            ui->treeView_bookmarks, SLOT(setTagFilter(QSet<CTagItem*>)));
 }
 
 CMainWindow::~CMainWindow()
@@ -83,19 +54,4 @@ void CMainWindow::on_action_About_triggered()
 {
     CAboutDialog dlg(this);
     dlg.exec();
-}
-
-void CMainWindow::on_pushButton_clicked()
-{
-    static int n = 10;
-    CBookmarkItemData data;
-    data.setTitle(QString::number(++n));
-    mgr->bookmarkAdd(data);
-}
-
-void CMainWindow::on_pushButton_2_clicked()
-{
-    mgr->bookmarkRemove(mgr->bookmarkAt(1));
-    //mgr->tagMove(mgr->tagReadLaterItem(), mgr->tagTagRootItem()->childAt(0));
-    //mgr->tagRemove(mgr->tagTagRootItem()->childAt(0));
 }

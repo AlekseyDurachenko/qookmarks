@@ -12,32 +12,29 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CMAINWINDOW_H
-#define CMAINWINDOW_H
+#ifndef CBOOKMARKEDITDIALOG_H
+#define CBOOKMARKEDITDIALOG_H
 
-#include <QMainWindow>
-class CBookmarkMgr;
+#include "cbookmarkitemdata.h"
+#include <QDialog>
 
 
 namespace Ui {
-class CMainWindow;
+class CBookmarkEditDialog;
 }
 
-class CMainWindow : public QMainWindow
+class CBookmarkEditDialog : public QDialog
 {
     Q_OBJECT
-    
 public:
-    explicit CMainWindow(QWidget *parent = 0);
-    virtual ~CMainWindow();
-private slots:
-    void on_action_Quit_triggered();
-    void on_action_AboutQt_triggered();
-    void on_action_About_triggered();
+    explicit CBookmarkEditDialog(QWidget *parent = 0);
+    virtual ~CBookmarkEditDialog();
+
+    CBookmarkItemData toData() const;
+    void setData(const CBookmarkItemData &data);
 private:
-    Ui::CMainWindow *ui;
-    CBookmarkMgr *m_bookmarkMgr;
+    Ui::CBookmarkEditDialog *ui;
 };
 
 
-#endif // CMAINWINDOW_H
+#endif // CBOOKMARKEDITDIALOG_H

@@ -193,7 +193,7 @@ void CBookmarkMgr::tagInit()
 CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)
 {
     QSqlQuery query = CStorage::createQuery();
-    query.prepare("SELECT id, title FROM TTag "
+    query.prepare("SELECT id, name FROM TTag "
             " WHERE parentId = -1 AND type = :type");
     query.bindValue(":type", type);
 
@@ -209,7 +209,7 @@ CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)
 void CBookmarkMgr::recursiveTagRead(CTagItem *parentItem)
 {
     QSqlQuery query = CStorage::createQuery();
-    query.prepare("SELECT id, type, title FROM TTag WHERE parentId = :id");
+    query.prepare("SELECT id, type, name FROM TTag WHERE parentId = :id");
     query.bindValue(":id", parentItem->id());
     if (query.exec())
     {
@@ -220,7 +220,7 @@ void CBookmarkMgr::recursiveTagRead(CTagItem *parentItem)
                     static_cast<CTagItem::Type>(query.value(1).toInt());
 
             CTagItemData data;
-            data.setTitle(query.value(2).toString());
+            data.setName(query.value(2).toString());
 
             CTagItem *item = new CTagItem(id, type, data, this, parentItem);
             m_tmpTagCache[item->id()] = item;

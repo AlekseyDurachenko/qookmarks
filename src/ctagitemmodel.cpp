@@ -85,7 +85,7 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
             }
             else
             {
-                return item->data().title();
+                return item->data().name();
             }
         }
     }

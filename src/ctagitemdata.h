@@ -23,15 +23,15 @@ class CTagItemData
 public:
     CTagItemData();
 
-    inline const QString &title() const;
-    void setTitle(const QString &title);
+    inline const QString &name() const;
+    void setName(const QString &name);
 private:
-    QString m_title;
+    QString m_name;
 };
 
-const QString &CTagItemData::title() const
+const QString &CTagItemData::name() const
 {
-    return m_title;
+    return m_name;
 }
 
 

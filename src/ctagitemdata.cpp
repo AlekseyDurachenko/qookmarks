@@ -17,10 +17,10 @@
 
 CTagItemData::CTagItemData()
 {
-    m_title = QObject::tr("untitled");
+    m_name = QObject::tr("untitled");
 }
 
-void CTagItemData::setTitle(const QString &title)
+void CTagItemData::setName(const QString &name)
 {
-    m_title = title;
+    m_name = name;
 }

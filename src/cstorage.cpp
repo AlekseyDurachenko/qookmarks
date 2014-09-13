@@ -116,9 +116,9 @@ int CStorage::tagInsert(CTagItem::Type type, int parentId,
         const CTagItemData &data)
 {
     QSqlQuery query(m_db);
-    query.prepare("INSERT INTO TTag(title, type, parentId)"
-            " VALUES(:title, :type, :parentid)");
-    query.bindValue(":title", data.title());
+    query.prepare("INSERT INTO TTag(name, type, parentId)"
+            " VALUES(:name, :type, :parentid)");
+    query.bindValue(":name", data.name());
     query.bindValue(":type", type);
     query.bindValue(":parentid", parentId);
     if (query.exec())
@@ -132,9 +132,9 @@ bool CStorage::tagUpdate(int id, int parentId, CTagItem::Type type,
 {
     QSqlQuery query(m_db);
     query.prepare("UPDATE TTag"
-            " SET title = :title, parentId = :parentId, type = :type"
+            " SET name = :name, parentId = :parentId, type = :type"
             " WHERE id = :id");
-    query.bindValue(":title", data.title());
+    query.bindValue(":name", data.name());
     query.bindValue(":parentId", parentId);
     query.bindValue(":type", type);
     query.bindValue(":id", id);

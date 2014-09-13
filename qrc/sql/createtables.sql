@@ -1,7 +1,7 @@
 CREATE TABLE  IF NOT EXISTS TTag(
     id integer primary key,
     parentId integer,
-    title text,
+    name text,
     type integer
 );
 

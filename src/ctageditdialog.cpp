@@ -35,6 +35,6 @@ QString CTagEditDialog::name() const
 CTagItemData CTagEditDialog::toData() const
 {
     CTagItemData data;
-    data.setTitle(ui->lineEdit_name->text());
+    data.setName(ui->lineEdit_name->text());
     return data;
 }

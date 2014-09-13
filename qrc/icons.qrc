@@ -9,5 +9,7 @@
         <file>icons/bookmark-tag.png</file>
         <file>icons/bookmark-untagged.png</file>
         <file>icons/bookmark-item.png</file>
+        <file>icons/browser-firefox.png</file>
+        <file>icons/browser-chromium.png</file>
     </qresource>
 </RCC>

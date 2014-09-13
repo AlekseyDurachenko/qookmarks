@@ -32,7 +32,9 @@ public slots:
     virtual void accept();
 private slots:
     void on_listWidget_systemBrowsers_currentRowChanged(int currentRow);
-    private:
+private:
+    QString pathChromium() const;
+private:
     Ui::CImportBookmarkDialog *ui;
 };
 

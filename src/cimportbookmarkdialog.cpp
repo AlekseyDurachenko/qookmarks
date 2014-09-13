@@ -15,6 +15,8 @@
 #include "cimportbookmarkdialog.h"
 #include "ui_cimportbookmarkdialog.h"
 #include <QPushButton>
+#include <QFileInfo>
+#include <QDir>
 
 
 CImportBookmarkDialog::CImportBookmarkDialog(QWidget *parent) :
@@ -22,6 +24,11 @@ CImportBookmarkDialog::CImportBookmarkDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+    if (!pathChromium().isEmpty() && QFileInfo(pathChromium()).exists())
+        ui->listWidget_systemBrowsers->addItem
+                (new QListWidgetItem(QIcon(":/icons/browser-chromium.png"),
+                    tr("Chromium")));
 }
 
 CImportBookmarkDialog::~CImportBookmarkDialog()
@@ -37,5 +44,13 @@ void CImportBookmarkDialog::accept()
 void CImportBookmarkDialog::on_listWidget_systemBrowsers_currentRowChanged(
         int currentRow)
 {
-     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(currentRow != -1);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(currentRow != -1);
+}
+
+QString CImportBookmarkDialog::pathChromium() const
+{
+#ifdef Q_OS_UNIX
+    return QDir::homePath() + "/.config/chromium/Default/Bookmarks";
+#endif
+    return QString();
 }

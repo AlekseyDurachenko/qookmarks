@@ -15,6 +15,7 @@
 #include "ctagtreeview.h"
 #include "ctageditdialog.h"
 #include <QMenu>
+#include <QMessageBox>
 #include <QDebug>
 
 
@@ -30,6 +31,8 @@ CTagTreeView::CTagTreeView(QWidget *parent) :
     m_actionTagRemove = new QAction(tr("Remove..."), this);
     connect(m_actionTagAdd, SIGNAL(triggered()),
             this, SLOT(onActionTagAddTriggered()));
+    connect(m_actionTagRemove, SIGNAL(triggered()),
+            this, SLOT(onActionTagRemoveTriggered()));
 
     m_mgr = 0;
     m_tagModel = new CTagItemModel(this);
@@ -78,6 +81,18 @@ void CTagTreeView::onActionTagAddTriggered()
         CTagItem *tag = static_cast<CTagItem *>
                 (currentIndex().data(Qt::UserRole).value<void *>());
         m_mgr->tagAdd(tag, dlg.toData());
+    }
+}
+
+void CTagTreeView::onActionTagRemoveTriggered()
+{
+    if (QMessageBox::question(this, tr("Remove the tag"),
+            tr("Are you sure you want to remove the tag?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
+    {
+        CTagItem *tag = static_cast<CTagItem *>
+                (currentIndex().data(Qt::UserRole).value<void *>());
+        m_mgr->tagRemove(tag);
     }
 }
 

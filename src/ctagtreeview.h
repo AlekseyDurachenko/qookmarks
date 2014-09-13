@@ -38,6 +38,7 @@ private slots:
     void onMgrDestroyed();
     void onCustomContextMenuRequested(const QPoint &pos);
     void onActionTagAddTriggered();
+    void onActionTagRemoveTriggered();
 protected:
     virtual void currentChanged(const QModelIndex &current,
                                 const QModelIndex &previous);

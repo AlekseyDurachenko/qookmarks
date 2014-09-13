@@ -37,6 +37,7 @@ public slots:
 private slots:
     void onMgrDestroyed();
     void onCustomContextMenuRequested(const QPoint &pos);
+    void onActionTagAddTriggered();
 protected:
     virtual void currentChanged(const QModelIndex &current,
                                 const QModelIndex &previous);

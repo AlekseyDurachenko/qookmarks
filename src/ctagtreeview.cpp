@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagtreeview.h"
+#include "ctageditdialog.h"
 #include <QMenu>
 #include <QDebug>
 
@@ -27,6 +28,8 @@ CTagTreeView::CTagTreeView(QWidget *parent) :
 
     m_actionTagAdd = new QAction(tr("Add..."), this);
     m_actionTagRemove = new QAction(tr("Remove..."), this);
+    connect(m_actionTagAdd, SIGNAL(triggered()),
+            this, SLOT(onActionTagAddTriggered()));
 
     m_mgr = 0;
     m_tagModel = new CTagItemModel(this);
@@ -64,6 +67,18 @@ void CTagTreeView::onCustomContextMenuRequested(const QPoint &pos)
     menu.addAction(m_actionTagAdd);
     menu.addAction(m_actionTagRemove);
     menu.exec(viewport()->mapToGlobal(pos));
+}
+
+void CTagTreeView::onActionTagAddTriggered()
+{
+    CTagEditDialog dlg(this);
+    dlg.setWindowTitle(tr("Create new tag"));
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        CTagItem *tag = static_cast<CTagItem *>
+                (currentIndex().data(Qt::UserRole).value<void *>());
+        m_mgr->tagAdd(tag, dlg.toData());
+    }
 }
 
 void CTagTreeView::currentChanged(const QModelIndex &current,

@@ -94,6 +94,6 @@ void CMainWindow::on_action_About_triggered()
 
 void CMainWindow::on_action_ImportBookmarks_triggered()
 {
-    CImportBookmarkDialog dlg(this);
+    CImportBookmarkDialog dlg(m_bookmarkMgr, this);
     dlg.exec();
 }

@@ -14,21 +14,28 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cimportbookmarkdialog.h"
 #include "ui_cimportbookmarkdialog.h"
+#include "importbookmarkchromium.h"
+#include <QMessageBox>
 #include <QPushButton>
 #include <QFileInfo>
 #include <QDir>
 
 
-CImportBookmarkDialog::CImportBookmarkDialog(QWidget *parent) :
+CImportBookmarkDialog::CImportBookmarkDialog(CBookmarkMgr *mgr,
+        QWidget *parent) :
     QDialog(parent), ui(new Ui::CImportBookmarkDialog)
 {
+    m_mgr = mgr;
     ui->setupUi(this);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     if (!pathChromium().isEmpty() && QFileInfo(pathChromium()).exists())
-        ui->listWidget_systemBrowsers->addItem
-                (new QListWidgetItem(QIcon(":/icons/browser-chromium.png"),
-                    tr("Chromium")));
+    {
+        QListWidgetItem *item = new QListWidgetItem(tr("Chromium"));
+        item->setIcon(QIcon(":/icons/browser-chromium.png"));
+        item->setData(Qt::UserRole, Chromium);
+        ui->listWidget_systemBrowsers->addItem(item);
+    }
 }
 
 CImportBookmarkDialog::~CImportBookmarkDialog()
@@ -38,7 +45,25 @@ CImportBookmarkDialog::~CImportBookmarkDialog()
 
 void CImportBookmarkDialog::accept()
 {
-    QDialog::accept();
+    bool ok = false;
+    QString errorString;
+
+    if (ui->tabWidget->currentIndex() == 0)
+    {
+        QListWidgetItem *item = ui->listWidget_systemBrowsers->currentItem();
+        if (item->data(Qt::UserRole).toInt() == Chromium)
+            ok = importBookmarkChromium(m_mgr, pathChromium(), &errorString);
+    }
+
+    if (!ok)
+    {
+        QMessageBox::critical(this, tr("Critical"), errorString);
+        QDialog::reject();
+    }
+    else
+    {
+        QDialog::accept();
+    }
 }
 
 void CImportBookmarkDialog::on_listWidget_systemBrowsers_currentRowChanged(

@@ -51,7 +51,8 @@ HEADERS        +=                                           \
     src/ctageditdialog.h \
     src/cbookmarktreeview.h \
     src/cbookmarkeditdialog.h \
-    src/cimportbookmarkdialog.h
+    src/cimportbookmarkdialog.h \
+    src/importbookmarkchromium.h
 
 SOURCES        +=                                           \
     src/cmainwindow.cpp                                     \
@@ -69,7 +70,8 @@ SOURCES        +=                                           \
     src/ctageditdialog.cpp \
     src/cbookmarktreeview.cpp \
     src/cbookmarkeditdialog.cpp \
-    src/cimportbookmarkdialog.cpp
+    src/cimportbookmarkdialog.cpp \
+    src/importbookmarkchromium.cpp
 
 FORMS          +=                                           \
     src/cmainwindow.ui                                      \

@@ -15,6 +15,7 @@
 #ifndef CIMPORTBOOKMARKDIALOG_H
 #define CIMPORTBOOKMARKDIALOG_H
 
+#include "cbookmarkmgr.h"
 #include <QDialog>
 
 
@@ -26,7 +27,16 @@ class CImportBookmarkDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CImportBookmarkDialog(QWidget *parent = 0);
+    enum BrowserType
+    {
+        Chromium    = 0 /*,
+        GoogleChrome= 1,
+        Firefox     = 2,
+        Opera       = 3,
+        IE          = 4 */
+    };
+public:
+    explicit CImportBookmarkDialog(CBookmarkMgr *mgr, QWidget *parent = 0);
     virtual ~CImportBookmarkDialog();
 public slots:
     virtual void accept();
@@ -36,6 +46,7 @@ private:
     QString pathChromium() const;
 private:
     Ui::CImportBookmarkDialog *ui;
+    CBookmarkMgr *m_mgr;
 };
 
 

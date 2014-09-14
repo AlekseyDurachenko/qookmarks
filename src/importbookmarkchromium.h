@@ -12,32 +12,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include "global.h"
-#include "cstorage.h"
-#include <QApplication>
-#include <QSettings>
-#include <QDebug>
-#include "importbookmarkchromium.h"
+#ifndef IMPORTBOOKMARKCHROMIUM_H
+#define IMPORTBOOKMARKCHROMIUM_H
 
-int main(int argc, char *argv[])
-{
-    //importBookmarkChromium(0, QDir::homePath() + "/.config/chromium/Default/Bookmarks");
-    //return 0;
-    QApplication app(argc, argv);
+#include "cbookmarkmgr.h"
 
-    G_SETTINGS_INIT();
-    QString dbFileName = QFileInfo(settings.fileName()).absolutePath()
-            + QDir::separator() + "bookmarks.db";
-    qDebug() << "filename: " << dbFileName;
-    qDebug() << "open db : " << CStorage::open(dbFileName);
 
-    CMainWindow mainWindow;
-    mainWindow.show();    
+bool importBookmarkChromium(CBookmarkMgr *bookmarkMgr, const QString &fileName,
+        QString *reason = 0);
 
-    int ret = app.exec();
 
-    CStorage::close();
-
-    return ret;
-}
+#endif // IMPORTBOOKMARKCHROMIUM_H

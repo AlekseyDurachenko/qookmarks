@@ -67,9 +67,10 @@ QSqlQuery CStorage::createQuery()
 int CStorage::bookmarkInsert(const CBookmarkItemData &data)
 {
     QSqlQuery query(m_db);
-    query.prepare("INSERT INTO TBookmark(title, url) VALUES(:title, :url)");
+    query.prepare("INSERT INTO TBookmark(title, url, httpcode) VALUES(:title, :url, :httpcode)");
     query.bindValue(":title", data.title());
     query.bindValue(":url", data.url());
+    query.bindValue(":httpcode", data.httpCode());
     if (query.exec())
         return query.lastInsertId().toInt();
 
@@ -80,11 +81,12 @@ bool CStorage::bookmarkUpdate(int id, const CBookmarkItemData &data)
 {
     QSqlQuery query(m_db);
     query.prepare("UPDATE TBookmark"
-            " SET title = :title, url = :url"
+            " SET title = :title, url = :url, httpcode = :httpcode"
             " WHERE id = :id");
     query.bindValue(":title", data.title());
     query.bindValue(":url", data.url());
     query.bindValue(":id", id);
+    query.bindValue(":httpcode", data.httpCode());
     return query.exec();
 }
 

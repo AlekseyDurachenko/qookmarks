@@ -246,7 +246,7 @@ void CBookmarkMgr::recursiveTagRead(CTagItem *parentItem)
 void CBookmarkMgr::bookmarkInit()
 {
     QSqlQuery query = CStorage::createQuery();
-    query.prepare("SELECT id, title, url FROM TBookmark");
+    query.prepare("SELECT id, title, url, httpcode FROM TBookmark");
     if (query.exec())
     {
         while (query.next())
@@ -256,6 +256,7 @@ void CBookmarkMgr::bookmarkInit()
             CBookmarkItemData data;
             data.setTitle(query.value(1).toString());
             data.setUrl(query.value(2).toUrl());
+            data.setHttpCode(query.value(3).toInt());
 
             CBookmarkItem *item = new CBookmarkItem(id, data, this);
             foreach (CTagItem *tag, bookmarkTagRead(item))

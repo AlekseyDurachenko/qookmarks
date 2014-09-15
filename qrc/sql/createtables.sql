@@ -12,6 +12,7 @@ CREATE TABLE  IF NOT EXISTS TBookmark(
     id integer primary key,
     title text,
     url text,
+    httpcode integer,
     UNIQUE(url)
 );
 

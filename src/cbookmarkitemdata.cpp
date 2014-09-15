@@ -18,6 +18,8 @@
 CBookmarkItemData::CBookmarkItemData()
 {
     m_title = QObject::tr("untitled");
+    m_url = QUrl();
+    m_httpCode = -1;
 }
 
 void CBookmarkItemData::setTitle(const QString &title)
@@ -29,3 +31,9 @@ void CBookmarkItemData::setUrl(const QUrl &url)
 {
     m_url = url;
 }
+
+void CBookmarkItemData::setHttpCode(int code)
+{
+    m_httpCode = code;
+}
+

@@ -28,9 +28,13 @@ public:
 
     inline const QUrl &url() const;
     void setUrl(const QUrl &url);
+
+    inline int httpCode() const;
+    void setHttpCode(int code);
 private:
     QString m_title;
     QUrl m_url;
+    int m_httpCode;
 };
 
 const QString &CBookmarkItemData::title() const
@@ -42,5 +46,11 @@ const QUrl &CBookmarkItemData::url() const
 {
     return m_url;
 }
+
+int CBookmarkItemData::httpCode() const
+{
+    return m_httpCode;
+}
+
 
 #endif // CBOOKMARKITEMDATA_H

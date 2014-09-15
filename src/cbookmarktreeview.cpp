@@ -90,7 +90,15 @@ void CBookmarkTreeView::onActionBookmarkAddTriggered()
     CBookmarkEditDialog dlg(this);
     dlg.setWindowTitle(tr("Create new bookmark"));
     if (dlg.exec() == QDialog::Accepted)
-        m_mgr->bookmarkAdd(dlg.toData());
+    {
+        CBookmarkItemData data = dlg.toData();
+        if (m_mgr->bookmarkFind(data.url()))
+            QMessageBox::warning(this, tr("Warning"), tr("The bookmark with "
+                    "the url \"%1\" is already exists")
+                            .arg(data.url().toString()));
+        else
+            m_mgr->bookmarkAdd(dlg.toData());
+    }
 }
 
 void CBookmarkTreeView::onActionBookmarkEditTriggered()

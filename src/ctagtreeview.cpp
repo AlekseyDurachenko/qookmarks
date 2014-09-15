@@ -84,7 +84,13 @@ void CTagTreeView::onActionTagAddTriggered()
     {
         CTagItem *tag = static_cast<CTagItem *>
                 (currentIndex().data(Qt::UserRole).value<void *>());
-        m_mgr->tagAdd(tag, dlg.toData());
+
+        CTagItemData data = dlg.toData();
+        if (m_mgr->tagFind(tag, data.name()))
+            QMessageBox::warning(this, tr("Warning"),
+                    tr("The tag \"%1\" is already exists").arg(data.name()));
+        else
+            m_mgr->tagAdd(tag, dlg.toData());
     }
 }
 

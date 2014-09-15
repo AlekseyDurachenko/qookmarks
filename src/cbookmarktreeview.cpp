@@ -22,6 +22,8 @@
 CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     QTreeView(parent)
 {
+    setRootIsDecorated(false);
+
     // configure context menu
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),

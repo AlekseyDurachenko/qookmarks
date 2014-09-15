@@ -57,6 +57,14 @@ CTagItem *CBookmarkMgr::tagFavoritesItem() const
     return m_tagFavoritesItem;
 }
 
+CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
+{
+    for (int i = 0; i < parentItem->childCount(); ++i)
+        if (parentItem->childAt(i)->data().name() == name)
+            return parentItem->childAt(i);
+    return 0;
+}
+
 CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
 {
     int id = CStorage::tagInsert(CTagItem::Tag, parent->id(), data);
@@ -101,6 +109,14 @@ int CBookmarkMgr::bookmarkCount() const
 CBookmarkItem *CBookmarkMgr::bookmarkAt(int index) const
 {
     return m_bookmarkList.at(index);
+}
+
+CBookmarkItem *CBookmarkMgr::bookmarkFind(const QUrl &url)
+{
+    foreach (CBookmarkItem *item, m_bookmarkList)
+        if (item->data().url() == url)
+            return item;
+    return 0;
 }
 
 CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
@@ -177,9 +193,6 @@ void CBookmarkMgr::tagInit()
     m_tagReadLaterItem = createTopLevelTag(CTagItem::ReadLater);
     m_tagFavoritesItem = createTopLevelTag(CTagItem::Favorites);
     recursiveTagRead(m_tagOtherItem);
-    recursiveTagRead(m_tagUntaggedItem);
-    recursiveTagRead(m_tagReadLaterItem);
-    recursiveTagRead(m_tagFavoritesItem);
     m_tagRootItem->addChild(m_tagOtherItem);
     m_tagRootItem->addChild(m_tagUntaggedItem);
     m_tagRootItem->addChild(m_tagReadLaterItem);

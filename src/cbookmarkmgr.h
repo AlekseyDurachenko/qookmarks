@@ -35,12 +35,14 @@ public:
     CTagItem *tagReadLaterItem() const;
     CTagItem *tagFavoritesItem() const;
 
+    CTagItem *tagFind(CTagItem *parentItem, const QString &name);
     CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
     void tagMove(CTagItem *newParent, CTagItem *item);
     void tagRemove(CTagItem *item);
 
     int bookmarkCount() const;
     CBookmarkItem *bookmarkAt(int index) const;
+    CBookmarkItem *bookmarkFind(const QUrl &url);
     CBookmarkItem *bookmarkAdd(const CBookmarkItemData &data);
     void bookmarkRemove(CBookmarkItem *bookmark);
 

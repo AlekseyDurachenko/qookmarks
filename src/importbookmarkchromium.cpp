@@ -24,17 +24,26 @@ static void addUrl(CBookmarkMgr *bookmarkMgr, CTagItem *parent,
     CBookmarkItemData data;
     data.setTitle(map.value("name").toString());
     data.setUrl(map.value("url").toString());
-    CBookmarkItem *bookmark = bookmarkMgr->bookmarkAdd(data);
+
+    CBookmarkItem *bookmark = bookmarkMgr->bookmarkFind(data.url());
+    if (!bookmark)
+        bookmark = bookmarkMgr->bookmarkAdd(data);
+
     if (bookmarkMgr->tagOtherItem() != parent)
         bookmarkMgr->bookmarkAddTag(bookmark, parent);
 }
 
 
-static CTagItem *addFolder(CBookmarkMgr *bookmarkMgr, CTagItem *parent,
+static CTagItem *findOrAddTag(CBookmarkMgr *bookmarkMgr, CTagItem *parent,
         const QVariantMap &map)
 {
     CTagItemData data;
     data.setName(map.value("name").toString());
+
+    CTagItem *item = bookmarkMgr->tagFind(parent, data.name());
+    if (item)
+        return item;
+
     return bookmarkMgr->tagAdd(parent, data);
 }
 
@@ -50,7 +59,7 @@ static void parseFolder(CBookmarkMgr *bookmarkMgr, CTagItem *parent,
         if (type == "url")
             addUrl(bookmarkMgr, parent, m);
         else if (type == "folder")
-            parseFolder(bookmarkMgr, addFolder(bookmarkMgr, parent, m), m);
+            parseFolder(bookmarkMgr, findOrAddTag(bookmarkMgr, parent, m), m);
     }
 }
 

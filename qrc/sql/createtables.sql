@@ -2,7 +2,8 @@ CREATE TABLE  IF NOT EXISTS TTag(
     id integer primary key,
     parentId integer,
     name text,
-    type integer
+    type integer,
+    UNIQUE(parentId, name)
 );
 
 ---NEXT---
@@ -10,7 +11,8 @@ CREATE TABLE  IF NOT EXISTS TTag(
 CREATE TABLE  IF NOT EXISTS TBookmark(
     id integer primary key,
     title text,
-    url text
+    url text,
+    UNIQUE(url)
 );
 
 ---NEXT---

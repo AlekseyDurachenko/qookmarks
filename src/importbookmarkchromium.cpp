@@ -18,21 +18,29 @@
 #include <QDebug>
 
 
-static void addUrl(CBookmarkMgr *bookmarkMgr, const QVariantMap &map)
+static void addUrl(CBookmarkMgr *bookmarkMgr, CTagItem *parent,
+        const QVariantMap &map)
 {
     CBookmarkItemData data;
     data.setTitle(map.value("name").toString());
     data.setUrl(map.value("url").toString());
-    bookmarkMgr->bookmarkAdd(data);
+    CBookmarkItem *bookmark = bookmarkMgr->bookmarkAdd(data);
+    if (bookmarkMgr->tagOtherItem() != parent)
+        bookmarkMgr->bookmarkAddTag(bookmark, parent);
 }
 
 
-static void addFolder(CBookmarkMgr *bookmarkMgr, const QVariantMap &map)
+static CTagItem *addFolder(CBookmarkMgr *bookmarkMgr, CTagItem *parent,
+        const QVariantMap &map)
 {
+    CTagItemData data;
+    data.setName(map.value("name").toString());
+    return bookmarkMgr->tagAdd(parent, data);
 }
 
 
-static void parseFolder(CBookmarkMgr *bookmarkMgr, const QVariantMap &map)
+static void parseFolder(CBookmarkMgr *bookmarkMgr, CTagItem *parent,
+        const QVariantMap &map)
 {
     foreach (QVariant v, map.value("children").toList())
     {
@@ -40,14 +48,9 @@ static void parseFolder(CBookmarkMgr *bookmarkMgr, const QVariantMap &map)
 
         QString type = m.value("type").toString();
         if (type == "url")
-        {
-            addUrl(bookmarkMgr, m);
-        }
+            addUrl(bookmarkMgr, parent, m);
         else if (type == "folder")
-        {
-            addFolder(bookmarkMgr, m);
-            parseFolder(bookmarkMgr, m);
-        }
+            parseFolder(bookmarkMgr, addFolder(bookmarkMgr, parent, m), m);
     }
 }
 
@@ -70,7 +73,7 @@ bool importBookmarkChromium(CBookmarkMgr *bookmarkMgr, const QString &fileName,
         if (!root.isValid())
             throw QObject::tr("can't parse the chromium bookmark file");
 
-        parseFolder(bookmarkMgr, root.toMap());
+        parseFolder(bookmarkMgr, bookmarkMgr->tagOtherItem(), root.toMap());
     }
     catch (const QString &error)
     {

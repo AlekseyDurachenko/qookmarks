@@ -61,7 +61,7 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
     {
         if (index.column() == 0)
         {

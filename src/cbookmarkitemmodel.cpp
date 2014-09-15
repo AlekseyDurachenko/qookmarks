@@ -57,7 +57,7 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     CBookmarkItem *bookmark = m_mgr->bookmarkAt(index.row());
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
     {
         switch (index.column())
         {

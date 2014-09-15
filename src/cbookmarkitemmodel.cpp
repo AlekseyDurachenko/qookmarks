@@ -148,6 +148,5 @@ void CBookmarkItemModel::onBookmarkRemoved(int first, int last)
 
 void CBookmarkItemModel::onBookmarkDataChanged(int first, int last)
 {
-    emit dataChanged(createIndex(first, 0, m_mgr->bookmarkAt(first)),
-                     createIndex(last,  3, m_mgr->bookmarkAt(last)));
+    emit dataChanged(createIndex(first, 0), createIndex(last, columnCount()-1));
 }

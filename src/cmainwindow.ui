@@ -44,6 +44,8 @@
      <string>&amp;File</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="action_TestAllUrls"/>
+    <addaction name="separator"/>
     <addaction name="action_ImportBookmarks"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
@@ -89,6 +91,11 @@
   <action name="action_ImportBookmarks">
    <property name="text">
     <string>&amp;Import bookmarks...</string>
+   </property>
+  </action>
+  <action name="action_TestAllUrls">
+   <property name="text">
+    <string>&amp;Test all urls...</string>
    </property>
   </action>
  </widget>

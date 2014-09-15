@@ -36,6 +36,9 @@ CMainWindow::CMainWindow(QWidget *parent) :
     connect(ui->treeView_tags, SIGNAL(currentTagChanged(QSet<CTagItem*>)),
             ui->treeView_bookmarks, SLOT(setTagFilter(QSet<CTagItem*>)));
 
+    m_networkMgr = new QNetworkAccessManager(this);
+    m_reply = 0;
+
     loadSettings();
 }
 
@@ -96,4 +99,46 @@ void CMainWindow::on_action_ImportBookmarks_triggered()
 {
     CImportBookmarkDialog dlg(m_bookmarkMgr, this);
     dlg.exec();
+}
+
+void CMainWindow::on_action_TestAllUrls_triggered()
+{
+    m_urlList.clear();
+    for (int i = 0; i < m_bookmarkMgr->bookmarkCount(); ++i)
+    {
+        m_urlList.push_back(m_bookmarkMgr->bookmarkAt(i)->data().url());
+        m_tmpHash[m_bookmarkMgr->bookmarkAt(i)->data().url()] = i;
+    }
+
+    QMetaObject::invokeMethod(this, "state_getNextUrl");
+}
+
+void CMainWindow::state_getNextUrl()
+{
+    m_reply = m_networkMgr->get(QNetworkRequest(m_urlList.takeFirst()));
+    connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)),
+            this, SLOT(state_downloadProgress(qint64,qint64)));
+    connect(m_reply, SIGNAL(finished()), this, SLOT(state_replyFinished()));
+    connect(m_reply, SIGNAL(finished()), m_reply, SLOT(deleteLater()));
+    m_reply->setReadBufferSize(64);
+}
+
+void CMainWindow::state_replyFinished()
+{
+    int code = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    QUrl url = m_reply->url();
+    m_reply = 0;
+
+    CBookmarkItem *item = m_bookmarkMgr->bookmarkAt(m_tmpHash[url]);
+    CBookmarkItemData data = item->data();
+    data.setHttpCode(code);
+    item->setData(data);
+
+    if (!m_urlList.isEmpty())
+        QMetaObject::invokeMethod(this, "state_getNextUrl");
+}
+
+void CMainWindow::state_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+{
+    m_reply->abort(); // double call are happened
 }

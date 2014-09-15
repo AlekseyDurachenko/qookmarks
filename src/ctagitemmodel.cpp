@@ -209,7 +209,7 @@ void CTagItemModel::onTagRemoved(CTagItem *parent, int first, int last)
 void CTagItemModel::onTagDataChanged(CTagItem *parent, int first, int last)
 {
     emit dataChanged(createIndex(first, 0, parent),
-                     createIndex(last,  1, parent));
+                     createIndex(last,  columnCount()-1, parent));
 }
 
 void CTagItemModel::onMgrDestroyed()

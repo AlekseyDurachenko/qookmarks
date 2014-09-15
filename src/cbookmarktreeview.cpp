@@ -23,6 +23,7 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     QTreeView(parent)
 {
     setRootIsDecorated(false);
+    setSortingEnabled(true);
 
     // configure context menu
     setContextMenuPolicy(Qt::CustomContextMenu);

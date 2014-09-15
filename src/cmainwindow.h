@@ -15,7 +15,10 @@
 #ifndef CMAINWINDOW_H
 #define CMAINWINDOW_H
 
+#include <QtNetwork>
 #include <QMainWindow>
+#include <QHash>
+#include <QUrl>
 class CBookmarkMgr;
 
 
@@ -34,12 +37,21 @@ private slots:
     void on_action_AboutQt_triggered();
     void on_action_About_triggered();
     void on_action_ImportBookmarks_triggered();
+    void on_action_TestAllUrls_triggered();
+
+    void state_getNextUrl();
+    void state_replyFinished();
+    void state_downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 private:
     void saveSettings();
     void loadSettings();
 private:
     Ui::CMainWindow *ui;
     CBookmarkMgr *m_bookmarkMgr;
+    QList<QUrl> m_urlList;
+    QNetworkReply *m_reply;
+    QNetworkAccessManager *m_networkMgr;
+    QHash<QUrl, int> m_tmpHash;
 };
 
 

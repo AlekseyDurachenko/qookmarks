@@ -16,7 +16,7 @@ TARGET          = qookmarks
 TEMPLATE        = app
 
 CONFIG         += console debug_and_release
-QT             += core gui network sql
+QT             += core gui network sql webkit
 
 DESTDIR         = bin
 OBJECTS_DIR     = build/release_obj

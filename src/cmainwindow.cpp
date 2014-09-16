@@ -23,6 +23,7 @@
 #include "cbookmarktagproxymodel.h"
 #include <QSettings>
 #include <QDebug>
+#include <QtWebKit/QWebView>
 
 CMainWindow::CMainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::CMainWindow)
@@ -141,4 +142,12 @@ void CMainWindow::state_replyFinished()
 void CMainWindow::state_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
     m_reply->abort(); // double call are happened
+}
+
+void CMainWindow::on_action_TestSavePageImage_triggered()
+{
+//    QWebView *view = new QWebView;
+//    view->setAttribute(Qt::WA_DeleteOnClose);
+//    view->load(QUrl("http://stackoverflow.com/questions/9086046/create-whole-page-screen-shot-using-qwebpage"));
+//    view->show();
 }

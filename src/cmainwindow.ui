@@ -44,6 +44,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="action_TestSavePageImage"/>
     <addaction name="action_TestAllUrls"/>
     <addaction name="separator"/>
     <addaction name="action_ImportBookmarks"/>
@@ -96,6 +97,11 @@
   <action name="action_TestAllUrls">
    <property name="text">
     <string>&amp;Test all urls...</string>
+   </property>
+  </action>
+  <action name="action_TestSavePageImage">
+   <property name="text">
+    <string>&amp;Test save page image</string>
    </property>
   </action>
  </widget>

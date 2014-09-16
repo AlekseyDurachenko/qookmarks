@@ -42,6 +42,8 @@ private slots:
     void state_getNextUrl();
     void state_replyFinished();
     void state_downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+
+    void on_action_TestSavePageImage_triggered();
 private:
     void saveSettings();
     void loadSettings();

@@ -46,10 +46,11 @@ public:
     int row() const;
 
     inline const CTagItemData &data() const;
-    void setData(const CTagItemData &data);
+    bool setData(const CTagItemData &data);
 
     int childCount() const;
     CTagItem *childAt(int row) const;
+    CTagItem *findChild(const QString &name) const;
 
     /*!
      * \brief fetchAllSubtags
@@ -61,12 +62,14 @@ private:
     CTagItem *takeChild(int row);
     int childIndexOf(CTagItem *item) const;
     void setParent(CTagItem *parent);
+    QHash<QString, CTagItem *> &searchHash();
 private:
     Type m_type;
     CTagItemData m_data;
     CBookmarkMgr *m_mgr;
     CTagItem *m_parent;
     QList<CTagItem *> m_childList;
+    QHash<QString, CTagItem *> m_searchHash;
 };
 
 CBookmarkMgr *CTagItem::mgr() const

@@ -37,7 +37,7 @@ public:
 
     CTagItem *tagFind(CTagItem *parentItem, const QString &name);
     CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
-    void tagMove(CTagItem *newParent, CTagItem *item);
+    bool tagMove(CTagItem *newParent, CTagItem *item);
     void tagRemove(CTagItem *item);
 
     int bookmarkCount() const;

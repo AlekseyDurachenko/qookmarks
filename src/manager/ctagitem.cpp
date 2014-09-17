@@ -19,7 +19,27 @@
 CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
 {
     m_type = type;
-    m_data = CTagItemData();
+    switch (type)
+    {
+    case RootItem:
+        m_data.setName("/");
+        break;
+    case Tag:
+        m_data.setName("Tag");
+        break;
+    case Other:
+        m_data.setName("Other");
+        break;
+    case Untagged:
+        m_data.setName("Untagged");
+        break;
+    case ReadLater:
+        m_data.setName("ReadLater");
+        break;
+    case Favorites:
+        m_data.setName("Favorites");
+        break;
+    }
     m_mgr = mgr;
     m_parent = parent;
 }
@@ -47,11 +67,16 @@ int CTagItem::row() const
     return -1;
 }
 
-void CTagItem::setData(const CTagItemData &data)
+bool CTagItem::setData(const CTagItemData &data)
 {
+    if (m_parent && m_parent->searchHash().contains(data.name()))
+        return false;
+
     m_data = data;
     if (m_mgr)
         m_mgr->callbackTagDataChanged(this);
+
+    return true;
 }
 
 int CTagItem::childCount() const
@@ -62,6 +87,11 @@ int CTagItem::childCount() const
 CTagItem *CTagItem::childAt(int row) const
 {
     return m_childList.at(row);
+}
+
+CTagItem *CTagItem::findChild(const QString &name) const
+{
+    return m_searchHash.value(name, 0);
 }
 
 QList<CTagItem *> CTagItem::fetchAllSubtags() const
@@ -80,6 +110,7 @@ void CTagItem::addChild(CTagItem *item)
     int row = m_childList.count();
     item->setParent(this);
     m_childList.push_back(item);
+    m_searchHash[item->data().name()] = item;
     if (m_mgr)
         m_mgr->callbackTagInserted(this, row, row);
 }
@@ -87,6 +118,7 @@ void CTagItem::addChild(CTagItem *item)
 CTagItem *CTagItem::takeChild(int row)
 {
     CTagItem *item = m_childList.takeAt(row);
+    m_searchHash.remove(item->data().name());
     if (m_mgr)
         m_mgr->callbackTagRemoved(this, row, row);
     return item;
@@ -100,4 +132,9 @@ int CTagItem::childIndexOf(CTagItem *item) const
 void CTagItem::setParent(CTagItem *parent)
 {
     m_parent = parent;
+}
+
+QHash<QString, CTagItem *> &CTagItem::searchHash()
+{
+    return m_searchHash;
 }

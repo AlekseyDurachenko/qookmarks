@@ -57,23 +57,28 @@ CTagItem *CBookmarkMgr::tagFavoritesItem() const
 
 CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
 {
-    for (int i = 0; i < parentItem->childCount(); ++i)
-        if (parentItem->childAt(i)->data().name() == name)
-            return parentItem->childAt(i);
-    return 0;
+    return parentItem->findChild(name);
 }
 
 CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
 {
+    if (parent->findChild(data.name()))
+        return 0;
+
     CTagItem *item = new CTagItem(CTagItem::Tag, data, this, parent);
     parent->addChild(item);
     return item;
 }
 
-void CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
+bool CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
 {
+    if (newParent->findChild(item->data().name()))
+        return false;
+
     CTagItem *oldParent = item->parent();
     newParent->addChild(oldParent->takeChild(oldParent->childIndexOf(item)));
+
+    return true;
 }
 
 void CBookmarkMgr::tagRemove(CTagItem *item)

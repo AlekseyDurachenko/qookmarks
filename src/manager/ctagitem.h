@@ -51,7 +51,7 @@ public:
     int childCount() const;
     CTagItem *childAt(int row) const;
 
-    QList<CTagItem *> subtags() const;
+    QList<CTagItem *> findAllSubtags() const;
 private:
     void addChild(CTagItem *item);
     CTagItem *takeChild(int row);

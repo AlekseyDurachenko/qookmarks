@@ -64,12 +64,12 @@ CTagItem *CTagItem::childAt(int row) const
     return m_childList.at(row);
 }
 
-QList<CTagItem *> CTagItem::subtags() const
+QList<CTagItem *> CTagItem::findAllSubtags() const
 {
     QList<CTagItem *> tagList;
 
     foreach (CTagItem *item, m_childList)
-        tagList += (item->subtags());
+        tagList += (item->findAllSubtags());
     tagList.push_back(const_cast<CTagItem *>(this));
 
     return tagList;

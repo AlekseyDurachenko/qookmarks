@@ -125,7 +125,7 @@ void CTagTreeView::currentChanged(const QModelIndex &current,
             (current.data(Qt::UserRole).value<void *>());
 
     emit currentTagChanged(tag);
-    emit currentTagChanged(tag->subtags().toSet());
+    emit currentTagChanged(tag->findAllSubtags().toSet());
 
     updateActions();
 }

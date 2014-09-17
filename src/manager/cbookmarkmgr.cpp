@@ -113,24 +113,27 @@ CBookmarkItem *CBookmarkMgr::bookmarkAt(int index) const
 
 CBookmarkItem *CBookmarkMgr::bookmarkFind(const QUrl &url)
 {
-    foreach (CBookmarkItem *item, m_bookmarkList)
-        if (item->data().url() == url)
-            return item;
-    return 0;
+    return m_bookmarkSearchHash.value(url, 0);
 }
 
 CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
 {
+    if (m_bookmarkSearchHash.contains(data.url()))
+        return 0;
+
     int row = m_bookmarkList.count();
     CBookmarkItem *bookmark = new CBookmarkItem(data, this);
     m_bookmarkList.push_back(bookmark);
+    m_bookmarkSearchHash[data.url()] = bookmark;
     emit bookmarkInserted(row, row);
+
     return bookmark;
 }
 
 void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 {
     int row = m_bookmarkList.indexOf(bookmark);
+    m_bookmarkSearchHash.remove(bookmark->data().url());
     delete m_bookmarkList.takeAt(row);
     emit bookmarkRemoved(row, row);
 }

@@ -67,6 +67,7 @@ signals:
     void tagDataChanged(CTagItem *parent, int first, int last);
 private:
     QList<CBookmarkItem *> m_bookmarkList;
+    QHash<QUrl, CBookmarkItem *> m_bookmarkSearchHash;
     CTagItem *m_tagRootItem;
     CTagItem *m_tagOtherItem;
     CTagItem *m_tagUntaggedItem;

@@ -51,6 +51,10 @@ public:
     int childCount() const;
     CTagItem *childAt(int row) const;
 
+    /*!
+     * \brief fetchAllSubtags
+     * \return all subtags including the current tag
+     */
     QList<CTagItem *> fetchAllSubtags() const;
 private:
     void addChild(CTagItem *item);

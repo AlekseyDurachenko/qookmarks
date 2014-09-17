@@ -100,6 +100,12 @@ void CMainWindow::on_action_ImportBookmarks_triggered()
 {
     CImportBookmarkDialog dlg(m_bookmarkMgr, this);
     dlg.exec();
+
+    CTagItem *tag = ui->treeView_tags->currentTag();
+    if (!tag)
+        ui->treeView_bookmarks->setTagFilter(QSet<CTagItem *>());
+
+    ui->treeView_bookmarks->setTagFilter(tag->fetchAllSubtags().toSet());
 }
 
 void CMainWindow::on_action_TestAllUrls_triggered()

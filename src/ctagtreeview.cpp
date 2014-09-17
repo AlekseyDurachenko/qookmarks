@@ -62,6 +62,15 @@ void CTagTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
     updateActions();
 }
 
+CTagItem *CTagTreeView::currentTag() const
+{
+    if (!currentIndex().isValid())
+        return 0;
+
+    return static_cast<CTagItem *>
+            (currentIndex().data(Qt::UserRole).value<void *>());
+}
+
 void CTagTreeView::onMgrDestroyed()
 {
     m_mgr = 0;

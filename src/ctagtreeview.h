@@ -31,6 +31,8 @@ public:
     inline QAction *actionTagAdd() const;
     inline QAction *actionTagEdit() const;
     inline QAction *actionTagRemove() const;
+
+    CTagItem *currentTag() const;
 signals:
     void currentTagChanged(CTagItem *tag);
     void currentTagChanged(const QSet<CTagItem *> &tags);

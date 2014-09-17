@@ -56,10 +56,7 @@ protected:
     virtual void callbackTagRemoved(CTagItem *parent, int first, int last);
 private:
     void tagInit();
-    CTagItem *createTopLevelTag(CTagItem::Type type);
-    void recursiveTagRead(CTagItem *parent);
     void bookmarkInit();
-    QSet<CTagItem *> bookmarkTagRead(CBookmarkItem *bookmark);
 signals:
     void bookmarkInserted(int first, int last);
     void bookmarkRemoved(int first, int last);

@@ -16,7 +16,7 @@ TARGET          = qookmarks
 TEMPLATE        = app
 
 CONFIG         += console debug_and_release
-QT             += core gui network sql webkit
+QT             += core gui network webkit xml
 
 DESTDIR         = bin
 OBJECTS_DIR     = build/release_obj
@@ -29,54 +29,57 @@ include($$PWD/libs/qt-json/qt-json.pri)
 DEFINES        +=                                           \
 
 INCLUDEPATH    +=                                           \
-
-INCLUDEPATH    +=                                           \
-    src                                                     \
+    $$PWD/src                                               \
+    $$PWD/src/import                                        \
+    $$PWD/src/manager                                       \
 
 HEADERS        +=                                           \
-    src/consts.h                                            \
-    src/global.h                                            \
-    src/cmainwindow.h                                       \
-    src/caboutdialog.h                                      \
-    src/cbookmarkitem.h                                     \
-    src/cbookmarkmgr.h                                      \
-    src/cbookmarkitemdata.h                                 \
-    src/cbookmarkitemmodel.h                                \
-    src/ctagitem.h                                          \
-    src/ctagitemdata.h                                      \
-    src/ctagitemmodel.h                                     \
-    src/cbookmarktagproxymodel.h \
+    src/manager/ctagitemmodel.h \
+    src/manager/ctagitemdata.h \
+    src/manager/ctagitem.h \
+    src/manager/cbookmarktagproxymodel.h \
+    src/manager/cbookmarkmgr.h \
+    src/manager/cbookmarkitemmodel.h \
+    src/manager/cbookmarkitemdata.h \
+    src/manager/cbookmarkitem.h \
+    src/import/importbookmarkchromium.h \
+    src/import/cimportbookmarkdialog.h \
+    src/global.h \
     src/ctagtreeview.h \
     src/ctageditdialog.h \
+    src/consts.h \
+    src/cmainwindow.h \
     src/cbookmarktreeview.h \
     src/cbookmarkeditdialog.h \
-    src/cimportbookmarkdialog.h \
-    src/importbookmarkchromium.h
+    src/caboutdialog.h
+
 
 SOURCES        +=                                           \
-    src/cmainwindow.cpp                                     \
-    src/caboutdialog.cpp                                    \
-    src/cbookmarkitem.cpp                                   \
-    src/cbookmarkmgr.cpp                                    \
-    src/cbookmarkitemdata.cpp                               \
-    src/cbookmarkitemmodel.cpp                              \
-    src/ctagitem.cpp                                        \
-    src/ctagitemdata.cpp                                    \
-    src/ctagitemmodel.cpp                                   \
-    src/cbookmarktagproxymodel.cpp \
+    src/manager/ctagitemmodel.cpp \
+    src/manager/ctagitemdata.cpp \
+    src/manager/ctagitem.cpp \
+    src/manager/cbookmarktagproxymodel.cpp \
+    src/manager/cbookmarkmgr.cpp \
+    src/manager/cbookmarkitemmodel.cpp \
+    src/manager/cbookmarkitemdata.cpp \
+    src/manager/cbookmarkitem.cpp \
+    src/import/importbookmarkchromium.cpp \
+    src/import/cimportbookmarkdialog.cpp \
     src/ctagtreeview.cpp \
     src/ctageditdialog.cpp \
+    src/cmainwindow.cpp \
     src/cbookmarktreeview.cpp \
     src/cbookmarkeditdialog.cpp \
-    src/cimportbookmarkdialog.cpp \
-    src/importbookmarkchromium.cpp
+    src/caboutdialog.cpp
+
 
 FORMS          +=                                           \
-    src/cmainwindow.ui                                      \
-    src/caboutdialog.ui \
+    src/import/cimportbookmarkdialog.ui \
     src/ctageditdialog.ui \
+    src/cmainwindow.ui \
     src/cbookmarkeditdialog.ui \
-    src/cimportbookmarkdialog.ui
+    src/caboutdialog.ui
+
 
 RESOURCES      +=                                           \
     qrc/icons.qrc                                           \

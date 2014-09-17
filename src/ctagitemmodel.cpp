@@ -65,26 +65,19 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
     {
         if (index.column() == 0)
         {
-            if (item->parent() && item->parent()->id() == -1)
+            switch(item->type())
             {
-                switch(item->type())
-                {
-                case CTagItem::RootItem:
-                    return QObject::tr("/");
-                case CTagItem::Other:
-                    return QObject::tr("Other bookmarks");
-                case CTagItem::Untagged:
-                    return QObject::tr("Without a tag");
-                case CTagItem::ReadLater:
-                    return QObject::tr("Read it later");
-                case CTagItem::Favorites:
-                    return QObject::tr("Favorites");
-                default:
-                    ;
-                }
-            }
-            else
-            {
+            case CTagItem::RootItem:
+                return QObject::tr("/");
+            case CTagItem::Other:
+                return QObject::tr("Other bookmarks");
+            case CTagItem::Untagged:
+                return QObject::tr("Without a tag");
+            case CTagItem::ReadLater:
+                return QObject::tr("Read it later");
+            case CTagItem::Favorites:
+                return QObject::tr("Favorites");
+            case CTagItem::Tag:
                 return item->data().name();
             }
         }

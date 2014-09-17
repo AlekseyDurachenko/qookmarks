@@ -18,15 +18,6 @@
 
 CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
 {
-    m_id = -1;
-    m_data = data;
-    m_mgr = mgr;
-}
-
-CBookmarkItem::CBookmarkItem(int id, const CBookmarkItemData &data,
-        CBookmarkMgr *mgr)
-{
-    m_id = id;
     m_data = data;
     m_mgr = mgr;
 }
@@ -45,11 +36,6 @@ bool CBookmarkItem::isTagsIntersected(const QSet<CTagItem *> &tags) const
             return true;
 
     return false;
-}
-
-void CBookmarkItem::setId(int id)
-{
-    m_id = id;
 }
 
 void CBookmarkItem::insertTag(CTagItem *tag)

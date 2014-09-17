@@ -28,10 +28,8 @@ class CBookmarkItem
     friend class CBookmarkMgr;
 private:
     CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr);
-    CBookmarkItem(int id, const CBookmarkItemData &data, CBookmarkMgr *mgr);
 public:
     inline CBookmarkMgr *mgr() const;
-    inline int id() const;
 
     inline const CBookmarkItemData &data() const;
     void setData(const CBookmarkItemData &data);
@@ -39,12 +37,10 @@ public:
     inline const QSet<CTagItem *> &tags() const;
     bool isTagsIntersected(const QSet<CTagItem *> &tags) const;
 private:
-    void setId(int id);
     void insertTag(CTagItem *tag);
     void removeTag(CTagItem *tag);
     void clearTags();
 private:
-    int m_id;
     CBookmarkItemData m_data;
     CBookmarkMgr *m_mgr;
     QSet<CTagItem *> m_tags;
@@ -53,11 +49,6 @@ private:
 CBookmarkMgr *CBookmarkItem::mgr() const
 {
     return m_mgr;
-}
-
-int CBookmarkItem::id() const
-{
-    return m_id;
 }
 
 const CBookmarkItemData &CBookmarkItem::data() const

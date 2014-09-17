@@ -75,7 +75,6 @@ private:
     CTagItem *m_tagUntaggedItem;
     CTagItem *m_tagReadLaterItem;
     CTagItem *m_tagFavoritesItem;
-    QHash<int, CTagItem *> m_tmpTagCache;
 };
 
 

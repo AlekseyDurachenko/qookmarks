@@ -14,7 +14,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cmainwindow.h"
 #include "global.h"
-#include "cstorage.h"
 #include <QApplication>
 #include <QSettings>
 #include <QDebug>
@@ -22,22 +21,10 @@
 
 int main(int argc, char *argv[])
 {
-    //importBookmarkChromium(0, QDir::homePath() + "/.config/chromium/Default/Bookmarks");
-    //return 0;
     QApplication app(argc, argv);
-
-    G_SETTINGS_INIT();
-    QString dbFileName = QFileInfo(settings.fileName()).absolutePath()
-            + QDir::separator() + "bookmarks.db";
-    qDebug() << "filename: " << dbFileName;
-    qDebug() << "open db : " << CStorage::open(dbFileName);
 
     CMainWindow mainWindow;
     mainWindow.show();    
 
-    int ret = app.exec();
-
-    CStorage::close();
-
-    return ret;
+    return app.exec();
 }

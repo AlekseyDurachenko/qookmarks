@@ -41,7 +41,6 @@ HEADERS        +=                                           \
     src/cbookmarkitem.h                                     \
     src/cbookmarkmgr.h                                      \
     src/cbookmarkitemdata.h                                 \
-    src/cstorage.h                                          \
     src/cbookmarkitemmodel.h                                \
     src/ctagitem.h                                          \
     src/ctagitemdata.h                                      \
@@ -60,7 +59,6 @@ SOURCES        +=                                           \
     src/cbookmarkitem.cpp                                   \
     src/cbookmarkmgr.cpp                                    \
     src/cbookmarkitemdata.cpp                               \
-    src/cstorage.cpp                                        \
     src/cbookmarkitemmodel.cpp                              \
     src/ctagitem.cpp                                        \
     src/ctagitemdata.cpp                                    \

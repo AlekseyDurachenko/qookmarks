@@ -13,7 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkmgr.h"
-#include "cstorage.h"
 #include <QDebug>
 
 CBookmarkMgr::CBookmarkMgr(QObject *parent) :
@@ -21,7 +20,6 @@ CBookmarkMgr::CBookmarkMgr(QObject *parent) :
 {
     tagInit();
     bookmarkInit();
-    m_tmpTagCache.clear();
 }
 
 CBookmarkMgr::~CBookmarkMgr()
@@ -67,8 +65,7 @@ CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
 
 CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
 {
-    int id = CStorage::tagInsert(CTagItem::Tag, parent->id(), data);
-    CTagItem *item = new CTagItem(id, CTagItem::Tag, data, this, parent);
+    CTagItem *item = new CTagItem(CTagItem::Tag, data, this, parent);
     parent->addChild(item);
     return item;
 }
@@ -77,7 +74,6 @@ void CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
 {
     CTagItem *oldParent = item->parent();
     newParent->addChild(oldParent->takeChild(oldParent->childIndexOf(item)));
-    CStorage::tagMove(item->id(), newParent->id());
 }
 
 void CBookmarkMgr::tagRemove(CTagItem *item)
@@ -97,7 +93,6 @@ void CBookmarkMgr::tagRemove(CTagItem *item)
         }
     }
 
-    CStorage::tagDelete(item->id());
     delete item;
 }
 
@@ -122,8 +117,7 @@ CBookmarkItem *CBookmarkMgr::bookmarkFind(const QUrl &url)
 CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
 {
     int row = m_bookmarkList.count();
-    int id = CStorage::bookmarkInsert(data);
-    CBookmarkItem *bookmark = new CBookmarkItem(id, data, this);
+    CBookmarkItem *bookmark = new CBookmarkItem(data, this);
     m_bookmarkList.push_back(bookmark);
     emit bookmarkInserted(row, row);
     return bookmark;
@@ -132,7 +126,6 @@ CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
 void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 {
     int row = m_bookmarkList.indexOf(bookmark);
-    CStorage::bookmarkDelete(bookmark->id());
     delete m_bookmarkList.takeAt(row);
     emit bookmarkRemoved(row, row);
 }
@@ -140,7 +133,6 @@ void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 void CBookmarkMgr::bookmarkAddTag(CBookmarkItem *bookmark, CTagItem *tag)
 {
     bookmark->insertTag(tag);
-    CStorage::bookmarkTagAdd(bookmark->id(), tag->id());
     int row = m_bookmarkList.indexOf(bookmark);
     emit bookmarkDataChanged(row, row);
 }
@@ -148,7 +140,6 @@ void CBookmarkMgr::bookmarkAddTag(CBookmarkItem *bookmark, CTagItem *tag)
 void CBookmarkMgr::bookmarkRemoveTag(CBookmarkItem *bookmark, CTagItem *tag)
 {
     bookmark->removeTag(tag);
-    CStorage::bookmarkTagRemove(bookmark->id(), tag->id());
     int row = m_bookmarkList.indexOf(bookmark);
     emit bookmarkDataChanged(row, row);
 }
@@ -156,7 +147,6 @@ void CBookmarkMgr::bookmarkRemoveTag(CBookmarkItem *bookmark, CTagItem *tag)
 void CBookmarkMgr::bookmarkClearTag(CBookmarkItem *bookmark)
 {
     bookmark->clearTags();
-    CStorage::bookmarkTagClear(bookmark->id());
     int row = m_bookmarkList.indexOf(bookmark);
     emit bookmarkDataChanged(row, row);
 }
@@ -164,14 +154,11 @@ void CBookmarkMgr::bookmarkClearTag(CBookmarkItem *bookmark)
 void CBookmarkMgr::callbackBookmarkDataChanged(CBookmarkItem *bookmark)
 {
     int row = m_bookmarkList.indexOf(bookmark);
-    CStorage::bookmarkUpdate(bookmark->id(), bookmark->data());
     emit bookmarkDataChanged(row, row);
 }
 
 void CBookmarkMgr::callbackTagDataChanged(CTagItem *tag)
 {
-    int parentId = (tag->parent()) ? (tag->parent()->id()) : (-1);
-    CStorage::tagUpdate(tag->id(), parentId, tag->type(), tag->data());
     emit tagDataChanged(tag->parent(), tag->row(), tag->row());
 }
 
@@ -192,90 +179,86 @@ void CBookmarkMgr::tagInit()
     m_tagUntaggedItem = createTopLevelTag(CTagItem::Untagged);
     m_tagReadLaterItem = createTopLevelTag(CTagItem::ReadLater);
     m_tagFavoritesItem = createTopLevelTag(CTagItem::Favorites);
-    recursiveTagRead(m_tagOtherItem);
+    //recursiveTagRead(m_tagOtherItem);
     m_tagRootItem->addChild(m_tagOtherItem);
     m_tagRootItem->addChild(m_tagUntaggedItem);
     m_tagRootItem->addChild(m_tagReadLaterItem);
     m_tagRootItem->addChild(m_tagFavoritesItem);
-    m_tmpTagCache[m_tagOtherItem->id()] = m_tagOtherItem;
-    m_tmpTagCache[m_tagUntaggedItem->id()] = m_tagUntaggedItem;
-    m_tmpTagCache[m_tagReadLaterItem->id()] = m_tagReadLaterItem;
-    m_tmpTagCache[m_tagFavoritesItem->id()] = m_tagFavoritesItem;
 }
 
 CTagItem *CBookmarkMgr::createTopLevelTag(CTagItem::Type type)
 {
-    QSqlQuery query = CStorage::createQuery();
-    query.prepare("SELECT id, name FROM TTag "
-            " WHERE parentId = -1 AND type = :type");
-    query.bindValue(":type", type);
+//    QSqlQuery query = CStorage::createQuery();
+//    query.prepare("SELECT id, name FROM TTag "
+//            " WHERE parentId = -1 AND type = :type");
+//    query.bindValue(":type", type);
 
-    int id = -1;
-    if (query.exec() && query.next())
-        id = query.value(0).toInt();
-    else
-        id = CStorage::tagInsert(type, -1, CTagItemData());
+//    int id = -1;
+//    if (query.exec() && query.next())
+//        id = query.value(0).toInt();
+//    else
+//        id = CStorage::tagInsert(type, -1, CTagItemData());
 
-    return new CTagItem(id, type, CTagItemData(), this);
+    return new CTagItem(type, CTagItemData(), this);
 }
 
 void CBookmarkMgr::recursiveTagRead(CTagItem *parentItem)
 {
-    QSqlQuery query = CStorage::createQuery();
-    query.prepare("SELECT id, type, name FROM TTag WHERE parentId = :id");
-    query.bindValue(":id", parentItem->id());
-    if (query.exec())
-    {
-        while (query.next())
-        {
-            int id = query.value(0).toInt();
-            CTagItem::Type type =
-                    static_cast<CTagItem::Type>(query.value(1).toInt());
+//    QSqlQuery query = CStorage::createQuery();
+//    query.prepare("SELECT id, type, name FROM TTag WHERE parentId = :id");
+//    query.bindValue(":id", parentItem->id());
+//    if (query.exec())
+//    {
+//        while (query.next())
+//        {
+//            int id = query.value(0).toInt();
+//            CTagItem::Type type =
+//                    static_cast<CTagItem::Type>(query.value(1).toInt());
 
-            CTagItemData data;
-            data.setName(query.value(2).toString());
+//            CTagItemData data;
+//            data.setName(query.value(2).toString());
 
-            CTagItem *item = new CTagItem(id, type, data, this, parentItem);
-            m_tmpTagCache[item->id()] = item;
-            recursiveTagRead(item);
-            parentItem->addChild(item);
-        }
-    }
+//            CTagItem *item = new CTagItem(id, type, data, this, parentItem);
+//            m_tmpTagCache[item->id()] = item;
+//            recursiveTagRead(item);
+//            parentItem->addChild(item);
+//        }
+//    }
 }
 
 void CBookmarkMgr::bookmarkInit()
 {
-    QSqlQuery query = CStorage::createQuery();
-    query.prepare("SELECT id, title, url, httpcode FROM TBookmark");
-    if (query.exec())
-    {
-        while (query.next())
-        {
-            int id = query.value(0).toInt();
+//    QSqlQuery query = CStorage::createQuery();
+//    query.prepare("SELECT id, title, url, httpcode FROM TBookmark");
+//    if (query.exec())
+//    {
+//        while (query.next())
+//        {
+//            int id = query.value(0).toInt();
 
-            CBookmarkItemData data;
-            data.setTitle(query.value(1).toString());
-            data.setUrl(query.value(2).toUrl());
-            data.setHttpCode(query.value(3).toInt());
+//            CBookmarkItemData data;
+//            data.setTitle(query.value(1).toString());
+//            data.setUrl(query.value(2).toUrl());
+//            data.setHttpCode(query.value(3).toInt());
 
-            CBookmarkItem *item = new CBookmarkItem(id, data, this);
-            foreach (CTagItem *tag, bookmarkTagRead(item))
-                item->insertTag(tag);
-            m_bookmarkList.push_back(item);
-        }
-    }
+//            CBookmarkItem *item = new CBookmarkItem(id, data, this);
+//            foreach (CTagItem *tag, bookmarkTagRead(item))
+//                item->insertTag(tag);
+//            m_bookmarkList.push_back(item);
+//        }
+//    }
 }
 
 QSet<CTagItem *> CBookmarkMgr::bookmarkTagRead(CBookmarkItem *bookmark)
 {
-    QSet<CTagItem *> set;
+//    QSet<CTagItem *> set;
 
-    QSqlQuery query = CStorage::createQuery();
-    query.prepare("SELECT TTagId FROM TBookmarkTag WHERE TBookmarkId = :id");
-    query.bindValue(":id", bookmark->id());
-    if (query.exec())
-        while (query.next())
-            set.insert(m_tmpTagCache[query.value(0).toInt()]);
+//    QSqlQuery query = CStorage::createQuery();
+//    query.prepare("SELECT TTagId FROM TBookmarkTag WHERE TBookmarkId = :id");
+//    query.bindValue(":id", bookmark->id());
+//    if (query.exec())
+//        while (query.next())
+//            set.insert(m_tmpTagCache[query.value(0).toInt()]);
 
-    return set;
+//    return set;
 }

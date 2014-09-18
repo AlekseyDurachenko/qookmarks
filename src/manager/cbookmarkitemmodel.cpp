@@ -85,7 +85,7 @@ Qt::ItemFlags CBookmarkItemModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
+    return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsDragEnabled;
 }
 
 QVariant CBookmarkItemModel::headerData(int section,

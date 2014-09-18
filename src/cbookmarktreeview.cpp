@@ -25,6 +25,8 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     setRootIsDecorated(false);
     setSortingEnabled(true);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::DragOnly);
 
     // configure context menu
     setContextMenuPolicy(Qt::CustomContextMenu);

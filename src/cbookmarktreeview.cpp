@@ -24,6 +24,7 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
 {
     setRootIsDecorated(false);
     setSortingEnabled(true);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     // configure context menu
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -117,12 +118,22 @@ void CBookmarkTreeView::onActionBookmarkEditTriggered()
 void CBookmarkTreeView::onActionBookmarkRemoveTriggered()
 {
     if (QMessageBox::question(this, tr("Remove the bookmark"),
-            tr("Are you sure you want to remove the bookmark?"),
+            tr("Are you sure you want to remove the selected bookmark(s)?"),
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
     {
-        CBookmarkItem *bookmark = static_cast<CBookmarkItem *>
-                (currentIndex().data(Qt::UserRole).value<void *>());
-        m_mgr->bookmarkRemove(bookmark);
+        QModelIndexList indexeList = selectionModel()->selectedRows(0);
+
+        QList<CBookmarkItem *> bookmarkList;
+        foreach (QModelIndex index, indexeList)
+            bookmarkList.push_back(static_cast<CBookmarkItem *>
+                    (index.data(Qt::UserRole).value<void *>()));
+
+        if (bookmarkList.count() == 0 && currentIndex().isValid())
+            bookmarkList.push_back(static_cast<CBookmarkItem *>
+                    (currentIndex().data(Qt::UserRole).value<void *>()));
+
+        foreach (CBookmarkItem *bookmark, bookmarkList)
+            m_mgr->bookmarkRemove(bookmark);
     }
 }
 
@@ -139,16 +150,18 @@ void CBookmarkTreeView::currentChanged(const QModelIndex & /*current*/,
 
 void CBookmarkTreeView::updateActions()
 {
-    if (m_mgr)
-    {
-        m_actionBookmarkAdd->setEnabled(true);
-        m_actionBookmarkEdit->setEnabled(currentIndex().isValid());
-        m_actionBookmarkRemove->setEnabled(currentIndex().isValid());
-    }
-    else
+    if (!m_mgr)
     {
         m_actionBookmarkAdd->setEnabled(false);
         m_actionBookmarkEdit->setEnabled(false);
         m_actionBookmarkRemove->setEnabled(false);
+        return;
     }
+
+    QModelIndexList rows = selectionModel()->selectedRows(0);
+    m_actionBookmarkAdd->setEnabled(true);
+    m_actionBookmarkEdit->setEnabled
+            (rows.count() == 1 || (!rows.count() && currentIndex().isValid()));
+    m_actionBookmarkRemove->setEnabled
+            (rows.count() || (!rows.count() && currentIndex().isValid()));
 }

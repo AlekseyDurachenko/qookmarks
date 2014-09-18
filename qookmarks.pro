@@ -32,45 +32,47 @@ INCLUDEPATH    +=                                           \
     $$PWD/src                                               \
     $$PWD/src/import                                        \
     $$PWD/src/manager                                       \
+    $$PWD/src/bookmarkview                                  \
+    $$PWD/src/tagview                                       \
 
 HEADERS        +=                                           \
-    src/manager/ctagitemmodel.h \
     src/manager/ctagitemdata.h \
     src/manager/ctagitem.h \
-    src/manager/cbookmarktagproxymodel.h \
     src/manager/cbookmarkmgr.h \
-    src/manager/cbookmarkitemmodel.h \
     src/manager/cbookmarkitemdata.h \
     src/manager/cbookmarkitem.h \
     src/import/importbookmarkchromium.h \
     src/import/cimportbookmarkdialog.h \
     src/global.h \
-    src/ctagtreeview.h \
     src/ctageditdialog.h \
     src/consts.h \
     src/cmainwindow.h \
-    src/cbookmarktreeview.h \
     src/cbookmarkeditdialog.h \
-    src/caboutdialog.h
+    src/caboutdialog.h \
+    src/bookmarkview/cbookmarkitemmodel.h \
+    src/bookmarkview/cbookmarktagproxymodel.h \
+    src/tagview/ctagitemmodel.h \
+    src/bookmarkview/cbookmarktreeview.h \
+    src/tagview/ctagtreeview.h
 
 
 SOURCES        +=                                           \
-    src/manager/ctagitemmodel.cpp \
     src/manager/ctagitemdata.cpp \
     src/manager/ctagitem.cpp \
-    src/manager/cbookmarktagproxymodel.cpp \
     src/manager/cbookmarkmgr.cpp \
-    src/manager/cbookmarkitemmodel.cpp \
     src/manager/cbookmarkitemdata.cpp \
     src/manager/cbookmarkitem.cpp \
     src/import/importbookmarkchromium.cpp \
     src/import/cimportbookmarkdialog.cpp \
-    src/ctagtreeview.cpp \
     src/ctageditdialog.cpp \
     src/cmainwindow.cpp \
-    src/cbookmarktreeview.cpp \
     src/cbookmarkeditdialog.cpp \
-    src/caboutdialog.cpp
+    src/caboutdialog.cpp \
+    src/bookmarkview/cbookmarkitemmodel.cpp \
+    src/bookmarkview/cbookmarktreeview.cpp \
+    src/tagview/ctagtreeview.cpp \
+    src/tagview/ctagitemmodel.cpp \
+    src/bookmarkview/cbookmarktagproxymodel.cpp
 
 
 FORMS          +=                                           \

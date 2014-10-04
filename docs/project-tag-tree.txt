@@ -1,0 +1,8 @@
++ Search results
++ Favorites Bookmarks (установлен флаг избранное)
++ Rated Bookmarks (установлен рейтинг больше 0) 
++ Read It Later (установлен флаг "прочитать позже")
++ Bookmarks
+  + category_1
+  + category_N
++ Deleted Bookmarks (установлен флаг "удалено")

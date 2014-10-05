@@ -22,28 +22,29 @@ CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
     m_mgr = mgr;
     m_parent = parent;
 
+    // default names for top level items
     switch (m_type)
     {
     case RootItem:
-        m_data.setName("/");
+        m_data.setName(QObject::tr("/"));
         break;
     case Tag:
-        m_data.setName("Tag");
+        m_data.setName(QObject::tr("Tag"));
         break;
     case Favorites:
-        m_data.setName("Favorites");
+        m_data.setName(QObject::tr("Favorites"));
         break;
     case Rated:
-        m_data.setName("Rated Bookmarks");
+        m_data.setName(QObject::tr("Rated Bookmarks"));
         break;
     case ReadLater:
-        m_data.setName("Read it Later");
+        m_data.setName(QObject::tr("Read it Later"));
         break;
     case Bookmarks:
-        m_data.setName("Bookmarks");
+        m_data.setName(QObject::tr("Bookmarks"));
         break;
     case Trash:
-        m_data.setName("Deleted Bookmarks");
+        m_data.setName(QObject::tr("Deleted Bookmarks"));
         break;
     }
 }
@@ -64,10 +65,10 @@ CTagItem::~CTagItem()
 
 int CTagItem::row() const
 {
-    if (m_parent)
-        return m_parent->childIndexOf(const_cast<CTagItem *>(this));
+    if (!m_parent)
+        return -1;
 
-    return -1;
+    return m_parent->childIndexOf(const_cast<CTagItem *>(this));
 }
 
 QIcon CTagItem::icon() const
@@ -91,74 +92,60 @@ QIcon CTagItem::icon() const
     }
 }
 
-bool CTagItem::setData(const CTagItemData &data)
+bool CTagItem::canSetData(const CTagItemData &data)
 {
-    if (m_parent && m_parent->searchHash().contains(data.name()))
-        return false;
+    // we can search for duplicates only when there is a parent
+    if (!m_parent)
+        return true;
 
-    m_data = data;
-    if (m_mgr)
-        m_mgr->callbackTagDataChanged(this);
+    // unique field (name) is already exists
+    CTagItem *item = m_parent->findChild(data.name());
+    if (item && item != this)
+        return false;
 
     return true;
 }
 
-int CTagItem::childCount() const
+bool CTagItem::setData(const CTagItemData &data)
 {
-    return m_childList.count();
-}
+    if (!canSetData(data))
+        return false;
 
-CTagItem *CTagItem::childAt(int row) const
-{
-    return m_childList.at(row);
-}
+    // nothing to be update
+    if (m_data == data)
+        return true;
 
-CTagItem *CTagItem::findChild(const QString &name) const
-{
-    return m_searchHash.value(name, 0);
-}
+    m_searchHash.remove(m_data.name());
+    m_searchHash[data.name()] = this;
+    m_data = data;
 
-QList<CTagItem *> CTagItem::fetchAllSubtags() const
-{
-    QList<CTagItem *> tagList;
+    m_mgr->callbackTagDataChanged(this);
 
-    foreach (CTagItem *item, m_childList)
-        tagList += (item->fetchAllSubtags());
-    tagList.push_back(const_cast<CTagItem *>(this));
-
-    return tagList;
+    return true;
 }
 
 void CTagItem::addChild(CTagItem *item)
 {
-    int row = m_childList.count();
     item->setParent(this);
+
+    int row = m_childList.count();
     m_childList.push_back(item);
     m_searchHash[item->data().name()] = item;
-    if (m_mgr)
-        m_mgr->callbackTagInserted(this, row, row);
+
+    m_mgr->callbackTagInserted(this, row, row);
 }
 
 CTagItem *CTagItem::takeChild(int row)
 {
     CTagItem *item = m_childList.takeAt(row);
     m_searchHash.remove(item->data().name());
-    if (m_mgr)
-        m_mgr->callbackTagRemoved(this, row, row);
-    return item;
-}
 
-int CTagItem::childIndexOf(CTagItem *item) const
-{
-    return m_childList.indexOf(item);
+    m_mgr->callbackTagRemoved(this, row, row);
+
+    return item;
 }
 
 void CTagItem::setParent(CTagItem *parent)
 {
     m_parent = parent;
-}
-
-QHash<QString, CTagItem *> &CTagItem::searchHash()
-{
-    return m_searchHash;
 }

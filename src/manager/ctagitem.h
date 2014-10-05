@@ -46,34 +46,29 @@ public:
     inline CTagItem *parent() const;
     inline Type type() const;
     int row() const;
+
+    inline int childCount() const;
+    inline int childIndexOf(CTagItem *item) const;
+    inline CTagItem *childAt(int row) const;
+    inline CTagItem *findChild(const QString &name) const;
+    inline const QList<CTagItem *> &children() const;
+
     QIcon icon() const;
 
-
     inline const CTagItemData &data() const;
+    bool canSetData(const CTagItemData &data);
     bool setData(const CTagItemData &data);
-
-    int childCount() const;
-    CTagItem *childAt(int row) const;
-    CTagItem *findChild(const QString &name) const;
-
-    /*!
-     * \brief fetchAllSubtags
-     * \return all subtags including the current tag
-     */
-    QList<CTagItem *> fetchAllSubtags() const;
 private:
+    void setParent(CTagItem *parent);
     void addChild(CTagItem *item);
     CTagItem *takeChild(int row);
-    int childIndexOf(CTagItem *item) const;
-    void setParent(CTagItem *parent);
-    QHash<QString, CTagItem *> &searchHash();
 private:
     Type m_type;
     CTagItemData m_data;
     CBookmarkMgr *m_mgr;
     CTagItem *m_parent;
     QList<CTagItem *> m_childList;
-    QHash<QString, CTagItem *> m_searchHash;
+    QHash<QString, CTagItem *> m_searchHash;    // quick search by name
 };
 
 CBookmarkMgr *CTagItem::mgr() const
@@ -95,5 +90,31 @@ const CTagItemData &CTagItem::data() const
 {
     return m_data;
 }
+
+const QList<CTagItem *> &CTagItem::children() const
+{
+    return m_childList;
+}
+
+int CTagItem::childCount() const
+{
+    return m_childList.count();
+}
+
+CTagItem *CTagItem::childAt(int row) const
+{
+    return m_childList.at(row);
+}
+
+CTagItem *CTagItem::findChild(const QString &name) const
+{
+    return m_searchHash.value(name, 0);
+}
+
+int CTagItem::childIndexOf(CTagItem *item) const
+{
+    return m_childList.indexOf(item);
+}
+
 
 #endif // CTAGITEM_H

@@ -29,4 +29,13 @@ class CTagItem;
 bool tagCheckIntersection(const QSet<CTagItem *> &a, const QSet<CTagItem *> &b);
 
 
+/*!
+ * \brief tagRecursiveFetch fetch children recursive from the tag
+ * \param root the root item
+ * \param useRoot add the root item to the result
+ * \return list of tags
+ */
+QList<CTagItem *> tagRecursiveFetch(CTagItem *root, bool useRoot = true);
+
+
 #endif // TAGUTILS_H

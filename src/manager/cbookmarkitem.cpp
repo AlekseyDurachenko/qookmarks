@@ -22,29 +22,47 @@ CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
     m_mgr = mgr;
 }
 
-void CBookmarkItem::setData(const CBookmarkItemData &data)
-{
-    if (m_data == data)
-        return;
 
-    m_data = data;
-    if (m_mgr)
-        m_mgr->callbackBookmarkDataChanged(this);
+bool CBookmarkItem::canSetData(const CBookmarkItemData &data)
+{
+    // unique field (url) is already exists
+    CBookmarkItem *bookmark = m_mgr->bookmarkFind(data.url());
+    if (bookmark && bookmark != this)
+        return false;
+
+    return true;
 }
 
-void CBookmarkItem::tagAdd(CTagItem *tag)
+bool CBookmarkItem::setData(const CBookmarkItemData &data)
 {
+    if (!canSetData(data))
+        return false;
+
+    // nothing to be update
+    if (m_data == data)
+        return true;
+
+    m_data = data;
+    m_mgr->callbackBookmarkDataChanged(this);
+
+    return true;
+}
+
+bool CBookmarkItem::tagAdd(CTagItem *tag)
+{
+    // tag already exists
     if (m_tags.contains(tag))
-        return;
+        return false;
 
     m_tags.insert(tag);
-    if (m_mgr)
-        m_mgr->callbackBookmarkDataChanged(this);
+    m_mgr->callbackBookmarkDataChanged(this);
+
+    return true;
 }
 
 void CBookmarkItem::tagRemove(CTagItem *tag)
 {
-    if (m_tags.remove(tag) && m_mgr)
+    if (m_tags.remove(tag))
         m_mgr->callbackBookmarkDataChanged(this);
 }
 
@@ -54,6 +72,5 @@ void CBookmarkItem::tagRemoveAll()
         return;
 
     m_tags.clear();
-    if (m_mgr)
-        m_mgr->callbackBookmarkDataChanged(this);
+    m_mgr->callbackBookmarkDataChanged(this);
 }

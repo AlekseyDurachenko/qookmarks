@@ -15,6 +15,7 @@
 #include "ctagitemdata.h"
 #include <QObject>
 
+
 CTagItemData::CTagItemData()
 {
     m_name = QObject::tr("untitled");

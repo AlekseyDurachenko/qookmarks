@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagtreeview.h"
 #include "ctageditdialog.h"
+#include "tagutils.h"
 #include <QMenu>
 #include <QMessageBox>
 #include <QDebug>
@@ -134,7 +135,7 @@ void CTagTreeView::currentChanged(const QModelIndex &current,
             (current.data(Qt::UserRole).value<void *>());
 
     emit currentTagChanged(tag);
-    emit currentTagChanged(tag->fetchAllSubtags().toSet());
+    emit currentTagChanged(tagRecursiveFetch(tag, true).toSet());
 
     updateActions();
 }

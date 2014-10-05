@@ -18,6 +18,7 @@
 #include <QString>
 #include <QUrl>
 
+
 class CTagItemData
 {
 public:
@@ -25,6 +26,9 @@ public:
 
     inline const QString &name() const;
     void setName(const QString &name);
+
+    inline bool operator == (const CTagItemData &other);
+    inline bool operator != (const CTagItemData &other);
 private:
     QString m_name;
 };
@@ -32,6 +36,16 @@ private:
 const QString &CTagItemData::name() const
 {
     return m_name;
+}
+
+bool CTagItemData::operator == (const CTagItemData &other)
+{
+    return (m_name == other.m_name);
+}
+
+bool CTagItemData::operator != (const CTagItemData &other)
+{
+    return (m_name != other.m_name);
 }
 
 

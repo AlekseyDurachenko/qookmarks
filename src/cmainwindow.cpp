@@ -21,6 +21,7 @@
 #include "cbookmarkmgr.h"
 #include "global.h"
 #include "cbookmarktagproxymodel.h"
+#include "tagutils.h"
 #include <QSettings>
 #include <QDebug>
 #include <QtWebKit/QWebView>
@@ -105,7 +106,7 @@ void CMainWindow::on_action_ImportBookmarks_triggered()
     if (!tag)
         ui->treeView_bookmarks->setTagFilter(QSet<CTagItem *>());
 
-    ui->treeView_bookmarks->setTagFilter(tag->fetchAllSubtags().toSet());
+    ui->treeView_bookmarks->setTagFilter(tagRecursiveFetch(tag, true).toSet());
 }
 
 void CMainWindow::on_action_TestAllUrls_triggered()

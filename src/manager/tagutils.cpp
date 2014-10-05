@@ -33,3 +33,17 @@ bool tagCheckIntersection(const QSet<CTagItem *> &a, const QSet<CTagItem *> &b)
 
     return false;
 }
+
+
+QList<CTagItem *> tagRecursiveFetch(CTagItem *root, bool useRoot)
+{
+    QList<CTagItem *> tagList;
+
+    foreach (CTagItem *item, root->children())
+        tagList << tagRecursiveFetch(item, true);
+
+    if (useRoot)
+        tagList << root;
+
+    return tagList;
+}

@@ -37,7 +37,6 @@ public:
     CTagItem *tagBookmarksItem() const;
     CTagItem *tagTrashItem() const;
 
-    bool tagCanAdd(CTagItem *parentItem, const CTagItemData &data);
     bool tagCanMove(CTagItem *newParent, CTagItem *item);
     CTagItem *tagFind(CTagItem *parentItem, const QString &name);
     CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);

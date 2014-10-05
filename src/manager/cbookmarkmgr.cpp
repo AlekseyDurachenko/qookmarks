@@ -58,19 +58,6 @@ CTagItem *CBookmarkMgr::tagTrashItem() const
     return m_tagTrashItem;
 }
 
-bool CBookmarkMgr::tagCanAdd(CTagItem *parentItem, const CTagItemData &data)
-{
-    // we can add only to the CTagItem::Tag or CTagItem::Bookmarks
-    if (parentItem->type() != CTagItem::Bookmarks
-            && parentItem->type() != CTagItem::Tag)
-        return false;
-
-    if (parentItem->findChild(data.name()))
-        return false;
-
-    return true;
-}
-
 bool CBookmarkMgr::tagCanMove(CTagItem *newParentItem, CTagItem *item)
 {
     // we can move only the CTagItem::Tag
@@ -79,6 +66,9 @@ bool CBookmarkMgr::tagCanMove(CTagItem *newParentItem, CTagItem *item)
             && newParentItem->type() != CTagItem::Tag)
             || item->type() != CTagItem::Tag)
         return false;
+
+    // TODO: check: item cannot be parent of newParentItem
+    // if ()
 
     if (newParentItem->findChild(item->data().name()))
         return false;
@@ -91,13 +81,18 @@ CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
     return parentItem->findChild(name);
 }
 
-CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
+CTagItem *CBookmarkMgr::tagAdd(CTagItem *parentItem, const CTagItemData &data)
 {
-    if (!tagCanAdd(parent, data))
+    // we can add only to the CTagItem::Tag or CTagItem::Bookmarks
+    if (parentItem->type() != CTagItem::Bookmarks
+            && parentItem->type() != CTagItem::Tag)
         return 0;
 
-    CTagItem *item = new CTagItem(data, this, parent);
-    parent->addChild(item);
+    if (parentItem->findChild(data.name()))
+        return 0;
+
+    CTagItem *item = new CTagItem(data, this, parentItem);
+    parentItem->addChild(item);
     return item;
 }
 

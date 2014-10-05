@@ -53,6 +53,7 @@
 -----------------------------------------
 
 * HTTP ответ сервера (httpResponseCode - int, 0 - никогда не проверялось)
+* HTTP текст ответа сервера (httpResponseText - QString)
 * Дата последней проверки (lastCheckDateTime - QDateTime)
 
 

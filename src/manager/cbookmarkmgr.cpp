@@ -24,9 +24,7 @@ CBookmarkMgr::CBookmarkMgr(QObject *parent) :
 
 CBookmarkMgr::~CBookmarkMgr()
 {
-    foreach (CBookmarkItem *item, m_bookmarkList)
-        delete item;
-
+    qDeleteAll(m_bookmarkList);
     delete m_tagRootItem;
 }
 
@@ -35,14 +33,14 @@ CTagItem *CBookmarkMgr::tagRootItem() const
     return m_tagRootItem;
 }
 
-CTagItem *CBookmarkMgr::tagOtherItem() const
+CTagItem *CBookmarkMgr::tagFavoritesItem() const
 {
-    return m_tagOtherItem;
+    return m_tagFavoritesItem;
 }
 
-CTagItem *CBookmarkMgr::tagUntaggedItem() const
+CTagItem *CBookmarkMgr::tagRatedItem() const
 {
-    return m_tagUntaggedItem;
+    return m_tagRatedItem;
 }
 
 CTagItem *CBookmarkMgr::tagReadLaterItem() const
@@ -50,9 +48,14 @@ CTagItem *CBookmarkMgr::tagReadLaterItem() const
     return m_tagReadLaterItem;
 }
 
-CTagItem *CBookmarkMgr::tagFavoritesItem() const
+CTagItem *CBookmarkMgr::tagBookmarksItem() const
 {
-    return m_tagFavoritesItem;
+    return m_tagBookmarksItem;
+}
+
+CTagItem *CBookmarkMgr::tagTrashItem() const
+{
+    return m_tagTrashItem;
 }
 
 CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
@@ -65,7 +68,7 @@ CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
     if (parent->findChild(data.name()))
         return 0;
 
-    CTagItem *item = new CTagItem(CTagItem::Tag, data, this, parent);
+    CTagItem *item = new CTagItem(data, this, parent);
     parent->addChild(item);
     return item;
 }
@@ -92,7 +95,7 @@ void CBookmarkMgr::tagRemove(CTagItem *item)
     {
         if (bookmark->tags().contains(item))
         {
-            bookmark->removeTag(item);
+            bookmark->tagRemove(item);
             int row = m_bookmarkList.indexOf(bookmark);
             emit bookmarkDataChanged(row, row);
         }
@@ -121,42 +124,41 @@ CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
     if (m_bookmarkSearchHash.contains(data.url()))
         return 0;
 
-    int row = m_bookmarkList.count();
+    int index = m_bookmarkList.count();
     CBookmarkItem *bookmark = new CBookmarkItem(data, this);
     m_bookmarkList.push_back(bookmark);
     m_bookmarkSearchHash[data.url()] = bookmark;
-    emit bookmarkInserted(row, row);
+    emit bookmarkInserted(index, index);
 
     return bookmark;
 }
 
 void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 {
-    int row = m_bookmarkList.indexOf(bookmark);
+    int index = m_bookmarkList.indexOf(bookmark);
     m_bookmarkSearchHash.remove(bookmark->data().url());
-    delete m_bookmarkList.takeAt(row);
-    emit bookmarkRemoved(row, row);
+    delete m_bookmarkList.takeAt(index);
+    emit bookmarkRemoved(index, index);
 }
 
-void CBookmarkMgr::bookmarkAddTag(CBookmarkItem *bookmark, CTagItem *tag)
+void CBookmarkMgr::bookmarkRemoveAt(int index)
 {
-    bookmark->insertTag(tag);
-    int row = m_bookmarkList.indexOf(bookmark);
-    emit bookmarkDataChanged(row, row);
+    CBookmarkItem *bookmark = m_bookmarkList.takeAt(index);
+    m_bookmarkSearchHash.remove(bookmark->data().url());
+    delete bookmark;
+    emit bookmarkRemoved(index, index);
 }
 
-void CBookmarkMgr::bookmarkRemoveTag(CBookmarkItem *bookmark, CTagItem *tag)
+void CBookmarkMgr::bookmarkRemoveAll()
 {
-    bookmark->removeTag(tag);
-    int row = m_bookmarkList.indexOf(bookmark);
-    emit bookmarkDataChanged(row, row);
-}
+    if (m_bookmarkList.count() == 0)
+        return;
 
-void CBookmarkMgr::bookmarkClearTag(CBookmarkItem *bookmark)
-{
-    bookmark->clearTags();
-    int row = m_bookmarkList.indexOf(bookmark);
-    emit bookmarkDataChanged(row, row);
+    int count = m_bookmarkList.count();
+    qDeleteAll(m_bookmarkList);
+    m_bookmarkList.clear();
+    m_bookmarkSearchHash.clear();
+    emit bookmarkRemoved(0, count-1);
 }
 
 void CBookmarkMgr::callbackBookmarkDataChanged(CBookmarkItem *bookmark)
@@ -183,14 +185,16 @@ void CBookmarkMgr::callbackTagRemoved(CTagItem *parent, int first, int last)
 void CBookmarkMgr::tagInit()
 {
     m_tagRootItem = new CTagItem(CTagItem::RootItem, this);
-    m_tagOtherItem = new CTagItem(CTagItem::Other, this);
-    m_tagUntaggedItem = new CTagItem(CTagItem::Untagged, this);
-    m_tagReadLaterItem = new CTagItem(CTagItem::ReadLater, this);
     m_tagFavoritesItem = new CTagItem(CTagItem::Favorites, this);
-    m_tagRootItem->addChild(m_tagOtherItem);
-    m_tagRootItem->addChild(m_tagUntaggedItem);
-    m_tagRootItem->addChild(m_tagReadLaterItem);
+    m_tagRatedItem = new CTagItem(CTagItem::Rated, this);
+    m_tagReadLaterItem = new CTagItem(CTagItem::ReadLater, this);
+    m_tagBookmarksItem = new CTagItem(CTagItem::Bookmarks, this);
+    m_tagTrashItem = new CTagItem(CTagItem::Trash, this);
     m_tagRootItem->addChild(m_tagFavoritesItem);
+    m_tagRootItem->addChild(m_tagRatedItem);
+    m_tagRootItem->addChild(m_tagReadLaterItem);
+    m_tagRootItem->addChild(m_tagBookmarksItem);
+    m_tagRootItem->addChild(m_tagTrashItem);
 }
 
 void CBookmarkMgr::bookmarkInit()

@@ -31,6 +31,9 @@ public:
 
     inline int httpCode() const;
     void setHttpCode(int code);
+
+    inline bool operator == (const CBookmarkItemData &other);
+    inline bool operator != (const CBookmarkItemData &other);
 private:
     QString m_title;
     QUrl m_url;
@@ -50,6 +53,20 @@ const QUrl &CBookmarkItemData::url() const
 int CBookmarkItemData::httpCode() const
 {
     return m_httpCode;
+}
+
+bool CBookmarkItemData::operator == (const CBookmarkItemData &other)
+{
+    return (m_title == other.m_title
+            && m_url == other.m_url
+            && m_httpCode == other.m_httpCode);
+}
+
+bool CBookmarkItemData::operator != (const CBookmarkItemData &other)
+{
+    return (m_title != other.m_title
+            || m_url != other.m_url
+            || m_httpCode != other.m_httpCode);
 }
 
 

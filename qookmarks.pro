@@ -53,7 +53,8 @@ HEADERS        +=                                           \
     src/bookmarkview/cbookmarktagproxymodel.h \
     src/tagview/ctagitemmodel.h \
     src/bookmarkview/cbookmarktreeview.h \
-    src/tagview/ctagtreeview.h
+    src/tagview/ctagtreeview.h \
+    src/manager/tagutils.h
 
 
 SOURCES        +=                                           \
@@ -72,7 +73,8 @@ SOURCES        +=                                           \
     src/bookmarkview/cbookmarktreeview.cpp \
     src/tagview/ctagtreeview.cpp \
     src/tagview/ctagitemmodel.cpp \
-    src/bookmarkview/cbookmarktagproxymodel.cpp
+    src/bookmarkview/cbookmarktagproxymodel.cpp \
+    src/manager/tagutils.cpp
 
 
 FORMS          +=                                           \
@@ -93,6 +95,10 @@ OTHER_FILES    +=                                           \
     CHANGELOG                                               \
     LICENSE                                                 \
     README.md                                               \
+    docs/project-tag-tree.txt \
+    docs/project-tag-props.md \
+    docs/project-functions.md \
+    docs/project-bookmark-props.md
 
 # if you want to test the project, do: qmake "QT += testlib"
 contains(QT, testlib) {

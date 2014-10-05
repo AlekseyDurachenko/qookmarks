@@ -18,6 +18,8 @@
 #include "ctagitemdata.h"
 #include <QString>
 #include <QList>
+#include <QIcon>
+
 
 class CBookmarkMgr;
 class CTagItem
@@ -28,22 +30,24 @@ public:
     {
         RootItem    = -1,
         Tag         =  0,
-        Other       =  1,
-        Untagged    =  2,
+        Favorites   =  1,
+        Rated       =  2,
         ReadLater   =  3,
-        Favorites   =  4
+        Bookmarks   =  4,
+        Trash       =  5
     };
 private:
     CTagItem(Type type, CBookmarkMgr *mgr, CTagItem *parent = 0);
-    CTagItem(Type type, const CTagItemData &data, CBookmarkMgr *mgr,
-            CTagItem *parent = 0);
+    CTagItem(const CTagItemData &data, CBookmarkMgr *mgr, CTagItem *parent = 0);
 public:
-    ~CTagItem();
+    virtual ~CTagItem();
 
     inline CBookmarkMgr *mgr() const;
     inline CTagItem *parent() const;
     inline Type type() const;
     int row() const;
+    QIcon icon() const;
+
 
     inline const CTagItemData &data() const;
     bool setData(const CTagItemData &data);

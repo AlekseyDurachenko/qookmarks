@@ -15,6 +15,7 @@
 #include "cbookmarktagproxymodel.h"
 #include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
+#include "tagutils.h"
 #include <QDebug>
 
 CBookmarkTagProxyModel::CBookmarkTagProxyModel(QObject *parent) :
@@ -37,9 +38,9 @@ bool CBookmarkTagProxyModel::filterAcceptsRow(int sourceRow,
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
     CBookmarkItem *item = static_cast<CBookmarkItem *>(index.internalPointer());
 
-    if (m_tags.contains(item->mgr()->tagUntaggedItem())
-            && item->tags().isEmpty())
-        return true;
+    //if (m_tags.contains(item->mgr()->tagUntaggedItem())
+    //        && item->tags().isEmpty())
+    //    return true;
 
-    return item->isTagsIntersected(m_tags);
+    return tagCheckIntersection(item->tags(), m_tags);
 }

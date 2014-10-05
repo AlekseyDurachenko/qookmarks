@@ -149,7 +149,7 @@ void CTagTreeView::updateActions()
                     (currentIndex().data(Qt::UserRole).value<void *>());
 
             m_actionTagAdd->setEnabled(tag->type() == CTagItem::Tag
-                                    || tag->type() == CTagItem::Other);
+                                    || tag->type() == CTagItem::Bookmarks);
             m_actionTagEdit->setEnabled(tag->type() == CTagItem::Tag);
             m_actionTagRemove->setEnabled(tag->type() == CTagItem::Tag);
         }

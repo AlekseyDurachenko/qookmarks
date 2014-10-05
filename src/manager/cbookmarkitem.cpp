@@ -14,7 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkitem.h"
 #include "cbookmarkmgr.h"
-#include <QDebug>
+
 
 CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
 {
@@ -24,31 +24,36 @@ CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
 
 void CBookmarkItem::setData(const CBookmarkItemData &data)
 {
+    if (m_data == data)
+        return;
+
     m_data = data;
     if (m_mgr)
         m_mgr->callbackBookmarkDataChanged(this);
 }
 
-bool CBookmarkItem::isTagsIntersected(const QSet<CTagItem *> &tags) const
+void CBookmarkItem::tagAdd(CTagItem *tag)
 {
-    foreach (CTagItem *tag, tags)
-        if (m_tags.contains(tag))
-            return true;
+    if (m_tags.contains(tag))
+        return;
 
-    return false;
-}
-
-void CBookmarkItem::insertTag(CTagItem *tag)
-{
     m_tags.insert(tag);
+    if (m_mgr)
+        m_mgr->callbackBookmarkDataChanged(this);
 }
 
-void CBookmarkItem::removeTag(CTagItem *tag)
+void CBookmarkItem::tagRemove(CTagItem *tag)
 {
-    m_tags.remove(tag);
+    if (m_tags.remove(tag) && m_mgr)
+        m_mgr->callbackBookmarkDataChanged(this);
 }
 
-void CBookmarkItem::clearTags()
+void CBookmarkItem::tagRemoveAll()
 {
+    if (m_tags.count() == 0)
+        return;
+
     m_tags.clear();
+    if (m_mgr)
+        m_mgr->callbackBookmarkDataChanged(this);
 }

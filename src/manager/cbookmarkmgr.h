@@ -30,10 +30,11 @@ public:
     virtual ~CBookmarkMgr();
 
     CTagItem *tagRootItem() const;
-    CTagItem *tagOtherItem() const;
-    CTagItem *tagUntaggedItem() const;
-    CTagItem *tagReadLaterItem() const;
     CTagItem *tagFavoritesItem() const;
+    CTagItem *tagRatedItem() const;
+    CTagItem *tagReadLaterItem() const;
+    CTagItem *tagBookmarksItem() const;
+    CTagItem *tagTrashItem() const;
 
     CTagItem *tagFind(CTagItem *parentItem, const QString &name);
     CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
@@ -45,10 +46,8 @@ public:
     CBookmarkItem *bookmarkFind(const QUrl &url);
     CBookmarkItem *bookmarkAdd(const CBookmarkItemData &data);
     void bookmarkRemove(CBookmarkItem *bookmark);
-
-    void bookmarkAddTag(CBookmarkItem *bookmark, CTagItem *tag);
-    void bookmarkRemoveTag(CBookmarkItem *bookmark, CTagItem *tag);
-    void bookmarkClearTag(CBookmarkItem *bookmark);
+    void bookmarkRemoveAt(int index);
+    void bookmarkRemoveAll();
 protected:
     virtual void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
     virtual void callbackTagDataChanged(CTagItem *tag);
@@ -69,10 +68,11 @@ private:
     QList<CBookmarkItem *> m_bookmarkList;
     QHash<QUrl, CBookmarkItem *> m_bookmarkSearchHash;
     CTagItem *m_tagRootItem;
-    CTagItem *m_tagOtherItem;
-    CTagItem *m_tagUntaggedItem;
-    CTagItem *m_tagReadLaterItem;
-    CTagItem *m_tagFavoritesItem;
+    CTagItem *m_tagFavoritesItem;   // favorites flag
+    CTagItem *m_tagRatedItem;       // rate > 0
+    CTagItem *m_tagReadLaterItem;   // read it later flag
+    CTagItem *m_tagBookmarksItem;   // all bookmarks
+    CTagItem *m_tagTrashItem;       // deleted flag
 };
 
 

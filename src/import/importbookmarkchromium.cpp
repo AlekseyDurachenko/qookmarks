@@ -29,8 +29,8 @@ static void addUrl(CBookmarkMgr *bookmarkMgr, CTagItem *parent,
     if (!bookmark)
         bookmark = bookmarkMgr->bookmarkAdd(data);
 
-    if (bookmarkMgr->tagOtherItem() != parent)
-        bookmarkMgr->bookmarkAddTag(bookmark, parent);
+    if (bookmarkMgr->tagBookmarksItem() != parent)
+        bookmark->tagAdd(parent);
 }
 
 
@@ -82,7 +82,7 @@ bool importBookmarkChromium(CBookmarkMgr *bookmarkMgr, const QString &fileName,
         if (!root.isValid())
             throw QObject::tr("can't parse the chromium bookmark file");
 
-        parseFolder(bookmarkMgr, bookmarkMgr->tagOtherItem(), root.toMap());
+        parseFolder(bookmarkMgr, bookmarkMgr->tagBookmarksItem(), root.toMap());
     }
     catch (const QString &error)
     {

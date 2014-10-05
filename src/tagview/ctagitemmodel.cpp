@@ -14,8 +14,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitemmodel.h"
 #include "cbookmarkmgr.h"
-#include <QIcon>
-#include <QDebug>
 
 
 CTagItemModel::CTagItemModel(QObject *parent) :
@@ -43,13 +41,13 @@ void CTagItemModel::setRootItem(CTagItem *rootItem)
     if (m_rootItem)
     {
         connect(m_rootItem->mgr(), SIGNAL(tagInserted(CTagItem *,int,int)),
-                this, SLOT(onTagInserted(CTagItem *,int,int)));
+                this, SLOT(slot_tag_inserted(CTagItem *,int,int)));
         connect(m_rootItem->mgr(), SIGNAL(tagRemoved(CTagItem *,int,int)),
-                this, SLOT(onTagRemoved(CTagItem *,int,int)));
+                this, SLOT(slot_tag_removed(CTagItem *,int,int)));
         connect(m_rootItem->mgr(), SIGNAL(tagDataChanged(CTagItem *,int,int)),
-                this, SLOT(onTagDataChanged(CTagItem *,int,int)));
+                this, SLOT(slot_tag_dataChanged(CTagItem *,int,int)));
         connect(m_rootItem->mgr(), SIGNAL(destroyed()),
-                this, SLOT(onMgrDestroyed()));
+                this, SLOT(slot_mgr_destroyed()));
     }
 
     endResetModel();
@@ -62,47 +60,12 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
 
     CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
-    {
         if (index.column() == 0)
-        {
-            switch(item->type())
-            {
-            case CTagItem::RootItem:
-                return QObject::tr("/");
-            case CTagItem::Other:
-                return QObject::tr("Other bookmarks");
-            case CTagItem::Untagged:
-                return QObject::tr("Without a tag");
-            case CTagItem::ReadLater:
-                return QObject::tr("Read it later");
-            case CTagItem::Favorites:
-                return QObject::tr("Favorites");
-            case CTagItem::Tag:
-                return item->data().name();
-            }
-        }
-    }
+            return item->data().name();
 
     if (role == Qt::DecorationRole)
-    {
         if (index.column() == 0)
-        {
-            switch(item->type())
-            {
-            case CTagItem::Other:
-            case CTagItem::Tag:
-                return QIcon(":/icons/bookmark-tag.png");
-            case CTagItem::Untagged:
-                return QIcon(":/icons/bookmark-untagged.png");
-            case CTagItem::ReadLater:
-                return QIcon(":/icons/bookmark-readlater.png");
-            case CTagItem::Favorites:
-                return QIcon(":/icons/bookmark-favorites.png");
-            default:
-                return QVariant();
-            }
-        }
-    }
+            return item->icon();
 
     if (role == Qt::UserRole)
         return QVariant::fromValue(index.internalPointer());
@@ -181,7 +144,7 @@ int CTagItemModel::columnCount(const QModelIndex &/*parent*/) const
     return 1;
 }
 
-void CTagItemModel::onTagInserted(CTagItem *parent, int first, int last)
+void CTagItemModel::slot_tag_inserted(CTagItem *parent, int first, int last)
 {
     if (parent == m_rootItem)
         beginInsertRows(QModelIndex(), first, last);
@@ -190,7 +153,7 @@ void CTagItemModel::onTagInserted(CTagItem *parent, int first, int last)
     endInsertRows();
 }
 
-void CTagItemModel::onTagRemoved(CTagItem *parent, int first, int last)
+void CTagItemModel::slot_tag_removed(CTagItem *parent, int first, int last)
 {
     if (parent == m_rootItem)
         beginRemoveRows(QModelIndex(), first, last);
@@ -199,13 +162,13 @@ void CTagItemModel::onTagRemoved(CTagItem *parent, int first, int last)
     endRemoveRows();
 }
 
-void CTagItemModel::onTagDataChanged(CTagItem *parent, int first, int last)
+void CTagItemModel::slot_tag_dataChanged(CTagItem *parent, int first, int last)
 {
     emit dataChanged(createIndex(first, 0, parent),
                      createIndex(last,  columnCount()-1, parent));
 }
 
-void CTagItemModel::onMgrDestroyed()
+void CTagItemModel::slot_mgr_destroyed()
 {
     m_rootItem = 0;
 }

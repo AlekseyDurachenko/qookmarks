@@ -1,4 +1,5 @@
-+ Search results
++ Search results -- а нужно ли?? может отдельной вкладкой??
+
 + Favorites Bookmarks (установлен флаг избранное)
 + Rated Bookmarks (установлен рейтинг больше 0) 
 + Read It Later (установлен флаг "прочитать позже")

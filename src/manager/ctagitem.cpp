@@ -19,7 +19,10 @@
 CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
 {
     m_type = type;
-    switch (type)
+    m_mgr = mgr;
+    m_parent = parent;
+
+    switch (m_type)
     {
     case RootItem:
         m_data.setName("/");
@@ -27,27 +30,28 @@ CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
     case Tag:
         m_data.setName("Tag");
         break;
-    case Other:
-        m_data.setName("Other");
-        break;
-    case Untagged:
-        m_data.setName("Untagged");
-        break;
-    case ReadLater:
-        m_data.setName("ReadLater");
-        break;
     case Favorites:
         m_data.setName("Favorites");
         break;
+    case Rated:
+        m_data.setName("Rated Bookmarks");
+        break;
+    case ReadLater:
+        m_data.setName("Read it Later");
+        break;
+    case Bookmarks:
+        m_data.setName("Bookmarks");
+        break;
+    case Trash:
+        m_data.setName("Deleted Bookmarks");
+        break;
     }
-    m_mgr = mgr;
-    m_parent = parent;
 }
 
-CTagItem::CTagItem(CTagItem::Type type, const CTagItemData &data,
+CTagItem::CTagItem(const CTagItemData &data,
         CBookmarkMgr *mgr, CTagItem *parent)
 {
-    m_type = type;
+    m_type = CTagItem::Tag;
     m_data = data;
     m_mgr = mgr;
     m_parent = parent;
@@ -55,8 +59,7 @@ CTagItem::CTagItem(CTagItem::Type type, const CTagItemData &data,
 
 CTagItem::~CTagItem()
 {
-    foreach (CTagItem *item, m_childList)
-        delete item;
+    qDeleteAll(m_childList);
 }
 
 int CTagItem::row() const
@@ -65,6 +68,27 @@ int CTagItem::row() const
         return m_parent->childIndexOf(const_cast<CTagItem *>(this));
 
     return -1;
+}
+
+QIcon CTagItem::icon() const
+{
+    switch(m_type)
+    {
+    case CTagItem::Tag:
+        return QIcon(":/icons/bookmark-tag.png");
+    case CTagItem::Favorites:
+        return QIcon(":/icons/bookmark-favorites.png");
+    case CTagItem::Rated:
+        return QIcon(":/icons/bookmark-rated.png");
+    case CTagItem::ReadLater:
+        return QIcon(":/icons/bookmark-readlater.png");
+    case CTagItem::Bookmarks:
+        return QIcon(":/icons/bookmark-bookmarks.png");
+    case CTagItem::Trash:
+        return QIcon(":/icons/bookmark-trash.png");
+    default:
+        return QIcon();
+    }
 }
 
 bool CTagItem::setData(const CTagItemData &data)

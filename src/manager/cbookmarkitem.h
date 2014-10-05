@@ -16,8 +16,6 @@
 #define CBOOKMARKITEM_H
 
 #include "cbookmarkitemdata.h"
-#include <QString>
-#include <QList>
 #include <QSet>
 class CTagItem;
 class CBookmarkMgr;
@@ -31,19 +29,17 @@ private:
 public:
     inline CBookmarkMgr *mgr() const;
 
+    inline const QSet<CTagItem *> &tags() const;
+    void tagAdd(CTagItem *tag);
+    void tagRemove(CTagItem *tag);
+    void tagRemoveAll();
+
     inline const CBookmarkItemData &data() const;
     void setData(const CBookmarkItemData &data);
-
-    inline const QSet<CTagItem *> &tags() const;
-    bool isTagsIntersected(const QSet<CTagItem *> &tags) const;
 private:
-    void insertTag(CTagItem *tag);
-    void removeTag(CTagItem *tag);
-    void clearTags();
-private:
-    CBookmarkItemData m_data;
     CBookmarkMgr *m_mgr;
     QSet<CTagItem *> m_tags;
+    CBookmarkItemData m_data;
 };
 
 CBookmarkMgr *CBookmarkItem::mgr() const
@@ -60,5 +56,6 @@ const QSet<CTagItem *> &CBookmarkItem::tags() const
 {
     return m_tags;
 }
+
 
 #endif // CBOOKMARKITEM_H

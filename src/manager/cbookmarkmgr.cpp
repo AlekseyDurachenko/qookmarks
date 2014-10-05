@@ -15,11 +15,11 @@
 #include "cbookmarkmgr.h"
 #include <QDebug>
 
+
 CBookmarkMgr::CBookmarkMgr(QObject *parent) :
     QObject(parent)
 {
-    tagInit();
-    bookmarkInit();
+    tagHierarchyCreate();
 }
 
 CBookmarkMgr::~CBookmarkMgr()
@@ -58,6 +58,34 @@ CTagItem *CBookmarkMgr::tagTrashItem() const
     return m_tagTrashItem;
 }
 
+bool CBookmarkMgr::tagCanAdd(CTagItem *parentItem, const CTagItemData &data)
+{
+    // we can add only to the CTagItem::Tag or CTagItem::Bookmarks
+    if (parentItem->type() != CTagItem::Bookmarks
+            && parentItem->type() != CTagItem::Tag)
+        return false;
+
+    if (parentItem->findChild(data.name()))
+        return false;
+
+    return true;
+}
+
+bool CBookmarkMgr::tagCanMove(CTagItem *newParentItem, CTagItem *item)
+{
+    // we can move only the CTagItem::Tag
+    // to CTagItem::Tag or CTagItem::Bookmarks
+    if ((newParentItem->type() != CTagItem::Bookmarks
+            && newParentItem->type() != CTagItem::Tag)
+            || item->type() != CTagItem::Tag)
+        return false;
+
+    if (newParentItem->findChild(item->data().name()))
+        return false;
+
+    return true;
+}
+
 CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
 {
     return parentItem->findChild(name);
@@ -65,7 +93,7 @@ CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
 
 CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
 {
-    if (parent->findChild(data.name()))
+    if (!tagCanAdd(parent, data))
         return 0;
 
     CTagItem *item = new CTagItem(data, this, parent);
@@ -75,8 +103,8 @@ CTagItem *CBookmarkMgr::tagAdd(CTagItem *parent, const CTagItemData &data)
 
 bool CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
 {
-    if (newParent->findChild(item->data().name()))
-        return false;
+    if (!tagCanMove(newParent, item))
+        return 0;
 
     CTagItem *oldParent = item->parent();
     newParent->addChild(oldParent->takeChild(oldParent->childIndexOf(item)));
@@ -86,6 +114,10 @@ bool CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
 
 void CBookmarkMgr::tagRemove(CTagItem *item)
 {
+    // we can remove only the CTagItem::Tag
+    if (item->type() != CTagItem::Tag)
+        return;
+
     item->parent()->takeChild(item->parent()->childIndexOf(item));
 
     for (int row = 0; row < item->childCount(); ++row)
@@ -102,6 +134,17 @@ void CBookmarkMgr::tagRemove(CTagItem *item)
     }
 
     delete item;
+}
+
+void CBookmarkMgr::tagRemoveAll()
+{
+    foreach (CBookmarkItem *bookmark, m_bookmarkList)
+        bookmark->tagRemoveAll();
+
+    while (m_tagBookmarksItem->childCount())
+        delete m_tagBookmarksItem->takeChild(0);
+
+    emit bookmarkDataChanged(0, m_bookmarkList.count()-1);
 }
 
 int CBookmarkMgr::bookmarkCount() const
@@ -182,7 +225,7 @@ void CBookmarkMgr::callbackTagRemoved(CTagItem *parent, int first, int last)
     emit tagRemoved(parent, first, last);
 }
 
-void CBookmarkMgr::tagInit()
+void CBookmarkMgr::tagHierarchyCreate()
 {
     m_tagRootItem = new CTagItem(CTagItem::RootItem, this);
     m_tagFavoritesItem = new CTagItem(CTagItem::Favorites, this);
@@ -195,8 +238,4 @@ void CBookmarkMgr::tagInit()
     m_tagRootItem->addChild(m_tagReadLaterItem);
     m_tagRootItem->addChild(m_tagBookmarksItem);
     m_tagRootItem->addChild(m_tagTrashItem);
-}
-
-void CBookmarkMgr::bookmarkInit()
-{
 }

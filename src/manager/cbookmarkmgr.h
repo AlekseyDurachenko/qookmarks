@@ -20,6 +20,7 @@
 #include <QObject>
 #include <QHash>
 
+
 class CBookmarkMgr : public QObject
 {
     Q_OBJECT
@@ -36,10 +37,13 @@ public:
     CTagItem *tagBookmarksItem() const;
     CTagItem *tagTrashItem() const;
 
+    bool tagCanAdd(CTagItem *parentItem, const CTagItemData &data);
+    bool tagCanMove(CTagItem *newParent, CTagItem *item);
     CTagItem *tagFind(CTagItem *parentItem, const QString &name);
     CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
-    bool tagMove(CTagItem *newParent, CTagItem *item);
+    bool tagMove(CTagItem *newParentItem, CTagItem *item);
     void tagRemove(CTagItem *item);
+    void tagRemoveAll();
 
     int bookmarkCount() const;
     CBookmarkItem *bookmarkAt(int index) const;
@@ -54,8 +58,7 @@ protected:
     virtual void callbackTagInserted(CTagItem *parent, int first, int last);
     virtual void callbackTagRemoved(CTagItem *parent, int first, int last);
 private:
-    void tagInit();
-    void bookmarkInit();
+    void tagHierarchyCreate();
 signals:
     void bookmarkInserted(int first, int last);
     void bookmarkRemoved(int first, int last);

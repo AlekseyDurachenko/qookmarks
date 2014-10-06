@@ -39,6 +39,7 @@ public:
 
     bool tagCanMove(CTagItem *newParent, CTagItem *item);
     CTagItem *tagFind(CTagItem *parentItem, const QString &name);
+    CTagItem *tagFind(const QStringList &path);
     CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
     bool tagMove(CTagItem *newParentItem, CTagItem *item);
     void tagRemove(CTagItem *item);

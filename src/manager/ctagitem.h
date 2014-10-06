@@ -46,6 +46,7 @@ public:
     inline CTagItem *parent() const;
     inline Type type() const;
     int row() const;
+    QStringList path() const;
 
     inline int childCount() const;
     inline int childIndexOf(CTagItem *item) const;

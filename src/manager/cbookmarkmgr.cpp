@@ -86,6 +86,19 @@ CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
     return parentItem->findChild(name);
 }
 
+CTagItem *CBookmarkMgr::tagFind(const QStringList &path)
+{
+    QStringList itemPath = path;
+    CTagItem *item = tagBookmarksItem();
+    while(item && itemPath.count())
+        item = item->findChild(itemPath.takeFirst());
+
+    if (itemPath.count())
+        return 0;
+
+    return item;
+}
+
 CTagItem *CBookmarkMgr::tagAdd(CTagItem *parentItem, const CTagItemData &data)
 {
     // we can add only to the CTagItem::Tag or CTagItem::Bookmarks

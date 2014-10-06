@@ -71,6 +71,19 @@ int CTagItem::row() const
     return m_parent->childIndexOf(const_cast<CTagItem *>(this));
 }
 
+QStringList CTagItem::path() const
+{
+    QStringList itemPath;
+    const CTagItem *item = this;
+    while (item && item->type() == CTagItem::Tag)
+    {
+        itemPath.push_front(item->data().name());
+        item = item->parent();
+    }
+
+    return itemPath;
+}
+
 QIcon CTagItem::icon() const
 {
     switch(m_type)

@@ -67,8 +67,13 @@ bool CBookmarkMgr::tagCanMove(CTagItem *newParentItem, CTagItem *item)
             || item->type() != CTagItem::Tag)
         return false;
 
-    // TODO: check: item cannot be parent of newParentItem
-    // if ()
+    // item cannot be parent of newParentItem
+    CTagItem *nextLevel = newParentItem;
+    while (nextLevel)
+        if (nextLevel->parent() == item)
+            return false;
+        else
+            nextLevel = newParentItem->parent();
 
     if (newParentItem->findChild(item->data().name()))
         return false;

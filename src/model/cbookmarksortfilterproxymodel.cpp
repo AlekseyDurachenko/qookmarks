@@ -12,18 +12,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarktagproxymodel.h"
+#include "cbookmarksortfilterproxymodel.h"
 #include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
 #include "tagutils.h"
 #include <QDebug>
 
-CBookmarkTagProxyModel::CBookmarkTagProxyModel(QObject *parent) :
+CBookmarkSortFilterProxyModel::CBookmarkSortFilterProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
 }
 
-void CBookmarkTagProxyModel::setTagFilter(const QSet<CTagItem *> &tags)
+void CBookmarkSortFilterProxyModel::setTagFilter(const QSet<CTagItem *> &tags)
 {
     if (m_tags != tags)
     {
@@ -32,7 +32,7 @@ void CBookmarkTagProxyModel::setTagFilter(const QSet<CTagItem *> &tags)
     }
 }
 
-bool CBookmarkTagProxyModel::filterAcceptsRow(int sourceRow,
+bool CBookmarkSortFilterProxyModel::filterAcceptsRow(int sourceRow,
         const QModelIndex &sourceParent) const
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);

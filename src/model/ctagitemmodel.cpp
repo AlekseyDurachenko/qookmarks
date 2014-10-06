@@ -41,11 +41,11 @@ void CTagItemModel::setRootItem(CTagItem *rootItem)
     if (m_rootItem)
     {
         connect(m_rootItem->mgr(), SIGNAL(tagInserted(CTagItem *,int,int)),
-                this, SLOT(slot_tag_inserted(CTagItem *,int,int)));
+                this, SLOT(slot_mgr_tagInserted(CTagItem *,int,int)));
         connect(m_rootItem->mgr(), SIGNAL(tagRemoved(CTagItem *,int,int)),
-                this, SLOT(slot_tag_removed(CTagItem *,int,int)));
+                this, SLOT(slot_mgr_tagRemoved(CTagItem *,int,int)));
         connect(m_rootItem->mgr(), SIGNAL(tagDataChanged(CTagItem *,int,int)),
-                this, SLOT(slot_tag_dataChanged(CTagItem *,int,int)));
+                this, SLOT(slot_mgr_tagDataChanged(CTagItem *,int,int)));
         connect(m_rootItem->mgr(), SIGNAL(destroyed()),
                 this, SLOT(slot_mgr_destroyed()));
     }
@@ -144,7 +144,7 @@ int CTagItemModel::columnCount(const QModelIndex &/*parent*/) const
     return 1;
 }
 
-void CTagItemModel::slot_tag_inserted(CTagItem *parent, int first, int last)
+void CTagItemModel::slot_mgr_tagInserted(CTagItem *parent, int first, int last)
 {
     if (parent == m_rootItem)
         beginInsertRows(QModelIndex(), first, last);
@@ -153,7 +153,7 @@ void CTagItemModel::slot_tag_inserted(CTagItem *parent, int first, int last)
     endInsertRows();
 }
 
-void CTagItemModel::slot_tag_removed(CTagItem *parent, int first, int last)
+void CTagItemModel::slot_mgr_tagRemoved(CTagItem *parent, int first, int last)
 {
     if (parent == m_rootItem)
         beginRemoveRows(QModelIndex(), first, last);
@@ -162,7 +162,8 @@ void CTagItemModel::slot_tag_removed(CTagItem *parent, int first, int last)
     endRemoveRows();
 }
 
-void CTagItemModel::slot_tag_dataChanged(CTagItem *parent, int first, int last)
+void CTagItemModel::slot_mgr_tagDataChanged(CTagItem *parent,
+        int first, int last)
 {
     emit dataChanged(createIndex(first, 0, parent),
                      createIndex(last,  columnCount()-1, parent));

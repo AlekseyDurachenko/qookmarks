@@ -30,75 +30,72 @@ DEFINES        +=                                           \
 
 INCLUDEPATH    +=                                           \
     $$PWD/src                                               \
-    $$PWD/src/import                                        \
     $$PWD/src/manager                                       \
-    $$PWD/src/bookmarkview                                  \
-    $$PWD/src/tagview                                       \
+    $$PWD/src/model                                         \
+    $$PWD/src/widgets/bookmarkview                          \
+    $$PWD/src/widgets/tagview                               \
+    $$PWD/src/import                                        \
 
 HEADERS        +=                                           \
-    src/manager/ctagitemdata.h \
-    src/manager/ctagitem.h \
-    src/manager/cbookmarkmgr.h \
-    src/manager/cbookmarkitemdata.h \
-    src/manager/cbookmarkitem.h \
-    src/import/importbookmarkchromium.h \
-    src/import/cimportbookmarkdialog.h \
-    src/global.h \
-    src/ctageditdialog.h \
-    src/consts.h \
-    src/cmainwindow.h \
-    src/cbookmarkeditdialog.h \
-    src/caboutdialog.h \
-    src/bookmarkview/cbookmarkitemmodel.h \
-    src/bookmarkview/cbookmarktagproxymodel.h \
-    src/tagview/ctagitemmodel.h \
-    src/bookmarkview/cbookmarktreeview.h \
-    src/tagview/ctagtreeview.h \
-    src/manager/tagutils.h
-
+    src/manager/ctagitemdata.h                              \
+    src/manager/ctagitem.h                                  \
+    src/manager/cbookmarkitemdata.h                         \
+    src/manager/cbookmarkitem.h                             \
+    src/manager/cbookmarkmgr.h                              \
+    src/manager/tagutils.h                                  \
+    src/model/ctagitemmodel.h                               \
+    src/model/cbookmarkitemmodel.h                          \
+    src/model/cbookmarksortfilterproxymodel.h               \
+    src/widgets/tagview/ctagtreeview.h                      \
+    src/widgets/bookmarkview/cbookmarktreeview.h            \
+    src/import/importbookmarkchromium.h                     \
+    src/import/cimportbookmarkdialog.h                      \
+    src/consts.h                                            \
+    src/global.h                                            \
+    src/cmainwindow.h                                       \
+    src/caboutdialog.h                                      \
+    src/ctageditdialog.h                                    \
+    src/cbookmarkeditdialog.h                               \
 
 SOURCES        +=                                           \
-    src/manager/ctagitemdata.cpp \
-    src/manager/ctagitem.cpp \
-    src/manager/cbookmarkmgr.cpp \
-    src/manager/cbookmarkitemdata.cpp \
-    src/manager/cbookmarkitem.cpp \
-    src/import/importbookmarkchromium.cpp \
-    src/import/cimportbookmarkdialog.cpp \
-    src/ctageditdialog.cpp \
-    src/cmainwindow.cpp \
-    src/cbookmarkeditdialog.cpp \
-    src/caboutdialog.cpp \
-    src/bookmarkview/cbookmarkitemmodel.cpp \
-    src/bookmarkview/cbookmarktreeview.cpp \
-    src/tagview/ctagtreeview.cpp \
-    src/tagview/ctagitemmodel.cpp \
-    src/bookmarkview/cbookmarktagproxymodel.cpp \
-    src/manager/tagutils.cpp
-
+    src/manager/ctagitemdata.cpp                            \
+    src/manager/ctagitem.cpp                                \
+    src/manager/cbookmarkitemdata.cpp                       \
+    src/manager/cbookmarkitem.cpp                           \
+    src/manager/cbookmarkmgr.cpp                            \
+    src/manager/tagutils.cpp                                \
+    src/model/ctagitemmodel.cpp                             \
+    src/model/cbookmarkitemmodel.cpp                        \
+    src/model/cbookmarksortfilterproxymodel.cpp             \
+    src/widgets/tagview/ctagtreeview.cpp                    \
+    src/widgets/bookmarkview/cbookmarktreeview.cpp          \
+    src/import/importbookmarkchromium.cpp                   \
+    src/import/cimportbookmarkdialog.cpp                    \
+    src/cmainwindow.cpp                                     \
+    src/caboutdialog.cpp                                    \
+    src/ctageditdialog.cpp                                  \
+    src/cbookmarkeditdialog.cpp                             \
 
 FORMS          +=                                           \
-    src/import/cimportbookmarkdialog.ui \
-    src/ctageditdialog.ui \
-    src/cmainwindow.ui \
-    src/cbookmarkeditdialog.ui \
-    src/caboutdialog.ui
-
+    src/import/cimportbookmarkdialog.ui                     \
+    src/cmainwindow.ui                                      \
+    src/caboutdialog.ui                                     \
+    src/ctageditdialog.ui                                   \
+    src/cbookmarkeditdialog.ui                              \
 
 RESOURCES      +=                                           \
     qrc/icons.qrc                                           \
     qrc/about.qrc                                           \
-    qrc/sql.qrc                                             \
 
 OTHER_FILES    +=                                           \
     AUTHORS                                                 \
     CHANGELOG                                               \
     LICENSE                                                 \
     README.md                                               \
-    docs/project-tag-tree.txt \
-    docs/project-tag-props.md \
-    docs/project-functions.md \
-    docs/project-bookmark-props.md
+    docs/project-tag-tree.txt                               \
+    docs/project-tag-props.md                               \
+    docs/project-functions.md                               \
+    docs/project-bookmark-props.md                          \
 
 # if you want to test the project, do: qmake "QT += testlib"
 contains(QT, testlib) {

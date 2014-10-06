@@ -15,7 +15,7 @@
 #include "cbookmarkitemmodel.h"
 #include "cbookmarkmgr.h"
 #include <QIcon>
-#include <QDebug>
+
 
 CBookmarkItemModel::CBookmarkItemModel(QObject *parent) :
     QAbstractItemModel(parent)
@@ -41,11 +41,11 @@ void CBookmarkItemModel::setBookmarkMgr(CBookmarkMgr *mgr)
     if (m_mgr)
     {
         connect(m_mgr, SIGNAL(bookmarkInserted(int,int)),
-                this, SLOT(onBookmarkInserted(int,int)));
+                this, SLOT(slot_mgr_bookmarkInserted(int,int)));
         connect(m_mgr, SIGNAL(bookmarkRemoved(int,int)),
-                this, SLOT(onBookmarkRemoved(int,int)));
+                this, SLOT(slot_mgr_bookmarkRemoved(int,int)));
         connect(m_mgr, SIGNAL(bookmarkDataChanged(int,int)),
-                this, SLOT(onBookmarkDataChanged(int,int)));
+                this, SLOT(slot_mgr_bookmarkDataChanged(int,int)));
     }
 
     endResetModel();
@@ -134,19 +134,25 @@ int CBookmarkItemModel::columnCount(const QModelIndex &/*parent*/) const
     return 3;
 }
 
-void CBookmarkItemModel::onBookmarkInserted(int first, int last)
+void CBookmarkItemModel::slot_mgr_bookmarkInserted(int first, int last)
 {
     beginInsertRows(QModelIndex(), first, last);
     endInsertRows();
 }
 
-void CBookmarkItemModel::onBookmarkRemoved(int first, int last)
+void CBookmarkItemModel::slot_mgr_bookmarkRemoved(int first, int last)
 {
     beginRemoveRows(QModelIndex(), first, last);
     endRemoveRows();
 }
 
-void CBookmarkItemModel::onBookmarkDataChanged(int first, int last)
+void CBookmarkItemModel::slot_mgr_bookmarkDataChanged(int first, int last)
 {
-    emit dataChanged(createIndex(first, 0), createIndex(last, columnCount()-1));
+    emit dataChanged(createIndex(first, 0),
+                     createIndex(last, columnCount()-1));
+}
+
+void CBookmarkItemModel::slot_mgr_destroyed()
+{
+    m_mgr = 0;
 }

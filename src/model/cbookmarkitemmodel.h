@@ -31,15 +31,18 @@ public:
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation,
+                                int role = Qt::DisplayRole) const;
+    virtual QModelIndex index(int row, int column,
+                              const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex &index) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 private slots:
-    void onBookmarkInserted(int first, int last);
-    void onBookmarkRemoved(int first, int last);
-    void onBookmarkDataChanged(int first, int last);
+    void slot_mgr_bookmarkInserted(int first, int last);
+    void slot_mgr_bookmarkRemoved(int first, int last);
+    void slot_mgr_bookmarkDataChanged(int first, int last);
+    void slot_mgr_destroyed();
 private:
     CBookmarkMgr *m_mgr;
 };

@@ -17,7 +17,7 @@
 
 #include "cbookmarkmgr.h"
 #include "cbookmarkitemmodel.h"
-#include "cbookmarktagproxymodel.h"
+#include "cbookmarksortfilterproxymodel.h"
 #include <QTreeView>
 
 
@@ -51,7 +51,7 @@ private:
 private:
     CBookmarkMgr *m_mgr;
     CBookmarkItemModel *m_bookmarkModel;
-    CBookmarkTagProxyModel *m_tagProxyModel;
+    CBookmarkSortFilterProxyModel *m_tagProxyModel;
     QAction *m_actionBookmarkAdd;
     QAction *m_actionBookmarkEdit;
     QAction *m_actionBookmarkRemove;

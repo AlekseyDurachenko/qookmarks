@@ -45,7 +45,7 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
 
     m_mgr = 0;
     m_bookmarkModel = new CBookmarkItemModel(this);
-    m_tagProxyModel = new CBookmarkTagProxyModel(this);
+    m_tagProxyModel = new CBookmarkSortFilterProxyModel(this);
     m_tagProxyModel->setSourceModel(m_bookmarkModel);
     setModel(m_tagProxyModel);
 

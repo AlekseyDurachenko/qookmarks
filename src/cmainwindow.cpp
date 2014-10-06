@@ -20,7 +20,7 @@
 #include "ctagitemmodel.h"
 #include "cbookmarkmgr.h"
 #include "global.h"
-#include "cbookmarktagproxymodel.h"
+#include "cbookmarksortfilterproxymodel.h"
 #include "tagutils.h"
 #include <QSettings>
 #include <QDebug>

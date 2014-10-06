@@ -12,19 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKTAGPROXYMODEL_H
-#define CBOOKMARKTAGPROXYMODEL_H
+#ifndef CBOOKMARKSORTFILTERPROXYMODEL_H
+#define CBOOKMARKSORTFILTERPROXYMODEL_H
 
 #include "ctagitem.h"
 #include <QSortFilterProxyModel>
 #include <QSet>
 
 
-class CBookmarkTagProxyModel : public QSortFilterProxyModel
+class CBookmarkSortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit CBookmarkTagProxyModel(QObject *parent = 0);
+    explicit CBookmarkSortFilterProxyModel(QObject *parent = 0);
     inline const QSet<CTagItem *> &tagFilter() const;
 public slots:
     void setTagFilter(const QSet<CTagItem *> &tagFilter);
@@ -34,10 +34,10 @@ private:
     QSet<CTagItem *> m_tags;
 };
 
-const QSet<CTagItem *> &CBookmarkTagProxyModel::tagFilter() const
+const QSet<CTagItem *> &CBookmarkSortFilterProxyModel::tagFilter() const
 {
     return m_tags;
 }
 
 
-#endif // CBOOKMARKTAGPROXYMODEL_H
+#endif // CBOOKMARKSORTFILTERPROXYMODEL_H

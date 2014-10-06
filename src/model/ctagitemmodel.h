@@ -39,9 +39,9 @@ public:
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 private slots:
-    void slot_tag_inserted(CTagItem *parent, int first, int last);
-    void slot_tag_removed(CTagItem *parent, int first, int last);
-    void slot_tag_dataChanged(CTagItem *parent, int first, int last);
+    void slot_mgr_tagInserted(CTagItem *parent, int first, int last);
+    void slot_mgr_tagRemoved(CTagItem *parent, int first, int last);
+    void slot_mgr_tagDataChanged(CTagItem *parent, int first, int last);
     void slot_mgr_destroyed();
 private:
     CTagItem *m_rootItem;

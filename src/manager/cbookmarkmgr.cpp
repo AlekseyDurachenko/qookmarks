@@ -60,6 +60,10 @@ CTagItem *CBookmarkMgr::tagTrashItem() const
 
 bool CBookmarkMgr::tagCanMove(CTagItem *newParentItem, CTagItem *item)
 {
+    // prevent incorrect usage of the function
+    if (newParentItem == 0|| item == 0)
+        return false;
+
     // we can move only the CTagItem::Tag
     // to CTagItem::Tag or CTagItem::Bookmarks
     if ((newParentItem->type() != CTagItem::Bookmarks
@@ -83,6 +87,10 @@ bool CBookmarkMgr::tagCanMove(CTagItem *newParentItem, CTagItem *item)
 
 CTagItem *CBookmarkMgr::tagFind(CTagItem *parentItem, const QString &name)
 {
+    // prevent incorrect usage of the function
+    if (parentItem == 0)
+        return 0;
+
     return parentItem->findChild(name);
 }
 
@@ -101,6 +109,10 @@ CTagItem *CBookmarkMgr::tagFind(const QStringList &path)
 
 CTagItem *CBookmarkMgr::tagAdd(CTagItem *parentItem, const CTagItemData &data)
 {
+    // prevent incorrect usage of the function
+    if (parentItem == 0)
+        return 0;
+
     // we can add only to the CTagItem::Tag or CTagItem::Bookmarks
     if (parentItem->type() != CTagItem::Bookmarks
             && parentItem->type() != CTagItem::Tag)
@@ -127,6 +139,10 @@ bool CBookmarkMgr::tagMove(CTagItem *newParent, CTagItem *item)
 
 void CBookmarkMgr::tagRemove(CTagItem *item)
 {
+    // prevent incorrect usage of the function
+    if (item == 0)
+        return;
+
     // we can remove only the CTagItem::Tag
     if (item->type() != CTagItem::Tag)
         return;
@@ -191,6 +207,10 @@ CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
 
 void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 {
+    // prevent incorrect usage of the function
+    if (bookmark == 0)
+        return;
+
     int index = m_bookmarkList.indexOf(bookmark);
     m_bookmarkSearchHash.remove(bookmark->data().url());
     delete m_bookmarkList.takeAt(index);

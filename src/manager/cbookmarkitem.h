@@ -30,6 +30,7 @@ public:
     inline CBookmarkMgr *mgr() const;
 
     inline const QSet<CTagItem *> &tags() const;
+    bool tagCanAdd(CTagItem *tag);
     bool tagAdd(CTagItem *tag);
     void tagRemove(CTagItem *tag);
     void tagRemoveAll();

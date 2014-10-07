@@ -22,6 +22,80 @@ CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
     m_mgr = mgr;
 }
 
+bool CBookmarkItem::tagCanAdd(CTagItem *tag)
+{
+    switch (tag->type())
+    {
+    case CTagItem::Tag:
+    case CTagItem::Favorites:
+    case CTagItem::ReadLater:
+    case CTagItem::Trash:
+        return true;
+    default:
+        return false;
+    }
+
+    return false;
+}
+
+bool CBookmarkItem::tagAdd(CTagItem *tag)
+{
+    // we can't accept the top level items
+    // but for some type of it we can processing (syntax sugar)
+    if (tag->type() != CTagItem::Tag)
+    {
+        switch (tag->type())
+        {
+        case CTagItem::Favorites:
+            if (!m_data.isFavorite())
+                m_data.setFavorite(true);
+            else
+                return true;
+            break;
+        case CTagItem::ReadLater:
+            if (!m_data.isReadLater())
+                m_data.setReadLater(true);
+            else
+                return true;
+            break;
+        case CTagItem::Trash:
+            if (!m_data.isDeleted())
+                m_data.setDeleted(true);
+            else
+                return true;
+            break;
+        default:
+            return false;
+        }
+
+        m_mgr->callbackBookmarkDataChanged(this);
+        return true;
+    }
+
+    // tag already exists
+    if (m_tags.contains(tag))
+        return false;
+
+    m_tags.insert(tag);
+    m_mgr->callbackBookmarkDataChanged(this);
+
+    return true;
+}
+
+void CBookmarkItem::tagRemove(CTagItem *tag)
+{
+    if (m_tags.remove(tag))
+        m_mgr->callbackBookmarkDataChanged(this);
+}
+
+void CBookmarkItem::tagRemoveAll()
+{
+    if (m_tags.count() == 0)
+        return;
+
+    m_tags.clear();
+    m_mgr->callbackBookmarkDataChanged(this);
+}
 
 bool CBookmarkItem::canSetData(const CBookmarkItemData &data)
 {
@@ -46,31 +120,4 @@ bool CBookmarkItem::setData(const CBookmarkItemData &data)
     m_mgr->callbackBookmarkDataChanged(this);
 
     return true;
-}
-
-bool CBookmarkItem::tagAdd(CTagItem *tag)
-{
-    // tag already exists
-    if (m_tags.contains(tag))
-        return false;
-
-    m_tags.insert(tag);
-    m_mgr->callbackBookmarkDataChanged(this);
-
-    return true;
-}
-
-void CBookmarkItem::tagRemove(CTagItem *tag)
-{
-    if (m_tags.remove(tag))
-        m_mgr->callbackBookmarkDataChanged(this);
-}
-
-void CBookmarkItem::tagRemoveAll()
-{
-    if (m_tags.count() == 0)
-        return;
-
-    m_tags.clear();
-    m_mgr->callbackBookmarkDataChanged(this);
 }

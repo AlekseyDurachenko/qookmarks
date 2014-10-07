@@ -150,6 +150,8 @@ void CTagItem::addChild(CTagItem *item)
 
 CTagItem *CTagItem::takeChild(int row)
 {
+    m_mgr->callbackTagBeginRemove(this, row, row);
+
     CTagItem *item = m_childList.takeAt(row);
     m_searchHash.remove(item->data().name());
 

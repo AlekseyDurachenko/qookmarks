@@ -253,6 +253,11 @@ void CBookmarkMgr::callbackTagInserted(CTagItem *parent, int first, int last)
     emit tagInserted(parent, first, last);
 }
 
+void CBookmarkMgr::callbackTagBeginRemove(CTagItem *parent, int first, int last)
+{
+    emit tagBeginRemove(parent, first, last);
+}
+
 void CBookmarkMgr::callbackTagRemoved(CTagItem *parent, int first, int last)
 {
     emit tagRemoved(parent, first, last);

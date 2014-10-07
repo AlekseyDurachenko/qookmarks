@@ -53,10 +53,11 @@ public:
     void bookmarkRemoveAt(int index);
     void bookmarkRemoveAll();
 protected:
-    virtual void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
-    virtual void callbackTagDataChanged(CTagItem *tag);
-    virtual void callbackTagInserted(CTagItem *parent, int first, int last);
-    virtual void callbackTagRemoved(CTagItem *parent, int first, int last);
+    void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
+    void callbackTagDataChanged(CTagItem *tag);
+    void callbackTagInserted(CTagItem *parent, int first, int last);
+    void callbackTagBeginRemove(CTagItem *parent, int first, int last);
+    void callbackTagRemoved(CTagItem *parent, int first, int last);
 private:
     void tagHierarchyCreate();
 signals:
@@ -65,6 +66,7 @@ signals:
     void bookmarkDataChanged(int first, int last);
 
     void tagInserted(CTagItem *parent, int first, int last);
+    void tagBeginRemove(CTagItem *parent, int first, int last);
     void tagRemoved(CTagItem *parent, int first, int last);
     void tagDataChanged(CTagItem *parent, int first, int last);
 private:

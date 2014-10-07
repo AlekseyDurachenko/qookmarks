@@ -37,6 +37,7 @@ signals:
     void currentBookmarkChanged(CBookmarkItem *bookmark);
 public slots:
     void setTagFilter(const QSet<CTagItem *> &tagFilter);
+    void clearTagFilter();
 private slots:
     void onMgrDestroyed();
     void onCustomContextMenuRequested(const QPoint &pos);

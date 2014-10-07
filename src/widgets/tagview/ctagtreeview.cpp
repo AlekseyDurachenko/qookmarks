@@ -131,13 +131,8 @@ void CTagTreeView::onActionTagRemoveTriggered()
 void CTagTreeView::currentChanged(const QModelIndex &current,
         const QModelIndex & /*previous*/)
 {
-    CTagItem *tag = static_cast<CTagItem *>
-            (current.data(Qt::UserRole).value<void *>());
-
-    emit currentTagChanged(tag);
-    emit currentTagChanged(tagRecursiveFetch(tag, true).toSet());
-
     updateActions();
+    emit currentTagChanged();
 }
 
 void CTagTreeView::updateActions()

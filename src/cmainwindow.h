@@ -44,6 +44,7 @@ private slots:
     void state_downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
     void on_action_TestSavePageImage_triggered();
+    void on_treeView_tags_currentTagChanged();
 private:
     void saveSettings();
     void loadSettings();

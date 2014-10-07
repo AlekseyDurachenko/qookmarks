@@ -35,8 +35,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_bookmarkMgr = new CBookmarkMgr(this);
     ui->treeView_tags->setBookmarkMgr(m_bookmarkMgr);
     ui->treeView_bookmarks->setBookmarkMgr(m_bookmarkMgr);
-    connect(ui->treeView_tags, SIGNAL(currentTagChanged(QSet<CTagItem*>)),
-            ui->treeView_bookmarks, SLOT(setTagFilter(QSet<CTagItem*>)));
+    //connect(ui->treeView_tags, SIGNAL(currentTagChanged(QSet<CTagItem*>)),
+    //        ui->treeView_bookmarks, SLOT(setTagFilter(QSet<CTagItem*>)));
 
     m_networkMgr = new QNetworkAccessManager(this);
     m_reply = 0;
@@ -156,5 +156,15 @@ void CMainWindow::on_action_TestSavePageImage_triggered()
 //    QWebView *view = new QWebView;
 //    view->setAttribute(Qt::WA_DeleteOnClose);
 //    view->load(QUrl("http://stackoverflow.com/questions/9086046/create-whole-page-screen-shot-using-qwebpage"));
-//    view->show();
+    //    view->show();
+}
+
+void CMainWindow::on_treeView_tags_currentTagChanged()
+{
+    CTagItem *tag = ui->treeView_tags->currentTag();
+    if (!tag)
+        ui->treeView_bookmarks->clearTagFilter();
+    else
+        ui->treeView_bookmarks->setTagFilter
+                (tagRecursiveFetch(ui->treeView_tags->currentTag()).toSet());
 }

@@ -34,9 +34,7 @@ public:
 
     CTagItem *currentTag() const;
 signals:
-    void currentTagChanged(CTagItem *tag);
-    void currentTagChanged(const QSet<CTagItem *> &tags);
-public slots:
+    void currentTagChanged();
 private slots:
     void onMgrDestroyed();
     void onCustomContextMenuRequested(const QPoint &pos);

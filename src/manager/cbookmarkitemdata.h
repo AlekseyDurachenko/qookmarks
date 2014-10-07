@@ -53,9 +53,6 @@ public:
     inline bool isDeleted() const;
     void setDeleted(bool state);
 
-    inline int httpCode() const;
-    void setHttpCode(int code);
-
     inline int rating() const;
     void setRating(int rating);
 
@@ -74,8 +71,6 @@ private:
     bool m_isFavorite;
     bool m_isDeleted;
     int m_rating;
-
-    int m_httpCode;
 };
 
 inline const QIcon &CBookmarkItemData::favicon() const
@@ -123,11 +118,6 @@ bool CBookmarkItemData::isDeleted() const
     return m_isDeleted;
 }
 
-int CBookmarkItemData::httpCode() const
-{
-    return m_httpCode;
-}
-
 int CBookmarkItemData::rating() const
 {
     return m_rating;
@@ -144,8 +134,7 @@ bool CBookmarkItemData::operator == (const CBookmarkItemData &other)
             && m_isReadLater == other.m_isReadLater
             && m_isFavorite == other.m_isFavorite
             && m_isDeleted == other.m_isDeleted
-            && m_rating == other.m_rating
-            && m_httpCode == other.m_httpCode);
+            && m_rating == other.m_rating);
 }
 
 bool CBookmarkItemData::operator != (const CBookmarkItemData &other)
@@ -159,8 +148,7 @@ bool CBookmarkItemData::operator != (const CBookmarkItemData &other)
             || m_isReadLater != other.m_isReadLater
             || m_isFavorite != other.m_isFavorite
             || m_isDeleted != other.m_isDeleted
-            || m_rating != other.m_rating
-            || m_httpCode != other.m_httpCode);
+            || m_rating != other.m_rating);
 }
 
 

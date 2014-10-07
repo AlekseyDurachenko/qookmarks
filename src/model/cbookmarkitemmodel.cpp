@@ -65,8 +65,6 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
             return bookmark->data().title();
         case 1:
             return bookmark->data().url();
-        case 2:
-            return bookmark->data().httpCode();
         }
     }
 
@@ -99,8 +97,6 @@ QVariant CBookmarkItemModel::headerData(int section,
             return tr("Title");
         case 1:
             return tr("Url");
-        case 2:
-            return tr("Http code");
         }
     }
 
@@ -131,7 +127,7 @@ int CBookmarkItemModel::rowCount(const QModelIndex &parent) const
 
 int CBookmarkItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return 3;
+    return 2;
 }
 
 void CBookmarkItemModel::slot_mgr_bookmarkInserted(int first, int last)

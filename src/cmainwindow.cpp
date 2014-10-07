@@ -139,7 +139,7 @@ void CMainWindow::state_replyFinished()
 
     CBookmarkItem *item = m_bookmarkMgr->bookmarkAt(m_tmpHash[url]);
     CBookmarkItemData data = item->data();
-    data.setHttpCode(code);
+    //data.setHttpCode(code);
     item->setData(data);
 
     if (!m_urlList.isEmpty())

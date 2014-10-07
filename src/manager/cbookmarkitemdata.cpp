@@ -20,8 +20,10 @@
 CBookmarkItemData::CBookmarkItemData()
 {
     m_title = QObject::tr("untitled");
-    m_url = QUrl();
-    m_httpCode = -1;
+    m_isFavorite = false;
+    m_isReadLater = false;
+    m_isDeleted = false;
+    m_rating = 0;
 }
 
 void CBookmarkItemData::setFavicon(const QIcon &favicon)
@@ -82,9 +84,4 @@ void CBookmarkItemData::setDeleted(bool state)
 void CBookmarkItemData::setRating(int rating)
 {
     m_rating = rating;
-}
-
-void CBookmarkItemData::setHttpCode(int code)
-{
-    m_httpCode = code;
 }

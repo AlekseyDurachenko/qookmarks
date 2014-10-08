@@ -16,6 +16,8 @@
 #define CBOOKMARKSORTFILTERPROXYMODEL_H
 
 #include "ctagitem.h"
+#include "cbookmarkmgr.h"
+#include "cbookmarkfilter.h"
 #include <QSortFilterProxyModel>
 #include <QSet>
 
@@ -25,18 +27,18 @@ class CBookmarkSortFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 public:
     explicit CBookmarkSortFilterProxyModel(QObject *parent = 0);
-    inline const QSet<CTagItem *> &tagFilter() const;
-public slots:
-    void setTagFilter(const QSet<CTagItem *> &tagFilter);
+
+    inline const CBookmarkFilter &bookmarkFilter();
+    void setBookmarkFilter(const CBookmarkFilter &bookmarkFilter);
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 private:
-    QSet<CTagItem *> m_tags;
+    CBookmarkFilter m_bookmarkFilter;
 };
 
-const QSet<CTagItem *> &CBookmarkSortFilterProxyModel::tagFilter() const
+const CBookmarkFilter &CBookmarkSortFilterProxyModel::bookmarkFilter()
 {
-    return m_tags;
+    return m_bookmarkFilter;
 }
 
 

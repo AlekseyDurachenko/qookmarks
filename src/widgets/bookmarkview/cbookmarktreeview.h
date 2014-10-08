@@ -30,14 +30,13 @@ public:
     inline CBookmarkMgr *mgr() const;
     void setBookmarkMgr(CBookmarkMgr *mgr);
 
+    inline CBookmarkSortFilterProxyModel *softFilterProxyModel() const;
+
     inline QAction *actionBookmarkAdd() const;
     inline QAction *actionBookmarkEdit() const;
     inline QAction *actionBookmarkRemove() const;
 signals:
     void currentBookmarkChanged(CBookmarkItem *bookmark);
-public slots:
-    void setTagFilter(const QSet<CTagItem *> &tagFilter);
-    void clearTagFilter();
 private slots:
     void onMgrDestroyed();
     void onCustomContextMenuRequested(const QPoint &pos);
@@ -61,6 +60,11 @@ private:
 CBookmarkMgr *CBookmarkTreeView::mgr() const
 {
     return m_mgr;
+}
+
+CBookmarkSortFilterProxyModel *CBookmarkTreeView::softFilterProxyModel() const
+{
+    return m_tagProxyModel;
 }
 
 QAction *CBookmarkTreeView::actionBookmarkAdd() const

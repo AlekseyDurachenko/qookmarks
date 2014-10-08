@@ -56,6 +56,7 @@ HEADERS        +=                                           \
     src/caboutdialog.h                                      \
     src/ctageditdialog.h                                    \
     src/cbookmarkeditdialog.h                               \
+    src/manager/cbookmarkfilter.h
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -75,6 +76,7 @@ SOURCES        +=                                           \
     src/caboutdialog.cpp                                    \
     src/ctageditdialog.cpp                                  \
     src/cbookmarkeditdialog.cpp                             \
+    src/manager/cbookmarkfilter.cpp
 
 FORMS          +=                                           \
     src/import/cimportbookmarkdialog.ui                     \

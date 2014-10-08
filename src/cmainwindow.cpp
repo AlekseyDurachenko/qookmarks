@@ -102,11 +102,31 @@ void CMainWindow::on_action_ImportBookmarks_triggered()
     CImportBookmarkDialog dlg(m_bookmarkMgr, this);
     dlg.exec();
 
+    CBookmarkItemData data0 = m_bookmarkMgr->bookmarkAt(0)->data();
+    data0.setFavorite(true);
+    m_bookmarkMgr->bookmarkAt(0)->setData(data0);
+
+    CBookmarkItemData data1 = m_bookmarkMgr->bookmarkAt(1)->data();
+    data1.setRating(4);
+    m_bookmarkMgr->bookmarkAt(1)->setData(data1);
+
+    CBookmarkItemData data2 = m_bookmarkMgr->bookmarkAt(2)->data();
+    data2.setReadLater(true);
+    m_bookmarkMgr->bookmarkAt(2)->setData(data2);
+
+    CBookmarkItemData data3 = m_bookmarkMgr->bookmarkAt(3)->data();
+    data3.setDeleted(true);
+    m_bookmarkMgr->bookmarkAt(3)->setData(data3);
+
+    on_treeView_tags_currentTagChanged();
+    ui->treeView_bookmarks->softFilterProxyModel()->invalidate();
+    /*
     CTagItem *tag = ui->treeView_tags->currentTag();
     if (!tag)
         ui->treeView_bookmarks->setTagFilter(QSet<CTagItem *>());
 
     ui->treeView_bookmarks->setTagFilter(tagRecursiveFetch(tag, true).toSet());
+    */
 }
 
 void CMainWindow::on_action_TestAllUrls_triggered()
@@ -162,9 +182,25 @@ void CMainWindow::on_action_TestSavePageImage_triggered()
 void CMainWindow::on_treeView_tags_currentTagChanged()
 {
     CTagItem *tag = ui->treeView_tags->currentTag();
+    CBookmarkFilter filter;
+    //filter.setTagFilter(tagRecursiveFetch(ui->treeView_tags->currentTag()).toSet());
+
+
+    if (tag) switch (tag->type())
+    {
+    case CTagItem::Tag:
+        filter.setTagFilter(QSet<CTagItem *>() << tag);
+    default:
+        filter.setAcceptTypes(tag->type());
+    }
+
+    ui->treeView_bookmarks->softFilterProxyModel()->setBookmarkFilter(filter);
+
+    /*
     if (!tag)
         ui->treeView_bookmarks->clearTagFilter();
     else
         ui->treeView_bookmarks->setTagFilter
                 (tagRecursiveFetch(ui->treeView_tags->currentTag()).toSet());
+    */
 }

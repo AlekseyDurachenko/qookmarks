@@ -55,23 +55,28 @@ public:
 protected:
     void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
     void callbackTagDataChanged(CTagItem *tag);
+    void callbackTagInserted(CTagItem *tag);
+    void callbackTagRemoved(CTagItem *tag);
     void callbackTagInserted(CTagItem *parent, int first, int last);
-    void callbackTagBeginRemove(CTagItem *parent, int first, int last);
     void callbackTagRemoved(CTagItem *parent, int first, int last);
 private:
     void tagHierarchyCreate();
 signals:
+    // this signals are used to update the bookmark model
     void bookmarkInserted(int first, int last);
     void bookmarkRemoved(int first, int last);
     void bookmarkDataChanged(int first, int last);
-
+    // this signals are used to update the tag model
     void tagInserted(CTagItem *parent, int first, int last);
-    void tagBeginRemove(CTagItem *parent, int first, int last);
     void tagRemoved(CTagItem *parent, int first, int last);
     void tagDataChanged(CTagItem *parent, int first, int last);
+    // this signals are emited before the previouse
+    void tagInserted(CTagItem *item);
+    void tagRemoved(CTagItem *item);
+    void tagDataChanged(CTagItem *item);
 private:
     QList<CBookmarkItem *> m_bookmarkList;
-    QHash<QUrl, CBookmarkItem *> m_bookmarkSearchHash;
+    QHash<QUrl, CBookmarkItem *> m_bookmarkUrlHash;
     CTagItem *m_tagRootItem;
     CTagItem *m_tagFavoritesItem;   // favorites flag
     CTagItem *m_tagRatedItem;       // rate > 0

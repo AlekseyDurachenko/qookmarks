@@ -70,16 +70,6 @@ void CBookmarkTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
     updateActions();
 }
 
-void CBookmarkTreeView::setTagFilter(const QSet<CTagItem *> &tagFilter)
-{
-    m_tagProxyModel->setTagFilter(tagFilter);
-}
-
-void CBookmarkTreeView::clearTagFilter()
-{
-    setTagFilter(QSet<CTagItem *>());
-}
-
 void CBookmarkTreeView::onMgrDestroyed()
 {
     m_mgr = 0;

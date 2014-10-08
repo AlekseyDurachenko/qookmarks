@@ -28,14 +28,15 @@ class CTagItem
 public:
     enum Type
     {
-        RootItem    = -1,
-        Tag         =  0,
-        Favorites   =  1,
-        Rated       =  2,
-        ReadLater   =  3,
-        Bookmarks   =  4,
-        Trash       =  5
+        None        =  0x00,    // root item
+        Tag         =  0x01,
+        Favorites   =  0x02,
+        Rated       =  0x04,
+        ReadLater   =  0x08,
+        Bookmarks   =  0x10,    // untagged bookmarks
+        Trash       =  0x20
     };
+    Q_DECLARE_FLAGS(Types, Type)
 private:
     CTagItem(Type type, CBookmarkMgr *mgr, CTagItem *parent = 0);
     CTagItem(const CTagItemData &data, CBookmarkMgr *mgr, CTagItem *parent = 0);
@@ -71,6 +72,8 @@ private:
     QList<CTagItem *> m_childList;
     QHash<QString, CTagItem *> m_searchHash;    // quick search by name
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(CTagItem::Types)
+
 
 CBookmarkMgr *CTagItem::mgr() const
 {

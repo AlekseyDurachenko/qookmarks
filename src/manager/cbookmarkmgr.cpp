@@ -188,18 +188,18 @@ CBookmarkItem *CBookmarkMgr::bookmarkAt(int index) const
 
 CBookmarkItem *CBookmarkMgr::bookmarkFind(const QUrl &url)
 {
-    return m_bookmarkSearchHash.value(url, 0);
+    return m_bookmarkUrlHash.value(url, 0);
 }
 
 CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
 {
-    if (m_bookmarkSearchHash.contains(data.url()))
+    if (m_bookmarkUrlHash.contains(data.url()))
         return 0;
 
     int index = m_bookmarkList.count();
     CBookmarkItem *bookmark = new CBookmarkItem(data, this);
     m_bookmarkList.push_back(bookmark);
-    m_bookmarkSearchHash[data.url()] = bookmark;
+    m_bookmarkUrlHash[data.url()] = bookmark;
     emit bookmarkInserted(index, index);
 
     return bookmark;
@@ -212,7 +212,7 @@ void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
         return;
 
     int index = m_bookmarkList.indexOf(bookmark);
-    m_bookmarkSearchHash.remove(bookmark->data().url());
+    m_bookmarkUrlHash.remove(bookmark->data().url());
     delete m_bookmarkList.takeAt(index);
     emit bookmarkRemoved(index, index);
 }
@@ -220,7 +220,7 @@ void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 void CBookmarkMgr::bookmarkRemoveAt(int index)
 {
     CBookmarkItem *bookmark = m_bookmarkList.takeAt(index);
-    m_bookmarkSearchHash.remove(bookmark->data().url());
+    m_bookmarkUrlHash.remove(bookmark->data().url());
     delete bookmark;
     emit bookmarkRemoved(index, index);
 }
@@ -233,7 +233,7 @@ void CBookmarkMgr::bookmarkRemoveAll()
     int count = m_bookmarkList.count();
     qDeleteAll(m_bookmarkList);
     m_bookmarkList.clear();
-    m_bookmarkSearchHash.clear();
+    m_bookmarkUrlHash.clear();
     emit bookmarkRemoved(0, count-1);
 }
 
@@ -245,17 +245,23 @@ void CBookmarkMgr::callbackBookmarkDataChanged(CBookmarkItem *bookmark)
 
 void CBookmarkMgr::callbackTagDataChanged(CTagItem *tag)
 {
+    emit tagDataChanged(tag);
     emit tagDataChanged(tag->parent(), tag->row(), tag->row());
+}
+
+void CBookmarkMgr::callbackTagInserted(CTagItem *tag)
+{
+    emit tagInserted(tag);
+}
+
+void CBookmarkMgr::callbackTagRemoved(CTagItem *tag)
+{
+    emit tagRemoved(tag);
 }
 
 void CBookmarkMgr::callbackTagInserted(CTagItem *parent, int first, int last)
 {
     emit tagInserted(parent, first, last);
-}
-
-void CBookmarkMgr::callbackTagBeginRemove(CTagItem *parent, int first, int last)
-{
-    emit tagBeginRemove(parent, first, last);
 }
 
 void CBookmarkMgr::callbackTagRemoved(CTagItem *parent, int first, int last)
@@ -265,7 +271,7 @@ void CBookmarkMgr::callbackTagRemoved(CTagItem *parent, int first, int last)
 
 void CBookmarkMgr::tagHierarchyCreate()
 {
-    m_tagRootItem = new CTagItem(CTagItem::RootItem, this);
+    m_tagRootItem = new CTagItem(CTagItem::None, this);
     m_tagFavoritesItem = new CTagItem(CTagItem::Favorites, this);
     m_tagRatedItem = new CTagItem(CTagItem::Rated, this);
     m_tagReadLaterItem = new CTagItem(CTagItem::ReadLater, this);

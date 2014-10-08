@@ -23,13 +23,14 @@ CBookmarkSortFilterProxyModel::CBookmarkSortFilterProxyModel(QObject *parent) :
 {
 }
 
-void CBookmarkSortFilterProxyModel::setTagFilter(const QSet<CTagItem *> &tags)
+void CBookmarkSortFilterProxyModel::setBookmarkFilter(
+        const CBookmarkFilter &bookmarkFilter)
 {
-    if (m_tags != tags)
-    {
-        m_tags = tags;
-        invalidateFilter();
-    }
+    if (m_bookmarkFilter == bookmarkFilter)
+        return;
+
+    m_bookmarkFilter = bookmarkFilter;
+    invalidateFilter();
 }
 
 bool CBookmarkSortFilterProxyModel::filterAcceptsRow(int sourceRow,
@@ -37,10 +38,5 @@ bool CBookmarkSortFilterProxyModel::filterAcceptsRow(int sourceRow,
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
     CBookmarkItem *item = static_cast<CBookmarkItem *>(index.internalPointer());
-
-    //if (m_tags.contains(item->mgr()->tagUntaggedItem())
-    //        && item->tags().isEmpty())
-    //    return true;
-
-    return tagCheckIntersection(item->tags(), m_tags);
+    return m_bookmarkFilter.testBookmark(item);
 }

@@ -25,7 +25,7 @@ CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
     // default names for top level items
     switch (m_type)
     {
-    case RootItem:
+    case None:
         m_data.setName(QObject::tr("/"));
         break;
     case Tag:
@@ -145,16 +145,16 @@ void CTagItem::addChild(CTagItem *item)
     m_childList.push_back(item);
     m_searchHash[item->data().name()] = item;
 
+    m_mgr->callbackTagInserted(item);
     m_mgr->callbackTagInserted(this, row, row);
 }
 
 CTagItem *CTagItem::takeChild(int row)
 {
-    m_mgr->callbackTagBeginRemove(this, row, row);
-
     CTagItem *item = m_childList.takeAt(row);
     m_searchHash.remove(item->data().name());
 
+    m_mgr->callbackTagRemoved(item);
     m_mgr->callbackTagRemoved(this, row, row);
 
     return item;

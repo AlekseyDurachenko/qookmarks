@@ -23,22 +23,38 @@
 CTagTreeView::CTagTreeView(QWidget *parent) :
     QTreeView(parent)
 {
+    m_mgr = 0;
+
     // configure context menu
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(onCustomContextMenuRequested(QPoint)));
+            this, SLOT(slot_customContextMenuRequested(QPoint)));
 
     m_actionTagAdd = new QAction(tr("Add..."), this);
     m_actionTagEdit = new QAction(tr("Edit..."), this);
     m_actionTagRemove = new QAction(tr("Remove..."), this);
+    m_actionEmptyFavorites = new QAction(tr("Empty Favorites..."), this);
+    m_actionUnrateBookmakrs = new QAction(tr("Unrate bookmakrs..."), this);
+    m_actionEmptyReadLater = new QAction(tr("Empty Read Later..."), this);
+    m_actionEmptyBookmarks = new QAction(tr("Empty bookmarks..."), this);
+    m_actionEmptyTrash = new QAction(tr("Empty Trash..."), this);
     connect(m_actionTagAdd, SIGNAL(triggered()),
-            this, SLOT(onActionTagAddTriggered()));
+            this, SLOT(slot_action_tagAdd_triggered()));
     connect(m_actionTagEdit, SIGNAL(triggered()),
-            this, SLOT(onActionTagEditTriggered()));
+            this, SLOT(slot_action_tagEdit_triggered()));
     connect(m_actionTagRemove, SIGNAL(triggered()),
-            this, SLOT(onActionTagRemoveTriggered()));
+            this, SLOT(slot_action_tagRemove_triggered()));
+    connect(m_actionEmptyFavorites, SIGNAL(triggered()),
+            this, SLOT(slot_action_emptyFavorites_tirggered()));
+    connect(m_actionUnrateBookmakrs, SIGNAL(triggered()),
+            this, SLOT(slot_action_unrateBookmarks_triggered()));
+    connect(m_actionEmptyReadLater, SIGNAL(triggered()),
+            this, SLOT(slot_action_emptyReadLater_triggered()));
+    connect(m_actionEmptyBookmarks, SIGNAL(triggered()),
+            this, SLOT(slot_action_emptyBookmakrs_triggered()));
+    connect(m_actionEmptyTrash, SIGNAL(triggered()),
+            this, SLOT(slot_action_emptyTrash_triggered()));
 
-    m_mgr = 0;
     m_tagModel = new CTagItemModel(this);
     setModel(m_tagModel);
 
@@ -56,7 +72,7 @@ void CTagTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
     m_mgr = mgr;
     if (m_mgr)
     {
-        connect(m_mgr, SIGNAL(destroyed()), this, SLOT(onMgrDestroyed()));
+        connect(m_mgr, SIGNAL(destroyed()), this, SLOT(slot_mgr_destroyed()));
         m_tagModel->setRootItem(m_mgr->tagRootItem());
     }
 
@@ -72,21 +88,49 @@ CTagItem *CTagTreeView::currentTag() const
             (currentIndex().data(Qt::UserRole).value<void *>());
 }
 
-void CTagTreeView::onMgrDestroyed()
+void CTagTreeView::slot_customContextMenuRequested(const QPoint &pos)
+{
+    CTagItem *tag = currentTag();
+    if (!tag)
+        return;
+
+    QMenu menu(this);
+    switch (tag->type())
+    {
+    case CTagItem::Bookmarks:
+        menu.addAction(m_actionTagAdd);
+        menu.addAction(m_actionEmptyBookmarks);
+        break;
+    case CTagItem::Tag:
+        menu.addAction(m_actionTagAdd);
+        menu.addAction(m_actionTagEdit);
+        menu.addAction(m_actionTagRemove);
+        break;
+    case CTagItem::Favorites:
+        menu.addAction(m_actionEmptyFavorites);
+        break;
+    case CTagItem::Rated:
+        menu.addAction(m_actionUnrateBookmakrs);
+        break;
+    case CTagItem::ReadLater:
+        menu.addAction(m_actionEmptyReadLater);
+        break;
+    case CTagItem::Trash:
+        menu.addAction(m_actionEmptyTrash);
+        break;
+    default:
+        return;
+    }
+
+    menu.exec(viewport()->mapToGlobal(pos));
+}
+
+void CTagTreeView::slot_mgr_destroyed()
 {
     m_mgr = 0;
 }
 
-void CTagTreeView::onCustomContextMenuRequested(const QPoint &pos)
-{
-    QMenu menu(this);
-    menu.addAction(m_actionTagAdd);
-    menu.addAction(m_actionTagEdit);
-    menu.addAction(m_actionTagRemove);
-    menu.exec(viewport()->mapToGlobal(pos));
-}
-
-void CTagTreeView::onActionTagAddTriggered()
+void CTagTreeView::slot_action_tagAdd_triggered()
 {
     CTagEditDialog dlg(this);
     dlg.setWindowTitle(tr("Create new tag"));
@@ -104,7 +148,7 @@ void CTagTreeView::onActionTagAddTriggered()
     }
 }
 
-void CTagTreeView::onActionTagEditTriggered()
+void CTagTreeView::slot_action_tagEdit_triggered()
 {
     CTagItem *tag = static_cast<CTagItem *>
             (currentIndex().data(Qt::UserRole).value<void *>());
@@ -116,7 +160,7 @@ void CTagTreeView::onActionTagEditTriggered()
         tag->setData(dlg.toData());
 }
 
-void CTagTreeView::onActionTagRemoveTriggered()
+void CTagTreeView::slot_action_tagRemove_triggered()
 {
     if (QMessageBox::question(this, tr("Remove the tag"),
             tr("Are you sure you want to remove the tag?"),
@@ -128,7 +172,92 @@ void CTagTreeView::onActionTagRemoveTriggered()
     }
 }
 
-void CTagTreeView::currentChanged(const QModelIndex &current,
+void CTagTreeView::slot_action_emptyFavorites_tirggered()
+{
+    if (QMessageBox::question(this, tr("Empty Favorites"),
+            tr("Are you sure to empty Favorites?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+    {
+        if (m_mgr->bookmarkAt(i)->data().isFavorite())
+        {
+            CBookmarkItemData data = m_mgr->bookmarkAt(i)->data();
+            data.setFavorite(false);
+            m_mgr->bookmarkAt(i)->setData(data);
+        }
+    }
+
+    updateActions();
+}
+
+void CTagTreeView::slot_action_unrateBookmarks_triggered()
+{
+    if (QMessageBox::question(this, tr("Unread Bookmakrs"),
+            tr("Are you sure to unread bookmakrs?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+    {
+        if (m_mgr->bookmarkAt(i)->data().rating() > 0)
+        {
+            CBookmarkItemData data = m_mgr->bookmarkAt(i)->data();
+            data.setRating(0);
+            m_mgr->bookmarkAt(i)->setData(data);
+        }
+    }
+
+    updateActions();
+}
+
+void CTagTreeView::slot_action_emptyReadLater_triggered()
+{
+    if (QMessageBox::question(this, tr("Empty Read Later"),
+            tr("Are you sure to empty Read Later?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+    {
+        if (m_mgr->bookmarkAt(i)->data().isReadLater())
+        {
+            CBookmarkItemData data = m_mgr->bookmarkAt(i)->data();
+            data.setReadLater(false);
+            m_mgr->bookmarkAt(i)->setData(data);
+        }
+    }
+
+    updateActions();
+}
+
+void CTagTreeView::slot_action_emptyBookmakrs_triggered()
+{
+    if (QMessageBox::question(this, tr("Empty Bookmarks"),
+            tr("Are you sure you want to empty bookmakrs?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    foreach (CTagItem *tag, m_mgr->tagBookmarksItem()->children())
+        m_mgr->tagRemove(tag);
+}
+
+void CTagTreeView::slot_action_emptyTrash_triggered()
+{
+    if (QMessageBox::question(this, tr("Empty Trash"),
+            tr("Are you sure to empty Trash?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+        if (m_mgr->bookmarkAt(i)->data().isDeleted())
+            m_mgr->bookmarkRemoveAt(i);
+
+    updateActions();
+}
+
+void CTagTreeView::currentChanged(const QModelIndex &/*current*/,
         const QModelIndex & /*previous*/)
 {
     updateActions();
@@ -137,29 +266,24 @@ void CTagTreeView::currentChanged(const QModelIndex &current,
 
 void CTagTreeView::updateActions()
 {
-    if (m_mgr)
-    {
-        if (currentIndex().isValid())
-        {
-            CTagItem *tag = static_cast<CTagItem *>
-                    (currentIndex().data(Qt::UserRole).value<void *>());
-
-            m_actionTagAdd->setEnabled(tag->type() == CTagItem::Tag
-                                    || tag->type() == CTagItem::Bookmarks);
-            m_actionTagEdit->setEnabled(tag->type() == CTagItem::Tag);
-            m_actionTagRemove->setEnabled(tag->type() == CTagItem::Tag);
-        }
-        else
-        {
-            m_actionTagAdd->setEnabled(false);
-            m_actionTagEdit->setEnabled(false);
-            m_actionTagRemove->setEnabled(false);
-        }
-    }
-    else
+    if (!m_mgr)
     {
         m_actionTagAdd->setEnabled(false);
         m_actionTagEdit->setEnabled(false);
         m_actionTagRemove->setEnabled(false);
+        m_actionEmptyTrash->setEnabled(false);
+        return;
     }
+
+    CTagItem *tag = currentTag();
+    // TODO: disable if <item type root> is empty
+    m_actionEmptyFavorites->setEnabled(true);
+    m_actionUnrateBookmakrs->setEnabled(true);
+    m_actionEmptyReadLater->setEnabled(true);
+    m_actionEmptyBookmarks->setEnabled(true);
+    m_actionEmptyTrash->setEnabled(true);
+    m_actionTagAdd->setEnabled(tag && (tag->type() == CTagItem::Tag
+                                       || tag->type() == CTagItem::Bookmarks));
+    m_actionTagEdit->setEnabled(tag && tag->type() == CTagItem::Tag);
+    m_actionTagRemove->setEnabled(tag && tag->type() == CTagItem::Tag);
 }

@@ -19,6 +19,7 @@
 #include "cbookmarkmgr.h"
 #include <QTreeView>
 
+
 class CTagTreeView : public QTreeView
 {
     Q_OBJECT
@@ -36,22 +37,32 @@ public:
 signals:
     void currentTagChanged();
 private slots:
-    void onMgrDestroyed();
-    void onCustomContextMenuRequested(const QPoint &pos);
-    void onActionTagAddTriggered();
-    void onActionTagEditTriggered();
-    void onActionTagRemoveTriggered();
+    void slot_customContextMenuRequested(const QPoint &pos);
+    void slot_mgr_destroyed();
+    void slot_action_tagAdd_triggered();
+    void slot_action_tagEdit_triggered();
+    void slot_action_tagRemove_triggered();
+    void slot_action_emptyFavorites_tirggered();
+    void slot_action_unrateBookmarks_triggered();
+    void slot_action_emptyReadLater_triggered();
+    void slot_action_emptyBookmakrs_triggered();
+    void slot_action_emptyTrash_triggered();
 protected:
     virtual void currentChanged(const QModelIndex &current,
                                 const QModelIndex &previous);
 private:
     void updateActions();
 private:
-    CBookmarkMgr *m_mgr;
     CTagItemModel *m_tagModel;
+    CBookmarkMgr *m_mgr;
     QAction *m_actionTagAdd;
     QAction *m_actionTagEdit;
     QAction *m_actionTagRemove;
+    QAction *m_actionEmptyFavorites;
+    QAction *m_actionUnrateBookmakrs;
+    QAction *m_actionEmptyReadLater;
+    QAction *m_actionEmptyBookmarks;
+    QAction *m_actionEmptyTrash;
 };
 
 CBookmarkMgr *CTagTreeView::mgr() const

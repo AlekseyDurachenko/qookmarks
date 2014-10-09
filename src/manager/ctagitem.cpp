@@ -44,7 +44,7 @@ CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
         m_data.setName(QObject::tr("Bookmarks"));
         break;
     case Trash:
-        m_data.setName(QObject::tr("Deleted Bookmarks"));
+        m_data.setName(QObject::tr("Trash"));
         break;
     }
 }

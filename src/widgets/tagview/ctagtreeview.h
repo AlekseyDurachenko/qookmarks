@@ -32,6 +32,11 @@ public:
     inline QAction *actionTagAdd() const;
     inline QAction *actionTagEdit() const;
     inline QAction *actionTagRemove() const;
+    inline QAction *actionEmptyFavorites() const;
+    inline QAction *actionUnrateBookmakrs() const;
+    inline QAction *actionEmptyReadLater() const;
+    inline QAction *actionEmptyBookmakrs() const;
+    inline QAction *actionEmptyTrash() const;
 
     CTagItem *currentTag() const;
 signals:
@@ -83,6 +88,31 @@ QAction *CTagTreeView::actionTagEdit() const
 QAction *CTagTreeView::actionTagRemove() const
 {
     return m_actionTagRemove;
+}
+
+QAction *CTagTreeView::actionEmptyFavorites() const
+{
+    return m_actionEmptyFavorites;
+}
+
+QAction *CTagTreeView::actionUnrateBookmakrs() const
+{
+    return m_actionUnrateBookmakrs;
+}
+
+QAction *CTagTreeView::actionEmptyReadLater() const
+{
+    return m_actionEmptyReadLater;
+}
+
+QAction *CTagTreeView::actionEmptyBookmakrs() const
+{
+    return m_actionEmptyBookmarks;
+}
+
+QAction *CTagTreeView::actionEmptyTrash() const
+{
+    return m_actionEmptyTrash;
 }
 
 

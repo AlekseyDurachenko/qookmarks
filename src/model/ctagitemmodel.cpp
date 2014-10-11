@@ -14,6 +14,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitemmodel.h"
 #include "cbookmarkmgr.h"
+#include <QMimeData>
+#include <QDebug>
 
 
 CTagItemModel::CTagItemModel(QObject *parent) :
@@ -78,7 +80,71 @@ Qt::ItemFlags CTagItemModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
+    CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
+    if (item->type() == CTagItem::Tag)
+        return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled;
+    else
+        return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsDropEnabled;
+}
+
+QStringList CTagItemModel::mimeTypes() const
+{
+    return QStringList() << "application/CTagItemList";
+}
+
+QMimeData *CTagItemModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+
+    QByteArray encodedData;
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+    foreach (QModelIndex index, indexes)
+        if (index.isValid())
+            stream << static_cast<CTagItem *>(index.internalPointer())->path();
+
+    mimeData->setData("application/CTagItemList", encodedData);
+    return mimeData;
+}
+
+bool CTagItemModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+        int /*row*/, int /*column*/, const QModelIndex &parent)
+{
+    if (action == Qt::IgnoreAction)
+        return true;
+
+    if (!data->hasFormat("application/CTagItemList"))
+        return false;
+
+    // new parent for the items
+    CTagItem *newParent = static_cast<CTagItem *>(parent.internalPointer());
+    if (!newParent)
+        return false;
+
+    // extrct paths
+    QByteArray encodedData = data->data("application/CTagItemList");
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    QList<QStringList> pathList;
+    int rows = 0;
+    while (!stream.atEnd())
+    {
+        QStringList path;
+        stream >> path;
+        pathList << path;
+        ++rows;
+    }
+
+    // can we move the items?
+    CBookmarkMgr *mgr = m_rootItem->mgr();
+    foreach (const QStringList &path, pathList)
+        if (!mgr->tagCanMove(newParent, mgr->tagFind(path)))
+            return false;
+
+    // move items
+    foreach (const QStringList &path, pathList)
+        mgr->tagMove(newParent, mgr->tagFind(path));
+
+    return true;
 }
 
 QVariant CTagItemModel::headerData(int section,
@@ -89,7 +155,7 @@ QVariant CTagItemModel::headerData(int section,
         switch (section)
         {
         case 0:
-            return QObject::tr("Tag name");
+            return QObject::tr("Name");
         }
     }
 

@@ -64,6 +64,10 @@ bool CBookmarkMgr::tagCanMove(CTagItem *newParentItem, CTagItem *item)
     if (newParentItem == 0|| item == 0)
         return false;
 
+    // it is the same
+    if (newParentItem == item)
+        return false;
+
     // we can move only the CTagItem::Tag
     // to CTagItem::Tag or CTagItem::Bookmarks
     if ((newParentItem->type() != CTagItem::Bookmarks
@@ -77,7 +81,7 @@ bool CBookmarkMgr::tagCanMove(CTagItem *newParentItem, CTagItem *item)
         if (nextLevel->parent() == item)
             return false;
         else
-            nextLevel = newParentItem->parent();
+            nextLevel = nextLevel->parent();
 
     if (newParentItem->findChild(item->data().name()))
         return false;

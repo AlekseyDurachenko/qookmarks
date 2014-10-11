@@ -30,6 +30,11 @@ CTagTreeView::CTagTreeView(QWidget *parent) :
 {
     m_mgr = 0;
 
+    // configure drag and drop
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
+
     // configure context menu
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),

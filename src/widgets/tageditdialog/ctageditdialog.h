@@ -16,6 +16,7 @@
 #define CTAGEDITDIALOG_H
 
 #include "ctagitemdata.h"
+#include "cbookmarkmgr.h"
 #include <QDialog>
 
 
@@ -27,14 +28,39 @@ class CTagEditDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CTagEditDialog(QWidget *parent = 0);
+    enum Mode
+    {
+        New     = 0,
+        Edit    = 1
+    };
+public:
+    explicit CTagEditDialog(Mode mode, CTagItem *tagParent, QWidget *parent = 0);
     virtual ~CTagEditDialog();
+
+    inline Mode mode() const;
+    inline CTagItem *tagParent() const;
 
     CTagItemData toData() const;
     void setData(const CTagItemData &data);
+private slots:
+    void slot_mgr_destroyed();
+    void slot_lineEdit_name_textChanged(const QString &text);
 private:
     Ui::CTagEditDialog *ui;
+    CTagItemData m_data;
+    CTagItem *m_tagParent;
+    Mode m_mode;
 };
+
+CTagEditDialog::Mode CTagEditDialog::mode() const
+{
+    return m_mode;
+}
+
+CTagItem *CTagEditDialog::tagParent() const
+{
+    return m_tagParent;
+}
 
 
 #endif // CTAGEDITDIALOG_H

@@ -34,6 +34,7 @@ INCLUDEPATH    +=                                           \
     $$PWD/src/model                                         \
     $$PWD/src/widgets/bookmarkview                          \
     $$PWD/src/widgets/tagview                               \
+    $$PWD/src/widgets/tageditdialog                         \
     $$PWD/src/import                                        \
 
 HEADERS        +=                                           \
@@ -48,15 +49,15 @@ HEADERS        +=                                           \
     src/model/cbookmarksortfilterproxymodel.h               \
     src/widgets/tagview/ctagtreeview.h                      \
     src/widgets/bookmarkview/cbookmarktreeview.h            \
+    src/widgets/tageditdialog/ctageditdialog.h              \
     src/import/importbookmarkchromium.h                     \
     src/import/cimportbookmarkdialog.h                      \
     src/consts.h                                            \
     src/global.h                                            \
     src/cmainwindow.h                                       \
     src/caboutdialog.h                                      \
-    src/ctageditdialog.h                                    \
     src/cbookmarkeditdialog.h                               \
-    src/manager/cbookmarkfilter.h
+    src/manager/cbookmarkfilter.h                           \
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -70,19 +71,19 @@ SOURCES        +=                                           \
     src/model/cbookmarksortfilterproxymodel.cpp             \
     src/widgets/tagview/ctagtreeview.cpp                    \
     src/widgets/bookmarkview/cbookmarktreeview.cpp          \
+    src/widgets/tageditdialog/ctageditdialog.cpp            \
     src/import/importbookmarkchromium.cpp                   \
     src/import/cimportbookmarkdialog.cpp                    \
     src/cmainwindow.cpp                                     \
     src/caboutdialog.cpp                                    \
-    src/ctageditdialog.cpp                                  \
     src/cbookmarkeditdialog.cpp                             \
-    src/manager/cbookmarkfilter.cpp
+    src/manager/cbookmarkfilter.cpp                         \
 
 FORMS          +=                                           \
+    src/widgets/tageditdialog/ctageditdialog.ui             \
     src/import/cimportbookmarkdialog.ui                     \
     src/cmainwindow.ui                                      \
     src/caboutdialog.ui                                     \
-    src/ctageditdialog.ui                                   \
     src/cbookmarkeditdialog.ui                              \
 
 RESOURCES      +=                                           \

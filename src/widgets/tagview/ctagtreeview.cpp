@@ -20,6 +20,11 @@
 #include <QDebug>
 
 
+static CTagItem *indexToItem(const QModelIndex &index)
+{
+    return static_cast<CTagItem *>(index.data(Qt::UserRole).value<void *>());
+}
+
 CTagTreeView::CTagTreeView(QWidget *parent) :
     QTreeView(parent)
 {
@@ -132,29 +137,16 @@ void CTagTreeView::slot_mgr_destroyed()
 
 void CTagTreeView::slot_action_tagAdd_triggered()
 {
-    CTagEditDialog dlg(this);
-    dlg.setWindowTitle(tr("Create new tag"));
+    CTagItem *parentTag = indexToItem(currentIndex());
+    CTagEditDialog dlg(CTagEditDialog::New, parentTag, this);
     if (dlg.exec() == QDialog::Accepted)
-    {
-        CTagItem *tag = static_cast<CTagItem *>
-                (currentIndex().data(Qt::UserRole).value<void *>());
-
-        CTagItemData data = dlg.toData();
-        if (m_mgr->tagFind(tag, data.name()))
-            QMessageBox::warning(this, tr("Warning"),
-                    tr("The tag \"%1\" is already exists").arg(data.name()));
-        else
-            m_mgr->tagAdd(tag, dlg.toData());
-    }
+        m_mgr->tagAdd(parentTag, dlg.toData());
 }
 
 void CTagTreeView::slot_action_tagEdit_triggered()
 {
-    CTagItem *tag = static_cast<CTagItem *>
-            (currentIndex().data(Qt::UserRole).value<void *>());
-
-    CTagEditDialog dlg(this);
-    dlg.setWindowTitle(tr("Edit tag"));
+    CTagItem *tag = indexToItem(currentIndex());
+    CTagEditDialog dlg(CTagEditDialog::Edit, tag->parent(), this);
     dlg.setData(tag->data());
     if (dlg.exec() == QDialog::Accepted)
         tag->setData(dlg.toData());

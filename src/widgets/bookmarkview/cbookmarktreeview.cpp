@@ -18,6 +18,10 @@
 #include <QAction>
 #include <QMessageBox>
 
+static CBookmarkItem *indexToItem(const QModelIndex &index)
+{
+    return static_cast<CBookmarkItem *>(index.data(Qt::UserRole).value<void *>());
+}
 
 CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     QTreeView(parent)
@@ -119,16 +123,14 @@ void CBookmarkTreeView::onActionBookmarkRemoveTriggered()
             tr("Are you sure you want to remove the selected bookmark(s)?"),
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
     {
-        QModelIndexList indexeList = selectionModel()->selectedRows(0);
+        QModelIndexList indexList = selectionModel()->selectedRows(0);
 
         QList<CBookmarkItem *> bookmarkList;
-        foreach (QModelIndex index, indexeList)
-            bookmarkList.push_back(static_cast<CBookmarkItem *>
-                    (index.data(Qt::UserRole).value<void *>()));
+        foreach (QModelIndex index, indexList)
+            bookmarkList.push_back(indexToItem(index));
 
         if (bookmarkList.count() == 0 && currentIndex().isValid())
-            bookmarkList.push_back(static_cast<CBookmarkItem *>
-                    (currentIndex().data(Qt::UserRole).value<void *>()));
+            bookmarkList.push_back(indexToItem(currentIndex()));
 
         foreach (CBookmarkItem *bookmark, bookmarkList)
             m_mgr->bookmarkRemove(bookmark);
@@ -138,12 +140,8 @@ void CBookmarkTreeView::onActionBookmarkRemoveTriggered()
 void CBookmarkTreeView::currentChanged(const QModelIndex & /*current*/,
         const QModelIndex & /*previous*/)
 {
-    CBookmarkItem *bookmark = static_cast<CBookmarkItem *>
-            (currentIndex().data(Qt::UserRole).value<void *>());
-
-    emit currentBookmarkChanged(bookmark);
-
     updateActions();
+    emit currentBookmarkChanged(indexToItem(currentIndex()));
 }
 
 void CBookmarkTreeView::updateActions()

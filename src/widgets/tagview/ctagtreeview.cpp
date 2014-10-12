@@ -94,8 +94,7 @@ CTagItem *CTagTreeView::currentTag() const
     if (!currentIndex().isValid())
         return 0;
 
-    return static_cast<CTagItem *>
-            (currentIndex().data(Qt::UserRole).value<void *>());
+    return indexToItem(currentIndex());
 }
 
 void CTagTreeView::slot_customContextMenuRequested(const QPoint &pos)

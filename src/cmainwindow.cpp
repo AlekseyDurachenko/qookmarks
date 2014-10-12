@@ -37,6 +37,10 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->treeView_bookmarks->setBookmarkMgr(m_bookmarkMgr);
     //connect(ui->treeView_tags, SIGNAL(currentTagChanged(QSet<CTagItem*>)),
     //        ui->treeView_bookmarks, SLOT(setTagFilter(QSet<CTagItem*>)));
+    connect(m_bookmarkMgr, SIGNAL(tagRemoved(CTagItem*)),
+            this, SLOT(on_treeView_tags_currentTagChanged()));
+    connect(m_bookmarkMgr, SIGNAL(tagInserted(CTagItem*)),
+            this, SLOT(on_treeView_tags_currentTagChanged()));
 
     m_networkMgr = new QNetworkAccessManager(this);
     m_reply = 0;
@@ -185,6 +189,7 @@ void CMainWindow::on_treeView_tags_currentTagChanged()
     CBookmarkFilter filter;
     //filter.setTagFilter(tagRecursiveFetch(ui->treeView_tags->currentTag()).toSet());
 
+    //qDebug() << tag->data().name();
 
     if (tag) switch (tag->type())
     {

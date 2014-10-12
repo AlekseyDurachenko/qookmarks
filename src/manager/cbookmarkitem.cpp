@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkitem.h"
 #include "cbookmarkmgr.h"
+#include <QDebug>
 
 
 CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)

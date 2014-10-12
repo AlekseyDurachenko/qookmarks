@@ -15,6 +15,8 @@
 #include "cbookmarkitemmodel.h"
 #include "cbookmarkmgr.h"
 #include <QIcon>
+#include <QMimeData>
+#include <QDebug>
 
 
 CBookmarkItemModel::CBookmarkItemModel(QObject *parent) :
@@ -84,6 +86,26 @@ Qt::ItemFlags CBookmarkItemModel::flags(const QModelIndex &index) const
         return 0;
 
     return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsDragEnabled;
+}
+
+QStringList CBookmarkItemModel::mimeTypes() const
+{
+    return QStringList() << "application/CBookmarkItemList";
+}
+
+QMimeData *CBookmarkItemModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+
+    QByteArray encodedData;
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+    foreach (QModelIndex index, indexes)
+        if (index.isValid() && index.column() == 0)
+            stream << static_cast<CBookmarkItem *>(index.internalPointer())->data().url();
+
+    mimeData->setData("application/CBookmarkItemList", encodedData);
+    return mimeData;
 }
 
 QVariant CBookmarkItemModel::headerData(int section,

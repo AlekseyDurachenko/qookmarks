@@ -45,9 +45,10 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
 
     m_mgr = 0;
     m_bookmarkModel = new CBookmarkItemModel(this);
-    m_tagProxyModel = new CBookmarkSortFilterProxyModel(this);
-    m_tagProxyModel->setSourceModel(m_bookmarkModel);
-    setModel(m_tagProxyModel);
+    m_softFilterProxyModel = new CBookmarkSortFilterProxyModel(this);
+    m_softFilterProxyModel->setSourceModel(m_bookmarkModel);
+    m_softFilterProxyModel->setDynamicSortFilter(true);
+    setModel(m_softFilterProxyModel);
 
     updateActions();
 }

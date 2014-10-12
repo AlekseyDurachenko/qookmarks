@@ -89,7 +89,8 @@ Qt::ItemFlags CTagItemModel::flags(const QModelIndex &index) const
 
 QStringList CTagItemModel::mimeTypes() const
 {
-    return QStringList() << "application/CTagItemList";
+    return QStringList() << "application/CTagItemList"
+                         << "application/CBookmarkItemList";
 }
 
 QMimeData *CTagItemModel::mimeData(const QModelIndexList &indexes) const
@@ -100,7 +101,7 @@ QMimeData *CTagItemModel::mimeData(const QModelIndexList &indexes) const
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
 
     foreach (QModelIndex index, indexes)
-        if (index.isValid())
+        if (index.isValid() && index.column() == 0)
             stream << static_cast<CTagItem *>(index.internalPointer())->path();
 
     mimeData->setData("application/CTagItemList", encodedData);
@@ -113,38 +114,62 @@ bool CTagItemModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     if (action == Qt::IgnoreAction)
         return true;
 
-    if (!data->hasFormat("application/CTagItemList"))
-        return false;
-
     // new parent for the items
     CTagItem *newParent = static_cast<CTagItem *>(parent.internalPointer());
     if (!newParent)
         return false;
 
-    // extrct paths
-    QByteArray encodedData = data->data("application/CTagItemList");
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
-    QList<QStringList> pathList;
-    int rows = 0;
-    while (!stream.atEnd())
+    if (data->hasFormat("application/CTagItemList"))
     {
-        QStringList path;
-        stream >> path;
-        pathList << path;
-        ++rows;
+        // extrct paths
+        QByteArray encodedData = data->data("application/CTagItemList");
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        QList<QStringList> pathList;
+        int rows = 0;
+        while (!stream.atEnd())
+        {
+            QStringList path;
+            stream >> path;
+            pathList << path;
+            ++rows;
+        }
+
+        // can we move the items?
+        CBookmarkMgr *mgr = m_rootItem->mgr();
+        foreach (const QStringList &path, pathList)
+            if (!mgr->tagCanMove(newParent, mgr->tagFind(path)))
+                return false;
+
+        // move items
+        foreach (const QStringList &path, pathList)
+            mgr->tagMove(newParent, mgr->tagFind(path));
+
+        return true;
+    }
+    else if (data->hasFormat("application/CBookmarkItemList"))
+    {
+        // extrct paths
+        QByteArray encodedData = data->data("application/CBookmarkItemList");
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        QList<QUrl> urlList;
+        int rows = 0;
+        while (!stream.atEnd())
+        {
+            QUrl url;
+            stream >> url;
+            urlList << url;
+            ++rows;
+        }
+
+        // can we move the items?
+        CBookmarkMgr *mgr = m_rootItem->mgr();
+        foreach (const QUrl &url, urlList)
+            mgr->bookmarkFind(url)->tagAdd(newParent);
+
+        return true;
     }
 
-    // can we move the items?
-    CBookmarkMgr *mgr = m_rootItem->mgr();
-    foreach (const QStringList &path, pathList)
-        if (!mgr->tagCanMove(newParent, mgr->tagFind(path)))
-            return false;
-
-    // move items
-    foreach (const QStringList &path, pathList)
-        mgr->tagMove(newParent, mgr->tagFind(path));
-
-    return true;
+    return false;
 }
 
 QVariant CTagItemModel::headerData(int section,

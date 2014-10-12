@@ -67,12 +67,30 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
             return bookmark->data().title();
         case 1:
             return bookmark->data().url();
+        case 2:
+            return bookmark->data().description();
+        case 3:
+            return bookmark->data().comment();
+        case 4:
+            return bookmark->data().keywordList();
+        case 5:
+            return bookmark->data().isReadLater();
+        case 6:
+            return bookmark->data().isFavorite();
+        case 7:
+            return bookmark->data().rating();
         }
     }
 
     if (role == Qt::DecorationRole)
+    {
         if (index.column() == 0)
-            return QIcon(":/icons/bookmark-item.png");
+        {
+            if (bookmark->data().favicon().isNull())
+                return QIcon(":/icons/bookmark-item.png");
+            return bookmark->data().favicon();
+        }
+    }
 
     if (role == Qt::UserRole)
         return QVariant::fromValue((void *)m_mgr->bookmarkAt(index.row()));
@@ -119,6 +137,18 @@ QVariant CBookmarkItemModel::headerData(int section,
             return tr("Title");
         case 1:
             return tr("Url");
+        case 2:
+            return tr("Description");
+        case 3:
+            return tr("Comment");
+        case 4:
+            return tr("Keywords");
+        case 5:
+            return tr("Read Later");
+        case 6:
+            return tr("Favorite");
+        case 7:
+            return tr("Rating");
         }
     }
 
@@ -149,7 +179,7 @@ int CBookmarkItemModel::rowCount(const QModelIndex &parent) const
 
 int CBookmarkItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return 2;
+    return 8;
 }
 
 void CBookmarkItemModel::slot_mgr_bookmarkInserted(int first, int last)

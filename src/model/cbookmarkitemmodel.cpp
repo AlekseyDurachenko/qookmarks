@@ -103,7 +103,14 @@ Qt::ItemFlags CBookmarkItemModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsDragEnabled;
+    Qt::ItemFlags f = Qt::ItemIsEnabled
+            |Qt::ItemIsSelectable
+            |Qt::ItemIsDragEnabled;
+
+//    if (index.column() == 5)
+//        f |= Qt::ItemIsEditable;
+
+    return f;
 }
 
 QStringList CBookmarkItemModel::mimeTypes() const
@@ -144,13 +151,26 @@ QVariant CBookmarkItemModel::headerData(int section,
         case 4:
             return tr("Keywords");
         case 5:
-            return tr("Read Later");
+            return QVariant();
+            //return tr("Read Later");
         case 6:
-            return tr("Favorite");
+            return QVariant();
+            //return tr("Favorite");
         case 7:
             return tr("Rating");
         }
     }
+
+//    if (orientation == Qt::Horizontal && role == Qt::DecorationRole)
+//    {
+//        switch (section)
+//        {
+//        case 5:
+//            return QIcon(":/icons/bookmark-readlater.png");
+//        default:
+//            return QVariant();
+//        }
+//    }
 
     return QVariant();
 }

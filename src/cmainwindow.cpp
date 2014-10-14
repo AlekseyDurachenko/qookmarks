@@ -35,6 +35,9 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_bookmarkMgr = new CBookmarkMgr(this);
     ui->treeView_tags->setBookmarkMgr(m_bookmarkMgr);
     ui->treeView_bookmarks->setBookmarkMgr(m_bookmarkMgr);
+    ui->treeView_bookmarks->resizeColumnToContents(5);
+    ui->treeView_bookmarks->resizeColumnToContents(6);
+
     //connect(ui->treeView_tags, SIGNAL(currentTagChanged(QSet<CTagItem*>)),
     //        ui->treeView_bookmarks, SLOT(setTagFilter(QSet<CTagItem*>)));
     connect(m_bookmarkMgr, SIGNAL(tagRemoved(CTagItem*)),

@@ -14,9 +14,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarktreeview.h"
 #include "cbookmarkeditdialog.h"
+#include "cbookmarkreadlaterdelegate.h"
+#include "cbookmarkfavoritesdelegate.h"
 #include <QMenu>
 #include <QAction>
 #include <QMessageBox>
+#include <QHeaderView>
+#include <QDebug>
+
 
 static CBookmarkItem *indexToItem(const QModelIndex &index)
 {
@@ -29,6 +34,7 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     setRootIsDecorated(false);
     setSortingEnabled(true);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
+
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragOnly);
 
@@ -36,6 +42,10 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(onCustomContextMenuRequested(QPoint)));
+
+    // delegates
+    setItemDelegateForColumn(5, new CBookmarkReadLaterDelegate(this));
+    setItemDelegateForColumn(6, new CBookmarkFavoritesDelegate(this));
 
     m_actionBookmarkAdd = new QAction(tr("Add..."), this);
     m_actionBookmarkEdit = new QAction(tr("Edit..."), this);
@@ -73,6 +83,17 @@ void CBookmarkTreeView::setBookmarkMgr(CBookmarkMgr *mgr)
     }
 
     updateActions();
+}
+
+int CBookmarkTreeView::sizeHintForColumn(int column) const
+{
+    // Костыль! да еще и не рабочий!
+    if (column == 5)
+        return 32;
+    if (column == 6)
+        return 32;
+
+    return QTreeView::sizeHintForColumn(column);
 }
 
 void CBookmarkTreeView::onMgrDestroyed()

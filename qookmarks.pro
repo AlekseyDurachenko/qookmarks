@@ -58,6 +58,8 @@ HEADERS        +=                                           \
     src/caboutdialog.h                                      \
     src/cbookmarkeditdialog.h                               \
     src/manager/cbookmarkfilter.h                           \
+    src/widgets/bookmarkview/cbookmarkreadlaterdelegate.h \
+    src/widgets/bookmarkview/cbookmarkfavoritesdelegate.h
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -78,6 +80,8 @@ SOURCES        +=                                           \
     src/caboutdialog.cpp                                    \
     src/cbookmarkeditdialog.cpp                             \
     src/manager/cbookmarkfilter.cpp                         \
+    src/widgets/bookmarkview/cbookmarkreadlaterdelegate.cpp \
+    src/widgets/bookmarkview/cbookmarkfavoritesdelegate.cpp
 
 FORMS          +=                                           \
     src/widgets/tageditdialog/ctageditdialog.ui             \

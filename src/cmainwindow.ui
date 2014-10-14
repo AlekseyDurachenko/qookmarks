@@ -25,7 +25,11 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="CTagTreeView" name="treeView_tags"/>
-      <widget class="CBookmarkTreeView" name="treeView_bookmarks"/>
+      <widget class="CBookmarkTreeView" name="treeView_bookmarks">
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>

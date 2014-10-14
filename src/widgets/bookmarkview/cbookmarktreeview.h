@@ -35,6 +35,8 @@ public:
     inline QAction *actionBookmarkAdd() const;
     inline QAction *actionBookmarkEdit() const;
     inline QAction *actionBookmarkRemove() const;
+
+    virtual int sizeHintForColumn(int column) const;
 signals:
     void currentBookmarkChanged(CBookmarkItem *bookmark);
 private slots:

@@ -14,7 +14,5 @@
         <file>icons/bookmark-item.png</file>
         <file>icons/browser-firefox.png</file>
         <file>icons/browser-chromium.png</file>
-        <file>icons/bookmark-readlater-inactive.png</file>
-        <file>icons/bookmark-readlater-disabled.png</file>
     </qresource>
 </RCC>

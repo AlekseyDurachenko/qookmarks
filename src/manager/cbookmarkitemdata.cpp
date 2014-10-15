@@ -85,3 +85,56 @@ void CBookmarkItemData::setRating(int rating)
 {
     m_rating = rating;
 }
+
+void CBookmarkItemData::setTextFont(const QFont &textFont)
+{
+    m_textFont = textFont;
+}
+
+void CBookmarkItemData::setTextColor(const QColor &textColor)
+{
+    m_textColor = textColor;
+}
+
+void CBookmarkItemData::setTextBackgroundColor(
+        const QColor &textBackgroundColor)
+{
+    m_textBackgroundColor = textBackgroundColor;
+}
+
+void CBookmarkItemData::setCreatedDateTime(const QDateTime &createdDateTime)
+{
+    m_createdDateTime = createdDateTime;
+}
+
+void CBookmarkItemData::setLastEditedDateTime(
+        const QDateTime &lastEditedDateTime)
+{
+    m_lastEditedDateTime = lastEditedDateTime;
+}
+
+void CBookmarkItemData::setLastVisitedDateTime(
+        const QDateTime &lastVisitedDateTime)
+{
+    m_lastVisitedDateTime = lastVisitedDateTime;
+}
+
+void CBookmarkItemData::setVisitCount(int visitCount)
+{
+    m_visitCount = visitCount;
+}
+
+void CBookmarkItemData::setHttpResponseCode(int httpResponseCode)
+{
+    m_httpResponseCode = httpResponseCode;
+}
+
+void CBookmarkItemData::setHttpResponseText(const QString &httpResponseText)
+{
+    m_httpResponseText = httpResponseText;
+}
+
+void CBookmarkItemData::setLastCheckDateTime(const QDateTime &lastCheckDateTime)
+{
+    m_lastVisitedDateTime = lastCheckDateTime;
+}

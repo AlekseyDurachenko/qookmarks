@@ -42,9 +42,9 @@
 4. Метасвойства
 ---------------
 
-* Дата создания закладки (createDateTime - QDateTime)
-* Дата последнего изменения закладки (lastEditDateTime - QDateTime)
-* Дата последнего визита (lastVisitDateTime - QDateTime)
+* Дата создания закладки (createdDateTime - QDateTime)
+* Дата последнего изменения закладки (editedDateTime - QDateTime)
+* Дата последнего визита (lastVisitedDateTime - QDateTime)
 * Общее количество посещений (visitCount - int)
 
 

@@ -18,6 +18,8 @@
 #include <QStringList>
 #include <QUrl>
 #include <QIcon>
+#include <QFont>
+#include <QDateTime>
 #include <QVariant>
 
 
@@ -56,21 +58,65 @@ public:
     inline int rating() const;
     void setRating(int rating);
 
+    inline const QFont &textFont() const;
+    void setTextFont(const QFont &textFont);
+
+    inline const QColor &textColor() const;
+    void setTextColor(const QColor &textColor);
+
+    inline const QColor &textBackgroundColor() const;
+    void setTextBackgroundColor(const QColor &textBackgroundColor);
+
+    inline const QDateTime &createdDateTime() const;
+    void setCreatedDateTime(const QDateTime &createdDateTime);
+
+    inline const QDateTime &lastEditedDateTime() const;
+    void setLastEditedDateTime(const QDateTime &lastEditedDateTime);
+
+    inline const QDateTime &lastVisitedDateTime() const;
+    void setLastVisitedDateTime(const QDateTime &lastVisitedDateTime);
+
+    inline int visitCount() const;
+    void setVisitCount(int visitCount);
+
+    inline int httpResponseCode() const;
+    void setHttpResponseCode(int httpResponseCode);
+
+    inline const QString &httpResponseText() const;
+    void setHttpResponseText(const QString &httpResponseText);
+
+    inline const QDateTime &lastCheckDateTime() const;
+    void setLastCheckDateTime(const QDateTime &lastCheckDateTime);
+
     inline bool operator == (const CBookmarkItemData &other);
     inline bool operator != (const CBookmarkItemData &other);   
 private:
+    // base
     QIcon m_favicon;
     QByteArray m_faviconHash;   // used for quick comparison
     QString m_title;
     QUrl m_url;
     QString m_description;
-
+    // ext
     QString m_comment;
     QStringList m_keywordList;
     bool m_isReadLater;
     bool m_isFavorite;
     bool m_isDeleted;
     int m_rating;
+    // style
+    QFont m_textFont;
+    QColor m_textColor;
+    QColor m_textBackgroundColor;
+    // meta
+    QDateTime m_createdDateTime;
+    QDateTime m_lastEditedDateTime;
+    QDateTime m_lastVisitedDateTime;
+    int m_visitCount;
+    // status
+    int m_httpResponseCode;
+    QString m_httpResponseText;
+    QDateTime m_lastCheckDateTime;
 };
 
 inline const QIcon &CBookmarkItemData::favicon() const
@@ -123,6 +169,56 @@ int CBookmarkItemData::rating() const
     return m_rating;
 }
 
+const QFont &CBookmarkItemData::textFont() const
+{
+    return m_textFont;
+}
+
+const QColor &CBookmarkItemData::textColor() const
+{
+    return m_textColor;
+}
+
+const QColor &CBookmarkItemData::textBackgroundColor() const
+{
+    return m_textBackgroundColor;
+}
+
+const QDateTime &CBookmarkItemData::createdDateTime() const
+{
+    return m_createdDateTime;
+}
+
+const QDateTime &CBookmarkItemData::lastEditedDateTime() const
+{
+    return m_lastEditedDateTime;
+}
+
+const QDateTime &CBookmarkItemData::lastVisitedDateTime() const
+{
+    return m_lastVisitedDateTime;
+}
+
+int CBookmarkItemData::visitCount() const
+{
+    return m_visitCount;
+}
+
+int CBookmarkItemData::httpResponseCode() const
+{
+    return m_httpResponseCode;
+}
+
+const QString &CBookmarkItemData::httpResponseText() const
+{
+    return m_httpResponseText;
+}
+
+const QDateTime &CBookmarkItemData::lastCheckDateTime() const
+{
+    return m_lastCheckDateTime;
+}
+
 bool CBookmarkItemData::operator == (const CBookmarkItemData &other)
 {
     return (m_faviconHash == other.m_faviconHash
@@ -134,7 +230,17 @@ bool CBookmarkItemData::operator == (const CBookmarkItemData &other)
             && m_isReadLater == other.m_isReadLater
             && m_isFavorite == other.m_isFavorite
             && m_isDeleted == other.m_isDeleted
-            && m_rating == other.m_rating);
+            && m_rating == other.m_rating
+            && m_textFont == other.m_textFont
+            && m_textColor == other.m_textColor
+            && m_textBackgroundColor == other.m_textBackgroundColor
+            && m_createdDateTime == other.m_createdDateTime
+            && m_lastEditedDateTime == other.m_lastEditedDateTime
+            && m_lastVisitedDateTime == other.m_lastVisitedDateTime
+            && m_visitCount == other.m_visitCount
+            && m_httpResponseCode == other.m_httpResponseCode
+            && m_httpResponseText == other.m_httpResponseText
+            && m_lastCheckDateTime == other.m_lastCheckDateTime);
 }
 
 bool CBookmarkItemData::operator != (const CBookmarkItemData &other)
@@ -148,7 +254,17 @@ bool CBookmarkItemData::operator != (const CBookmarkItemData &other)
             || m_isReadLater != other.m_isReadLater
             || m_isFavorite != other.m_isFavorite
             || m_isDeleted != other.m_isDeleted
-            || m_rating != other.m_rating);
+            || m_rating != other.m_rating
+            || m_textFont != other.m_textFont
+            || m_textColor != other.m_textColor
+            || m_textBackgroundColor != other.m_textBackgroundColor
+            || m_createdDateTime != other.m_createdDateTime
+            || m_lastEditedDateTime != other.m_lastEditedDateTime
+            || m_lastVisitedDateTime != other.m_lastVisitedDateTime
+            || m_visitCount != other.m_visitCount
+            || m_httpResponseCode != other.m_httpResponseCode
+            || m_httpResponseText != other.m_httpResponseText
+            || m_lastCheckDateTime != other.m_lastCheckDateTime);
 }
 
 

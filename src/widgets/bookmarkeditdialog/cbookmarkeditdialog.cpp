@@ -53,7 +53,10 @@ void CBookmarkEditDialog::setData(const CBookmarkItemData &data)
     m_data = data;
 
     ui->lineEdit_url->setText(data.url().toString());
-    ui->faviconPlace->setPixmap(data.favicon().pixmap(24, 24));
+    if (data.favicon().isNull())
+        ui->faviconPlace->setPixmap(QIcon(":/icons/bookmark-item.png").pixmap(24, 24));
+    else
+        ui->faviconPlace->setPixmap(data.favicon().pixmap(24, 24));
     // TODO: set font && color for example text
     ui->lineEdit_title->setText(data.title());
     ui->lineEdit_description->setText(data.description());

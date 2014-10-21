@@ -12,31 +12,30 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkeditdialog.h"
-#include "ui_cbookmarkeditdialog.h"
+#ifndef CBOOKMARKEDITDIALOG_H
+#define CBOOKMARKEDITDIALOG_H
+
+#include "cbookmarkitemdata.h"
+#include <QDialog>
 
 
-CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
-    QDialog(parent), ui(new Ui::CBookmarkEditDialog)
-{
-    ui->setupUi(this);
+namespace Ui {
+class CBookmarkEditDialog;
 }
 
-CBookmarkEditDialog::~CBookmarkEditDialog()
+class CBookmarkEditDialog : public QDialog
 {
-    delete ui;
-}
+    Q_OBJECT
+public:
+    explicit CBookmarkEditDialog(QWidget *parent = 0);
+    virtual ~CBookmarkEditDialog();
 
-CBookmarkItemData CBookmarkEditDialog::toData() const
-{
-    CBookmarkItemData data;
-    data.setTitle(ui->lineEdit_title->text());
-    data.setUrl(ui->lineEdit_url->text());
-    return data;
-}
+    CBookmarkItemData toData() const;
+    void setData(const CBookmarkItemData &toData);
+private:
+    Ui::CBookmarkEditDialog *ui;
+    CBookmarkItemData m_data;
+};
 
-void CBookmarkEditDialog::setData(const CBookmarkItemData &data)
-{
-    ui->lineEdit_title->setText(data.title());
-    ui->lineEdit_url->setText(data.url().toString());
-}
+
+#endif // CBOOKMARKEDITDIALOG_H

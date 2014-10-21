@@ -70,8 +70,8 @@ public:
     inline const QDateTime &createdDateTime() const;
     void setCreatedDateTime(const QDateTime &createdDateTime);
 
-    inline const QDateTime &lastEditedDateTime() const;
-    void setLastEditedDateTime(const QDateTime &lastEditedDateTime);
+    inline const QDateTime &editedDateTime() const;
+    void setEditedDateTime(const QDateTime &editedDateTime);
 
     inline const QDateTime &lastVisitedDateTime() const;
     void setLastVisitedDateTime(const QDateTime &lastVisitedDateTime);
@@ -110,7 +110,7 @@ private:
     QColor m_textBackgroundColor;
     // meta
     QDateTime m_createdDateTime;
-    QDateTime m_lastEditedDateTime;
+    QDateTime m_editedDateTime;
     QDateTime m_lastVisitedDateTime;
     int m_visitCount;
     // status
@@ -189,9 +189,9 @@ const QDateTime &CBookmarkItemData::createdDateTime() const
     return m_createdDateTime;
 }
 
-const QDateTime &CBookmarkItemData::lastEditedDateTime() const
+const QDateTime &CBookmarkItemData::editedDateTime() const
 {
-    return m_lastEditedDateTime;
+    return m_editedDateTime;
 }
 
 const QDateTime &CBookmarkItemData::lastVisitedDateTime() const
@@ -235,7 +235,7 @@ bool CBookmarkItemData::operator == (const CBookmarkItemData &other)
             && m_textColor == other.m_textColor
             && m_textBackgroundColor == other.m_textBackgroundColor
             && m_createdDateTime == other.m_createdDateTime
-            && m_lastEditedDateTime == other.m_lastEditedDateTime
+            && m_editedDateTime == other.m_editedDateTime
             && m_lastVisitedDateTime == other.m_lastVisitedDateTime
             && m_visitCount == other.m_visitCount
             && m_httpResponseCode == other.m_httpResponseCode
@@ -259,7 +259,7 @@ bool CBookmarkItemData::operator != (const CBookmarkItemData &other)
             || m_textColor != other.m_textColor
             || m_textBackgroundColor != other.m_textBackgroundColor
             || m_createdDateTime != other.m_createdDateTime
-            || m_lastEditedDateTime != other.m_lastEditedDateTime
+            || m_editedDateTime != other.m_editedDateTime
             || m_lastVisitedDateTime != other.m_lastVisitedDateTime
             || m_visitCount != other.m_visitCount
             || m_httpResponseCode != other.m_httpResponseCode

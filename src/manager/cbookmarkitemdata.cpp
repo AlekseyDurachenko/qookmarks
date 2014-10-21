@@ -107,10 +107,10 @@ void CBookmarkItemData::setCreatedDateTime(const QDateTime &createdDateTime)
     m_createdDateTime = createdDateTime;
 }
 
-void CBookmarkItemData::setLastEditedDateTime(
+void CBookmarkItemData::setEditedDateTime(
         const QDateTime &lastEditedDateTime)
 {
-    m_lastEditedDateTime = lastEditedDateTime;
+    m_editedDateTime = lastEditedDateTime;
 }
 
 void CBookmarkItemData::setLastVisitedDateTime(

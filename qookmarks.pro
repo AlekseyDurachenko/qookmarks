@@ -35,6 +35,7 @@ INCLUDEPATH    +=                                           \
     $$PWD/src/widgets/bookmarkview                          \
     $$PWD/src/widgets/tagview                               \
     $$PWD/src/widgets/tageditdialog                         \
+    $$PWD/src/widgets/bookmarkeditdialog                    \
     $$PWD/src/import                                        \
 
 HEADERS        +=                                           \
@@ -56,10 +57,10 @@ HEADERS        +=                                           \
     src/global.h                                            \
     src/cmainwindow.h                                       \
     src/caboutdialog.h                                      \
-    src/cbookmarkeditdialog.h                               \
     src/manager/cbookmarkfilter.h                           \
     src/widgets/bookmarkview/cbookmarkreadlaterdelegate.h \
-    src/widgets/bookmarkview/cbookmarkfavoritesdelegate.h
+    src/widgets/bookmarkview/cbookmarkfavoritesdelegate.h \
+    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.h
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -78,17 +79,17 @@ SOURCES        +=                                           \
     src/import/cimportbookmarkdialog.cpp                    \
     src/cmainwindow.cpp                                     \
     src/caboutdialog.cpp                                    \
-    src/cbookmarkeditdialog.cpp                             \
     src/manager/cbookmarkfilter.cpp                         \
     src/widgets/bookmarkview/cbookmarkreadlaterdelegate.cpp \
-    src/widgets/bookmarkview/cbookmarkfavoritesdelegate.cpp
+    src/widgets/bookmarkview/cbookmarkfavoritesdelegate.cpp \
+    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.cpp
 
 FORMS          +=                                           \
     src/widgets/tageditdialog/ctageditdialog.ui             \
     src/import/cimportbookmarkdialog.ui                     \
     src/cmainwindow.ui                                      \
     src/caboutdialog.ui                                     \
-    src/cbookmarkeditdialog.ui                              \
+    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.ui
 
 RESOURCES      +=                                           \
     qrc/icons.qrc                                           \

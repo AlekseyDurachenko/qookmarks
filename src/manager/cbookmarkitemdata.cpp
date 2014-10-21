@@ -138,5 +138,5 @@ void CBookmarkItemData::setHttpResponseText(const QString &httpResponseText)
 
 void CBookmarkItemData::setLastCheckDateTime(const QDateTime &lastCheckDateTime)
 {
-    m_lastVisitedDateTime = lastCheckDateTime;
+    m_lastCheckDateTime = lastCheckDateTime;
 }

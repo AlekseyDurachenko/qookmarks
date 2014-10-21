@@ -72,13 +72,27 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
         case 3:
             return bookmark->data().comment();
         case 4:
-            return bookmark->data().keywordList();
+            return bookmark->data().keywordList().join(",");
         case 5:
             return bookmark->data().isReadLater();
         case 6:
             return bookmark->data().isFavorite();
         case 7:
             return bookmark->data().rating();
+        case 8:
+            return bookmark->data().createdDateTime();
+        case 9:
+            return bookmark->data().editedDateTime();
+        case 10:
+            return bookmark->data().lastVisitedDateTime();
+        case 11:
+            return bookmark->data().visitCount();
+        case 12:
+            return bookmark->data().httpResponseCode();
+        case 13:
+            return bookmark->data().httpResponseText();
+        case 14:
+            return bookmark->data().lastCheckDateTime();
         }
     }
 
@@ -158,6 +172,20 @@ QVariant CBookmarkItemModel::headerData(int section,
             //return tr("Favorite");
         case 7:
             return tr("Rating");
+        case 8:
+            return tr("Created");
+        case 9:
+            return tr("Edited");
+        case 10:
+            return tr("Last Visited");
+        case 11:
+            return tr("Visit count");
+        case 12:
+            return tr("Http code");
+        case 13:
+            return tr("Http text");
+        case 14:
+            return tr("Check date");
         }
     }
 
@@ -199,7 +227,7 @@ int CBookmarkItemModel::rowCount(const QModelIndex &parent) const
 
 int CBookmarkItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return 8;
+    return 15;
 }
 
 void CBookmarkItemModel::slot_mgr_bookmarkInserted(int first, int last)

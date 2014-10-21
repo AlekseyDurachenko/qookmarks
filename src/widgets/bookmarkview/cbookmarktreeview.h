@@ -53,7 +53,7 @@ private:
 private:
     CBookmarkMgr *m_mgr;
     CBookmarkItemModel *m_bookmarkModel;
-    CBookmarkSortFilterProxyModel *m_softFilterProxyModel;
+    CBookmarkSortFilterProxyModel *m_sortFilterProxyModel;
     QAction *m_actionBookmarkAdd;
     QAction *m_actionBookmarkEdit;
     QAction *m_actionBookmarkRemove;
@@ -66,7 +66,7 @@ CBookmarkMgr *CBookmarkTreeView::mgr() const
 
 CBookmarkSortFilterProxyModel *CBookmarkTreeView::softFilterProxyModel() const
 {
-    return m_softFilterProxyModel;
+    return m_sortFilterProxyModel;
 }
 
 QAction *CBookmarkTreeView::actionBookmarkAdd() const

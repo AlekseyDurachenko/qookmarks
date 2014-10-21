@@ -59,10 +59,10 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
 
     m_mgr = 0;
     m_bookmarkModel = new CBookmarkItemModel(this);
-    m_softFilterProxyModel = new CBookmarkSortFilterProxyModel(this);
-    m_softFilterProxyModel->setSourceModel(m_bookmarkModel);
-    m_softFilterProxyModel->setDynamicSortFilter(true);
-    setModel(m_softFilterProxyModel);
+    m_sortFilterProxyModel = new CBookmarkSortFilterProxyModel(this);
+    m_sortFilterProxyModel->setSourceModel(m_bookmarkModel);
+    m_sortFilterProxyModel->setDynamicSortFilter(true);
+    setModel(m_sortFilterProxyModel);
 
     updateActions();
 }
@@ -114,15 +114,22 @@ void CBookmarkTreeView::onActionBookmarkAddTriggered()
 {
     CBookmarkEditDialog dlg(this);
     dlg.setWindowTitle(tr("Create new bookmark"));
+    dlg.setTags(m_mgr->tagBookmarksItem(), m_sortFilterProxyModel->bookmarkFilter().tagFilter());
     if (dlg.exec() == QDialog::Accepted)
     {
         CBookmarkItemData data = dlg.toData();
         if (m_mgr->bookmarkFind(data.url()))
+        {
             QMessageBox::warning(this, tr("Warning"), tr("The bookmark with "
                     "the url \"%1\" is already exists")
                             .arg(data.url().toString()));
+        }
         else
-            m_mgr->bookmarkAdd(dlg.toData());
+        {
+            CBookmarkItem *bookmark = m_mgr->bookmarkAdd(dlg.toData());
+            foreach (CTagItem *item, dlg.checkedTags())
+                bookmark->tagAdd(item);
+        }
     }
 }
 

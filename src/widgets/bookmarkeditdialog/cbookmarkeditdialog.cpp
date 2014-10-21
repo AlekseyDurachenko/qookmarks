@@ -20,6 +20,8 @@ CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::CBookmarkEditDialog)
 {
     ui->setupUi(this);
+    m_model = new CCheckableTagItemModel(this);
+    ui->treeView_tags->setModel(m_model);
 }
 
 CBookmarkEditDialog::~CBookmarkEditDialog()
@@ -73,4 +75,17 @@ void CBookmarkEditDialog::setData(const CBookmarkItemData &data)
     ui->dateTimeEdit_metadata_created->setDateTime(data.createdDateTime());
     ui->dateTimeEdit_metadata_edited->setDateTime(data.editedDateTime());
     ui->dateTimeEdit_metadata_lastVisited->setDateTime(data.lastVisitedDateTime());
+}
+
+void CBookmarkEditDialog::setTags(CTagItem *rootItem,
+        const QSet<CTagItem *> &tags)
+{
+    m_model->setRootItem(rootItem);
+    foreach (CTagItem *item, tags)
+        m_model->selectTag(item);
+}
+
+QSet<CTagItem *> CBookmarkEditDialog::checkedTags()
+{
+    return m_model->checkedTags();
 }

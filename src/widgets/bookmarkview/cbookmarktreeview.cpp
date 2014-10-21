@@ -134,8 +134,17 @@ void CBookmarkTreeView::onActionBookmarkEditTriggered()
     CBookmarkEditDialog dlg(this);
     dlg.setWindowTitle(tr("Edit bookmark"));
     dlg.setData(bookmark->data());
+    dlg.setTags(m_mgr->tagBookmarksItem(), bookmark->tags());
     if (dlg.exec() == QDialog::Accepted)
+    {
+        QSet<CTagItem *> checkedTags = dlg.checkedTags();
+        QSet<CTagItem *> tagForRemove = bookmark->tags() - checkedTags;
         bookmark->setData(dlg.toData());
+        foreach (CTagItem *item, tagForRemove)
+            bookmark->tagRemove(item);
+        foreach (CTagItem *item, checkedTags)
+            bookmark->tagAdd(item);
+    }
 }
 
 void CBookmarkTreeView::onActionBookmarkRemoveTriggered()

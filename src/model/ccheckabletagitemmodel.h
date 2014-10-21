@@ -12,35 +12,30 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKEDITDIALOG_H
-#define CBOOKMARKEDITDIALOG_H
+#ifndef CCHECKABLETAGITEMMODEL_H
+#define CCHECKABLETAGITEMMODEL_H
 
-#include "cbookmarkitemdata.h"
-#include "ccheckabletagitemmodel.h"
-#include <QDialog>
+#include "ctagitemmodel.h"
 
 
-namespace Ui {
-class CBookmarkEditDialog;
-}
-
-class CBookmarkEditDialog : public QDialog
+class CCheckableTagItemModel : public CTagItemModel
 {
     Q_OBJECT
 public:
-    explicit CBookmarkEditDialog(QWidget *parent = 0);
-    virtual ~CBookmarkEditDialog();
+    explicit CCheckableTagItemModel(QObject *parent = 0);
+    explicit CCheckableTagItemModel(CTagItem *rootItem, QObject *parent = 0);
 
-    CBookmarkItemData toData() const;
-    void setData(const CBookmarkItemData &toData);
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual bool setData(const QModelIndex &index,
+                         const QVariant &value, int role = Qt::EditRole);
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    void setTags(CTagItem *rootItem, const QSet<CTagItem *> &tags);
+    void selectTag(CTagItem *item);
+    bool selectTag(CTagItem *item, const QModelIndex &parent);
     QSet<CTagItem *> checkedTags();
 private:
-    Ui::CBookmarkEditDialog *ui;
-    CCheckableTagItemModel *m_model;
-    CBookmarkItemData m_data;
+    QList <QPersistentModelIndex> m_checkedList;
 };
 
 
-#endif // CBOOKMARKEDITDIALOG_H
+#endif // CCHECKABLETAGITEMMODEL_H

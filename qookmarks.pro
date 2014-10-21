@@ -60,7 +60,8 @@ HEADERS        +=                                           \
     src/manager/cbookmarkfilter.h                           \
     src/widgets/bookmarkview/cbookmarkreadlaterdelegate.h \
     src/widgets/bookmarkview/cbookmarkfavoritesdelegate.h \
-    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.h
+    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.h \
+    src/model/ccheckabletagitemmodel.h
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -82,7 +83,8 @@ SOURCES        +=                                           \
     src/manager/cbookmarkfilter.cpp                         \
     src/widgets/bookmarkview/cbookmarkreadlaterdelegate.cpp \
     src/widgets/bookmarkview/cbookmarkfavoritesdelegate.cpp \
-    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.cpp
+    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.cpp \
+    src/model/ccheckabletagitemmodel.cpp
 
 FORMS          +=                                           \
     src/widgets/tageditdialog/ctageditdialog.ui             \

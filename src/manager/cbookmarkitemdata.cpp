@@ -24,6 +24,8 @@ CBookmarkItemData::CBookmarkItemData()
     m_isReadLater = false;
     m_isDeleted = false;
     m_rating = 0;
+    m_visitCount = 0;
+    m_httpResponseCode = 0;
 }
 
 void CBookmarkItemData::setFavicon(const QIcon &favicon)

@@ -66,7 +66,6 @@ void CBookmarkEditDialog::setData(const CBookmarkItemData &data)
     ui->checkBox_favorite->setChecked(data.isFavorite());
     ui->checkBox_readItLater->setChecked(data.isReadLater());
     ui->spinBox_rating->setValue(data.rating());
-    // TODO: set tags
     ui->spinBox_httpResponseCode->setValue(data.httpResponseCode());
     ui->lineEdit_httpResponseText->setText(data.httpResponseText());
     ui->dateTimeEdit_lastCheck->setDateTime(data.lastCheckDateTime());

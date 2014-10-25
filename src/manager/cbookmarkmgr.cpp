@@ -204,6 +204,7 @@ CBookmarkItem *CBookmarkMgr::bookmarkAdd(const CBookmarkItemData &data)
     CBookmarkItem *bookmark = new CBookmarkItem(data, this);
     m_bookmarkList.push_back(bookmark);
     m_bookmarkUrlHash[data.url()] = bookmark;
+    emit bookmarkInserted(bookmark);
     emit bookmarkInserted(index, index);
 
     return bookmark;
@@ -217,22 +218,28 @@ void CBookmarkMgr::bookmarkRemove(CBookmarkItem *bookmark)
 
     int index = m_bookmarkList.indexOf(bookmark);
     m_bookmarkUrlHash.remove(bookmark->data().url());
-    delete m_bookmarkList.takeAt(index);
+    m_bookmarkList.removeAt(index);
+    emit bookmarkRemoved(bookmark);
     emit bookmarkRemoved(index, index);
+    delete bookmark;
 }
 
 void CBookmarkMgr::bookmarkRemoveAt(int index)
 {
     CBookmarkItem *bookmark = m_bookmarkList.takeAt(index);
     m_bookmarkUrlHash.remove(bookmark->data().url());
-    delete bookmark;
+    emit bookmarkRemoved(bookmark);
     emit bookmarkRemoved(index, index);
+    delete bookmark;
 }
 
 void CBookmarkMgr::bookmarkRemoveAll()
 {
     if (m_bookmarkList.count() == 0)
         return;
+
+    foreach (CBookmarkItem *bookmark, m_bookmarkList)
+        emit bookmarkRemoved(bookmark);
 
     int count = m_bookmarkList.count();
     qDeleteAll(m_bookmarkList);
@@ -244,6 +251,7 @@ void CBookmarkMgr::bookmarkRemoveAll()
 void CBookmarkMgr::callbackBookmarkDataChanged(CBookmarkItem *bookmark)
 {
     int row = m_bookmarkList.indexOf(bookmark);
+    emit bookmarkDataChanged(bookmark);
     emit bookmarkDataChanged(row, row);
 }
 

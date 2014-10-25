@@ -74,6 +74,9 @@ signals:
     void tagInserted(CTagItem *item);
     void tagRemoved(CTagItem *item);
     void tagDataChanged(CTagItem *item);
+    void bookmarkInserted(CBookmarkItem *item);
+    void bookmarkRemoved(CBookmarkItem *item);
+    void bookmarkDataChanged(CBookmarkItem *item);
 private:
     QList<CBookmarkItem *> m_bookmarkList;
     QHash<QUrl, CBookmarkItem *> m_bookmarkUrlHash;

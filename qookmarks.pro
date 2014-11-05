@@ -37,6 +37,7 @@ INCLUDEPATH    +=                                           \
     $$PWD/src/widgets/tageditdialog                         \
     $$PWD/src/widgets/bookmarkeditdialog                    \
     $$PWD/src/import                                        \
+    $$PWD/src/webchecker                                    \
 
 HEADERS        +=                                           \
     src/manager/ctagitemdata.h                              \
@@ -61,7 +62,11 @@ HEADERS        +=                                           \
     src/widgets/bookmarkview/cbookmarkreadlaterdelegate.h \
     src/widgets/bookmarkview/cbookmarkfavoritesdelegate.h \
     src/widgets/bookmarkeditdialog/cbookmarkeditdialog.h \
-    src/model/ccheckabletagitemmodel.h
+    src/model/ccheckabletagitemmodel.h \
+    src/webchecker/cwebcheckerqueueitem.h \
+    src/webchecker/cwebcheckerqueuemgr.h \
+    src/webchecker/cwebcheckerqueueitemmodel.h \
+    src/webchecker/cwebcheckerjob.h
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -84,7 +89,11 @@ SOURCES        +=                                           \
     src/widgets/bookmarkview/cbookmarkreadlaterdelegate.cpp \
     src/widgets/bookmarkview/cbookmarkfavoritesdelegate.cpp \
     src/widgets/bookmarkeditdialog/cbookmarkeditdialog.cpp \
-    src/model/ccheckabletagitemmodel.cpp
+    src/model/ccheckabletagitemmodel.cpp \
+    src/webchecker/cwebcheckerqueueitem.cpp \
+    src/webchecker/cwebcheckerqueuemgr.cpp \
+    src/webchecker/cwebcheckerqueueitemmodel.cpp \
+    src/webchecker/cwebcheckerjob.cpp
 
 FORMS          +=                                           \
     src/widgets/tageditdialog/ctageditdialog.ui             \

@@ -15,6 +15,7 @@
 #ifndef CMAINWINDOW_H
 #define CMAINWINDOW_H
 
+#include "cwebcheckerqueuemgr.h"
 #include <QtNetwork>
 #include <QMainWindow>
 #include <QHash>
@@ -55,6 +56,7 @@ private:
     QNetworkReply *m_reply;
     QNetworkAccessManager *m_networkMgr;
     QHash<QUrl, int> m_tmpHash;
+    CWebCheckerQueueMgr *m_webChecker;
 };
 
 

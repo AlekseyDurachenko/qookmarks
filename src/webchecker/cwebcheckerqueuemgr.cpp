@@ -118,7 +118,7 @@ void CWebCheckerQueueMgr::next()
 {
     if (m_itemList.count() == 0 || m_job->isRunning())
         return;
-qDebug() << m_itemList.first().bookmark()->data().url();
+
     m_itemList.first().setStatus(CWebCheckerQueueItem::Processing);
     m_job->start(m_itemList.first().bookmark()->data().url());
 }

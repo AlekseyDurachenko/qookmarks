@@ -46,6 +46,8 @@ private slots:
 
     void on_action_TestSavePageImage_triggered();
     void on_treeView_tags_currentTagChanged();
+    void on_action_showWebCheckerWindow_triggered();
+
 private:
     void saveSettings();
     void loadSettings();

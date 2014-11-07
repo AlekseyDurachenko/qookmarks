@@ -15,6 +15,7 @@
 #ifndef CWEBCHECKERQUEUEITEMMODEL_H
 #define CWEBCHECKERQUEUEITEMMODEL_H
 
+#include "cwebcheckerqueuemgr.h"
 #include <QAbstractItemModel>
 
 
@@ -23,9 +24,34 @@ class CWebCheckerQueueItemModel : public QAbstractItemModel
     Q_OBJECT
 public:
     explicit CWebCheckerQueueItemModel(QObject *parent = 0);
-signals:
-public slots:
+    explicit CWebCheckerQueueItemModel(CWebCheckerQueueMgr *mgr,
+                                       QObject *parent = 0);
+
+    inline CWebCheckerQueueMgr *mgr() const;
+    void setMgr(CWebCheckerQueueMgr *mgr);
+
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation,
+                                int role = Qt::DisplayRole) const;
+    virtual QModelIndex index(int row, int column,
+                              const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+private slots:
+    void slot_mgr_inserted(int first, int last);
+    void slot_mgr_removed(int first, int last);
+    void slot_mgr_dataChanged(int first, int last);
+    void slot_mgr_destroyed();
+private:
+    CWebCheckerQueueMgr *m_mgr;
 };
+
+CWebCheckerQueueMgr *CWebCheckerQueueItemModel::mgr() const
+{
+    return m_mgr;
+}
 
 
 #endif // CWEBCHECKERQUEUEITEMMODEL_H

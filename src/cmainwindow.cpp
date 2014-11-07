@@ -21,6 +21,7 @@
 #include "cbookmarkmgr.h"
 #include "global.h"
 #include "cbookmarksortfilterproxymodel.h"
+#include "cwebcheckerwindow.h"
 #include "tagutils.h"
 #include <QSettings>
 #include <QDebug>
@@ -216,4 +217,12 @@ void CMainWindow::on_treeView_tags_currentTagChanged()
         ui->treeView_bookmarks->setTagFilter
                 (tagRecursiveFetch(ui->treeView_tags->currentTag()).toSet());
     */
+}
+
+void CMainWindow::on_action_showWebCheckerWindow_triggered()
+{
+    CWebCheckerWindow *wnd = new CWebCheckerWindow;
+    wnd->setAttribute(Qt::WA_DeleteOnClose);
+    wnd->setMgr(m_webChecker);
+    wnd->show();
 }

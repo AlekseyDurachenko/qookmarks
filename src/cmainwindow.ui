@@ -53,6 +53,8 @@
     <addaction name="separator"/>
     <addaction name="action_ImportBookmarks"/>
     <addaction name="separator"/>
+    <addaction name="action_showWebCheckerWindow"/>
+    <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
@@ -106,6 +108,11 @@
   <action name="action_TestSavePageImage">
    <property name="text">
     <string>&amp;Test save page image</string>
+   </property>
+  </action>
+  <action name="action_showWebCheckerWindow">
+   <property name="text">
+    <string>&amp;Show web checker window...</string>
    </property>
   </action>
  </widget>

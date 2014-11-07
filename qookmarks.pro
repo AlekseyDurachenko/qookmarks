@@ -66,7 +66,8 @@ HEADERS        +=                                           \
     src/webchecker/cwebcheckerqueueitem.h \
     src/webchecker/cwebcheckerqueuemgr.h \
     src/webchecker/cwebcheckerqueueitemmodel.h \
-    src/webchecker/cwebcheckerjob.h
+    src/webchecker/cwebcheckerjob.h \
+    src/webchecker/cwebcheckerwindow.h
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -93,14 +94,16 @@ SOURCES        +=                                           \
     src/webchecker/cwebcheckerqueueitem.cpp \
     src/webchecker/cwebcheckerqueuemgr.cpp \
     src/webchecker/cwebcheckerqueueitemmodel.cpp \
-    src/webchecker/cwebcheckerjob.cpp
+    src/webchecker/cwebcheckerjob.cpp \
+    src/webchecker/cwebcheckerwindow.cpp
 
 FORMS          +=                                           \
     src/widgets/tageditdialog/ctageditdialog.ui             \
     src/import/cimportbookmarkdialog.ui                     \
     src/cmainwindow.ui                                      \
     src/caboutdialog.ui                                     \
-    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.ui
+    src/widgets/bookmarkeditdialog/cbookmarkeditdialog.ui \
+    src/webchecker/cwebcheckerwindow.ui
 
 RESOURCES      +=                                           \
     qrc/icons.qrc                                           \

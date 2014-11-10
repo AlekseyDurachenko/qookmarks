@@ -17,6 +17,7 @@
 
 #include "cbookmarkitem.h"
 #include "ctagitem.h"
+#include "cwebcheckerqueuemgr.h"
 #include <QObject>
 #include <QHash>
 
@@ -52,6 +53,8 @@ public:
     void bookmarkRemove(CBookmarkItem *bookmark);
     void bookmarkRemoveAt(int index);
     void bookmarkRemoveAll();
+
+    inline CWebCheckerQueueMgr *webChecker() const;
 protected:
     void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
     void callbackTagDataChanged(CTagItem *tag);
@@ -86,7 +89,14 @@ private:
     CTagItem *m_tagReadLaterItem;   // read it later flag
     CTagItem *m_tagBookmarksItem;   // all bookmarks
     CTagItem *m_tagTrashItem;       // deleted flag
+    //temporary
+    CWebCheckerQueueMgr *m_webChecker;
 };
+
+CWebCheckerQueueMgr *CBookmarkMgr::webChecker() const
+{
+    return m_webChecker;
+}
 
 
 #endif // CBOOKMARKMGR_H

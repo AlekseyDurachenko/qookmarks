@@ -58,7 +58,6 @@ private:
     QNetworkReply *m_reply;
     QNetworkAccessManager *m_networkMgr;
     QHash<QUrl, int> m_tmpHash;
-    CWebCheckerQueueMgr *m_webChecker;
 };
 
 

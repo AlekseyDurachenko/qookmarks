@@ -15,11 +15,10 @@
 #ifndef CWEBCHECKERQUEUEMGR_H
 #define CWEBCHECKERQUEUEMGR_H
 
-#include "cbookmarkmgr.h"
 #include "cwebcheckerqueueitem.h"
 #include "cwebcheckerjob.h"
 #include <QNetworkAccessManager>
-
+class CBookmarkMgr;
 
 class CWebCheckerQueueMgr : public QObject
 {

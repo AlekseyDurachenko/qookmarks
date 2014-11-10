@@ -49,8 +49,6 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_networkMgr = new QNetworkAccessManager(this);
     m_reply = 0;
 
-    m_webChecker = new CWebCheckerQueueMgr(m_bookmarkMgr, this);
-
     loadSettings();
 }
 
@@ -112,8 +110,8 @@ void CMainWindow::on_action_ImportBookmarks_triggered()
     CImportBookmarkDialog dlg(m_bookmarkMgr, this);
     dlg.exec();
 
-    for (int i = 0; i < m_bookmarkMgr->bookmarkCount(); ++i)
-        m_webChecker->add(m_bookmarkMgr->bookmarkAt(i));
+    //for (int i = 0; i < m_bookmarkMgr->bookmarkCount(); ++i)
+    //        m_webChecker->add(m_bookmarkMgr->bookmarkAt(i));
 
     CBookmarkItemData data0 = m_bookmarkMgr->bookmarkAt(0)->data();
     data0.setFavorite(true);
@@ -223,6 +221,6 @@ void CMainWindow::on_action_showWebCheckerWindow_triggered()
 {
     CWebCheckerWindow *wnd = new CWebCheckerWindow;
     wnd->setAttribute(Qt::WA_DeleteOnClose);
-    wnd->setMgr(m_webChecker);
+    wnd->setMgr(m_bookmarkMgr->webChecker());
     wnd->show();
 }

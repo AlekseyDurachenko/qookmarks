@@ -52,6 +52,7 @@ private slots:
     void slot_action_emptyReadLater_triggered();
     void slot_action_emptyBookmakrs_triggered();
     void slot_action_emptyTrash_triggered();
+    void slot_action_httpCheck_triggered();
 protected:
     virtual void currentChanged(const QModelIndex &current,
                                 const QModelIndex &previous);
@@ -68,6 +69,7 @@ private:
     QAction *m_actionEmptyReadLater;
     QAction *m_actionEmptyBookmarks;
     QAction *m_actionEmptyTrash;
+    QAction *m_actionHttpCheck;
 };
 
 CBookmarkMgr *CTagTreeView::mgr() const

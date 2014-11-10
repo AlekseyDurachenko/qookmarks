@@ -20,6 +20,7 @@
 #include <QAction>
 #include <QMessageBox>
 #include <QHeaderView>
+#include <QDesktopServices>
 #include <QDebug>
 
 
@@ -51,6 +52,7 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     m_actionBookmarkEdit = new QAction(tr("Edit..."), this);
     m_actionBookmarkRemove = new QAction(tr("Remove..."), this);
     m_actionHttpCheck = new QAction(tr("Check urls..."), this);
+    m_actionOpenUrl = new QAction(tr("Open url..."), this);
     connect(m_actionBookmarkAdd, SIGNAL(triggered()),
             this, SLOT(onActionBookmarkAddTriggered()));
     connect(m_actionBookmarkEdit, SIGNAL(triggered()),
@@ -59,6 +61,8 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
             this, SLOT(onActionBookmarkRemoveTriggered()));
     connect(m_actionHttpCheck, SIGNAL(triggered()),
             this, SLOT(onActionHttpCheckTriggered()));
+    connect(m_actionOpenUrl, SIGNAL(triggered()),
+            this, SLOT(onActionOpenUrlTriggered()));
 
     m_mgr = 0;
     m_bookmarkModel = new CBookmarkItemModel(this);
@@ -112,6 +116,8 @@ void CBookmarkTreeView::onCustomContextMenuRequested(const QPoint &pos)
     menu.addAction(m_actionBookmarkRemove);
     menu.addSeparator();
     menu.addAction(m_actionHttpCheck);
+    menu.addSeparator();
+    menu.addAction(m_actionOpenUrl);
     menu.exec(viewport()->mapToGlobal(pos));
 }
 
@@ -194,6 +200,21 @@ void CBookmarkTreeView::onActionHttpCheckTriggered()
         m_mgr->webChecker()->add(bookmark);
 }
 
+void CBookmarkTreeView::onActionOpenUrlTriggered()
+{
+    QModelIndexList indexList = selectionModel()->selectedRows(0);
+
+    QSet<CBookmarkItem *> bookmarkList;
+    foreach (QModelIndex index, indexList)
+        bookmarkList << indexToItem(index);
+
+    if (bookmarkList.count() == 0 && currentIndex().isValid())
+        bookmarkList << indexToItem(currentIndex());
+
+    foreach (CBookmarkItem *bookmark, bookmarkList)
+        QDesktopServices::openUrl(bookmark->data().url());
+}
+
 void CBookmarkTreeView::currentChanged(const QModelIndex & /*current*/,
         const QModelIndex & /*previous*/)
 {
@@ -209,6 +230,7 @@ void CBookmarkTreeView::updateActions()
         m_actionBookmarkEdit->setEnabled(false);
         m_actionBookmarkRemove->setEnabled(false);
         m_actionHttpCheck->setEnabled(false);
+        m_actionOpenUrl->setEnabled(false);
         return;
     }
 
@@ -219,5 +241,7 @@ void CBookmarkTreeView::updateActions()
     m_actionBookmarkRemove->setEnabled
             (rows.count() || (!rows.count() && currentIndex().isValid()));
     m_actionHttpCheck->setEnabled
+            (rows.count() || (!rows.count() && currentIndex().isValid()));
+    m_actionOpenUrl->setEnabled
             (rows.count() || (!rows.count() && currentIndex().isValid()));
 }

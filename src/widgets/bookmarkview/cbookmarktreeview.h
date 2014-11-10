@@ -45,6 +45,7 @@ private slots:
     void onActionBookmarkAddTriggered();
     void onActionBookmarkEditTriggered();
     void onActionBookmarkRemoveTriggered();
+    void onActionHttpCheckTriggered();
 protected:
     virtual void currentChanged(const QModelIndex &current,
                                 const QModelIndex &previous);
@@ -57,6 +58,7 @@ private:
     QAction *m_actionBookmarkAdd;
     QAction *m_actionBookmarkEdit;
     QAction *m_actionBookmarkRemove;
+    QAction *m_actionHttpCheck;
 };
 
 CBookmarkMgr *CBookmarkTreeView::mgr() const

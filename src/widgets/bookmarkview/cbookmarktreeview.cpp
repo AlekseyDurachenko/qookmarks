@@ -50,12 +50,15 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     m_actionBookmarkAdd = new QAction(tr("Add..."), this);
     m_actionBookmarkEdit = new QAction(tr("Edit..."), this);
     m_actionBookmarkRemove = new QAction(tr("Remove..."), this);
+    m_actionHttpCheck = new QAction(tr("Check urls..."), this);
     connect(m_actionBookmarkAdd, SIGNAL(triggered()),
             this, SLOT(onActionBookmarkAddTriggered()));
     connect(m_actionBookmarkEdit, SIGNAL(triggered()),
             this, SLOT(onActionBookmarkEditTriggered()));
     connect(m_actionBookmarkRemove, SIGNAL(triggered()),
             this, SLOT(onActionBookmarkRemoveTriggered()));
+    connect(m_actionHttpCheck, SIGNAL(triggered()),
+            this, SLOT(onActionHttpCheckTriggered()));
 
     m_mgr = 0;
     m_bookmarkModel = new CBookmarkItemModel(this);
@@ -107,6 +110,8 @@ void CBookmarkTreeView::onCustomContextMenuRequested(const QPoint &pos)
     menu.addAction(m_actionBookmarkAdd);
     menu.addAction(m_actionBookmarkEdit);
     menu.addAction(m_actionBookmarkRemove);
+    menu.addSeparator();
+    menu.addAction(m_actionHttpCheck);
     menu.exec(viewport()->mapToGlobal(pos));
 }
 
@@ -174,6 +179,21 @@ void CBookmarkTreeView::onActionBookmarkRemoveTriggered()
     }
 }
 
+void CBookmarkTreeView::onActionHttpCheckTriggered()
+{
+    QModelIndexList indexList = selectionModel()->selectedRows(0);
+
+    QList<CBookmarkItem *> bookmarkList;
+    foreach (QModelIndex index, indexList)
+        bookmarkList.push_back(indexToItem(index));
+
+    if (bookmarkList.count() == 0 && currentIndex().isValid())
+        bookmarkList.push_back(indexToItem(currentIndex()));
+
+    foreach (CBookmarkItem *bookmark, bookmarkList)
+        m_mgr->webChecker()->add(bookmark);
+}
+
 void CBookmarkTreeView::currentChanged(const QModelIndex & /*current*/,
         const QModelIndex & /*previous*/)
 {
@@ -188,6 +208,7 @@ void CBookmarkTreeView::updateActions()
         m_actionBookmarkAdd->setEnabled(false);
         m_actionBookmarkEdit->setEnabled(false);
         m_actionBookmarkRemove->setEnabled(false);
+        m_actionHttpCheck->setEnabled(false);
         return;
     }
 
@@ -196,5 +217,7 @@ void CBookmarkTreeView::updateActions()
     m_actionBookmarkEdit->setEnabled
             (rows.count() == 1 || (!rows.count() && currentIndex().isValid()));
     m_actionBookmarkRemove->setEnabled
+            (rows.count() || (!rows.count() && currentIndex().isValid()));
+    m_actionHttpCheck->setEnabled
             (rows.count() || (!rows.count() && currentIndex().isValid()));
 }

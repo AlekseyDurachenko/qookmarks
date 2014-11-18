@@ -38,6 +38,7 @@ INCLUDEPATH    +=                                           \
     $$PWD/src/widgets/bookmarkeditdialog                    \
     $$PWD/src/import                                        \
     $$PWD/src/webchecker                                    \
+    $$PWD/src/webiconfetch                                  \
 
 HEADERS        +=                                           \
     src/manager/ctagitemdata.h                              \
@@ -67,7 +68,12 @@ HEADERS        +=                                           \
     src/webchecker/cwebcheckerqueuemgr.h \
     src/webchecker/cwebcheckerqueueitemmodel.h \
     src/webchecker/cwebcheckerjob.h \
-    src/webchecker/cwebcheckerwindow.h
+    src/webchecker/cwebcheckerwindow.h \
+    src/webiconfetch/cwebiconfetchjob.h \
+    src/webiconfetch/cwebiconfetchqueueitem.h \
+    src/webiconfetch/cwebiconfetchqueueitemmodel.h \
+    src/webiconfetch/cwebiconfetchqueuemgr.h \
+    src/webiconfetch/cwebiconfetchwindow.h
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -95,7 +101,12 @@ SOURCES        +=                                           \
     src/webchecker/cwebcheckerqueuemgr.cpp \
     src/webchecker/cwebcheckerqueueitemmodel.cpp \
     src/webchecker/cwebcheckerjob.cpp \
-    src/webchecker/cwebcheckerwindow.cpp
+    src/webchecker/cwebcheckerwindow.cpp \
+    src/webiconfetch/cwebiconfetchjob.cpp \
+    src/webiconfetch/cwebiconfetchqueueitem.cpp \
+    src/webiconfetch/cwebiconfetchqueuemgr.cpp \
+    src/webiconfetch/cwebiconfetchwindow.cpp \
+    src/webiconfetch/cwebiconfetchqueueitemmodel.cpp
 
 FORMS          +=                                           \
     src/widgets/tageditdialog/ctageditdialog.ui             \
@@ -103,7 +114,8 @@ FORMS          +=                                           \
     src/cmainwindow.ui                                      \
     src/caboutdialog.ui                                     \
     src/widgets/bookmarkeditdialog/cbookmarkeditdialog.ui \
-    src/webchecker/cwebcheckerwindow.ui
+    src/webchecker/cwebcheckerwindow.ui \
+    src/webiconfetch/cwebiconfetchwindow.ui
 
 RESOURCES      +=                                           \
     qrc/icons.qrc                                           \

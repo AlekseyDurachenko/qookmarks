@@ -20,6 +20,7 @@ CBookmarkMgr::CBookmarkMgr(QObject *parent) :
     QObject(parent)
 {
     m_webChecker = new CWebCheckerQueueMgr(this, this);
+    m_iconFetch = new CWebIconFetchQueueMgr(this, this);
 
     tagHierarchyCreate();
 }

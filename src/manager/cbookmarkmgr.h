@@ -18,6 +18,7 @@
 #include "cbookmarkitem.h"
 #include "ctagitem.h"
 #include "cwebcheckerqueuemgr.h"
+#include "cwebiconfetchqueuemgr.h"
 #include <QObject>
 #include <QHash>
 
@@ -55,6 +56,7 @@ public:
     void bookmarkRemoveAll();
 
     inline CWebCheckerQueueMgr *webChecker() const;
+    inline CWebIconFetchQueueMgr *webIconFetch() const;
 protected:
     void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
     void callbackTagDataChanged(CTagItem *tag);
@@ -91,11 +93,17 @@ private:
     CTagItem *m_tagTrashItem;       // deleted flag
     //temporary
     CWebCheckerQueueMgr *m_webChecker;
+    CWebIconFetchQueueMgr *m_iconFetch;
 };
 
 CWebCheckerQueueMgr *CBookmarkMgr::webChecker() const
 {
     return m_webChecker;
+}
+
+CWebIconFetchQueueMgr *CBookmarkMgr::webIconFetch() const
+{
+    return m_iconFetch;
 }
 
 

@@ -54,6 +54,7 @@
     <addaction name="action_ImportBookmarks"/>
     <addaction name="separator"/>
     <addaction name="action_showWebCheckerWindow"/>
+    <addaction name="action_showWebIconFetchWindow"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -113,6 +114,11 @@
   <action name="action_showWebCheckerWindow">
    <property name="text">
     <string>&amp;Show web checker window...</string>
+   </property>
+  </action>
+  <action name="action_showWebIconFetchWindow">
+   <property name="text">
+    <string>Show web icon &amp;fetch window...</string>
    </property>
   </action>
  </widget>

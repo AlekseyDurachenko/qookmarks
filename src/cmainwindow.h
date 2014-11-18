@@ -48,6 +48,8 @@ private slots:
     void on_treeView_tags_currentTagChanged();
     void on_action_showWebCheckerWindow_triggered();
 
+    void on_action_showWebIconFetchWindow_triggered();
+
 private:
     void saveSettings();
     void loadSettings();

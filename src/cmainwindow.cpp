@@ -22,6 +22,7 @@
 #include "global.h"
 #include "cbookmarksortfilterproxymodel.h"
 #include "cwebcheckerwindow.h"
+#include "cwebiconfetchwindow.h"
 #include "tagutils.h"
 #include <QSettings>
 #include <QDebug>
@@ -113,9 +114,12 @@ void CMainWindow::on_action_ImportBookmarks_triggered()
     //for (int i = 0; i < m_bookmarkMgr->bookmarkCount(); ++i)
     //        m_webChecker->add(m_bookmarkMgr->bookmarkAt(i));
 
+    m_bookmarkMgr->webIconFetch()->add(m_bookmarkMgr->bookmarkAt(0));
+
     CBookmarkItemData data0 = m_bookmarkMgr->bookmarkAt(0)->data();
     data0.setFavorite(true);
     m_bookmarkMgr->bookmarkAt(0)->setData(data0);
+
 
     CBookmarkItemData data1 = m_bookmarkMgr->bookmarkAt(1)->data();
     data1.setRating(4);
@@ -222,5 +226,13 @@ void CMainWindow::on_action_showWebCheckerWindow_triggered()
     CWebCheckerWindow *wnd = new CWebCheckerWindow;
     wnd->setAttribute(Qt::WA_DeleteOnClose);
     wnd->setMgr(m_bookmarkMgr->webChecker());
+    wnd->show();
+}
+
+void CMainWindow::on_action_showWebIconFetchWindow_triggered()
+{
+    CWebIconFetchWindow *wnd = new CWebIconFetchWindow;
+    wnd->setAttribute(Qt::WA_DeleteOnClose);
+    wnd->setMgr(m_bookmarkMgr->webIconFetch());
     wnd->show();
 }

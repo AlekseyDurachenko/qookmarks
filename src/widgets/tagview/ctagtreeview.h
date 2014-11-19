@@ -52,6 +52,7 @@ private slots:
     void slot_action_emptyReadLater_triggered();
     void slot_action_emptyBookmakrs_triggered();
     void slot_action_emptyTrash_triggered();
+    void slot_action_getIcon_triggered();
     void slot_action_httpCheck_triggered();
 protected:
     virtual void currentChanged(const QModelIndex &current,
@@ -69,6 +70,7 @@ private:
     QAction *m_actionEmptyReadLater;
     QAction *m_actionEmptyBookmarks;
     QAction *m_actionEmptyTrash;
+    QAction *m_actionGetIcon;
     QAction *m_actionHttpCheck;
 };
 

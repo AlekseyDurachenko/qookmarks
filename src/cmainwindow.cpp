@@ -113,8 +113,7 @@ void CMainWindow::on_action_ImportBookmarks_triggered()
 
     //for (int i = 0; i < m_bookmarkMgr->bookmarkCount(); ++i)
     //        m_webChecker->add(m_bookmarkMgr->bookmarkAt(i));
-
-    m_bookmarkMgr->webIconFetch()->add(m_bookmarkMgr->bookmarkAt(0));
+    //m_bookmarkMgr->webIconFetch()->add(m_bookmarkMgr->bookmarkAt(0));
 
     CBookmarkItemData data0 = m_bookmarkMgr->bookmarkAt(0)->data();
     data0.setFavorite(true);

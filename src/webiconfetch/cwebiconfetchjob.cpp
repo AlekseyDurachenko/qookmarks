@@ -67,8 +67,7 @@ void CWebIconFetchJob::abort()
 
 void CWebIconFetchJob::slot_reply_finished()
 {
-    qDebug() << "ok";
-    qDebug() << m_reply->errorString();
+    qDebug() << "finished: " << m_reply->errorString();
     if (m_reply->error() == QNetworkReply::NoError)
     {
         QPixmap pixmap;

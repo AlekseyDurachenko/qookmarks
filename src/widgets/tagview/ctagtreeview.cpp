@@ -49,6 +49,7 @@ CTagTreeView::CTagTreeView(QWidget *parent) :
     m_actionEmptyBookmarks = new QAction(tr("Empty bookmarks..."), this);
     m_actionEmptyTrash = new QAction(tr("Empty Trash..."), this);
     m_actionHttpCheck = new QAction(tr("Check urls..."), this);
+    m_actionGetIcon = new QAction(tr("Fetch icons..."), this);
 
     connect(m_actionTagAdd, SIGNAL(triggered()),
             this, SLOT(slot_action_tagAdd_triggered()));
@@ -68,6 +69,8 @@ CTagTreeView::CTagTreeView(QWidget *parent) :
             this, SLOT(slot_action_emptyTrash_triggered()));
     connect(m_actionHttpCheck, SIGNAL(triggered()),
             this, SLOT(slot_action_httpCheck_triggered()));
+    connect(m_actionGetIcon, SIGNAL(triggered()),
+            this, SLOT(slot_action_getIcon_triggered()));
 
     m_tagModel = new CTagItemModel(this);
     setModel(m_tagModel);
@@ -137,6 +140,7 @@ void CTagTreeView::slot_customContextMenuRequested(const QPoint &pos)
 
     menu.addSeparator();
     menu.addAction(m_actionHttpCheck);
+    menu.addAction(m_actionGetIcon);
     menu.exec(viewport()->mapToGlobal(pos));
 }
 
@@ -257,6 +261,55 @@ void CTagTreeView::slot_action_emptyTrash_triggered()
             m_mgr->bookmarkRemoveAt(i);
 
     updateActions();
+}
+
+void CTagTreeView::slot_action_getIcon_triggered()
+{
+    CTagItem *tag = currentTag();
+    if (!tag)
+        return;
+
+    QList<CBookmarkItem *> bookmarkList;
+    switch (tag->type())
+    {
+    case CTagItem::Bookmarks:
+        for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+            bookmarkList << m_mgr->bookmarkAt(i);
+        break;
+    case CTagItem::Tag:
+    {
+        QSet<CTagItem *> tmp = tagRecursiveFetch(tag, true).toSet();
+        for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+            if (tagCheckIntersection(m_mgr->bookmarkAt(i)->tags(), tmp))
+                bookmarkList << m_mgr->bookmarkAt(i);
+        break;
+    }
+    case CTagItem::Favorites:
+        for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+            if (m_mgr->bookmarkAt(i)->data().isFavorite())
+                bookmarkList << m_mgr->bookmarkAt(i);
+        break;
+    case CTagItem::Rated:
+        for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+            if (m_mgr->bookmarkAt(i)->data().rating() > 0)
+                bookmarkList << m_mgr->bookmarkAt(i);
+        break;
+    case CTagItem::ReadLater:
+        for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+            if (m_mgr->bookmarkAt(i)->data().isReadLater())
+                bookmarkList << m_mgr->bookmarkAt(i);
+        break;
+    case CTagItem::Trash:
+        for (int i = 0; i < m_mgr->bookmarkCount(); ++i)
+            if (m_mgr->bookmarkAt(i)->data().isDeleted())
+                bookmarkList << m_mgr->bookmarkAt(i);
+        break;
+    default:
+        return;
+    }
+
+    foreach (CBookmarkItem *bookmark, bookmarkList)
+        m_mgr->webIconFetch()->add(bookmark);
 }
 
 void CTagTreeView::slot_action_httpCheck_triggered()

@@ -46,6 +46,7 @@ private slots:
     void onActionBookmarkEditTriggered();
     void onActionBookmarkRemoveTriggered();
     void onActionHttpCheckTriggered();
+    void onActionGetIconTriggered();
     void onActionOpenUrlTriggered();
 protected:
     virtual void currentChanged(const QModelIndex &current,
@@ -60,6 +61,7 @@ private:
     QAction *m_actionBookmarkEdit;
     QAction *m_actionBookmarkRemove;
     QAction *m_actionHttpCheck;
+    QAction *m_actionGetIcon;
     QAction *m_actionOpenUrl;
 };
 

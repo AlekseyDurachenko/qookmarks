@@ -52,6 +52,7 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
     m_actionBookmarkEdit = new QAction(tr("Edit..."), this);
     m_actionBookmarkRemove = new QAction(tr("Remove..."), this);
     m_actionHttpCheck = new QAction(tr("Check urls..."), this);
+    m_actionGetIcon = new QAction(tr("Get icon..."), this);
     m_actionOpenUrl = new QAction(tr("Open url..."), this);
     connect(m_actionBookmarkAdd, SIGNAL(triggered()),
             this, SLOT(onActionBookmarkAddTriggered()));
@@ -61,6 +62,8 @@ CBookmarkTreeView::CBookmarkTreeView(QWidget *parent) :
             this, SLOT(onActionBookmarkRemoveTriggered()));
     connect(m_actionHttpCheck, SIGNAL(triggered()),
             this, SLOT(onActionHttpCheckTriggered()));
+    connect(m_actionGetIcon, SIGNAL(triggered()),
+            this, SLOT(onActionGetIconTriggered()));
     connect(m_actionOpenUrl, SIGNAL(triggered()),
             this, SLOT(onActionOpenUrlTriggered()));
 
@@ -116,6 +119,7 @@ void CBookmarkTreeView::onCustomContextMenuRequested(const QPoint &pos)
     menu.addAction(m_actionBookmarkRemove);
     menu.addSeparator();
     menu.addAction(m_actionHttpCheck);
+    menu.addAction(m_actionGetIcon);
     menu.addSeparator();
     menu.addAction(m_actionOpenUrl);
     menu.exec(viewport()->mapToGlobal(pos));
@@ -198,6 +202,21 @@ void CBookmarkTreeView::onActionHttpCheckTriggered()
 
     foreach (CBookmarkItem *bookmark, bookmarkList)
         m_mgr->webChecker()->add(bookmark);
+}
+
+void CBookmarkTreeView::onActionGetIconTriggered()
+{
+    QModelIndexList indexList = selectionModel()->selectedRows(0);
+
+    QList<CBookmarkItem *> bookmarkList;
+    foreach (QModelIndex index, indexList)
+        bookmarkList.push_back(indexToItem(index));
+
+    if (bookmarkList.count() == 0 && currentIndex().isValid())
+        bookmarkList.push_back(indexToItem(currentIndex()));
+
+    foreach (CBookmarkItem *bookmark, bookmarkList)
+        m_mgr->webIconFetch()->add(bookmark);
 }
 
 void CBookmarkTreeView::onActionOpenUrlTriggered()

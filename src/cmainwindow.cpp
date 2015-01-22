@@ -27,6 +27,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QtWebKit/QWebView>
+#include "webdownloader/cwebdownloadjob.h"
 
 CMainWindow::CMainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::CMainWindow)
@@ -50,7 +51,12 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_networkMgr = new QNetworkAccessManager(this);
     m_reply = 0;
 
-    loadSettings();
+    CWebDownloadJob *job = new CWebDownloadJob(m_networkMgr, this);
+    //job->start(QUrl("http://ky6uk.org/launchpad-its-really-simple"));
+    //job->start(QUrl("http://www.w3.org/TR/REC-CSS2/selector.html"));
+    job->start(QUrl("http://qt-project.org/forums/viewthread/43290"));
+
+    loadSettings();    
 }
 
 CMainWindow::~CMainWindow()

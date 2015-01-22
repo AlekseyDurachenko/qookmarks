@@ -73,7 +73,8 @@ HEADERS        +=                                           \
     src/webiconfetch/cwebiconfetchqueueitem.h \
     src/webiconfetch/cwebiconfetchqueueitemmodel.h \
     src/webiconfetch/cwebiconfetchqueuemgr.h \
-    src/webiconfetch/cwebiconfetchwindow.h
+    src/webiconfetch/cwebiconfetchwindow.h \
+    src/webdownloader/cwebdownloadjob.h
 
 SOURCES        +=                                           \
     src/manager/ctagitemdata.cpp                            \
@@ -106,7 +107,8 @@ SOURCES        +=                                           \
     src/webiconfetch/cwebiconfetchqueueitem.cpp \
     src/webiconfetch/cwebiconfetchqueuemgr.cpp \
     src/webiconfetch/cwebiconfetchwindow.cpp \
-    src/webiconfetch/cwebiconfetchqueueitemmodel.cpp
+    src/webiconfetch/cwebiconfetchqueueitemmodel.cpp \
+    src/webdownloader/cwebdownloadjob.cpp
 
 FORMS          +=                                           \
     src/widgets/tageditdialog/ctageditdialog.ui             \

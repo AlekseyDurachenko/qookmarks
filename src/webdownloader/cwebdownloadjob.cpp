@@ -86,10 +86,10 @@ void CWebDownloadJob::slot_reply_finished()
         QByteArray array = m_reply->readAll();
         webPage = new QWebPage(this);
         QWebFrame *frame = webPage->mainFrame();
-        webPage->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
-        webPage->settings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
-        webPage->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-        webPage->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+        //webPage->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
+        //webPage->settings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
+        //webPage->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+        //webPage->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
         //frame->load(QUrl("http://ya.ru"));
         connect(frame, SIGNAL(loadFinished(bool)), this, SLOT(slot_load_finished()));
         frame->setHtml(array);

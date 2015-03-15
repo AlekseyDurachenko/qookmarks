@@ -1,3 +1,0 @@
-[submodule "libs/qt-json"]
-	path = libs/qt-json
-	url = https://github.com/AlekseyDurachenko/qt-json.git

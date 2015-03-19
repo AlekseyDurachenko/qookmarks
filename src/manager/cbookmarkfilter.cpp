@@ -1,4 +1,4 @@
-// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,49 +13,121 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkfilter.h"
-#include "tagutils.h"
+#include "cmanager.h"
+#include "ctagmgr.h"
+#include "cbookmarkmgr.h"
+#include "ctagitem.h"
+#include "cbookmarkitem.h"
 
 
-CBookmarkFilter::CBookmarkFilter()
+CBookmarkFilter::CBookmarkFilter(CManager *manager, QObject *parent) :
+    CAbstractBookmarkFilter(parent)
+{
+    m_manager = 0;
+    m_inclusiveFilter = ~Bookmark::FilterOptions(Bookmark::Trash);
+    m_minRating = Bookmark::MinimumRating;
+    m_maxRating = Bookmark::MaximumRating;
+
+    setManager(manager);
+}
+
+CBookmarkFilter::~CBookmarkFilter()
 {
 }
 
-void CBookmarkFilter::setTagFilter(const QSet<CTagItem *> tagFilter)
+void CBookmarkFilter::setManager(CManager *manager)
 {
-    m_tags = tagFilter;
+    if (m_manager == manager)
+        return;
+
+    if (m_manager != 0)
+    {
+        disconnect(m_manager->tagMgr(), 0, this, 0);
+        disconnect(m_manager->bookmarkMgr(), 0, this, 0);
+    }
+
+    m_manager = 0;
+    if (m_manager)
+    {
+        connect(m_manager->tagMgr(), SIGNAL(destroyed()),
+                this, SLOT(tagMgr_destroyed()));
+        connect(m_manager->tagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
+                this, SLOT(tagMgr_aboutToBeRemoved(CTagItem*,int,int)));
+    }
+
+    m_tags.clear();
+    update();
 }
 
-void CBookmarkFilter::setAcceptTypes(const CTagItem::Types &acceptTypes)
+void CBookmarkFilter::setTags(const QSet<CTagItem *> &tags)
 {
-    m_acceptTypes = acceptTypes;
+    m_tags = tags;
 }
 
-bool CBookmarkFilter::testBookmark(CBookmarkItem *bookmark) const
+void CBookmarkFilter::setInclusiveOption(const Bookmark::FilterOptions &options)
 {
-    bool contains = true;
-    if (!m_tags.isEmpty())
-        contains = tagCheckIntersection(bookmark->tags(), m_tags);
+    m_inclusiveFilter = options;
+}
 
-    if (m_acceptTypes & CTagItem::Trash)
-        return contains && bookmark->data().isDeleted();
+void CBookmarkFilter::setRatingRange(int min, int max)
+{
+    m_maxRating = qMin(min, max);
+    m_minRating = qMax(min, max);
+}
 
-    if (bookmark->data().isDeleted())
+bool CBookmarkFilter::validate(const CBookmarkItem *item) const
+{
+    if (m_manager == 0)
+        return true;
+
+
+    if (m_tags.isEmpty() == false
+            && CTagItem::checkIntersection(m_tags, item->tags()) == false)
         return false;
 
-    if (m_acceptTypes == CTagItem::Tag)
-        return contains;
 
-    if (m_acceptTypes & CTagItem::Favorites)
-        return contains && bookmark->data().isFavorite();
+    if (item->data().rating() < m_minRating
+            || item->data().rating() > m_maxRating)
+        return false;
 
-    if (m_acceptTypes & CTagItem::Rated)
-        return contains && (bookmark->data().rating() > 0);
 
-    if (m_acceptTypes & CTagItem::ReadLater)
-        return contains && bookmark->data().isReadLater();
+    if (m_inclusiveFilter.testFlag(Bookmark::Favorite)
+            && item->data().isFavorite() == true)
+        return true;
 
-    if (m_acceptTypes & CTagItem::Bookmarks)
-        return contains && bookmark->tags().isEmpty();
+    if (m_inclusiveFilter.testFlag(Bookmark::NotFavorite)
+            && item->data().isFavorite() == false)
+        return true;
+
+    if (m_inclusiveFilter.testFlag(Bookmark::ReadLater)
+            && item->data().isReadLater() == true)
+        return true;
+
+    if (m_inclusiveFilter.testFlag(Bookmark::NotReadLater)
+            && item->data().isReadLater() == false)
+        return true;
+
+    if (m_inclusiveFilter.testFlag(Bookmark::Trash)
+            && item->data().isTrash() == true)
+        return true;
+
+    if (m_inclusiveFilter.testFlag(Bookmark::NotTrash)
+            && item->data().isTrash() == false)
+        return true;
+
 
     return false;
+}
+
+void CBookmarkFilter::tagMgr_aboutToBeRemoved(CTagItem *parent,
+        int first, int last)
+{
+    for (int i = first; i <= last; ++i)
+        m_tags.remove(parent->at(i));
+}
+
+void CBookmarkFilter::tagMgr_destroyed()
+{
+    m_manager = 0;
+    update();
 }

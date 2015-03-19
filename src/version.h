@@ -1,4 +1,4 @@
-// Copyright 2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,31 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CONSTS
-#define CONSTS
+#ifndef VERSION_H
+#define VERSION_H
 
-#include <QtGlobal>
+// "{APP_MAJOR}.{APP_MINOR}.{APP_PATCH}[.{APP_REV}[.{APP_BUILD_NUMBER}]]"
+const char *appVersion();
+// "{APP_BUILD_DATE}"
+// if build number is not presented this function returns 0
+const char *appBuildDate();
+// the application name (often equal to the program name)
+const char *appName();
+// the short name of the application
+const char *appShortName();
+// the full name of the application
+const char *appFullName();
 
-
-namespace Bookmark {
-    const int MinimumRating = 0;
-    const int MaximumRating = 10;
-}
-
-namespace Bookmark {
-    enum FilterOption {
-        Any             = 0xFFFF,
-        ReadLater       = 0x0001,
-        NotReadLater    = 0x0100,
-        Favorite        = 0x0002,
-        NotFavorite     = 0x0200,
-        Trash           = 0x0004,
-        NotTrash        = 0x0400
-    };
-    Q_DECLARE_FLAGS(FilterOptions, FilterOption)
-}
-Q_DECLARE_OPERATORS_FOR_FLAGS(Bookmark::FilterOptions)
-
-
-#endif // CONSTS
-
+#endif // VERSION_H

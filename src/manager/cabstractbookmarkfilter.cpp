@@ -12,31 +12,25 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CONSTS
-#define CONSTS
-
-#include <QtGlobal>
+#include "cabstractbookmarkfilter.h"
 
 
-namespace Bookmark {
-    const int MinimumRating = 0;
-    const int MaximumRating = 10;
+CAbstractBookmarkFilter::CAbstractBookmarkFilter(QObject *parent) :
+    QObject(parent)
+{
 }
 
-namespace Bookmark {
-    enum FilterOption {
-        Any             = 0xFFFF,
-        ReadLater       = 0x0001,
-        NotReadLater    = 0x0100,
-        Favorite        = 0x0002,
-        NotFavorite     = 0x0200,
-        Trash           = 0x0004,
-        NotTrash        = 0x0400
-    };
-    Q_DECLARE_FLAGS(FilterOptions, FilterOption)
+CAbstractBookmarkFilter::~CAbstractBookmarkFilter()
+{
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS(Bookmark::FilterOptions)
 
-
-#endif // CONSTS
+/*!
+ * \brief CAbstractBookmarkFilter::update
+ *
+ * you should call this method after your filter is changed
+ */
+void CAbstractBookmarkFilter::update()
+{
+    emit changed();
+}
 

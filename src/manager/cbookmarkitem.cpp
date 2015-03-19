@@ -1,4 +1,4 @@
-// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2014-2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,112 +13,59 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkitem.h"
+#include "ctagitem.h"
 #include "cbookmarkmgr.h"
-#include <QDebug>
 
 
-CBookmarkItem::CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr)
+CBookmarkItem::CBookmarkItem(const CBookmark &data, CBookmarkMgr *bookmarkMgr)
 {
     m_data = data;
-    m_mgr = mgr;
+    m_bookmarkMgr = bookmarkMgr;
 }
 
-bool CBookmarkItem::tagCanAdd(CTagItem *tag)
+CBookmarkItem::~CBookmarkItem()
 {
-    switch (tag->type())
-    {
-    case CTagItem::Tag:
-    case CTagItem::Favorites:
-    case CTagItem::ReadLater:
-    case CTagItem::Trash:
-        return true;
-    default:
-        return false;
-    }
-
-    return false;
+    notifyTagAboutDestroyed();
 }
 
-bool CBookmarkItem::tagAdd(CTagItem *tag)
+int CBookmarkItem::index() const
 {
-    // we can't accept the top level items
-    // but for some type of it we can processing (syntax sugar)
-    if (tag->type() != CTagItem::Tag)
-    {
-        switch (tag->type())
-        {
-        case CTagItem::Favorites:
-            if (!m_data.isFavorite())
-                m_data.setFavorite(true);
-            else
-                return true;
-            break;
-        case CTagItem::ReadLater:
-            if (!m_data.isReadLater())
-                m_data.setReadLater(true);
-            else
-                return true;
-            break;
-        case CTagItem::Trash:
-            if (!m_data.isDeleted())
-                m_data.setDeleted(true);
-            else
-                return true;
-            break;
-        default:
-            return false;
-        }
+    return m_bookmarkMgr->indexOf(const_cast<CBookmarkItem *>(this));
+}
 
-        m_mgr->callbackBookmarkDataChanged(this);
-        return true;
-    }
-
-    // tag already exists
-    if (m_tags.contains(tag))
+bool CBookmarkItem::setData(const CBookmark &data)
+{
+    CBookmarkItem *item = m_bookmarkMgr->find(data.url());
+    if (item && item != this)
         return false;
 
+    if (m_data != data)
+    {
+        CBookmark old = m_data;
+        m_data = data;
+        m_bookmarkMgr->callbackDataChanged(this, old, data);
+    }
+
+    return true;
+}
+
+void CBookmarkItem::notifyTagAboutDestroyed()
+{
+    foreach (CTagItem *item, m_tags)
+    {
+        m_tags.remove(item);
+        item->callbackBookmarkDestroyed(this);
+    }
+}
+
+void CBookmarkItem::callbackTagAdd(CTagItem *tag)
+{
     m_tags.insert(tag);
-    m_mgr->callbackBookmarkDataChanged(this);
-
-    return true;
+    m_bookmarkMgr->callbackTagsChanged(this);
 }
 
-void CBookmarkItem::tagRemove(CTagItem *tag)
+void CBookmarkItem::callbackTagRemove(CTagItem *tag)
 {
-    if (m_tags.remove(tag))
-        m_mgr->callbackBookmarkDataChanged(this);
-}
-
-void CBookmarkItem::tagRemoveAll()
-{
-    if (m_tags.count() == 0)
-        return;
-
-    m_tags.clear();
-    m_mgr->callbackBookmarkDataChanged(this);
-}
-
-bool CBookmarkItem::canSetData(const CBookmarkItemData &data)
-{
-    // unique field (url) is already exists
-    CBookmarkItem *bookmark = m_mgr->bookmarkFind(data.url());
-    if (bookmark && bookmark != this)
-        return false;
-
-    return true;
-}
-
-bool CBookmarkItem::setData(const CBookmarkItemData &data)
-{
-    if (!canSetData(data))
-        return false;
-
-    // nothing to be update
-    if (m_data == data)
-        return true;
-
-    m_data = data;
-    m_mgr->callbackBookmarkDataChanged(this);
-
-    return true;
+    m_tags.remove(tag);
+    m_bookmarkMgr->callbackTagsChanged(this);
 }

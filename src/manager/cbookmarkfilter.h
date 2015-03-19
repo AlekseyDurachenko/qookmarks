@@ -1,4 +1,4 @@
-// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,51 +15,69 @@
 #ifndef CBOOKMARKFILTER_H
 #define CBOOKMARKFILTER_H
 
-#include "cbookmarkitem.h"
-#include "ctagitem.h"
+#include <QSharedDataPointer>
+#include <QSet>
+#include "cabstractbookmarkfilter.h"
+#include "consts.h"
+class CManager;
+class CTagItem;
 
 
-class CBookmarkFilter
+class CBookmarkFilter : public CAbstractBookmarkFilter
 {
+    Q_OBJECT
 public:
-    CBookmarkFilter();
+    CBookmarkFilter(CManager *manager, QObject *parent = 0);
+    virtual ~CBookmarkFilter();
 
-    inline const QSet<CTagItem *> &tagFilter() const;
-    void setTagFilter(const QSet<CTagItem *> tagFilter);
+    inline CManager *manager() const;
+    void setManager(CManager *manager);
 
-    inline const CTagItem::Types &acceptTypes() const;
-    void setAcceptTypes(const CTagItem::Types &acceptTypes);
+    inline const QSet<CTagItem *> tags() const;
+    void setTags(const QSet<CTagItem *> &tags);
 
-    bool testBookmark(CBookmarkItem *bookmark) const;
+    inline const Bookmark::FilterOptions &inclusiveOption() const;
+    void setInclusiveOption(const Bookmark::FilterOptions &options);
 
-    inline bool operator == (const CBookmarkFilter &other);
-    inline bool operator != (const CBookmarkFilter &other);
+    inline int minRating() const;
+    inline int maxRating() const;
+    void setRatingRange(int min, int max);
+
+    virtual bool validate(const CBookmarkItem *item) const;
+private slots:
+    void tagMgr_aboutToBeRemoved(CTagItem *parent, int first, int last);
+    void tagMgr_destroyed();
 private:
+    CManager *m_manager;
     QSet<CTagItem *> m_tags;
-    CTagItem::Types m_acceptTypes;
+    Bookmark::FilterOptions m_inclusiveFilter;
+    int m_minRating;
+    int m_maxRating;
 };
 
+CManager *CBookmarkFilter::manager() const
+{
+    return m_manager;
+}
 
-const QSet<CTagItem *> &CBookmarkFilter::tagFilter() const
+const QSet<CTagItem *> CBookmarkFilter::tags() const
 {
     return m_tags;
 }
 
-const CTagItem::Types &CBookmarkFilter::acceptTypes() const
+const Bookmark::FilterOptions &CBookmarkFilter::inclusiveOption() const
 {
-    return m_acceptTypes;
+    return m_inclusiveFilter;
 }
 
-bool CBookmarkFilter::operator == (const CBookmarkFilter &other)
+int CBookmarkFilter::minRating() const
 {
-    return (m_tags == other.m_tags
-            && m_acceptTypes == other.m_acceptTypes);
+    return m_minRating;
 }
 
-bool CBookmarkFilter::operator != (const CBookmarkFilter &other)
+int CBookmarkFilter::maxRating() const
 {
-    return (m_tags != other.m_tags
-            || m_acceptTypes != other.m_acceptTypes);
+    return m_maxRating;
 }
 
 

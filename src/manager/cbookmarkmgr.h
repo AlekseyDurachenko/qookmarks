@@ -1,4 +1,4 @@
-// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2014-2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,95 +15,70 @@
 #ifndef CBOOKMARKMGR_H
 #define CBOOKMARKMGR_H
 
-#include "cbookmarkitem.h"
-#include "ctagitem.h"
-#include "cwebcheckerqueuemgr.h"
-#include "cwebiconfetchqueuemgr.h"
 #include <QObject>
-#include <QHash>
-
+#include "cbookmark.h"
+class CManager;
+class CTagMgr;
+class CBookmarkItem;
 
 class CBookmarkMgr : public QObject
 {
     Q_OBJECT
+
     friend class CBookmarkItem;
-    friend class CTagItem;
-public:
-    explicit CBookmarkMgr(QObject *parent = 0);
+    friend class CTagMgr;
+    friend class CManager;
+private:
+    explicit CBookmarkMgr(CManager *mgr = 0);
     virtual ~CBookmarkMgr();
+public:
+    inline CManager *mgr() const;
 
-    CTagItem *tagRootItem() const;
-    CTagItem *tagFavoritesItem() const;
-    CTagItem *tagRatedItem() const;
-    CTagItem *tagReadLaterItem() const;
-    CTagItem *tagBookmarksItem() const;
-    CTagItem *tagTrashItem() const;
-
-    bool tagCanMove(CTagItem *newParent, CTagItem *item);
-    CTagItem *tagFind(CTagItem *parentItem, const QString &name);
-    CTagItem *tagFind(const QStringList &path);
-    CTagItem *tagAdd(CTagItem *parentItem, const CTagItemData &data);
-    bool tagMove(CTagItem *newParentItem, CTagItem *item);
-    void tagRemove(CTagItem *item);
-    void tagRemoveAll();
-
-    int bookmarkCount() const;
-    CBookmarkItem *bookmarkAt(int index) const;
-    CBookmarkItem *bookmarkFind(const QUrl &url);
-    CBookmarkItem *bookmarkAdd(const CBookmarkItemData &data);
-    void bookmarkRemove(CBookmarkItem *bookmark);
-    void bookmarkRemoveAt(int index);
-    void bookmarkRemoveAll();
-
-    inline CWebCheckerQueueMgr *webChecker() const;
-    inline CWebIconFetchQueueMgr *webIconFetch() const;
-protected:
-    void callbackBookmarkDataChanged(CBookmarkItem *bookmark);
-    void callbackTagDataChanged(CTagItem *tag);
-    void callbackTagInserted(CTagItem *tag);
-    void callbackTagRemoved(CTagItem *tag);
-    void callbackTagInserted(CTagItem *parent, int first, int last);
-    void callbackTagRemoved(CTagItem *parent, int first, int last);
-private:
-    void tagHierarchyCreate();
+    inline int count() const;
+    int indexOf(CBookmarkItem *item) const;
+    int indexOf(const QUrl &url) const;
+    inline const QList<CBookmarkItem *> &bookmarks() const;
+    inline CBookmarkItem *at(int index) const;
+    CBookmarkItem *find(const QUrl &url) const;
+    CBookmarkItem *add(const CBookmark &data);
+    CBookmarkItem *replace(const CBookmark &data);
+    void removeAt(int index);
+    void removeAll();
 signals:
-    // this signals are used to update the bookmark model
-    void bookmarkInserted(int first, int last);
-    void bookmarkRemoved(int first, int last);
-    void bookmarkDataChanged(int first, int last);
-    // this signals are used to update the tag model
-    void tagInserted(CTagItem *parent, int first, int last);
-    void tagRemoved(CTagItem *parent, int first, int last);
-    void tagDataChanged(CTagItem *parent, int first, int last);
-    // this signals are emited before the previouse
-    void tagInserted(CTagItem *item);
-    void tagRemoved(CTagItem *item);
-    void tagDataChanged(CTagItem *item);
-    void bookmarkInserted(CBookmarkItem *item);
-    void bookmarkRemoved(CBookmarkItem *item);
-    void bookmarkDataChanged(CBookmarkItem *item);
+    void aboutToBeInserted(int first, int last);
+    void inserted(int first, int last);
+    void aboutToBeRemoved(int first, int last);
+    void removed(int first, int last);
+    void dataChanged(CBookmarkItem *item, const CBookmark& oldData,
+                     const CBookmark &newData);
+    void tagsChanged(CBookmarkItem *item);
 private:
-    QList<CBookmarkItem *> m_bookmarkList;
-    QHash<QUrl, CBookmarkItem *> m_bookmarkUrlHash;
-    CTagItem *m_tagRootItem;
-    CTagItem *m_tagFavoritesItem;   // favorites flag
-    CTagItem *m_tagRatedItem;       // rate > 0
-    CTagItem *m_tagReadLaterItem;   // read it later flag
-    CTagItem *m_tagBookmarksItem;   // all bookmarks
-    CTagItem *m_tagTrashItem;       // deleted flag
-    //temporary
-    CWebCheckerQueueMgr *m_webChecker;
-    CWebIconFetchQueueMgr *m_iconFetch;
+    void callbackDataChanged(CBookmarkItem *item, const CBookmark& oldData,
+                             const CBookmark &newData);
+    void callbackTagsChanged(CBookmarkItem *item);
+private:
+    QList<CBookmarkItem *> m_bookmarkItems;
+    CManager *m_mgr;
 };
 
-CWebCheckerQueueMgr *CBookmarkMgr::webChecker() const
+CManager *CBookmarkMgr::mgr() const
 {
-    return m_webChecker;
+    return m_mgr;
 }
 
-CWebIconFetchQueueMgr *CBookmarkMgr::webIconFetch() const
+int CBookmarkMgr::count() const
 {
-    return m_iconFetch;
+    return m_bookmarkItems.count();
+}
+
+const QList<CBookmarkItem *> &CBookmarkMgr::bookmarks() const
+{
+    return m_bookmarkItems;
+}
+
+CBookmarkItem *CBookmarkMgr::at(int index) const
+{
+    return m_bookmarkItems.at(index);
 }
 
 

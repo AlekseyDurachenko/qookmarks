@@ -12,31 +12,17 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CONSTS
-#define CONSTS
+#include "cmanager.h"
+#include "cbookmarkmgr.h"
+#include "ctagmgr.h"
 
-#include <QtGlobal>
 
-
-namespace Bookmark {
-    const int MinimumRating = 0;
-    const int MaximumRating = 10;
+CManager::CManager(QObject *parent) : QObject(parent)
+{
+    m_bookmarkMgr = new CBookmarkMgr(this);
+    m_tagMgr = new CTagMgr(this);
 }
 
-namespace Bookmark {
-    enum FilterOption {
-        Any             = 0xFFFF,
-        ReadLater       = 0x0001,
-        NotReadLater    = 0x0100,
-        Favorite        = 0x0002,
-        NotFavorite     = 0x0200,
-        Trash           = 0x0004,
-        NotTrash        = 0x0400
-    };
-    Q_DECLARE_FLAGS(FilterOptions, FilterOption)
+CManager::~CManager()
+{
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS(Bookmark::FilterOptions)
-
-
-#endif // CONSTS
-

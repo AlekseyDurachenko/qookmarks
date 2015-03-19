@@ -1,4 +1,4 @@
-// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2014-2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,8 +15,8 @@
 #ifndef CBOOKMARKITEM_H
 #define CBOOKMARKITEM_H
 
-#include "cbookmarkitemdata.h"
 #include <QSet>
+#include "cbookmark.h"
 class CTagItem;
 class CBookmarkMgr;
 
@@ -24,32 +24,35 @@ class CBookmarkMgr;
 class CBookmarkItem
 {
     friend class CBookmarkMgr;
+    friend class CTagItem;
 private:
-    CBookmarkItem(const CBookmarkItemData &data, CBookmarkMgr *mgr);
+    CBookmarkItem(const CBookmark &data, CBookmarkMgr *bookmarkMgr);
+    ~CBookmarkItem();
 public:
-    inline CBookmarkMgr *mgr() const;
+    inline CBookmarkMgr *bookmarkMgr() const;
+    int index() const;
+
+    inline const CBookmark &data() const;
+    bool setData(const CBookmark &data);
 
     inline const QSet<CTagItem *> &tags() const;
-    bool tagCanAdd(CTagItem *tag);
-    bool tagAdd(CTagItem *tag);
-    void tagRemove(CTagItem *tag);
-    void tagRemoveAll();
-
-    inline const CBookmarkItemData &data() const;
-    bool canSetData(const CBookmarkItemData &data);
-    bool setData(const CBookmarkItemData &data);
 private:
-    CBookmarkMgr *m_mgr;
+    void notifyTagAboutDestroyed();
+private:
+    void callbackTagAdd(CTagItem *tag);
+    void callbackTagRemove(CTagItem *tag);
+private:
+    CBookmark m_data;
+    CBookmarkMgr *m_bookmarkMgr;
     QSet<CTagItem *> m_tags;
-    CBookmarkItemData m_data;
 };
 
-CBookmarkMgr *CBookmarkItem::mgr() const
+CBookmarkMgr *CBookmarkItem::bookmarkMgr() const
 {
-    return m_mgr;
+    return m_bookmarkMgr;
 }
 
-const CBookmarkItemData &CBookmarkItem::data() const
+const CBookmark &CBookmarkItem::data() const
 {
     return m_data;
 }

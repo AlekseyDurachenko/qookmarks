@@ -1,4 +1,4 @@
-// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2014-2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,154 +13,228 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitem.h"
+#include "cbookmarkitem.h"
 #include "cbookmarkmgr.h"
+#include "ctagmgr.h"
 
 
-CTagItem::CTagItem(CTagItem::Type type, CBookmarkMgr *mgr, CTagItem *parent)
+CTagItem::CTagItem(const CTag &data, CTagMgr *mgr, CTagItem *parent)
 {
-    m_type = type;
-    m_mgr = mgr;
-    m_parent = parent;
-
-    // default names for top level items
-    switch (m_type)
-    {
-    case None:
-        m_data.setName(QObject::tr("/"));
-        break;
-    case Tag:
-        m_data.setName(QObject::tr("Tag"));
-        break;
-    case Favorites:
-        m_data.setName(QObject::tr("Favorites"));
-        break;
-    case Rated:
-        m_data.setName(QObject::tr("Rated Bookmarks"));
-        break;
-    case ReadLater:
-        m_data.setName(QObject::tr("Read it Later"));
-        break;
-    case Bookmarks:
-        m_data.setName(QObject::tr("Bookmarks"));
-        break;
-    case Trash:
-        m_data.setName(QObject::tr("Trash"));
-        break;
-    }
-}
-
-CTagItem::CTagItem(const CTagItemData &data,
-        CBookmarkMgr *mgr, CTagItem *parent)
-{
-    m_type = CTagItem::Tag;
     m_data = data;
-    m_mgr = mgr;
+    m_tagMgr = mgr;
     m_parent = parent;
 }
 
 CTagItem::~CTagItem()
 {
-    qDeleteAll(m_childList);
+    removeAll();
+    notifyBookmarkAboutDestroyed();
 }
 
-int CTagItem::row() const
+QSet<CBookmarkItem *> CTagItem::bookmarksRecursively() const
 {
-    if (!m_parent)
-        return -1;
+    QSet<CBookmarkItem *> bookmarks = m_bookmarks;
+    foreach (CTagItem *item, m_children)
+        bookmarks += item->bookmarksRecursively();
 
-    return m_parent->childIndexOf(const_cast<CTagItem *>(this));
+    return bookmarks;
+}
+
+void CTagItem::bookmarkAdd(CBookmarkItem *item)
+{
+    if (m_bookmarks.contains(item))
+        return;
+
+    m_bookmarks.insert(item);
+    item->callbackTagAdd(this);
+    m_tagMgr->callbackBookmarksChanged(this);
+}
+
+void CTagItem::bookmarkRemove(CBookmarkItem *item)
+{
+    if (!m_bookmarks.contains(item))
+        return;
+
+    m_bookmarks.remove(item);
+    item->callbackTagRemove(this);
+    m_tagMgr->callbackBookmarksChanged(this);
+}
+
+int CTagItem::indexOf(const QString &name) const
+{
+    for (int i = 0; i < m_children.count(); ++i)
+        if (m_children.at(i)->data().name() == name)
+            return i;
+
+    return -1;
+}
+
+CTagItem *CTagItem::find(const QString &name) const
+{
+    foreach (CTagItem *tag, m_children)
+        if (tag->data().name() == name)
+            return tag;
+
+    return 0;
+}
+
+bool CTagItem::aboveOf(CTagItem *item) const
+{
+    // itself is not above of itself
+    if (this == item)
+        return false;
+
+    for (item = item->parent(); item != 0; item = item->parent())
+        if (item == this)
+            return true;
+
+    return false;
 }
 
 QStringList CTagItem::path() const
 {
-    QStringList itemPath;
-    const CTagItem *item = this;
-    while (item && item->type() == CTagItem::Tag)
-    {
-        itemPath.push_front(item->data().name());
-        item = item->parent();
-    }
+    QStringList result;
+    for (const CTagItem *item = this; item->parent(); item = item->parent())
+        result.push_front(item->data().name());
 
-    return itemPath;
+    return result;
 }
 
-QIcon CTagItem::icon() const
+CTagItem *CTagItem::add(const CTag &data)
 {
-    switch(m_type)
-    {
-    case CTagItem::Tag:
-        return QIcon(":/icons/bookmark-tag.png");
-    case CTagItem::Favorites:
-        return QIcon(":/icons/bookmark-favorites.png");
-    case CTagItem::Rated:
-        return QIcon(":/icons/bookmark-rated.png");
-    case CTagItem::ReadLater:
-        return QIcon(":/icons/bookmark-readlater.png");
-    case CTagItem::Bookmarks:
-        return QIcon(":/icons/bookmark-bookmarks.png");
-    case CTagItem::Trash:
-        return QIcon(":/icons/bookmark-trash.png");
-    default:
-        return QIcon();
-    }
+    if (find(data.name()))
+        return 0;
+
+    CTagItem *item = new CTagItem(data, m_tagMgr, this);
+    int index = m_children.count();
+
+    m_tagMgr->callbackAboutToBeInserted(this, index, index);
+    m_children.push_back(item);
+    m_tagMgr->callbackInserted(this, index, index);
+
+    return item;
 }
 
-bool CTagItem::canSetData(const CTagItemData &data)
+CTagItem *CTagItem::replace(const CTag &data)
 {
-    // we can search for duplicates only when there is a parent
-    if (!m_parent)
-        return true;
+    CTagItem *item = find(data.name());
+    if (item)
+    {
+        item->setData(data);
+    }
+    else
+    {
+        item = new CTagItem(data, m_tagMgr, this);
+        int index = m_children.count();
 
-    // unique field (name) is already exists
-    CTagItem *item = m_parent->findChild(data.name());
+        m_tagMgr->callbackAboutToBeInserted(this, index, index);
+        m_children.push_back(item);
+        m_tagMgr->callbackInserted(this, index, index);
+    }
+    return item;
+}
+
+void CTagItem::removeAt(int index)
+{
+    m_tagMgr->callbackAboutToBeRemoved(this, index, index);
+    delete m_children.takeAt(index);
+    m_tagMgr->callbackRemoved(this, index, index);
+}
+
+void CTagItem::removeAll()
+{
+    if (m_children.isEmpty())
+        return;
+
+    int last = m_children.count() - 1;
+
+    m_tagMgr->aboutToBeRemoved(this, 0, last);
+    while (m_children.count())
+        delete m_children.takeLast();
+    m_tagMgr->callbackRemoved(this, 0, last);
+}
+
+bool CTagItem::moveTo(CTagItem *newParent)
+{
+    if (aboveOf(newParent))
+        return false;
+
+    CTagItem *oldParent = m_parent;
+    int oldIndex = index();
+    int newIndex = newParent->count();
+    m_tagMgr->callbackAboutToBeMoved(this);
+    m_tagMgr->callbackAboutToBeMoved(oldParent, oldIndex, oldIndex, newParent, newIndex);
+    newParent->add(oldParent->takeAt(oldIndex));
+    m_tagMgr->callbackMoved(oldParent, oldIndex, oldIndex, newParent, newIndex);
+    m_tagMgr->callbackMoved(this);
+
+    return true;
+}
+
+bool CTagItem::setData(const CTag &data)
+{
+    CTagItem *item = m_parent->find(data.name());
     if (item && item != this)
         return false;
 
-    return true;
-}
-
-bool CTagItem::setData(const CTagItemData &data)
-{
-    if (!canSetData(data))
-        return false;
-
-    // nothing to be update
-    if (m_data == data)
-        return true;
-
-    m_searchHash.remove(m_data.name());
-    m_searchHash[data.name()] = this;
-    m_data = data;
-
-    m_mgr->callbackTagDataChanged(this);
+    if (m_data != data)
+    {
+        CTag old = m_data;
+        m_data = data;
+        m_tagMgr->callbackDataChanged(this, old, data);
+    }
 
     return true;
 }
 
-void CTagItem::addChild(CTagItem *item)
+bool CTagItem::checkIntersection(const QSet<CTagItem *> &a,
+                                 const QSet<CTagItem *> &b)
 {
-    item->setParent(this);
+    if (a.count() < b.count()) // optimization
+    {
+        foreach (CTagItem *tag, a)
+            if (b.contains(tag))
+                return true;
+    }
+    else
+    {
+        foreach (CTagItem *tag, b)
+            if (a.contains(tag))
+                return true;
+    }
 
-    int row = m_childList.count();
-    m_childList.push_back(item);
-    m_searchHash[item->data().name()] = item;
-
-    m_mgr->callbackTagInserted(item);
-    m_mgr->callbackTagInserted(this, row, row);
-}
-
-CTagItem *CTagItem::takeChild(int row)
-{
-    CTagItem *item = m_childList.takeAt(row);
-    m_searchHash.remove(item->data().name());
-
-    m_mgr->callbackTagRemoved(item);
-    m_mgr->callbackTagRemoved(this, row, row);
-
-    return item;
+    return false;
 }
 
 void CTagItem::setParent(CTagItem *parent)
 {
     m_parent = parent;
+}
+
+void CTagItem::add(CTagItem *item)
+{
+    item->setParent(this);
+    m_children.push_back(item);
+}
+
+CTagItem *CTagItem::takeAt(int index)
+{
+    CTagItem *item = m_children.takeAt(index);
+    item->setParent(0);
+    return item;
+}
+
+void CTagItem::notifyBookmarkAboutDestroyed()
+{
+    foreach (CBookmarkItem *item, m_bookmarks)
+    {
+        m_bookmarks.remove(item);
+        item->callbackTagRemove(this);
+    }
+}
+
+void CTagItem::callbackBookmarkDestroyed(CBookmarkItem *bookmark)
+{
+    m_bookmarks.remove(bookmark);
+    m_tagMgr->callbackBookmarksChanged(this);
 }

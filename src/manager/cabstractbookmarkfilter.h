@@ -12,31 +12,25 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CONSTS
-#define CONSTS
+#ifndef CABSTRACTBOOKMARKFILTER_H
+#define CABSTRACTBOOKMARKFILTER_H
 
-#include <QtGlobal>
-
-
-namespace Bookmark {
-    const int MinimumRating = 0;
-    const int MaximumRating = 10;
-}
-
-namespace Bookmark {
-    enum FilterOption {
-        Any             = 0xFFFF,
-        ReadLater       = 0x0001,
-        NotReadLater    = 0x0100,
-        Favorite        = 0x0002,
-        NotFavorite     = 0x0200,
-        Trash           = 0x0004,
-        NotTrash        = 0x0400
-    };
-    Q_DECLARE_FLAGS(FilterOptions, FilterOption)
-}
-Q_DECLARE_OPERATORS_FOR_FLAGS(Bookmark::FilterOptions)
+#include <QObject>
+class CBookmarkItem;
 
 
-#endif // CONSTS
+class CAbstractBookmarkFilter : public QObject
+{
+    Q_OBJECT
+public:
+    explicit CAbstractBookmarkFilter(QObject *parent = 0);
+    virtual ~CAbstractBookmarkFilter();
 
+    virtual bool validate(const CBookmarkItem *item) const = 0;
+    void update();
+signals:
+    void changed();
+};
+
+
+#endif // CABSTRACTBOOKMARKFILTER_H

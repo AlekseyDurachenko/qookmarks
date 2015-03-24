@@ -22,6 +22,7 @@
 class CManager;
 class CTagItem;
 class CBookmarkItem;
+class IManagerAction;
 
 
 class CNavigationItemModel : public QAbstractItemModel
@@ -34,6 +35,9 @@ public:
 
     inline CManager *manager() const;
     void setManager(CManager *manager);
+
+    inline IManagerAction *managerActionInterface() const;
+    void setManagerActionInterface(IManagerAction *managerActionInterface);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -48,14 +52,6 @@ public:
     virtual QModelIndex parent(const QModelIndex &index) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-signals:
-    void tagsNeedMoving(const QList<QStringList> &tags,
-                        const QStringList &parentTag);
-    void bookmarksNeedTagging(const QList<QUrl> &bookmarks,
-                              const QStringList& tag);
-    void bookmarksFavoriteMarking(const QList<QUrl> &bookmarks);
-    void bookmarksReadLaterMarking(const QList<QUrl> &bookmarks);
-    void bookmarksTrashMarking(const QList<QUrl> &bookmarks);
 private slots:
     void tagMgr_aboutToBeInserted(CTagItem *parent ,int first, int last);
     void tagMgr_inserted(CTagItem *parent, int first, int last);
@@ -72,6 +68,7 @@ private slots:
     void bookmarkMgr_inserted();
     void bookmarkMgr_removed();
     void manager_destroyed();
+    void managerActionInterface_destroyed();
 private:
     enum TopLevelItem { Favorites, Rated, ReadLater, BookmarkRoot, Trash };
 private:
@@ -92,6 +89,7 @@ private:
     QList<QUrl> fromMimeBookmarkList(const QMimeData *data);
 private:
     CManager *m_manager;
+    IManagerAction *m_managerActionInterface;
     QVector<TopLevelItem> m_topLevelItems;
     QHash<TopLevelItem, int> m_topLevelCounters;
 };
@@ -99,6 +97,11 @@ private:
 CManager *CNavigationItemModel::manager() const
 {
     return m_manager;
+}
+
+IManagerAction *CNavigationItemModel::managerActionInterface() const
+{
+    return m_managerActionInterface;
 }
 
 

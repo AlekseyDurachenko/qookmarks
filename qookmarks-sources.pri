@@ -25,7 +25,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.h              \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
-    $$PWD/src/mainwindow.h                                              \
+    $$PWD/src/mainwindow.h \
+    $$PWD/src/imanageraction.h
 
 
 SOURCES        +=                                                       \

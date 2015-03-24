@@ -16,6 +16,18 @@
 #include <QMessageBox>
 #include <QPushButton>
 
+class testInterface : public IManagerAction
+{
+public:
+    virtual void tagsCopyOrMove(const QList<QStringList> &tags,
+                          const QStringList &parentTag) {}
+    virtual void bookmarksAssignTag(const QList<QUrl> &bookmarks,
+                                    const QStringList& tag) {}
+    virtual void bookmarksMarkFavorite(const QList<QUrl> &bookmarks) {}
+    virtual void bookmarksMarkReadLater(const QList<QUrl> &bookmarks) {}
+    virtual void bookmarksMarkTrash(const QList<QUrl> &bookmarks) {}
+};
+
 
 void printTagItem(const QString &path, CTagItem *item)
 {
@@ -118,13 +130,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mgr->bookmarkMgr()->at(0)->setData(data);
 
     CNavigationItemModel *navItemModel = new CNavigationItemModel(mgr, this);
+    navItemModel->setManagerActionInterface(this);
     ui->treeView_tags->setModel(navItemModel);
-
-    connect(navItemModel, SIGNAL(tagsNeedMoving(QList<QStringList>,QStringList)),
-            this, SLOT(slot_tagsNeedMoving(QList<QStringList>,QStringList)));
-    connect(navItemModel, SIGNAL(bookmarksNeedTagging(QList<QUrl>,QStringList)),
-            this, SLOT(slot_bookmarksNeedTagging(QList<QUrl>,QStringList)));
-
 }
 
 MainWindow::~MainWindow()
@@ -169,6 +176,33 @@ void MainWindow::on_action_Save_triggered()
 void MainWindow::slot_tagsNeedMoving(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
+}
+
+void MainWindow::slot_bookmarksNeedTagging(const QList<QUrl> &bookmarks,
+        const QStringList &tag)
+{
+
+
+    //    QList<CBookmarkItem *> bookmarkItems;
+    //    foreach (const QUrl &url, bookmarkUrls)
+    //    {
+    //        CBookmarkItem *bookmarkItem = m_manager->bookmarkMgr()->find(url);
+    //        if (!bookmarkItem)
+    //            continue;
+
+    //        bookmarkItems.push_back(bookmarkItem);
+    //    }
+
+    //    if (bookmarkItems.isEmpty())
+    //        return false;
+
+    //    emit bookmarksNeedTagging(bookmarkItems, tagParentItem);
+
+    //    return true;
+}
+
+void MainWindow::tagsCopyOrMove(const QList<QStringList> &tags, const QStringList &parentTag)
+{
     CTagItem *parentItem = mgr->tagMgr()->findByPath(parentTag);
     if (!parentItem)
         return;
@@ -196,8 +230,7 @@ void MainWindow::slot_tagsNeedMoving(const QList<QStringList> &tags,
         tagItem->moveTo(parentItem);
 }
 
-void MainWindow::slot_bookmarksNeedTagging(const QList<QUrl> &bookmarks,
-        const QStringList &tag)
+void MainWindow::bookmarksAssignTag(const QList<QUrl> &bookmarks, const QStringList &tag)
 {
     CTagItem *tagItem = mgr->tagMgr()->findByPath(tag);
     if (!tagItem)
@@ -224,24 +257,21 @@ void MainWindow::slot_bookmarksNeedTagging(const QList<QUrl> &bookmarks,
             tagItem->bookmarkAdd(bookmarkItem);
         }
     }
+}
 
+void MainWindow::bookmarksMarkFavorite(const QList<QUrl> &bookmarks)
+{
 
-    //    QList<CBookmarkItem *> bookmarkItems;
-    //    foreach (const QUrl &url, bookmarkUrls)
-    //    {
-    //        CBookmarkItem *bookmarkItem = m_manager->bookmarkMgr()->find(url);
-    //        if (!bookmarkItem)
-    //            continue;
+}
 
-    //        bookmarkItems.push_back(bookmarkItem);
-    //    }
+void MainWindow::bookmarksMarkReadLater(const QList<QUrl> &bookmarks)
+{
 
-    //    if (bookmarkItems.isEmpty())
-    //        return false;
+}
 
-    //    emit bookmarksNeedTagging(bookmarkItems, tagParentItem);
+void MainWindow::bookmarksMarkTrash(const QList<QUrl> &bookmarks)
+{
 
-    //    return true;
 }
 
 //void MainWindow::dragEnterEvent(QDragEnterEvent *event)

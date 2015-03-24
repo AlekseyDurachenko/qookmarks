@@ -16,18 +16,20 @@
 #include <QMimeData>
 #include <QStringList>
 #include <QIcon>
+#include <typeinfo>
 #include "cmanager.h"
 #include "ctagmgr.h"
 #include "ctagitem.h"
 #include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
-#include <QDebug>
+#include "imanageraction.h"
 
 
 CNavigationItemModel::CNavigationItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_manager = 0;
+    m_managerActionInterface = 0;
     initTopLevelItems();
     initTopLevelCounters();
 }
@@ -36,6 +38,7 @@ CNavigationItemModel::CNavigationItemModel(CManager *manager, QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_manager = 0;
+    m_managerActionInterface = 0;
     initTopLevelItems();
     initTopLevelCounters();
     setManager(manager);
@@ -84,6 +87,21 @@ void CNavigationItemModel::setManager(CManager *manager)
 
     recalcTopLevelCounters();
     reset();
+}
+
+void CNavigationItemModel::setManagerActionInterface(
+        IManagerAction *managerActionInterface)
+{
+    QObject *obj = dynamic_cast<QObject *>(m_managerActionInterface);
+    if (obj)
+        disconnect(obj, 0, this, 0);
+
+    obj = dynamic_cast<QObject *>(managerActionInterface);
+    if (obj)
+        connect(obj, SIGNAL(destroyed()),
+                this, SLOT(managerActionInterface_destroyed()));
+
+    m_managerActionInterface = managerActionInterface;
 }
 
 QVariant CNavigationItemModel::data(const QModelIndex &index, int role) const
@@ -178,13 +196,24 @@ bool CNavigationItemModel::dropMimeData(const QMimeData *data,
         else if (data->hasFormat("qookmarks/bookmark-list"))
             return dropMimeBookmarkList(data, parentItem->path());
     }
-    else
+    else if (m_managerActionInterface)
     {
-//        TopLevelItem type = m_topLevelItems[parent.row()];
-//        if (type == Favorites)
-//        {
-//            emit bookmarksFavoriteMarking(
-//        }
+        TopLevelItem type = m_topLevelItems[parent.row()];
+        QList<QUrl> bookmarkList = fromMimeBookmarkList(data);
+        switch (type)
+        {
+        case Favorites:
+            m_managerActionInterface->bookmarksMarkFavorite(bookmarkList);
+            break;
+        case ReadLater:
+            m_managerActionInterface->bookmarksMarkReadLater(bookmarkList);
+            break;
+        case Trash:
+            m_managerActionInterface->bookmarksMarkTrash(bookmarkList);
+            break;
+        default:
+            ;
+        }
     }
 
     return false;
@@ -401,6 +430,11 @@ void CNavigationItemModel::manager_destroyed()
     m_manager = 0;
 }
 
+void CNavigationItemModel::managerActionInterface_destroyed()
+{
+    m_managerActionInterface = 0;
+}
+
 void CNavigationItemModel::initTopLevelItems()
 {
     m_topLevelItems
@@ -511,14 +545,18 @@ void CNavigationItemModel::recalcTopLevelCounters()
 bool CNavigationItemModel::dropMimeTagList(const QMimeData *data,
         const QStringList &parentTag)
 {
-    emit tagsNeedMoving(fromMimeTagList(data), parentTag);
+    if (m_managerActionInterface)
+        m_managerActionInterface->tagsCopyOrMove(fromMimeTagList(data), parentTag);
+
     return true;
 }
 
 bool CNavigationItemModel::dropMimeBookmarkList(const QMimeData *data,
         const QStringList &parentTag)
 {
-    emit bookmarksNeedTagging(fromMimeBookmarkList(data), parentTag);
+    if (m_managerActionInterface)
+        m_managerActionInterface->bookmarksAssignTag(fromMimeBookmarkList(data), parentTag);
+
     return true;
 }
 

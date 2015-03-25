@@ -1,0 +1,131 @@
+// Copyright 2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "ccompositwidget.h"
+#include <QHBoxLayout>
+#include <QSplitter>
+#include "cnavigationview.h"
+#include "cbookmarkview.h"
+#include "cnavigationitemmodel.h"
+#include "cbookmarkfilteritemmodel.h"
+#include "cbookmarkfilterdatamodel.h"
+#include "cbookmarkfilter.h"
+#include "cmanager.h"
+
+
+CCompositWidget::CCompositWidget(QWidget *parent) : QWidget(parent)
+{
+    m_manager = 0;
+
+    m_filter = new CBookmarkFilter(this);
+    m_dataModel = new CBookmarkFilterDataModel(this);
+    m_dataModel->setFilter(m_filter);
+    m_navigationItemModel = new CNavigationItemModel(this);
+    m_bookmarkItemModel = new CBookmarkFilteredItemModel(this);
+    m_bookmarkItemModel->setDataModel(m_dataModel);
+
+    m_navigationView = new CNavigationView(this);
+    m_navigationView->setModel(m_navigationItemModel);
+    connect(m_navigationView->selectionModel(),
+            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(navigation_selection_selectionChanged()));
+    m_bookmarkView = new CBookmarkView(this);
+    m_bookmarkView->setModel(m_bookmarkItemModel);
+
+    QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
+    splitter->addWidget(m_navigationView);
+    splitter->addWidget(m_bookmarkView);
+
+    QHBoxLayout *hbox = new QHBoxLayout;
+    hbox->addWidget(splitter);
+    setLayout(hbox);
+}
+
+CCompositWidget::~CCompositWidget()
+{
+}
+
+void CCompositWidget::setManager(CManager *manager)
+{
+    if (m_manager == manager)
+        return;
+
+    if (m_manager)
+        disconnect(m_manager, 0, this, 0);
+
+    m_manager = manager;
+    if (m_manager)
+    {
+        connect(m_manager, SIGNAL(destroyed()),
+                this, SLOT(manager_destroyed()));
+
+        m_navigationItemModel->setManager(m_manager);
+        m_dataModel->setManager(m_manager);
+        m_filter->setManager(m_manager);
+    }
+}
+
+void CCompositWidget::manager_destroyed()
+{
+    m_manager = 0;
+}
+
+void CCompositWidget::navigation_selection_selectionChanged()
+{
+    foreach (const QModelIndex &index,
+             m_navigationView->selectionModel()->selectedRows())
+    {
+        m_filter->setInclusiveOption(~Bookmark::FilterOptions(Bookmark::Trash));
+        m_filter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
+
+        QSet<CTagItem *> tags;
+        if (index.internalPointer())
+        {
+            tags.insert(static_cast<CTagItem *>(index.internalPointer()));
+        }
+        else
+        {
+            CNavigationItemModel::TopLevelItem type =
+                    static_cast<CNavigationItemModel::TopLevelItem>(
+                        index.data(Qt::UserRole).toInt());
+
+            switch (type)
+            {
+            case CNavigationItemModel::Favorites:
+                m_filter->setInclusiveOption(
+                            Bookmark::FilterOptions(Bookmark::Favorite));
+                break;
+            case CNavigationItemModel::ReadLater:
+                m_filter->setInclusiveOption(
+                            Bookmark::FilterOptions(Bookmark::ReadLater));
+                break;
+            case CNavigationItemModel::Rated:
+                m_filter->setRatingRange(
+                            Bookmark::MinRating+1, Bookmark::MaxRating);
+                break;
+            case CNavigationItemModel::Trash:
+                m_filter->setInclusiveOption(
+                            Bookmark::FilterOptions(Bookmark::Trash));
+                break;
+            default:
+                ;
+            }
+        }
+
+        m_filter->setTags(tags);
+        m_filter->update();
+
+        break; // only first selected item
+    }
+}

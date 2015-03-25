@@ -28,7 +28,17 @@ class INavigationActions;
 class CNavigationItemModel : public QAbstractItemModel
 {
     Q_OBJECT
+    Q_ENUMS(TopLevelItem)
 public:
+    enum TopLevelItem
+    {
+        Favorites       = 0x01,
+        Rated           = 0x02,
+        ReadLater       = 0x03,
+        BookmarkRoot    = 0x04,
+        Trash           = 0x05
+    };
+
     explicit CNavigationItemModel(QObject *parent = 0);
     explicit CNavigationItemModel(CManager *manager, QObject *parent = 0);
     virtual ~CNavigationItemModel();
@@ -69,8 +79,6 @@ private slots:
     void bookmarkMgr_removed();    
     void manager_destroyed();
     void navigationActions_destroyed();
-private:
-    enum TopLevelItem { Favorites, Rated, ReadLater, BookmarkRoot, Trash };
 private:
     void initTopLevelItems();
     void initTopLevelCounters();

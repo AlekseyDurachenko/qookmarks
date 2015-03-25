@@ -21,6 +21,13 @@
 #include <QDebug>
 
 
+CBookmarkFilterDataModel::CBookmarkFilterDataModel(QObject *parent) :
+     QObject(parent)
+{
+    m_manager = 0;
+    m_filter = 0;
+}
+
 CBookmarkFilterDataModel::CBookmarkFilterDataModel(CManager *manager,
         QObject *parent) :  QObject(parent)
 {
@@ -85,7 +92,7 @@ void CBookmarkFilterDataModel::setFilter(CAbstractBookmarkFilter *filter)
 void CBookmarkFilterDataModel::invalidate()
 {
     m_bookmarks.clear();
-    if (m_manager->bookmarkMgr() && m_filter)
+    if (m_manager && m_filter)
         foreach (CBookmarkItem *item, m_manager->bookmarkMgr()->bookmarks())
             if (m_filter->validate(item))
                 m_bookmarks.push_back(item);

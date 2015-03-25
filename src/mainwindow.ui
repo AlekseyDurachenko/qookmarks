@@ -17,46 +17,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QSplitter" name="splitter">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <widget class="QTreeView" name="treeView_tags">
-       <property name="acceptDrops">
-        <bool>true</bool>
-       </property>
-       <property name="dragEnabled">
-        <bool>true</bool>
-       </property>
-       <property name="dragDropMode">
-        <enum>QAbstractItemView::DragDrop</enum>
-       </property>
-       <property name="alternatingRowColors">
-        <bool>true</bool>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::ExtendedSelection</enum>
-       </property>
-       <property name="sortingEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QTreeView" name="treeView_bookmarks">
-       <property name="dragDropMode">
-        <enum>QAbstractItemView::DragDrop</enum>
-       </property>
-       <property name="alternatingRowColors">
-        <bool>true</bool>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::ExtendedSelection</enum>
-       </property>
-      </widget>
-     </widget>
-    </item>
-   </layout>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

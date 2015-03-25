@@ -12,31 +12,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CONSTS
-#define CONSTS
+#include "cnavigationview.h"
 
-#include <QtGlobal>
-
-
-namespace Bookmark {
-    const int MinRating = 0;
-    const int MaxRating = 10;
+CNavigationView::CNavigationView(QWidget *parent) : QTreeView(parent)
+{
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setDragDropMode(QAbstractItemView::DragDrop);
+    viewport()->setAcceptDrops(true);
+    setDropIndicatorShown(true);
 }
 
-namespace Bookmark {
-    enum FilterOption {
-        Any             = 0xFFFF,
-        ReadLater       = 0x0001,
-        NotReadLater    = 0x0100,
-        Favorite        = 0x0002,
-        NotFavorite     = 0x0200,
-        Trash           = 0x0004,
-        NotTrash        = 0x0400
-    };
-    Q_DECLARE_FLAGS(FilterOptions, FilterOption)
+CNavigationView::~CNavigationView()
+{
+
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS(Bookmark::FilterOptions)
-
-
-#endif // CONSTS
 

@@ -20,13 +20,22 @@
 #include "cbookmarkitem.h"
 
 
+CBookmarkFilter::CBookmarkFilter(QObject *parent) :
+    CAbstractBookmarkFilter(parent)
+{
+    m_manager = 0;
+    m_inclusiveFilter = ~Bookmark::FilterOptions(Bookmark::Trash);
+    m_minRating = Bookmark::MinRating;
+    m_maxRating = Bookmark::MaxRating;
+}
+
 CBookmarkFilter::CBookmarkFilter(CManager *manager, QObject *parent) :
     CAbstractBookmarkFilter(parent)
 {
     m_manager = 0;
     m_inclusiveFilter = ~Bookmark::FilterOptions(Bookmark::Trash);
-    m_minRating = Bookmark::MinimumRating;
-    m_maxRating = Bookmark::MaximumRating;
+    m_minRating = Bookmark::MinRating;
+    m_maxRating = Bookmark::MaxRating;
 
     setManager(manager);
 }
@@ -40,13 +49,13 @@ void CBookmarkFilter::setManager(CManager *manager)
     if (m_manager == manager)
         return;
 
-    if (m_manager != 0)
+    if (m_manager)
     {
         disconnect(m_manager->tagMgr(), 0, this, 0);
         disconnect(m_manager->bookmarkMgr(), 0, this, 0);
     }
 
-    m_manager = 0;
+    m_manager = manager;
     if (m_manager)
     {
         connect(m_manager->tagMgr(), SIGNAL(destroyed()),
@@ -71,13 +80,13 @@ void CBookmarkFilter::setInclusiveOption(const Bookmark::FilterOptions &options)
 
 void CBookmarkFilter::setRatingRange(int min, int max)
 {
-    m_maxRating = qMin(min, max);
-    m_minRating = qMax(min, max);
+    m_minRating = qMin(min, max);
+    m_maxRating = qMax(min, max);
 }
 
 bool CBookmarkFilter::validate(const CBookmarkItem *item) const
 {
-    if (m_manager == 0)
+    if (!m_manager)
         return true;
 
 

@@ -25,6 +25,7 @@ class CBookmarkFilterDataModel : public QObject
 {
     Q_OBJECT
 public:
+    explicit CBookmarkFilterDataModel(QObject *parent = 0);
     explicit CBookmarkFilterDataModel(CManager *manager, QObject *parent = 0);
     virtual ~CBookmarkFilterDataModel();
 

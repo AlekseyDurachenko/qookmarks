@@ -481,6 +481,10 @@ QVariant CNavigationItemModel::topLevelData(const QModelIndex &index,
         if (index.column() == 0)
             return topLevelIcon(m_topLevelItems.at(index.row()));
 
+    if (role == Qt::UserRole)
+        if (index.column() == 0)
+            return m_topLevelItems.at(index.row());
+
     return QVariant();
 }
 

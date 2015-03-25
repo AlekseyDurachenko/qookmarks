@@ -27,6 +27,7 @@ class CBookmarkFilter : public CAbstractBookmarkFilter
 {
     Q_OBJECT
 public:
+    CBookmarkFilter(QObject *parent = 0);
     CBookmarkFilter(CManager *manager, QObject *parent = 0);
     virtual ~CBookmarkFilter();
 

@@ -24,19 +24,20 @@
 #include "cmanager.h"
 
 
-CCompositWidget::CCompositWidget(QWidget *parent) : QWidget(parent)
+CCompositWidget::CCompositWidget(CManager *manager, QWidget *parent) :
+    QWidget(parent)
 {
-    m_manager = 0;
+    m_manager = manager;
 
-    m_filter = new CBookmarkFilter(this);
-    m_dataModel = new CBookmarkFilterDataModel(this);
+    m_filter = new CBookmarkFilter(m_manager, this);
+    m_dataModel = new CBookmarkFilterDataModel(m_manager, this);
     m_dataModel->setFilter(m_filter);
-    m_navigationItemModel = new CNavigationItemModel(this);
-    m_bookmarkItemModel = new CBookmarkFilteredItemModel(this);
-    m_bookmarkItemModel->setDataModel(m_dataModel);
+    m_navigationItemModel = new CNavigationItemModel(m_manager, this);
+    m_bookmarkItemModel = new CBookmarkFilteredItemModel(m_dataModel, this);
 
-    m_navigationView = new CNavigationView(this);
+    m_navigationView = new CNavigationView(m_manager, this);
     m_navigationView->setModel(m_navigationItemModel);
+    m_navigationItemModel->setNavigationActions(m_navigationView);
     connect(m_navigationView->selectionModel(),
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(navigation_selection_selectionChanged()));
@@ -54,31 +55,6 @@ CCompositWidget::CCompositWidget(QWidget *parent) : QWidget(parent)
 
 CCompositWidget::~CCompositWidget()
 {
-}
-
-void CCompositWidget::setManager(CManager *manager)
-{
-    if (m_manager == manager)
-        return;
-
-    if (m_manager)
-        disconnect(m_manager, 0, this, 0);
-
-    m_manager = manager;
-    if (m_manager)
-    {
-        connect(m_manager, SIGNAL(destroyed()),
-                this, SLOT(manager_destroyed()));
-
-        m_navigationItemModel->setManager(m_manager);
-        m_dataModel->setManager(m_manager);
-        m_filter->setManager(m_manager);
-    }
-}
-
-void CCompositWidget::manager_destroyed()
-{
-    m_manager = 0;
 }
 
 void CCompositWidget::navigation_selection_selectionChanged()

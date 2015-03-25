@@ -29,13 +29,9 @@ class CCompositWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CCompositWidget(QWidget *parent = 0);
+    explicit CCompositWidget(CManager *manager, QWidget *parent = 0);
     virtual ~CCompositWidget();
-
-    inline CManager *manager() const;
-    void setManager(CManager *manager);
 private slots:
-    void manager_destroyed();
     void navigation_selection_selectionChanged();
 private:
     CNavigationView *m_navigationView;
@@ -46,11 +42,6 @@ private:
     CBookmarkFilter *m_filter;
     CManager *m_manager;
 };
-
-CManager *CCompositWidget::manager() const
-{
-    return m_manager;
-}
 
 
 #endif // CCOMPOSITWIDGET_H

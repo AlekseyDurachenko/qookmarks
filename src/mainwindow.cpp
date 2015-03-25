@@ -136,8 +136,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->treeView_tags->setModel(navItemModel);
 
 
-    m_compositeWidget = new CCompositWidget(this);
-    m_compositeWidget->setManager(mgr);
+    m_compositeWidget = new CCompositWidget(mgr, this);
     setCentralWidget(m_compositeWidget);
 }
 

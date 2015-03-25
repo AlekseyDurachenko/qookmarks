@@ -198,8 +198,20 @@ bool CNavigationItemModel::dropMimeData(const QMimeData *data,
     }
     else if (m_navigationActions)
     {
+        QList<QUrl> bookmarkList;
+        if (data->hasFormat("qookmarks/bookmark-list"))
+        {
+            bookmarkList = fromMimeBookmarkList(data);
+        }
+        else if (data->hasFormat("qookmarks/tag-list"))
+        {
+            foreach (const QStringList &path, fromMimeTagList(data))
+                foreach (CBookmarkItem *bookmarkItem,
+                         m_manager->tagMgr()->findByPath(path)->bookmarks())
+                    bookmarkList.push_back(bookmarkItem->data().url());
+        }
+
         TopLevelItem type = m_topLevelItems[parent.row()];
-        QList<QUrl> bookmarkList = fromMimeBookmarkList(data);
         switch (type)
         {
         case Favorites:

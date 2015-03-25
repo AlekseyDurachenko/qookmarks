@@ -16,13 +16,27 @@
 #define CNAVIGATIONVIEW_H
 
 #include <QTreeView>
+#include "inavigationactions.h"
+class CManager;
 
-class CNavigationView : public QTreeView
+
+class CNavigationView : public QTreeView, public INavigationActions
 {
     Q_OBJECT
 public:
-    CNavigationView(QWidget *parent = 0);
+    CNavigationView(CManager *manager, QWidget *parent = 0);
     virtual ~CNavigationView();
+protected:
+    virtual void tagsCopyOrMove(const QList<QStringList> &tags,
+                                const QStringList &parentTag);
+    virtual void bookmarksAssignTag(const QList<QUrl> &bookmarks,
+                                    const QStringList& tag);
+    virtual void bookmarksMarkFavorite(const QList<QUrl> &bookmarks);
+    virtual void bookmarksMarkReadLater(const QList<QUrl> &bookmarks);
+    virtual void bookmarksMarkTrash(const QList<QUrl> &bookmarks);
+private:
+    CManager *m_manager;
 };
+
 
 #endif // CNAVIGATIONVIEW_H

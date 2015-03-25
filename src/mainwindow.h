@@ -5,7 +5,7 @@
 #include <QDragEnterEvent>
 #include "ctagitem.h"
 #include "cbookmarkitem.h"
-#include "imanageraction.h"
+#include "inavigationactions.h"
 class CBookmarkFilterDataModel;
 class CBookmarkFilter;
 class CManager;
@@ -14,14 +14,13 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow, public IManagerAction
+class MainWindow : public QMainWindow, public INavigationActions
 {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
+    virtual ~MainWindow();
 private slots:
     void on_action_Quit_triggered();
     void on_action_Save_triggered();
@@ -39,7 +38,6 @@ protected:
     virtual void bookmarksMarkFavorite(const QList<QUrl> &bookmarks);
     virtual void bookmarksMarkReadLater(const QList<QUrl> &bookmarks);
     virtual void bookmarksMarkTrash(const QList<QUrl> &bookmarks);
-
 private:
     Ui::MainWindow *ui;
     CBookmarkFilterDataModel *dataModel;

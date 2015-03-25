@@ -16,7 +16,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 
-class testInterface : public IManagerAction
+class testInterface : public INavigationActions
 {
 public:
     virtual void tagsCopyOrMove(const QList<QStringList> &tags,
@@ -130,7 +130,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mgr->bookmarkMgr()->at(0)->setData(data);
 
     CNavigationItemModel *navItemModel = new CNavigationItemModel(mgr, this);
-    navItemModel->setManagerActionInterface(this);
+    navItemModel->setNavigationActions(this);
     ui->treeView_tags->setModel(navItemModel);
 }
 

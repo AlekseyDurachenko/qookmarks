@@ -26,7 +26,7 @@ HEADERS        +=                                                       \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
     $$PWD/src/mainwindow.h \
-    $$PWD/src/imanageraction.h
+    $$PWD/src/widget/navigationview/inavigationactions.h
 
 
 SOURCES        +=                                                       \

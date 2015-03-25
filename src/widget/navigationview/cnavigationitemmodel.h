@@ -22,7 +22,7 @@
 class CManager;
 class CTagItem;
 class CBookmarkItem;
-class IManagerAction;
+class INavigationActions;
 
 
 class CNavigationItemModel : public QAbstractItemModel
@@ -36,8 +36,8 @@ public:
     inline CManager *manager() const;
     void setManager(CManager *manager);
 
-    inline IManagerAction *managerActionInterface() const;
-    void setManagerActionInterface(IManagerAction *managerActionInterface);
+    inline INavigationActions *navigationActions() const;
+    void setNavigationActions(INavigationActions *navigationActions);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -66,9 +66,9 @@ private slots:
     void bookmarkMgr_dataChanged(CBookmarkItem *item, const CBookmark& oldData,
                                  const CBookmark &newData);
     void bookmarkMgr_inserted();
-    void bookmarkMgr_removed();
+    void bookmarkMgr_removed();    
     void manager_destroyed();
-    void managerActionInterface_destroyed();
+    void navigationActions_destroyed();
 private:
     enum TopLevelItem { Favorites, Rated, ReadLater, BookmarkRoot, Trash };
 private:
@@ -89,7 +89,7 @@ private:
     QList<QUrl> fromMimeBookmarkList(const QMimeData *data);
 private:
     CManager *m_manager;
-    IManagerAction *m_managerActionInterface;
+    INavigationActions *m_navigationActions;
     QVector<TopLevelItem> m_topLevelItems;
     QHash<TopLevelItem, int> m_topLevelCounters;
 };
@@ -99,9 +99,9 @@ CManager *CNavigationItemModel::manager() const
     return m_manager;
 }
 
-IManagerAction *CNavigationItemModel::managerActionInterface() const
+INavigationActions *CNavigationItemModel::navigationActions() const
 {
-    return m_managerActionInterface;
+    return m_navigationActions;
 }
 
 

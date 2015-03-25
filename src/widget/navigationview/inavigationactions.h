@@ -12,15 +12,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef IMANAGERACTION_H
-#define IMANAGERACTION_H
+#ifndef INAVIGATIONACTIONS_H
+#define INAVIGATIONACTIONS_H
 
 #include <QUrl>
 #include <QList>
 #include <QStringList>
 
 
-class IManagerAction
+class INavigationActions
 {
 public:
     virtual void tagsCopyOrMove(const QList<QStringList> &tags,
@@ -33,4 +33,4 @@ public:
 };
 
 
-#endif // IMANAGERACTION_H
+#endif // INAVIGATIONACTIONS_H

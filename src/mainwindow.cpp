@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QDir>
+#include <QtGui>
 #include "cmanager.h"
 #include "ctagmgr.h"
 #include "ctagitem.h"
@@ -104,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //CTagItemModel *model = new CTagItemModel(bookmarkMgr->tagRootItem(), this);
     //ui->tag_treeView->setModel(model);
 
-    mgr = new CManager(this);
+//    mgr = new CManager(this);
 //    dataModel = new CBookmarkFilterDataModel(mgr, this);
 //    filter = new CBookmarkFilter(mgr, this);
 //    dataModel->setFilter(filter);
@@ -112,7 +113,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->treeView_bookmarks->setModel(model);
 
 
-    bookmarkImportChromium(mgr, QDir::homePath() + "/.config/chromium/Default/Bookmarks");
+    //bookmarkImportChromium(mgr, QDir::homePath() + "/.config/chromium/Default/Bookmarks");
 
 //    CBookmark data1 = mgr->bookmarkMgr()->at(1)->data();
 //    data1.setTrash(true);
@@ -135,9 +136,11 @@ MainWindow::MainWindow(QWidget *parent) :
 //    navItemModel->setNavigationActions(this);
 //    ui->treeView_tags->setModel(navItemModel);
 
+    m_project = new CPrj(this);
 
-    m_compositeWidget = new CCompositWidget(mgr, this);
+    m_compositeWidget = new CCompositWidget(m_project->manager(), this);
     setCentralWidget(m_compositeWidget);
+
 }
 
 MainWindow::~MainWindow()
@@ -284,3 +287,17 @@ MainWindow::~MainWindow()
 ////{
 ////    qDebug() << "ok" << event->format();
 ////}
+
+void MainWindow::on_action_create_triggered()
+{
+    QString dirName = QFileDialog::getExistingDirectory(this,
+            tr("Open bookmarks"), "",
+            QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
+
+    if (dirName.isEmpty())
+        return;
+
+    QString reason;
+    if (!m_project->create(dirName, &reason))
+        QMessageBox::warning(this, tr("Warning"), reason);
+}

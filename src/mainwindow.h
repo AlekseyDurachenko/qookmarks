@@ -7,6 +7,7 @@
 #include "cbookmarkitem.h"
 #include "inavigationactions.h"
 #include "ccompositwidget.h"
+#include "project/cprj.h"
 class CBookmarkFilterDataModel;
 class CBookmarkFilter;
 class CManager;
@@ -30,6 +31,8 @@ private slots:
 //                             const QStringList &parentTag);
 //    void slot_bookmarksNeedTagging(const QList<QUrl> &bookmarks,
 //                                   const QStringList& tag);
+    void on_action_create_triggered();
+
 protected:
 //    virtual void dragEnterEvent(QDragEnterEvent *event);
 //    virtual void tagsCopyOrMove(const QList<QStringList> &tags,
@@ -44,7 +47,8 @@ private:
 //    CBookmarkFilterDataModel *dataModel;
 //    CBookmarkFilter *filter;
     CCompositWidget *m_compositeWidget;
-    CManager *mgr;
+    //CManager *mgr;
+    CPrj *m_project;
 };
 
 #endif // MAINWINDOW_H

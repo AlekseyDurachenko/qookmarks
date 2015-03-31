@@ -30,7 +30,9 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/navigationview/inavigationactions.h \
     $$PWD/src/widget/compositwidget/ccompositwidget.h \
     $$PWD/src/widget/navigationview/cnavigationview.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkview.h
+    $$PWD/src/widget/bookmarkview/cbookmarkview.h \
+    $$PWD/src/project/cprj.h \
+    $$PWD/src/project/cprjxml.h
 
 
 SOURCES        +=                                                       \
@@ -53,7 +55,9 @@ SOURCES        +=                                                       \
     $$PWD/src/mainwindow.cpp                                            \
     $$PWD/src/widget/compositwidget/ccompositwidget.cpp \
     $$PWD/src/widget/navigationview/cnavigationview.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkview.cpp
+    $$PWD/src/widget/bookmarkview/cbookmarkview.cpp \
+    $$PWD/src/project/cprj.cpp \
+    $$PWD/src/project/cprjxml.cpp
 
 
 FORMS          +=                                                       \

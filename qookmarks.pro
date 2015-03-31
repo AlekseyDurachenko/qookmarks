@@ -18,7 +18,7 @@ TEMPLATE        = app
 TARGET          = qookmarks
 
 CONFIG         += console debug_and_release
-QT             += core gui network webkit
+QT             += core gui network webkit xml
 
 
 # release build options

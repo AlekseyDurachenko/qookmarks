@@ -14,7 +14,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnavigationview.h"
 #include <QMessageBox>
+#include <QPushButton>
 #include "cmanager.h"
+#include "ctagitem.h"
+#include "ctagmgr.h"
 #include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
 #include <QDebug>
@@ -36,14 +39,55 @@ CNavigationView::~CNavigationView()
 
 }
 
-void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags, const QStringList &parentTag)
+void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags,
+        const QStringList &parentTag)
 {
+    CTagItem *parentItem = m_manager->tagMgr()->findByPath(parentTag);
+    if (!parentItem)
+        return;
 
+    foreach (const QStringList &tag, tags)
+    {
+        CTagItem *item = m_manager->tagMgr()->findByPath(tag);
+        if (!item || item == parentItem || item->aboveOf(parentItem))
+            continue;
+
+        item->moveTo(parentItem);
+    }
 }
 
-void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks, const QStringList &tag)
+void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
+        const QStringList &tag)
 {
+    CTagItem *parentItem = m_manager->tagMgr()->findByPath(tag);
+    if (!parentItem)
+        return;
 
+    QMessageBox msgBox(QMessageBox::Question, "Action", "What do you want?");
+    QPushButton *moveButton = msgBox.addButton("Move", QMessageBox::ActionRole);
+    QPushButton *copyButton = msgBox.addButton("Copy", QMessageBox::ActionRole);
+    msgBox.addButton(QMessageBox::Cancel);
+
+    if (msgBox.exec() == QMessageBox::Cancel)
+        return;
+
+    foreach (const QUrl &url, bookmarks)
+    {
+        CBookmarkItem *bookmarkItem = m_manager->bookmarkMgr()->find(url);
+        if (!bookmarkItem)
+            continue;
+
+        if (msgBox.clickedButton() == moveButton)
+        {
+            foreach (CTagItem *item, bookmarkItem->tags())
+                if (parentItem != item)
+                    item->bookmarkRemove(bookmarkItem);
+        }
+        else if (msgBox.clickedButton() == copyButton)
+        {
+            parentItem->bookmarkAdd(bookmarkItem);
+        }
+    }
 }
 
 void CNavigationView::bookmarksMarkFavorite(const QList<QUrl> &bookmarks)

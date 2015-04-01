@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cprjxml.h"
 #include <QIODevice>
+#include <QStack>
 #include "cmanager.h"
 #include "ctagmgr.h"
 #include "ctagitem.h"
@@ -45,6 +46,27 @@ static QString dateTimeToString(const QDateTime &dt)
     return dt.toString(dtFormat);
 }
 
+static QColor colorFromString(const QString &str)
+{
+    if (str.isEmpty())
+        return QColor();
+
+    return QColor(str);
+}
+
+static QString colorToString(const QColor &color)
+{
+    if (color.isValid())
+        return color.name();
+    else
+        return "";
+}
+
+bool CPrjXml::saveEmptyXml(QIODevice *output, QString *reason)
+{
+    return saveXml(0, output, reason);
+}
+
 bool CPrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
 {
     try
@@ -52,8 +74,11 @@ bool CPrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
         QDomDocument doc(nsDocType);
         QDomElement prjElem = doc.createElement(nsPrj);
 
-        prjElem.appendChild(createTagItemElem(doc, manager->tagMgr()->rootItem()));
-        prjElem.appendChild(createBookmarkMgrElem(doc, manager->bookmarkMgr()));
+        if (manager)
+        {
+            prjElem.appendChild(createTagItemElem(doc, manager->tagMgr()->rootItem()));
+            prjElem.appendChild(createBookmarkMgrElem(doc, manager->bookmarkMgr()));
+        }
         doc.appendChild(prjElem);
 
         QByteArray xmlData = doc.toByteArray();
@@ -72,6 +97,25 @@ bool CPrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
 
 bool CPrjXml::loadXml(CManager *manager, QIODevice *input, QString *reason)
 {
+    try
+    {
+        QDomDocument doc(nsDocType);
+        if (!doc.setContent(input, reason))
+           return false;
+
+        if (doc.documentElement().nodeName() != nsPrj)
+            return false;
+
+        parsePrjNode(manager, doc.documentElement().firstChild());
+
+        return true;
+    }
+    catch (const QString &error)
+    {
+        if (reason) *reason = error;
+    }
+
+    return false;
 }
 
 QDomElement CPrjXml::createBookmarkMgrElem(QDomDocument doc, CBookmarkMgr *mgr)
@@ -93,10 +137,14 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
     elem.setAttribute("note",   item->data().note());
     elem.setAttribute("readLater",  item->data().isReadLater());
     elem.setAttribute("favorite",   item->data().isFavorite());
+    if (item->data().isFavorite() == true)
+        qDebug() << "ok" << item->data().isFavorite();
     elem.setAttribute("trash",      item->data().isTrash());
     elem.setAttribute("rating",     item->data().rating());
-    elem.setAttribute("textColor",  item->data().textColor().name());
-    elem.setAttribute("backgroundColor", item->data().backgroundColor().name());
+    elem.setAttribute("textColor",
+                      colorToString(item->data().textColor()));
+    elem.setAttribute("backgroundColor",
+                      colorToString(item->data().backgroundColor()));
     elem.setAttribute("createdDateTime",
                       dateTimeToString(item->data().createdDateTime()));
     elem.setAttribute("editedDateTime",
@@ -112,7 +160,7 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
     foreach (const QString &keyword, item->data().keywords())
     {
         QDomElement keywordElem = doc.createElement(nsBookmarkKeyword);
-        keywordElem.setAttribute("name", keyword);
+        keywordElem.setAttribute("value", keyword);
         elem.appendChild(keywordElem);
     }
 
@@ -128,7 +176,7 @@ QDomElement CPrjXml::createBookmarkTagElem(QDomDocument doc, CTagItem *item)
     foreach (const QString &path, item->path())
     {
         QDomElement pathElem = doc.createElement(nsBookmarkTagPath);
-        pathElem.setAttribute("name", path);
+        pathElem.setAttribute("value", path);
         elem.appendChild(pathElem);
     }
 
@@ -144,4 +192,127 @@ QDomElement CPrjXml::createTagItemElem(QDomDocument doc, CTagItem *item)
         elem.appendChild(createTagItemElem(doc, item->at(i)));
 
     return elem;
+}
+
+void CPrjXml::parsePrjNode(CManager *manager, QDomNode node)
+{
+    while (!node.isNull())
+    {
+        if (node.nodeName() == nsTagItem)
+        {
+            parseTagNode(manager->tagMgr()->rootItem(), node.firstChild());
+        }
+        else if (node.nodeName() == nsBookmarkMgr)
+        {
+            QDomNode bookmarkNode = node.firstChild();
+            while(!bookmarkNode.isNull())
+            {
+                if (bookmarkNode.nodeName() == nsBookmarkItem)
+                    parseBookmarkNode(manager, bookmarkNode);
+
+                bookmarkNode = bookmarkNode.nextSibling();
+            }
+        }
+
+        node = node.nextSibling();
+    }
+}
+
+void CPrjXml::parseTagNode(CTagItem *parentTag, QDomNode node)
+{
+    while (!node.isNull())
+    {
+        if (node.nodeName() == nsTagItem)
+        {
+            CTagItem *tag = parentTag->add(createTagData(node.toElement()));
+            parseTagNode(tag, node.firstChild());
+        }
+        node = node.nextSibling();
+    }
+}
+
+void CPrjXml::parseBookmarkNode(CManager *manager, QDomNode node)
+{
+    QDomElement elem = node.toElement();
+    CBookmark bookmarkData = createBookmarkData(elem);
+    bookmarkData.setKeywords(createBookmarkKeyworkds(node.firstChild()));
+    CBookmarkItem *bookmarkItem = manager->bookmarkMgr()->add(bookmarkData);
+
+    node = node.firstChild();
+    while (!node.isNull())
+    {
+        if (node.nodeName() == nsBookmarkTag)
+        {
+            QStringList tagPath = createBookmarkTagPath(node.firstChild());
+            CTagItem *tagItem = manager->tagMgr()->findByPath(tagPath);
+            if (tagItem)
+                tagItem->bookmarkAdd(bookmarkItem);
+        }
+        node = node.nextSibling();
+    }
+}
+
+CTag CPrjXml::createTagData(QDomElement elem)
+{
+    CTag tag;
+    tag.setName(elem.attribute("name", "unknow"));
+    return tag;
+}
+
+CBookmark CPrjXml::createBookmarkData(QDomElement elem)
+{
+    CBookmark bookmark;
+    bookmark.setTitle(elem.attribute("title", "untitled"));
+    bookmark.setUrl(elem.attribute("url", ""));
+    bookmark.setDescription(elem.attribute("desc", ""));
+    bookmark.setNote(elem.attribute("note", ""));
+    bookmark.setReadLater(elem.attribute("readLater", "0").toInt());
+    bookmark.setFavorite(elem.attribute("favorite", "0").toInt());
+    bookmark.setTrash(elem.attribute("trash", "0").toInt());
+    bookmark.setRating(elem.attribute("rating", "0").toInt());
+    bookmark.setTextColor(
+                colorFromString(elem.attribute("textColor", "")));
+    bookmark.setBackgroundColor(
+                colorFromString(elem.attribute("backgroundColor", "")));
+    bookmark.setCreatedDateTime(
+                dateTimeFromString(elem.attribute("createdDateTime", "")));
+    bookmark.setEditedDateTime(
+                dateTimeFromString(elem.attribute("editedDateTime", "")));
+    bookmark.setLastVisitedDateTime(
+                dateTimeFromString(elem.attribute("lastVisitedDateTime", "")));
+    bookmark.setVisitCount(elem.attribute("visitCount", "0").toInt());
+    bookmark.setHttpResponseCode(
+                elem.attribute("httpResponseCode", "0").toInt());
+    bookmark.setHttpResponseText(elem.attribute("httpResponseText", "0"));
+    bookmark.setLastCheckDateTime(
+                dateTimeFromString(elem.attribute("lastCheckDateTime", "")));
+    return bookmark;
+}
+
+QSet<QString> CPrjXml::createBookmarkKeyworkds(QDomNode node)
+{
+    QSet<QString> keyworkds;
+    while (!node.isNull())
+    {
+        if (node.nodeName() == nsBookmarkKeyword)
+            keyworkds.insert(node.toElement().attribute("value"));
+
+        node = node.nextSibling();
+    }
+
+    return keyworkds;
+}
+
+QStringList CPrjXml::createBookmarkTagPath(QDomNode node)
+{
+    QStringList path;
+    while (!node.isNull())
+    {
+        if (node.nodeName() == nsBookmarkTagPath)
+            path.push_back(node.toElement().attribute("value"));
+
+        node = node.nextSibling();
+    }
+
+    return path;
 }

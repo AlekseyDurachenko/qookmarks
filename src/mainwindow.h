@@ -32,6 +32,9 @@ private slots:
 //    void slot_bookmarksNeedTagging(const QList<QUrl> &bookmarks,
 //                                   const QStringList& tag);
     void on_action_create_triggered();
+    void on_action_open_triggered();
+    void on_action_save_triggered();
+    void on_action_close_triggered();
 
 protected:
 //    virtual void dragEnterEvent(QDragEnterEvent *event);

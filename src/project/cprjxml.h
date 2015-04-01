@@ -17,6 +17,8 @@
 
 #include <QDomDocument>
 #include <QDomElement>
+#include "ctag.h"
+#include "cbookmark.h"
 class QString;
 class QIODevice;
 class CManager;
@@ -28,6 +30,7 @@ class CTagItem;
 class CPrjXml
 {
 public:
+    static bool saveEmptyXml(QIODevice *output, QString *reason = 0);
     static bool saveXml(CManager *manager, QIODevice *output, QString *reason = 0);
     static bool loadXml(CManager *manager, QIODevice *input, QString *reason = 0);
 private:
@@ -35,6 +38,13 @@ private:
     static QDomElement createBookmarkItemElem(QDomDocument doc, CBookmarkItem *item);
     static QDomElement createBookmarkTagElem(QDomDocument doc, CTagItem *item);
     static QDomElement createTagItemElem(QDomDocument doc, CTagItem *mgr);
+    static void parsePrjNode(CManager *manager, QDomNode node);
+    static void parseTagNode(CTagItem *parentTag, QDomNode node);
+    static void parseBookmarkNode(CManager *manager, QDomNode node);
+    static CTag createTagData(QDomElement elem);
+    static CBookmark createBookmarkData(QDomElement elem);
+    static QSet<QString> createBookmarkKeyworkds(QDomNode node);
+    static QStringList createBookmarkTagPath(QDomNode node);
 };
 
 

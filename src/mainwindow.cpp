@@ -45,8 +45,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
-
 //    QSet<QString> set;
 //    set << "January" << "February" << "December";
 
@@ -291,7 +289,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_action_create_triggered()
 {
     QString dirName = QFileDialog::getExistingDirectory(this,
-            tr("Open bookmarks"), "",
+            tr("Create bookmarks"), "",
             QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
 
     if (dirName.isEmpty())
@@ -300,4 +298,30 @@ void MainWindow::on_action_create_triggered()
     QString reason;
     if (!m_project->create(dirName, &reason))
         QMessageBox::warning(this, tr("Warning"), reason);
+}
+
+void MainWindow::on_action_open_triggered()
+{
+    QString dirName = QFileDialog::getExistingDirectory(this,
+            tr("Open bookmarks"), "",
+            QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
+
+    if (dirName.isEmpty())
+        return;
+
+    QString reason;
+    if (!m_project->open(dirName, &reason))
+        QMessageBox::warning(this, tr("Warning"), reason);
+}
+
+void MainWindow::on_action_save_triggered()
+{
+    QString reason;
+    qDebug() << m_project->save(&reason);
+    qDebug() << reason;
+}
+
+void MainWindow::on_action_close_triggered()
+{
+    m_project->close();
 }

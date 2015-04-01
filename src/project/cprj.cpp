@@ -26,8 +26,8 @@
 CPrj::CPrj(QObject *parent) : QObject(parent)
 {
     m_manager = new CManager(this);
-    bookmarkImportChromium(m_manager, QDir::homePath() + "/.config/chromium/Default/Bookmarks");
-    m_path.clear();
+    //bookmarkImportChromium(m_manager, QDir::homePath() + "/.config/chromium/Default/Bookmarks");
+    //m_path.clear();
 }
 
 CPrj::~CPrj()
@@ -56,22 +56,8 @@ bool CPrj::create(const QString &path, QString *reason)
         if (!file.open(QIODevice::WriteOnly))
             throw file.errorString();
 
-        // default xml data
-        QByteArray xmlData =
-                "<!DOCTYPE QOOKMARKS-1.0>"
-                "<PROJECT>"
-                    "<TAG/>"
-                    "<BOOKMARKS/>"
-                "</PROJECT>";
-
-        //if (file.write(xmlData) != xmlData.size())
-        //    throw file.errorString();
-        CPrjXml::saveXml(m_manager, &file, reason);
-
-        //close();
-        m_path = absPath;
-
-        return true;
+        // write empty xml document
+        return CPrjXml::saveEmptyXml(&file, reason);
     }
     catch (const QString &error)
     {
@@ -83,7 +69,27 @@ bool CPrj::create(const QString &path, QString *reason)
 
 bool CPrj::open(const QString &path, QString *reason)
 {
+    try
+    {
+        if (isOpen())
+            throw tr("bookmarks is already opened");
 
+        QFile file(xmlPath(path));
+        if (!file.open(QIODevice::ReadOnly))
+            throw file.errorString();
+
+        if (!CPrjXml::loadXml(m_manager, &file, reason))
+            return false;
+
+        m_path = path;
+        return true;
+    }
+    catch (const QString &error)
+    {
+        if (reason) *reason = error;
+    }
+
+    return false;
 }
 
 bool CPrj::save(QString *reason)

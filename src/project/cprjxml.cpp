@@ -20,7 +20,7 @@
 #include "ctagitem.h"
 #include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
-#include <QDebug>
+
 
 const char *dtFormat = "yyyy-MM-dd,HH:mm:ss.zzz";
 
@@ -137,8 +137,6 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
     elem.setAttribute("note",   item->data().note());
     elem.setAttribute("readLater",  item->data().isReadLater());
     elem.setAttribute("favorite",   item->data().isFavorite());
-    if (item->data().isFavorite() == true)
-        qDebug() << "ok" << item->data().isFavorite();
     elem.setAttribute("trash",      item->data().isTrash());
     elem.setAttribute("rating",     item->data().rating());
     elem.setAttribute("textColor",

@@ -22,6 +22,7 @@
 #include "cbookmarkfilterdatamodel.h"
 #include "cbookmarkfilter.h"
 #include "cmanager.h"
+#include "ctagmgr.h"
 
 
 CCompositWidget::CCompositWidget(CManager *manager, QWidget *parent) :
@@ -66,7 +67,8 @@ void CCompositWidget::navigation_selection_selectionChanged()
         m_filter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
 
         QSet<CTagItem *> tags;
-        if (index.internalPointer())
+        if (index.internalPointer()
+                && index.internalPointer() != m_manager->tagMgr()->rootItem())
         {
             tags.insert(static_cast<CTagItem *>(index.internalPointer()));
         }

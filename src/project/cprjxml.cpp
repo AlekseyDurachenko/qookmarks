@@ -21,14 +21,29 @@
 #include "cbookmarkitem.h"
 #include <QDebug>
 
+const char *dtFormat = "yyyy-MM-dd,HH:mm:ss.zzz";
+
 const char *nsDocType   = "QOOKMAKRS-1.0";
 const char *nsPrj       = "PROJECT";
 const char *nsTagItem       = "TAG";
 const char *nsBookmarkMgr   = "BOOKMARKS";
 const char *nsBookmarkItem      = "BOOKMARK";
+const char *nsBookmarkKeyword   = "KEYWORD";
 const char *nsBookmarkTag       = "TAG";
 const char *nsBookmarkTagPath       = "PATH";
 
+
+static QDateTime dateTimeFromString(const QString &str)
+{
+    QDateTime dateTime = QDateTime::fromString(str, dtFormat);
+    dateTime.setTimeSpec(Qt::UTC);
+    return dateTime;
+}
+
+static QString dateTimeToString(const QDateTime &dt)
+{
+    return dt.toString(dtFormat);
+}
 
 bool CPrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
 {
@@ -72,7 +87,34 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
         CBookmarkItem *item)
 {
     QDomElement elem = doc.createElement(nsBookmarkItem);
-    elem.setAttribute("title", item->data().title());
+    elem.setAttribute("title",  item->data().title());
+    elem.setAttribute("url",    item->data().url().toString());
+    elem.setAttribute("desc",   item->data().description());
+    elem.setAttribute("note",   item->data().note());
+    elem.setAttribute("readLater",  item->data().isReadLater());
+    elem.setAttribute("favorite",   item->data().isFavorite());
+    elem.setAttribute("trash",      item->data().isTrash());
+    elem.setAttribute("rating",     item->data().rating());
+    elem.setAttribute("textColor",  item->data().textColor().name());
+    elem.setAttribute("backgroundColor", item->data().backgroundColor().name());
+    elem.setAttribute("createdDateTime",
+                      dateTimeToString(item->data().createdDateTime()));
+    elem.setAttribute("editedDateTime",
+                      dateTimeToString(item->data().editedDateTime()));
+    elem.setAttribute("lastVisitedDateTime",
+                      dateTimeToString(item->data().lastVisitedDateTime()));
+    elem.setAttribute("visitCount", item->data().visitCount());
+    elem.setAttribute("httpResponseCode",   item->data().httpResponseCode());
+    elem.setAttribute("httpResponseText",   item->data().httpResponseText());
+    elem.setAttribute("lastCheckDateTime",
+                      dateTimeToString(item->data().lastCheckDateTime()));
+
+    foreach (const QString &keyword, item->data().keywords())
+    {
+        QDomElement keywordElem = doc.createElement(nsBookmarkKeyword);
+        keywordElem.setAttribute("name", keyword);
+        elem.appendChild(keywordElem);
+    }
 
     foreach (CTagItem *tagItem, item->tags())
         elem.appendChild(createBookmarkTagElem(doc, tagItem));
@@ -83,11 +125,11 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
 QDomElement CPrjXml::createBookmarkTagElem(QDomDocument doc, CTagItem *item)
 {
     QDomElement elem = doc.createElement(nsBookmarkTag);
-    foreach (const QString &p, item->path())
+    foreach (const QString &path, item->path())
     {
-        QDomElement tmp = doc.createElement(nsBookmarkTagPath);
-        tmp.setAttribute("value", p);
-        elem.appendChild(tmp);
+        QDomElement pathElem = doc.createElement(nsBookmarkTagPath);
+        pathElem.setAttribute("name", path);
+        elem.appendChild(pathElem);
     }
 
     return elem;

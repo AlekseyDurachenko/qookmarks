@@ -79,6 +79,8 @@ void CNavigationItemModel::setManager(CManager *manager)
                 this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*,CBookmark, CBookmark)));
         connect(m_manager->bookmarkMgr(), SIGNAL(inserted(int,int)),
                 this, SLOT(bookmarkMgr_inserted(int,int)));
+        connect(m_manager->bookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
+                this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
         connect(m_manager->bookmarkMgr(), SIGNAL(removed(int,int)),
                 this, SLOT(bookmarkMgr_removed()));
         connect(m_manager->tagMgr(), SIGNAL(destroyed()),
@@ -447,6 +449,27 @@ void CNavigationItemModel::bookmarkMgr_inserted(int first, int last)
         }
     }
     updateBookmarkRootItem();
+}
+
+void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
+{
+    for (int i = first; i <= last; ++i)
+    {
+        CBookmark data = m_manager->bookmarkMgr()->at(i)->data();
+        if (data.isTrash())
+        {
+            m_topLevelCounters[Trash] -= 1;
+        }
+        else
+        {
+            if (data.isFavorite())
+                m_topLevelCounters[Favorites] -= 1;
+            if (data.rating())
+                m_topLevelCounters[Rated] -= 1;
+            if (data.isReadLater())
+                m_topLevelCounters[ReadLater] -= 1;
+        }
+    }
 }
 
 void CNavigationItemModel::bookmarkMgr_removed()

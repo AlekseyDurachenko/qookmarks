@@ -76,6 +76,7 @@ private slots:
     void bookmarkMgr_dataChanged(CBookmarkItem *item, const CBookmark& oldData,
                                  const CBookmark &newData);
     void bookmarkMgr_inserted(int first, int last);
+    void bookmarkMgr_aboutToBeRemoved(int first, int last);
     void bookmarkMgr_removed();
     void manager_destroyed();
     void navigationActions_destroyed();

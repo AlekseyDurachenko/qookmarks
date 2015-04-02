@@ -81,12 +81,12 @@ void CCompositWidget::navigation_selection_selectionChanged()
             switch (type)
             {
             case CNavigationItemModel::Favorites:
-                m_filter->setInclusiveOption(
-                            Bookmark::FilterOptions(Bookmark::Favorite));
+                m_filter->setInclusiveOption(Bookmark::FilterOptions(
+                            Bookmark::Favorite|Bookmark::NotTrash));
                 break;
             case CNavigationItemModel::ReadLater:
-                m_filter->setInclusiveOption(
-                            Bookmark::FilterOptions(Bookmark::ReadLater));
+                m_filter->setInclusiveOption(Bookmark::FilterOptions(
+                            Bookmark::ReadLater|Bookmark::NotTrash));
                 break;
             case CNavigationItemModel::Rated:
                 m_filter->setRatingRange(

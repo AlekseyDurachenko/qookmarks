@@ -36,7 +36,8 @@ public:
         Rated           = 0x02,
         ReadLater       = 0x03,
         BookmarkRoot    = 0x04,
-        Trash           = 0x05
+        Untagged        = 0x05,
+        Trash           = 0x06
     };
 
     explicit CNavigationItemModel(QObject *parent = 0);
@@ -78,6 +79,8 @@ private slots:
     void bookmarkMgr_inserted(int first, int last);
     void bookmarkMgr_aboutToBeRemoved(int first, int last);
     void bookmarkMgr_removed();
+    void bookmarkMgr_aboutTagsChanged(CBookmarkItem *item);
+    void bookmarkMgr_tagsChanged(CBookmarkItem *item);
     void manager_destroyed();
     void navigationActions_destroyed();
 private:

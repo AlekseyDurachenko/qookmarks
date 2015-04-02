@@ -52,9 +52,11 @@ signals:
     void dataChanged(CBookmarkItem *item, const CBookmark& oldData,
                      const CBookmark &newData);
     void tagsChanged(CBookmarkItem *item);
+    void aboutTagsChanged(CBookmarkItem *item);
 private:
     void callbackDataChanged(CBookmarkItem *item, const CBookmark& oldData,
                              const CBookmark &newData);
+    void callbackAboutTagsChanged(CBookmarkItem *item);
     void callbackTagsChanged(CBookmarkItem *item);
 private:
     QList<CBookmarkItem *> m_bookmarkItems;

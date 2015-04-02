@@ -96,6 +96,9 @@ void CCompositWidget::navigation_selection_selectionChanged()
                 m_filter->setInclusiveOption(
                             Bookmark::FilterOptions(Bookmark::Trash));
                 break;
+            case CNavigationItemModel::Untagged:
+                tags.insert(m_manager->tagMgr()->rootItem());
+                break;
             default:
                 ;
             }

@@ -61,7 +61,8 @@ void CTagMgr::callbackRemoved(CTagItem *parent, int first, int last)
 
 void CTagMgr::callbackAboutToBeMoved(CTagItem *item)
 {
-    Q_UNUSED(item);
+    foreach (CBookmarkItem *bookmark, item->bookmarksRecursively())
+        m_mgr->bookmarkMgr()->callbackAboutTagsChanged(bookmark);
 }
 
 void CTagMgr::callbackAboutToBeMoved(CTagItem *sourceParent, int sourceFirst,

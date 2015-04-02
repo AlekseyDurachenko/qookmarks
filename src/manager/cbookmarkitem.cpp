@@ -60,12 +60,14 @@ void CBookmarkItem::notifyTagAboutDestroyed()
 
 void CBookmarkItem::callbackTagAdd(CTagItem *tag)
 {
+    m_bookmarkMgr->callbackAboutTagsChanged(this);
     m_tags.insert(tag);
     m_bookmarkMgr->callbackTagsChanged(this);
 }
 
 void CBookmarkItem::callbackTagRemove(CTagItem *tag)
 {
+    m_bookmarkMgr->callbackAboutTagsChanged(this);
     m_tags.remove(tag);
     m_bookmarkMgr->callbackTagsChanged(this);
 }

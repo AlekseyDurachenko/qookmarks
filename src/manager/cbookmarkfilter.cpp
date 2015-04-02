@@ -18,6 +18,7 @@
 #include "cbookmarkmgr.h"
 #include "ctagitem.h"
 #include "cbookmarkitem.h"
+#include <QDebug>
 
 
 CBookmarkFilter::CBookmarkFilter(QObject *parent) :
@@ -89,10 +90,18 @@ bool CBookmarkFilter::validate(const CBookmarkItem *item) const
     if (!m_manager)
         return true;
 
-
-    if (m_tags.isEmpty() == false
-            && CTagItem::checkIntersection(m_tags, item->tags()) == false)
-        return false;
+    if (!m_tags.isEmpty())
+    {
+        if (m_tags.contains(m_manager->tagMgr()->rootItem()))
+        {
+            if (!item->tags().isEmpty())
+                return false;
+        }
+        else if (!CTagItem::checkIntersection(m_tags, item->tags()))
+        {
+            return false;
+        }
+    }
 
 
     if (item->data().rating() < m_minRating

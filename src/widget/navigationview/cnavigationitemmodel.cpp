@@ -83,6 +83,10 @@ void CNavigationItemModel::setManager(CManager *manager)
                 this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
         connect(m_manager->bookmarkMgr(), SIGNAL(removed(int,int)),
                 this, SLOT(bookmarkMgr_removed()));
+        connect(m_manager->bookmarkMgr(), SIGNAL(aboutTagsChanged(CBookmarkItem*)),
+                this, SLOT(bookmarkMgr_aboutTagsChanged(CBookmarkItem*)));
+        connect(m_manager->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+                this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));
         connect(m_manager->tagMgr(), SIGNAL(destroyed()),
                 this, SLOT(manager_destroyed()));
     }
@@ -433,7 +437,8 @@ void CNavigationItemModel::bookmarkMgr_inserted(int first, int last)
 {
     for (int i = first; i <= last; ++i)
     {
-        CBookmark data = m_manager->bookmarkMgr()->at(i)->data();
+        CBookmarkItem *item = m_manager->bookmarkMgr()->at(i);
+        CBookmark data = item->data();
         if (data.isTrash())
         {
             m_topLevelCounters[Trash] += 1;
@@ -446,6 +451,8 @@ void CNavigationItemModel::bookmarkMgr_inserted(int first, int last)
                 m_topLevelCounters[Rated] += 1;
             if (data.isReadLater())
                 m_topLevelCounters[ReadLater] += 1;
+            if (item->tags().isEmpty())
+                m_topLevelCounters[Untagged] += 1;
         }
     }
     updateBookmarkRootItem();
@@ -455,7 +462,8 @@ void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
 {
     for (int i = first; i <= last; ++i)
     {
-        CBookmark data = m_manager->bookmarkMgr()->at(i)->data();
+        CBookmarkItem *item = m_manager->bookmarkMgr()->at(i);
+        CBookmark data = item->data();
         if (data.isTrash())
         {
             m_topLevelCounters[Trash] -= 1;
@@ -468,12 +476,30 @@ void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
                 m_topLevelCounters[Rated] -= 1;
             if (data.isReadLater())
                 m_topLevelCounters[ReadLater] -= 1;
+            if (item->tags().isEmpty())
+                m_topLevelCounters[Untagged] -= 1;
         }
     }
 }
 
 void CNavigationItemModel::bookmarkMgr_removed()
 {
+    updateBookmarkRootItem();
+}
+
+void CNavigationItemModel::bookmarkMgr_aboutTagsChanged(CBookmarkItem *item)
+{
+    if (item->tags().isEmpty())
+        m_topLevelCounters[Untagged] -= 1;
+
+    updateBookmarkRootItem();
+}
+
+void CNavigationItemModel::bookmarkMgr_tagsChanged(CBookmarkItem *item)
+{
+    if (item->tags().isEmpty())
+        m_topLevelCounters[Untagged] += 1;
+
     updateBookmarkRootItem();
 }
 
@@ -493,6 +519,7 @@ void CNavigationItemModel::initTopLevelItems()
             << Favorites
             << Rated
             << ReadLater
+            << Untagged
             << BookmarkRoot
             << Trash;
 }
@@ -502,6 +529,7 @@ void CNavigationItemModel::initTopLevelCounters()
     m_topLevelCounters[Favorites] = 0;
     m_topLevelCounters[Rated] = 0;
     m_topLevelCounters[ReadLater] = 0;
+    m_topLevelCounters[Untagged] = 0;
     m_topLevelCounters[Trash] = 0;
 }
 
@@ -550,6 +578,8 @@ QString CNavigationItemModel::topLevelName(CNavigationItemModel::TopLevelItem it
         return tr("Rated Bookmarks (%1)").arg(m_topLevelCounters[Rated]);
     case ReadLater:
         return tr("Read it Later (%1)").arg(m_topLevelCounters[ReadLater]);
+    case Untagged:
+        return tr("Untagged (%1)").arg(m_topLevelCounters[Untagged]);
     case BookmarkRoot:
         return tr("Bookmarks (%1)").arg(bookmarkRootCount());
     case Trash:
@@ -569,6 +599,8 @@ QIcon CNavigationItemModel::topLevelIcon(CNavigationItemModel::TopLevelItem item
         return QIcon(":/icons/bookmark-rated.png");
     case ReadLater:
         return QIcon(":/icons/bookmark-readlater.png");
+    case Untagged:
+        return QIcon(":/icons/bookmark-untagged.png");
     case BookmarkRoot:
         return QIcon(":/icons/bookmark-bookmarks.png");
     case Trash:
@@ -595,6 +627,8 @@ void CNavigationItemModel::recalcTopLevelCounters()
             m_topLevelCounters[Rated] += 1;
         if (item->data().isReadLater())
             m_topLevelCounters[ReadLater] += 1;
+        if (item->tags().isEmpty())
+            m_topLevelCounters[Untagged] += 1;
     }
 }
 

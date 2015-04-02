@@ -64,9 +64,9 @@ void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
     if (!parentItem)
         return;
 
-    QMessageBox msgBox(QMessageBox::Question, "Action", "What do you want?");
-    QPushButton *moveButton = msgBox.addButton("Move", QMessageBox::ActionRole);
-    QPushButton *copyButton = msgBox.addButton("Copy", QMessageBox::ActionRole);
+    QMessageBox msgBox(QMessageBox::Question, tr("Action"), tr("What do you want?"));
+    QPushButton *moveButton = msgBox.addButton(tr("Move"), QMessageBox::ActionRole);
+    QPushButton *copyButton = msgBox.addButton(tr("Copy"), QMessageBox::ActionRole);
     msgBox.addButton(QMessageBox::Cancel);
 
     if (msgBox.exec() == QMessageBox::Cancel)

@@ -52,7 +52,8 @@ void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags,
         if (!item || item == parentItem || item->aboveOf(parentItem))
             continue;
 
-        item->moveTo(parentItem);
+        if (item->parent() != parentItem)
+            item->moveTo(parentItem);
     }
 }
 

@@ -82,6 +82,8 @@ void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
             foreach (CTagItem *item, bookmarkItem->tags())
                 if (parentItem != item)
                     item->bookmarkRemove(bookmarkItem);
+
+            parentItem->bookmarkAdd(bookmarkItem);
         }
         else if (msgBox.clickedButton() == copyButton)
         {

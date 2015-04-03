@@ -99,9 +99,10 @@ bool CPrj::open(const QString &path, QString *reason)
             throw file.errorString();
 
         blockSignals(true);
-        if (!CPrjXml::loadXml(m_manager, &file, reason))
-            return false;
+        bool state = CPrjXml::loadXml(m_manager, &file, reason);
         blockSignals(false);
+        if (!state)
+            return false;
 
         m_path = path;
         m_hasChanges = false;

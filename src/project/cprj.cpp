@@ -107,6 +107,7 @@ bool CPrj::open(const QString &path, QString *reason)
         m_path = path;
         m_hasChanges = false;
         updateActions();
+        emit opened();
 
         return true;
     }
@@ -154,6 +155,7 @@ void CPrj::close()
     m_path = QString();
     m_hasChanges = false;
     updateActions();
+    emit closed();
 }
 
 QString CPrj::xmlPath(const QString &path)

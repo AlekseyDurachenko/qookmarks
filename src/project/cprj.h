@@ -45,6 +45,9 @@ public:
     inline QAction *actionOpen() const;
     inline QAction *actionSave() const;
     inline QAction *actionClose() const;
+signals:
+    void opened();
+    void closed();
 private slots:
     void somethingChanged();
 private:

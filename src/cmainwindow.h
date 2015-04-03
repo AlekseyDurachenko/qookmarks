@@ -38,6 +38,8 @@ public:
     explicit CMainWindow(QWidget *parent = 0);
     virtual ~CMainWindow();
 private slots:
+    void project_opened();
+    void project_closed();
     void actionCreate_triggered();
     void actionOpen_triggered();
     void actionSave_triggered();

@@ -46,6 +46,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
             this, SLOT(actionSave_triggered()));
     connect(m_project->actionClose(), SIGNAL(triggered()),
             this, SLOT(actionClose_triggered()));
+    connect(m_project, SIGNAL(opened()), this, SLOT(project_opened()));
+    connect(m_project, SIGNAL(closed()), this, SLOT(project_closed()));
 
     // Menu: File
     ui->menu_file->addAction(m_project->actionCreate());
@@ -56,6 +58,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_file->addAction(ui->action_quit);
 
     m_mainWidget = new CCompositWidget(m_project->manager(), this);
+    m_mainWidget->setEnabled(false);
     setCentralWidget(m_mainWidget);
 
 }
@@ -63,6 +66,16 @@ CMainWindow::CMainWindow(QWidget *parent) :
 CMainWindow::~CMainWindow()
 {
     delete ui;
+}
+
+void CMainWindow::project_opened()
+{
+    m_mainWidget->setEnabled(true);
+}
+
+void CMainWindow::project_closed()
+{
+    m_mainWidget->setEnabled(false);
 }
 
 void CMainWindow::actionCreate_triggered()

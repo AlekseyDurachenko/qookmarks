@@ -393,8 +393,6 @@ void CNavigationItemModel::tagMgr_bookmarksChanged(CTagItem *item)
 void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item,
         const CBookmark &oldData, const CBookmark &newData)
 {
-    Q_UNUSED(item);
-
     if (oldData.isFavorite() == newData.isFavorite()
             && oldData.isReadLater() == newData.isReadLater()
             && oldData.isTrash() == newData.isTrash()
@@ -413,6 +411,8 @@ void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item,
             m_topLevelCounters[Rated] -= 1;
         if (oldData.isReadLater())
             m_topLevelCounters[ReadLater] -= 1;
+        if (item->tags().isEmpty())
+            m_topLevelCounters[Untagged] -= 1;
     }
 
     if (newData.isTrash())
@@ -427,6 +427,8 @@ void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item,
             m_topLevelCounters[Rated] += 1;
         if (newData.isReadLater())
             m_topLevelCounters[ReadLater] += 1;
+        if (item->tags().isEmpty())
+            m_topLevelCounters[Untagged] -= 1;
     }
 
     emit dataChanged(createIndex(0, 0, 0),
@@ -494,7 +496,7 @@ void CNavigationItemModel::bookmarkMgr_removed()
 
 void CNavigationItemModel::bookmarkMgr_aboutToBeTagsChanged(CBookmarkItem *item)
 {
-    if (item->tags().isEmpty())
+    if (item->tags().isEmpty() && !item->data().isTrash())
         m_topLevelCounters[Untagged] -= 1;
 
     emit dataChanged(createIndex(0, 0, 0),
@@ -503,7 +505,7 @@ void CNavigationItemModel::bookmarkMgr_aboutToBeTagsChanged(CBookmarkItem *item)
 
 void CNavigationItemModel::bookmarkMgr_tagsChanged(CBookmarkItem *item)
 {
-    if (item->tags().isEmpty())
+    if (item->tags().isEmpty() && !item->data().isTrash())
         m_topLevelCounters[Untagged] += 1;
 
     emit dataChanged(createIndex(0, 0, 0),

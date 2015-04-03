@@ -26,13 +26,13 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.h              \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
-    $$PWD/src/mainwindow.h \
     $$PWD/src/widget/navigationview/inavigationactions.h \
     $$PWD/src/widget/compositwidget/ccompositwidget.h \
     $$PWD/src/widget/navigationview/cnavigationview.h \
     $$PWD/src/widget/bookmarkview/cbookmarkview.h \
     $$PWD/src/project/cprj.h \
-    $$PWD/src/project/cprjxml.h
+    $$PWD/src/project/cprjxml.h \
+    $$PWD/src/cmainwindow.h
 
 
 SOURCES        +=                                                       \
@@ -52,16 +52,16 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkreadlaterdelegate.cpp        \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.cpp            \
     $$PWD/src/version.cpp                                               \
-    $$PWD/src/mainwindow.cpp                                            \
     $$PWD/src/widget/compositwidget/ccompositwidget.cpp \
     $$PWD/src/widget/navigationview/cnavigationview.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkview.cpp \
     $$PWD/src/project/cprj.cpp \
-    $$PWD/src/project/cprjxml.cpp
+    $$PWD/src/project/cprjxml.cpp \
+    $$PWD/src/cmainwindow.cpp
 
 
 FORMS          +=                                                       \
-    $$PWD/src/mainwindow.ui                                             \
+    $$PWD/src/cmainwindow.ui
 
 
 RESOURCES      +=                                                       \

@@ -16,6 +16,7 @@
 #define CPRJ_H
 
 #include <QObject>
+#include <QAction>
 class CManager;
 
 
@@ -24,10 +25,11 @@ class CPrj : public QObject
     Q_OBJECT
 public:
     explicit CPrj(QObject *parent = 0);
-    virtual ~CPrj();
 
     inline CManager *manager() const;
+
     inline bool isOpen() const;
+    inline bool hasChanges() const;
 
     bool create(const QString &path, QString *reason = 0);
     bool open(const QString &path, QString *reason = 0);
@@ -38,16 +40,28 @@ public:
     inline QString iconPath() const;
     inline QString screenshotPath() const;
     inline QString downloadsPath() const;
-signals:
-public slots:
+
+    inline QAction *actionCreate() const;
+    inline QAction *actionOpen() const;
+    inline QAction *actionSave() const;
+    inline QAction *actionClose() const;
+private slots:
+    void somethingChanged();
 private:
     static QString xmlPath(const QString &path);
     static QString iconPath(const QString &path);
     static QString screenshotPath(const QString &path);
     static QString downloadsPath(const QString &path);
 private:
+    void updateActions();
+private:
     CManager *m_manager;
+    QAction *m_actionCreate;
+    QAction *m_actionOpen;
+    QAction *m_actionSave;
+    QAction *m_actionClose;
     QString m_path;
+    bool m_hasChanges;
 };
 
 CManager *CPrj::manager() const
@@ -58,6 +72,11 @@ CManager *CPrj::manager() const
 bool CPrj::isOpen() const
 {
     return (!m_path.isEmpty());
+}
+
+bool CPrj::hasChanges() const
+{
+    return m_hasChanges;
 }
 
 QString CPrj::xmlPath() const
@@ -78,6 +97,26 @@ QString CPrj::screenshotPath() const
 QString CPrj::downloadsPath() const
 {
     return downloadsPath(m_path);
+}
+
+QAction *CPrj::actionCreate() const
+{
+    return m_actionCreate;
+}
+
+QAction *CPrj::actionOpen() const
+{
+    return m_actionOpen;
+}
+
+QAction *CPrj::actionSave() const
+{
+    return m_actionSave;
+}
+
+QAction *CPrj::actionClose() const
+{
+    return m_actionClose;
 }
 
 

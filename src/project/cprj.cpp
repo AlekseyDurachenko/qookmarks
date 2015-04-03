@@ -25,29 +25,49 @@
 
 CPrj::CPrj(QObject *parent) : QObject(parent)
 {
-    m_manager = new CManager(this);
-    //bookmarkImportChromium(m_manager, QDir::homePath() + "/.config/chromium/Default/Bookmarks");
-    //m_path.clear();
-}
+    m_actionCreate = new QAction(tr("Create..."), this);
+    m_actionOpen = new QAction(tr("Open..."), this);
+    m_actionSave = new QAction(tr("Save"), this);
+    m_actionClose = new QAction(tr("Close..."), this);
 
-CPrj::~CPrj()
-{
+    m_manager = new CManager(this);
+    connect(m_manager->tagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
+            this, SLOT(somethingChanged()));
+    connect(m_manager->tagMgr(), SIGNAL(removed(CTagItem*,int,int)),
+            this, SLOT(somethingChanged()));
+    connect(m_manager->tagMgr(), SIGNAL(dataChanged(CTagItem*,CTag,CTag)),
+            this, SLOT(somethingChanged()));
+    connect(m_manager->tagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
+            this, SLOT(somethingChanged()));
+    connect(m_manager->bookmarkMgr(), SIGNAL(inserted(int,int)),
+            this, SLOT(somethingChanged()));
+    connect(m_manager->bookmarkMgr(), SIGNAL(removed(int,int)),
+            this, SLOT(somethingChanged()));
+    connect(m_manager->bookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
+            this, SLOT(somethingChanged()));
+    connect(m_manager->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+            this, SLOT(somethingChanged()));
+
+    m_path = QString();
+    m_hasChanges = false;
+    updateActions();
 }
 
 bool CPrj::create(const QString &path, QString *reason)
 {
     try
     {
-        QString absPath = QFileInfo(path).absoluteFilePath();
-        // icons
+        QString absPath = QFileInfo(path).absoluteFilePath();       
+
+        // create path for icons
         if (!QDir(iconPath(absPath)).exists())
             if (!QDir().mkpath(iconPath(absPath)))
                 throw tr("can't create path \"%1\"").arg(iconPath(absPath));
-        // screenshots
+        // create path for screenshots
         if (!QDir(screenshotPath(absPath)).exists())
             if (!QDir().mkpath(screenshotPath(absPath)))
                 throw tr("can't create path \"%1\"").arg(screenshotPath(absPath));
-        // downloads (webpages, e.t.c.)
+        // create path for downloads (webpages, e.t.c.)
         if (!QDir(downloadsPath(absPath)).exists())
             if (!QDir().mkpath(downloadsPath(absPath)))
                 throw tr("can't create path \"%1\"").arg(downloadsPath(absPath));
@@ -82,6 +102,9 @@ bool CPrj::open(const QString &path, QString *reason)
             return false;
 
         m_path = path;
+        m_hasChanges = false;
+        updateActions();
+
         return true;
     }
     catch (const QString &error)
@@ -103,7 +126,12 @@ bool CPrj::save(QString *reason)
         if (!file.open(QIODevice::WriteOnly))
             throw file.errorString();
 
-        return CPrjXml::saveXml(m_manager, &file, reason);
+        bool state = CPrjXml::saveXml(m_manager, &file, reason);
+        if (state)
+            m_hasChanges = false;
+        updateActions();
+
+        return state;
     }
     catch (const QString &error)
     {
@@ -117,7 +145,10 @@ void CPrj::close()
 {
     m_manager->bookmarkMgr()->removeAll();
     m_manager->tagMgr()->rootItem()->removeAll();
-    m_path.clear();
+
+    m_path = QString();
+    m_hasChanges = false;
+    updateActions();
 }
 
 QString CPrj::xmlPath(const QString &path)
@@ -138,4 +169,17 @@ QString CPrj::screenshotPath(const QString &path)
 QString CPrj::downloadsPath(const QString &path)
 {
     return path + QDir::separator() + "downloads";
+}
+
+void CPrj::somethingChanged()
+{
+    m_hasChanges = true;
+    updateActions();
+}
+
+void CPrj::updateActions()
+{
+    // TODO: realize the correct updates
+    m_actionSave->setEnabled(hasChanges());
+    m_actionClose->setEnabled(isOpen());
 }

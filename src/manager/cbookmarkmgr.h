@@ -49,15 +49,21 @@ signals:
     void inserted(int first, int last);
     void aboutToBeRemoved(int first, int last);
     void removed(int first, int last);
+    void aboutToBeDataChanged(CBookmarkItem *item);
+    void dataChanged(CBookmarkItem *item);
+    void aboutToBeTagsChanged(CBookmarkItem *item);
+    void tagsChanged(CBookmarkItem *item);
+    // TODO: deprecated?
     void dataChanged(CBookmarkItem *item, const CBookmark& oldData,
                      const CBookmark &newData);
-    void tagsChanged(CBookmarkItem *item);
-    void aboutTagsChanged(CBookmarkItem *item);
 private:
+    void callbackAboutToBeDataChanged(CBookmarkItem *item);
+    void callbackDataChanged(CBookmarkItem *item);
+    void callbackAboutToBeTagsChanged(CBookmarkItem *item);
+    void callbackTagsChanged(CBookmarkItem *item);
+    // TODO: deprecated?
     void callbackDataChanged(CBookmarkItem *item, const CBookmark& oldData,
                              const CBookmark &newData);
-    void callbackAboutTagsChanged(CBookmarkItem *item);
-    void callbackTagsChanged(CBookmarkItem *item);
 private:
     QList<CBookmarkItem *> m_bookmarkItems;
     CManager *m_mgr;

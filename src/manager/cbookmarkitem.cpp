@@ -42,7 +42,10 @@ bool CBookmarkItem::setData(const CBookmark &data)
     if (m_data != data)
     {
         CBookmark old = m_data;
+        m_bookmarkMgr->callbackAboutToBeDataChanged(this);
         m_data = data;
+        m_bookmarkMgr->callbackDataChanged(this);
+        // TODO: deprecated?
         m_bookmarkMgr->callbackDataChanged(this, old, data);
     }
 
@@ -60,14 +63,14 @@ void CBookmarkItem::notifyTagAboutDestroyed()
 
 void CBookmarkItem::callbackTagAdd(CTagItem *tag)
 {
-    m_bookmarkMgr->callbackAboutTagsChanged(this);
+    m_bookmarkMgr->callbackAboutToBeTagsChanged(this);
     m_tags.insert(tag);
     m_bookmarkMgr->callbackTagsChanged(this);
 }
 
 void CBookmarkItem::callbackTagRemove(CTagItem *tag)
 {
-    m_bookmarkMgr->callbackAboutTagsChanged(this);
+    m_bookmarkMgr->callbackAboutToBeTagsChanged(this);
     m_tags.remove(tag);
     m_bookmarkMgr->callbackTagsChanged(this);
 }

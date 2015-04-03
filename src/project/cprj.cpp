@@ -98,8 +98,10 @@ bool CPrj::open(const QString &path, QString *reason)
         if (!file.open(QIODevice::ReadOnly))
             throw file.errorString();
 
+        blockSignals(true);
         if (!CPrjXml::loadXml(m_manager, &file, reason))
             return false;
+        blockSignals(false);
 
         m_path = path;
         m_hasChanges = false;
@@ -143,8 +145,10 @@ bool CPrj::save(QString *reason)
 
 void CPrj::close()
 {
+    blockSignals(true);
     m_manager->bookmarkMgr()->removeAll();
     m_manager->tagMgr()->rootItem()->removeAll();
+    blockSignals(false);
 
     m_path = QString();
     m_hasChanges = false;

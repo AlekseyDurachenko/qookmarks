@@ -79,7 +79,7 @@ private slots:
     void bookmarkMgr_inserted(int first, int last);
     void bookmarkMgr_aboutToBeRemoved(int first, int last);
     void bookmarkMgr_removed();
-    void bookmarkMgr_aboutTagsChanged(CBookmarkItem *item);
+    void bookmarkMgr_aboutToBeTagsChanged(CBookmarkItem *item);
     void bookmarkMgr_tagsChanged(CBookmarkItem *item);
     void manager_destroyed();
     void navigationActions_destroyed();

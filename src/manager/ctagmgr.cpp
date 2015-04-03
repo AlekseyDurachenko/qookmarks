@@ -62,7 +62,7 @@ void CTagMgr::callbackRemoved(CTagItem *parent, int first, int last)
 void CTagMgr::callbackAboutToBeMoved(CTagItem *item)
 {
     foreach (CBookmarkItem *bookmark, item->bookmarksRecursively())
-        m_mgr->bookmarkMgr()->callbackAboutTagsChanged(bookmark);
+        m_mgr->bookmarkMgr()->callbackAboutToBeTagsChanged(bookmark);
 }
 
 void CTagMgr::callbackAboutToBeMoved(CTagItem *sourceParent, int sourceFirst,
@@ -83,6 +83,16 @@ void CTagMgr::callbackMoved(CTagItem *item)
 {
     foreach (CBookmarkItem *bookmark, item->bookmarksRecursively())
         m_mgr->bookmarkMgr()->callbackTagsChanged(bookmark);
+}
+
+void CTagMgr::callbackAboutToBeDataChanged(CTagItem *item)
+{
+    emit aboutToBeDataChanged(item);
+}
+
+void CTagMgr::callbackDataChanged(CTagItem *item)
+{
+    emit dataChanged(item);
 }
 
 void CTagMgr::callbackDataChanged(CTagItem *item, const CTag &oldTag,

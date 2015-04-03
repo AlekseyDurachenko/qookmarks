@@ -44,6 +44,8 @@ signals:
                         CTagItem *destinationParent, int destinationIndex);
     void moved(CTagItem *sourceParent, int sourceFirst, int sourceLast,
                CTagItem *destinationParent, int destinationIndex);
+    void aboutToBeDataChanged(CTagItem *item);
+    void dataChanged(CTagItem *item);
     void dataChanged(CTagItem *item, const CTag &oldTag, const CTag &newTag);
     void bookmarksChanged(CTagItem *item);
 private:
@@ -58,6 +60,8 @@ private:
     void callbackMoved(CTagItem *sourceParent, int sourceFirst, int sourceLast,
                        CTagItem *destinationParent, int destinationIndex);
     void callbackMoved(CTagItem *item);
+    void callbackAboutToBeDataChanged(CTagItem *item);
+    void callbackDataChanged(CTagItem *item);
     void callbackDataChanged(CTagItem *item, const CTag &oldTag,
                              const CTag &newTag);
     void callbackBookmarksChanged(CTagItem *item);

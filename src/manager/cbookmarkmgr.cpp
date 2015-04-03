@@ -102,18 +102,28 @@ void CBookmarkMgr::removeAll()
     emit removed(0, last);
 }
 
-void CBookmarkMgr::callbackDataChanged(CBookmarkItem *item,
-        const CBookmark& oldData, const CBookmark &newData)
+void CBookmarkMgr::callbackAboutToBeDataChanged(CBookmarkItem *item)
 {
-    emit dataChanged(item, oldData, newData);
+    emit aboutToBeDataChanged(item);
 }
 
-void CBookmarkMgr::callbackAboutTagsChanged(CBookmarkItem *item)
+void CBookmarkMgr::callbackDataChanged(CBookmarkItem *item)
 {
-    emit aboutTagsChanged(item);
+    emit dataChanged(item);
+}
+
+void CBookmarkMgr::callbackAboutToBeTagsChanged(CBookmarkItem *item)
+{
+    emit aboutToBeTagsChanged(item);
 }
 
 void CBookmarkMgr::callbackTagsChanged(CBookmarkItem *item)
 {
     emit tagsChanged(item);
+}
+
+void CBookmarkMgr::callbackDataChanged(CBookmarkItem *item,
+        const CBookmark& oldData, const CBookmark &newData)
+{
+    emit dataChanged(item, oldData, newData);
 }

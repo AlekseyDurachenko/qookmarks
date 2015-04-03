@@ -83,8 +83,8 @@ void CNavigationItemModel::setManager(CManager *manager)
                 this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
         connect(m_manager->bookmarkMgr(), SIGNAL(removed(int,int)),
                 this, SLOT(bookmarkMgr_removed()));
-        connect(m_manager->bookmarkMgr(), SIGNAL(aboutTagsChanged(CBookmarkItem*)),
-                this, SLOT(bookmarkMgr_aboutTagsChanged(CBookmarkItem*)));
+        connect(m_manager->bookmarkMgr(), SIGNAL(aboutToBeTagsChanged(CBookmarkItem*)),
+                this, SLOT(bookmarkMgr_aboutToBeTagsChanged(CBookmarkItem*)));
         connect(m_manager->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
                 this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));
         connect(m_manager->tagMgr(), SIGNAL(destroyed()),
@@ -455,7 +455,9 @@ void CNavigationItemModel::bookmarkMgr_inserted(int first, int last)
                 m_topLevelCounters[Untagged] += 1;
         }
     }
-    updateBookmarkRootItem();
+
+    emit dataChanged(createIndex(0, 0, 0),
+                     createIndex(m_topLevelItems.count(), 0, 0));
 }
 
 void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
@@ -480,6 +482,9 @@ void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
                 m_topLevelCounters[Untagged] -= 1;
         }
     }
+
+    emit dataChanged(createIndex(0, 0, 0),
+                     createIndex(m_topLevelItems.count(), 0, 0));
 }
 
 void CNavigationItemModel::bookmarkMgr_removed()
@@ -487,12 +492,13 @@ void CNavigationItemModel::bookmarkMgr_removed()
     updateBookmarkRootItem();
 }
 
-void CNavigationItemModel::bookmarkMgr_aboutTagsChanged(CBookmarkItem *item)
+void CNavigationItemModel::bookmarkMgr_aboutToBeTagsChanged(CBookmarkItem *item)
 {
     if (item->tags().isEmpty())
         m_topLevelCounters[Untagged] -= 1;
 
-    updateBookmarkRootItem();
+    emit dataChanged(createIndex(0, 0, 0),
+                     createIndex(m_topLevelItems.count(), 0, 0));
 }
 
 void CNavigationItemModel::bookmarkMgr_tagsChanged(CBookmarkItem *item)
@@ -500,7 +506,8 @@ void CNavigationItemModel::bookmarkMgr_tagsChanged(CBookmarkItem *item)
     if (item->tags().isEmpty())
         m_topLevelCounters[Untagged] += 1;
 
-    updateBookmarkRootItem();
+    emit dataChanged(createIndex(0, 0, 0),
+                     createIndex(m_topLevelItems.count(), 0, 0));
 }
 
 void CNavigationItemModel::manager_destroyed()

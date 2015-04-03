@@ -67,6 +67,39 @@ CMainWindow::~CMainWindow()
 
 void CMainWindow::actionCreate_triggered()
 {
+    if (m_project->isOpen())
+    {
+        int ret = QMessageBox::Ignore;
+        if (m_project->hasChanges())
+        {
+            ret = QMessageBox::question(this, tr("Question"),
+                    tr("Opened bookmarks was changed. What do you want?"),
+                    QMessageBox::Save|QMessageBox::Ignore|QMessageBox::Cancel);
+        }
+        else
+        {
+            ret = QMessageBox::question(this, tr("Question"),
+                    tr("Bookmarks is open. Close current bookmarks?"),
+                    QMessageBox::Yes|QMessageBox::Cancel);
+        }
+
+        if (ret == QMessageBox::Cancel)
+        {
+            return;
+        }
+        else if (ret == QMessageBox::Save)
+        {
+            QString reason;
+            if (!m_project->save(&reason))
+            {
+                QMessageBox::critical(this, tr("Critical"), reason);
+                return;
+            }
+        }
+
+        m_project->close();
+    }
+
     QString dirName = QFileDialog::getExistingDirectory(this,
             tr("Create bookmarks"), "",
             QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
@@ -77,10 +110,46 @@ void CMainWindow::actionCreate_triggered()
     QString reason;
     if (!m_project->create(dirName, &reason))
         QMessageBox::warning(this, tr("Warning"), reason);
+
+    if (!m_project->open(dirName, &reason))
+        QMessageBox::warning(this, tr("Warning"), reason);
 }
 
 void CMainWindow::actionOpen_triggered()
 {
+    if (m_project->isOpen())
+    {
+        int ret = QMessageBox::Ignore;
+        if (m_project->hasChanges())
+        {
+            ret = QMessageBox::question(this, tr("Question"),
+                    tr("Opened bookmarks was changed. What do you want?"),
+                    QMessageBox::Save|QMessageBox::Ignore|QMessageBox::Cancel);
+        }
+        else
+        {
+            ret = QMessageBox::question(this, tr("Question"),
+                    tr("Bookmarks is open. Close current bookmarks?"),
+                    QMessageBox::Yes|QMessageBox::Cancel);
+        }
+
+        if (ret == QMessageBox::Cancel)
+        {
+            return;
+        }
+        else if (ret == QMessageBox::Save)
+        {
+            QString reason;
+            if (!m_project->save(&reason))
+            {
+                QMessageBox::critical(this, tr("Critical"), reason);
+                return;
+            }
+        }
+
+        m_project->close();
+    }
+
     QString dirName = QFileDialog::getExistingDirectory(this,
             tr("Open bookmarks"), "",
             QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
@@ -96,8 +165,8 @@ void CMainWindow::actionOpen_triggered()
 void CMainWindow::actionSave_triggered()
 {
     QString reason;
-    qDebug() << m_project->save(&reason);
-    qDebug() << reason;
+    if (!m_project->save(&reason))
+        QMessageBox::critical(this, tr("Critical"), reason);
 }
 
 void CMainWindow::actionClose_triggered()

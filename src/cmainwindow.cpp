@@ -171,6 +171,21 @@ void CMainWindow::actionSave_triggered()
 
 void CMainWindow::actionClose_triggered()
 {
+    if (m_project->hasChanges())
+    {
+        if (QMessageBox::question(this, tr("Question"),
+                tr("Opened bookmarks was changed. Save the changes?"),
+                QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
+        {
+            QString reason;
+            if (!m_project->save(&reason))
+            {
+                QMessageBox::critical(this, tr("Critical"), reason);
+                return;
+            }
+        }
+    }
+
     m_project->close();
 }
 

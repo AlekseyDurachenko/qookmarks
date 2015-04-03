@@ -123,7 +123,7 @@ QVariant CNavigationItemModel::data(const QModelIndex &index, int role) const
         if (index.column() == 0)
             return QString("%1 (%2)")
                     .arg(item->data().name())
-                    .arg(item->bookmarks().count());
+                    .arg(bookmarkNotTrashedCount(item));
 
     if (role == Qt::DecorationRole)
         if (index.column() == 0)
@@ -548,6 +548,17 @@ int CNavigationItemModel::bookmarkRootIndex() const
 int CNavigationItemModel::bookmarkRootCount() const
 {
     return m_manager->bookmarkMgr()->count() - m_topLevelCounters[Trash];
+}
+
+int CNavigationItemModel::bookmarkNotTrashedCount(CTagItem *item,
+        bool /*recursive*/) const
+{
+    int count = 0;
+    foreach (const CBookmarkItem *bookmark, item->bookmarks())
+        if (!bookmark->data().isTrash())
+            ++count;
+
+    return count;
 }
 
 void CNavigationItemModel::updateBookmarkRootItem()

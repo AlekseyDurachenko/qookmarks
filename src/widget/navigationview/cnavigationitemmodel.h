@@ -88,6 +88,7 @@ private:
     void initTopLevelCounters();
     int bookmarkRootIndex() const;
     int bookmarkRootCount() const;
+    int bookmarkNotTrashedCount(CTagItem *item, bool recursive = true) const;
     void updateBookmarkRootItem();
     QVariant topLevelData(const QModelIndex &index, int role) const;
     QString topLevelName(TopLevelItem item) const;

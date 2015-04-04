@@ -45,6 +45,7 @@ private slots:
     void actionSave_triggered();
     void actionClose_triggered();
     void on_action_quit_triggered();
+    void on_action_import_triggered();
 private:
     void readSettings_window();
     void readSettings_lastOpenedBookmarks();

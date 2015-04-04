@@ -56,12 +56,15 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_file->addAction(m_project->actionSave());
     ui->menu_file->addAction(m_project->actionClose());
     ui->menu_file->addSeparator();
+    ui->menu_file->addAction(ui->action_import);
+    ui->menu_file->addAction(ui->action_export);
+    ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_quit);
 
     m_mainWidget = new CCompositWidget(m_project->manager(), this);
-    m_mainWidget->setEnabled(false);
     setCentralWidget(m_mainWidget);
 
+    project_closed();
     readSettings_window();
     readSettings_lastOpenedBookmarks();
 }
@@ -77,11 +80,15 @@ CMainWindow::~CMainWindow()
 void CMainWindow::project_opened()
 {
     m_mainWidget->setEnabled(true);
+    ui->action_import->setEnabled(true);
+    ui->action_export->setEnabled(true);
 }
 
 void CMainWindow::project_closed()
 {
     m_mainWidget->setEnabled(false);
+    ui->action_import->setEnabled(false);
+    ui->action_export->setEnabled(false);
 }
 
 void CMainWindow::actionCreate_triggered()
@@ -215,6 +222,13 @@ void CMainWindow::actionClose_triggered()
 void CMainWindow::on_action_quit_triggered()
 {
     close();
+}
+
+void CMainWindow::on_action_import_triggered()
+{
+    QString reason, path = QDir::homePath() + "/.config/chromium/Default/Bookmarks";
+    if (!bookmarkImportChromium(m_project->manager(), path, &reason))
+        QMessageBox::warning(this, "Warning", reason);
 }
 
 void CMainWindow::readSettings_window()

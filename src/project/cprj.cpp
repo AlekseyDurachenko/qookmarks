@@ -25,10 +25,10 @@
 
 CPrj::CPrj(QObject *parent) : QObject(parent)
 {
-    m_actionCreate = new QAction(tr("Create..."), this);
-    m_actionOpen = new QAction(tr("Open..."), this);
-    m_actionSave = new QAction(tr("Save"), this);
-    m_actionClose = new QAction(tr("Close..."), this);
+    m_actionCreate = new QAction(tr("New Bookmark Collection..."), this);
+    m_actionOpen = new QAction(tr("Open Bookmark Collection..."), this);
+    m_actionSave = new QAction(tr("Save Bookmark Collection"), this);
+    m_actionClose = new QAction(tr("Close Bookmark Collection..."), this);
 
     m_manager = new CManager(this);
     connect(m_manager->tagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
@@ -92,7 +92,7 @@ bool CPrj::open(const QString &path, QString *reason)
     try
     {
         if (isOpen())
-            throw tr("bookmarks is already opened");
+            throw tr("bookmarks collection is already opened");
 
         QFile file(xmlPath(path));
         if (!file.open(QIODevice::ReadOnly))
@@ -124,7 +124,7 @@ bool CPrj::save(QString *reason)
     try
     {
         if (!isOpen())
-            throw tr("bookmarks is not opened");
+            throw tr("bookmarks collection is not opened");
 
         QFile file(xmlPath());
         if (!file.open(QIODevice::WriteOnly))

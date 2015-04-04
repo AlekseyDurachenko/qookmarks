@@ -46,6 +46,11 @@ private slots:
     void actionClose_triggered();
     void on_action_quit_triggered();
 private:
+    void readSettings_window();
+    void readSettings_lastOpenedBookmarks();
+    void writeSettings_window();
+    void writeSettings_lastOpenedBookmarks();
+private:
     Ui::CMainWindow *ui;
     CPrj *m_project;
     CCompositWidget *m_mainWidget;

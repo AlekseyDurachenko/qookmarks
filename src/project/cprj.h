@@ -36,6 +36,7 @@ public:
     bool save(QString *reason = 0);
     void close();
 
+    inline QString path() const;
     inline QString xmlPath() const;
     inline QString iconPath() const;
     inline QString screenshotPath() const;
@@ -80,6 +81,11 @@ bool CPrj::isOpen() const
 bool CPrj::hasChanges() const
 {
     return m_hasChanges;
+}
+
+QString CPrj::path() const
+{
+    return m_path;
 }
 
 QString CPrj::xmlPath() const

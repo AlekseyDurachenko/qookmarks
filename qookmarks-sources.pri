@@ -32,7 +32,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkview.h \
     $$PWD/src/project/cprj.h \
     $$PWD/src/project/cprjxml.h \
-    $$PWD/src/cmainwindow.h
+    $$PWD/src/cmainwindow.h \
+    $$PWD/src/settings.h
 
 
 SOURCES        +=                                                       \

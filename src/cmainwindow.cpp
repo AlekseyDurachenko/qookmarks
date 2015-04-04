@@ -28,6 +28,7 @@
 #include "cbookmarkfilter.h"
 #include "cbookmarkfilteritemmodel.h"
 #include "cnavigationitemmodel.h"
+#include "settings.h"
 #include <QMessageBox>
 #include <QPushButton>
 
@@ -61,10 +62,15 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_mainWidget->setEnabled(false);
     setCentralWidget(m_mainWidget);
 
+    readSettings_window();
+    readSettings_lastOpenedBookmarks();
 }
 
 CMainWindow::~CMainWindow()
 {
+    writeSettings_window();
+    writeSettings_lastOpenedBookmarks();
+
     delete ui;
 }
 
@@ -205,4 +211,35 @@ void CMainWindow::actionClose_triggered()
 void CMainWindow::on_action_quit_triggered()
 {
     close();
+}
+
+void CMainWindow::readSettings_window()
+{
+    G_SETTINGS_INIT();
+    restoreState(settings.value(
+                     "CMainWindow/state", saveState()).toByteArray());
+    restoreGeometry(settings.value(
+                        "CMainWindow/geometry",saveGeometry()).toByteArray());
+}
+
+void CMainWindow::readSettings_lastOpenedBookmarks()
+{
+    G_SETTINGS_INIT();
+    QString reason, path = settings.value("lastBookmarks", "").toString();
+    if (!path.isEmpty())
+        if (!m_project->open(path, &reason))
+            QMessageBox::warning(this, tr("Warning"), reason);
+}
+
+void CMainWindow::writeSettings_window()
+{
+    G_SETTINGS_INIT();
+    settings.setValue("CMainWindow/state", saveState());
+    settings.setValue("CMainWindow/geometry", saveGeometry());
+}
+
+void CMainWindow::writeSettings_lastOpenedBookmarks()
+{
+    G_SETTINGS_INIT();
+    settings.setValue("lastBookmarks", m_project->path());
 }

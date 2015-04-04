@@ -1,6 +1,8 @@
 INCLUDEPATH    +=                                                       \
     $$PWD/src                                                           \
     $$PWD/src/bookmarkimport                                            \
+    $$PWD/src/project                                                   \
+    $$PWD/src/network                                                   \
     $$PWD/src/manager                                                   \
     $$PWD/src/widget                                                    \
     $$PWD/src/widget/bookmarkview                                       \
@@ -33,7 +35,10 @@ HEADERS        +=                                                       \
     $$PWD/src/project/cprj.h \
     $$PWD/src/project/cprjxml.h \
     $$PWD/src/cmainwindow.h \
-    $$PWD/src/settings.h
+    $$PWD/src/settings.h \
+    $$PWD/src/network/cwebfiledownloader.h \
+    $$PWD/src/network/cwebpagedownloader.h \
+    $$PWD/src/network/cwebpagescreenshot.h
 
 
 SOURCES        +=                                                       \
@@ -58,7 +63,10 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkview.cpp \
     $$PWD/src/project/cprj.cpp \
     $$PWD/src/project/cprjxml.cpp \
-    $$PWD/src/cmainwindow.cpp
+    $$PWD/src/cmainwindow.cpp \
+    $$PWD/src/network/cwebfiledownloader.cpp \
+    $$PWD/src/network/cwebpagedownloader.cpp \
+    $$PWD/src/network/cwebpagescreenshot.cpp
 
 
 FORMS          +=                                                       \

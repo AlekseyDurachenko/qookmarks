@@ -51,7 +51,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     connect(m_project, SIGNAL(opened()), this, SLOT(project_opened()));
     connect(m_project, SIGNAL(closed()), this, SLOT(project_closed()));
 
-    m_mainWidget = new CCompositWidget(m_project->manager(), this);
+    m_mainWidget = new CCompositWidget(m_project, this);
     setCentralWidget(m_mainWidget);
 
     // Menu: File

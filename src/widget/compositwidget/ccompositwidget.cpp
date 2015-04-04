@@ -28,15 +28,22 @@
 #include "ctagmgr.h"
 #include "cbookmarkitem.h"
 #include "cbookmarkmgr.h"
+#include "cwebpagescreenshot.h"
+#include "cprj.h"
+#include <QCryptographicHash>
+#include <QDir>
+#include <QDebug>
 
 
-CCompositWidget::CCompositWidget(CManager *manager, QWidget *parent) :
+CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
     QWidget(parent)
 {
-    m_manager = manager;
+    m_network = new QNetworkAccessManager(this);
 
-    m_filter = new CBookmarkFilter(m_manager, this);
-    m_dataModel = new CBookmarkFilterDataModel(m_manager, this);
+    m_project = project;
+
+    m_filter = new CBookmarkFilter(m_project->manager(), this);
+    m_dataModel = new CBookmarkFilterDataModel(m_project->manager(), this);
     m_dataModel->setFilter(m_filter);
     m_bookmarkItemModel = new CBookmarkFilteredItemModel(m_dataModel, this);
     m_bookmarkView = new CBookmarkView(this);
@@ -47,8 +54,8 @@ CCompositWidget::CCompositWidget(CManager *manager, QWidget *parent) :
             this, SLOT(updateActions()));
 
 
-    m_navigationItemModel = new CNavigationItemModel(m_manager, this);
-    m_navigationView = new CNavigationView(m_manager, this);
+    m_navigationItemModel = new CNavigationItemModel(m_project->manager(), this);
+    m_navigationView = new CNavigationView(m_project->manager(), this);
     m_navigationView->setModel(m_navigationItemModel);
     m_navigationItemModel->setNavigationActions(m_navigationView);
     connect(m_navigationView->selectionModel(),
@@ -58,6 +65,7 @@ CCompositWidget::CCompositWidget(CManager *manager, QWidget *parent) :
     m_actionBookmarkAdd = new QAction(tr("Add..."), this);
     m_actionBookmarkEdit = new QAction(tr("Edit..."), this);
     m_actionBookmarkRemove = new QAction(tr("Remove..."), this);
+    m_actionBookmarkScreenshot = new QAction(tr("Screenshot..."), this);
 
     connect(m_actionBookmarkAdd, SIGNAL(triggered()),
             this, SLOT(actionBookmarkAdd_triggered()));
@@ -65,6 +73,8 @@ CCompositWidget::CCompositWidget(CManager *manager, QWidget *parent) :
             this, SLOT(actionBookmarkEdit_triggered()));
     connect(m_actionBookmarkRemove, SIGNAL(triggered()),
             this, SLOT(actionBookmarkRemove_triggered()));
+    connect(m_actionBookmarkScreenshot, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkScreenshot_triggered()));
 
     QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
     splitter->addWidget(m_navigationView);
@@ -89,7 +99,8 @@ void CCompositWidget::navigation_selection_selectionChanged()
 
         QSet<CTagItem *> tags;
         if (index.internalPointer()
-                && index.internalPointer() != m_manager->tagMgr()->rootItem())
+                && (index.internalPointer()
+                    != m_project->manager()->tagMgr()->rootItem()))
         {
             tags.insert(static_cast<CTagItem *>(index.internalPointer()));
         }
@@ -120,7 +131,7 @@ void CCompositWidget::navigation_selection_selectionChanged()
                             Bookmark::FilterOptions(Bookmark::Trash));
                 break;
             case CNavigationItemModel::Untagged:
-                tags.insert(m_manager->tagMgr()->rootItem());
+                tags.insert(m_project->manager()->tagMgr()->rootItem());
                 break;
             default:
                 ;
@@ -150,7 +161,6 @@ void CCompositWidget::actionBookmarkRemove_triggered()
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
         return;
 
-    QList<int> bookmarkIndexes;
     foreach (const QModelIndex &index,
              m_bookmarkView->selectionModel()->selectedRows())
     {
@@ -162,12 +172,30 @@ void CCompositWidget::actionBookmarkRemove_triggered()
     }
 }
 
+void CCompositWidget::actionBookmarkScreenshot_triggered()
+{
+    foreach (const QModelIndex &index,
+             m_bookmarkView->selectionModel()->selectedRows())
+    {
+        CWebPageScreenshot *screenshot = new CWebPageScreenshot(m_network, this);
+        connect(screenshot, SIGNAL(finished()), screenshot, SLOT(deleteLater()));
+        connect(screenshot, SIGNAL(finished()), this, SLOT(screenshot_finished()));
+
+        CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+
+        screenshot->setUrl(item->data().url());
+        screenshot->setScreenshotSize(QSize(1280, 1024));
+        screenshot->start();
+    }
+}
+
 void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
 {
     QMenu menu(this);
     menu.addAction(m_actionBookmarkAdd);
     menu.addAction(m_actionBookmarkEdit);
     menu.addAction(m_actionBookmarkRemove);
+    menu.addAction(m_actionBookmarkScreenshot);
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
 }
 
@@ -176,4 +204,37 @@ void CCompositWidget::updateActions()
     int selectedCount = m_bookmarkView->selectionModel()->selectedRows().count();
     m_actionBookmarkEdit->setEnabled((selectedCount == 1));
     m_actionBookmarkRemove->setEnabled(selectedCount);
+    m_actionBookmarkScreenshot->setEnabled(selectedCount);
+}
+
+static QString md5(const QString &str)
+{
+    QCryptographicHash hash(QCryptographicHash::Md5);
+    hash.addData(str.toUtf8());
+    return hash.result().toHex();
+}
+
+static QString sha1(const QString &str)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    hash.addData(str.toUtf8());
+    return hash.result().toHex();
+}
+
+void CCompositWidget::screenshot_finished()
+{
+    CWebPageScreenshot *screenshot = qobject_cast<CWebPageScreenshot *>(sender());
+    if (screenshot->error() != CWebPageScreenshot::NoError)
+        return;
+
+    QImage image = screenshot->screenshot();
+
+    QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss-zzz.png");
+    QString subdir = sha1(screenshot->url().toString()) + "_" + md5(screenshot->url().toString());
+    QString path = m_project->screenshotPath();
+    QString res = path + "/" + subdir + "/" + fileName;
+    if (!QDir(path + "/" + subdir).exists())
+        QDir().mkpath(path + "/" + subdir);
+
+    image.save(res);
 }

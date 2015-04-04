@@ -29,6 +29,7 @@
 #include "cbookmarkfilteritemmodel.h"
 #include "cnavigationitemmodel.h"
 #include "settings.h"
+#include "cbookmarkview.h"
 #include <QMessageBox>
 #include <QPushButton>
 
@@ -50,6 +51,9 @@ CMainWindow::CMainWindow(QWidget *parent) :
     connect(m_project, SIGNAL(opened()), this, SLOT(project_opened()));
     connect(m_project, SIGNAL(closed()), this, SLOT(project_closed()));
 
+    m_mainWidget = new CCompositWidget(m_project->manager(), this);
+    setCentralWidget(m_mainWidget);
+
     // Menu: File
     ui->menu_file->addAction(m_project->actionCreate());
     ui->menu_file->addAction(m_project->actionOpen());
@@ -61,8 +65,10 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_quit);
 
-    m_mainWidget = new CCompositWidget(m_project->manager(), this);
-    setCentralWidget(m_mainWidget);
+    // Menu: Bookmark
+    ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkAdd());
+    ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkEdit());
+    ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkRemove());
 
     project_closed();
     readSettings_window();
@@ -82,6 +88,7 @@ void CMainWindow::project_opened()
     m_mainWidget->setEnabled(true);
     ui->action_import->setEnabled(true);
     ui->action_export->setEnabled(true);
+    ui->menu_bookmark->setEnabled(true);
 }
 
 void CMainWindow::project_closed()
@@ -89,6 +96,7 @@ void CMainWindow::project_closed()
     m_mainWidget->setEnabled(false);
     ui->action_import->setEnabled(false);
     ui->action_export->setEnabled(false);
+    ui->menu_bookmark->setEnabled(false);
 }
 
 void CMainWindow::actionCreate_triggered()
@@ -223,6 +231,9 @@ void CMainWindow::actionClose_triggered()
             }
         }
     }
+
+    // HACK: removing so slow if selection is exists
+    m_mainWidget->bookmarkView()->selectionModel()->clear();
 
     m_project->close();
 }

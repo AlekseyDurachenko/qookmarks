@@ -17,11 +17,11 @@
 
 #include <QWidget>
 class CNavigationItemModel;
+class CNavigationView;
+class CBookmarkView;
 class CBookmarkFilteredItemModel;
 class CBookmarkFilterDataModel;
 class CBookmarkFilter;
-class CNavigationView;
-class CBookmarkView;
 class CManager;
 
 
@@ -31,17 +31,52 @@ class CCompositWidget : public QWidget
 public:
     explicit CCompositWidget(CManager *manager, QWidget *parent = 0);
     virtual ~CCompositWidget();
+
+    inline CBookmarkView *bookmarkView() const;
+
+    inline QAction *actionBookmarkAdd() const;
+    inline QAction *actionBookmarkEdit() const;
+    inline QAction *actionBookmarkRemove() const;
 private slots:
     void navigation_selection_selectionChanged();
+    void actionBookmarkAdd_triggered();
+    void actionBookmarkEdit_triggered();
+    void actionBookmarkRemove_triggered();
+    void bookmarkView_showContextMenu(const QPoint &pos);
+    void updateActions();
 private:
     CNavigationView *m_navigationView;
     CBookmarkView *m_bookmarkView;
-    CNavigationItemModel *m_navigationItemModel;
-    CBookmarkFilteredItemModel *m_bookmarkItemModel;
-    CBookmarkFilterDataModel *m_dataModel;
     CBookmarkFilter *m_filter;
+    CBookmarkFilterDataModel *m_dataModel;
+    CBookmarkFilteredItemModel *m_bookmarkItemModel;
+    CNavigationItemModel *m_navigationItemModel;
     CManager *m_manager;
+
+    QAction *m_actionBookmarkAdd;
+    QAction *m_actionBookmarkEdit;
+    QAction *m_actionBookmarkRemove;
 };
+
+CBookmarkView *CCompositWidget::bookmarkView() const
+{
+    return m_bookmarkView;
+}
+
+QAction *CCompositWidget::actionBookmarkAdd() const
+{
+    return m_actionBookmarkAdd;
+}
+
+QAction *CCompositWidget::actionBookmarkEdit() const
+{
+    return m_actionBookmarkEdit;
+}
+
+QAction *CCompositWidget::actionBookmarkRemove() const
+{
+    return m_actionBookmarkRemove;
+}
 
 
 #endif // CCOMPOSITWIDGET_H

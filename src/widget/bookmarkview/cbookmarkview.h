@@ -23,7 +23,6 @@ class CBookmarkView : public QTreeView
     Q_OBJECT
 public:
     CBookmarkView(QWidget *parent = 0);
-    virtual ~CBookmarkView();
 };
 
 

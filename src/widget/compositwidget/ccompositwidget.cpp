@@ -15,14 +15,19 @@
 #include "ccompositwidget.h"
 #include <QHBoxLayout>
 #include <QSplitter>
+#include <QAction>
+#include <QMenu>
+#include <QMessageBox>
 #include "cnavigationview.h"
 #include "cbookmarkview.h"
 #include "cnavigationitemmodel.h"
+#include "cbookmarkfilter.h"
 #include "cbookmarkfilteritemmodel.h"
 #include "cbookmarkfilterdatamodel.h"
-#include "cbookmarkfilter.h"
 #include "cmanager.h"
 #include "ctagmgr.h"
+#include "cbookmarkitem.h"
+#include "cbookmarkmgr.h"
 
 
 CCompositWidget::CCompositWidget(CManager *manager, QWidget *parent) :
@@ -33,17 +38,33 @@ CCompositWidget::CCompositWidget(CManager *manager, QWidget *parent) :
     m_filter = new CBookmarkFilter(m_manager, this);
     m_dataModel = new CBookmarkFilterDataModel(m_manager, this);
     m_dataModel->setFilter(m_filter);
-    m_navigationItemModel = new CNavigationItemModel(m_manager, this);
     m_bookmarkItemModel = new CBookmarkFilteredItemModel(m_dataModel, this);
+    m_bookmarkView = new CBookmarkView(this);
+    m_bookmarkView->setModel(m_bookmarkItemModel);
+    connect(m_bookmarkView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(bookmarkView_showContextMenu(QPoint)));
+    connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(updateActions()));
 
+
+    m_navigationItemModel = new CNavigationItemModel(m_manager, this);
     m_navigationView = new CNavigationView(m_manager, this);
     m_navigationView->setModel(m_navigationItemModel);
     m_navigationItemModel->setNavigationActions(m_navigationView);
     connect(m_navigationView->selectionModel(),
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(navigation_selection_selectionChanged()));
-    m_bookmarkView = new CBookmarkView(this);
-    m_bookmarkView->setModel(m_bookmarkItemModel);
+
+    m_actionBookmarkAdd = new QAction(tr("Add..."), this);
+    m_actionBookmarkEdit = new QAction(tr("Edit..."), this);
+    m_actionBookmarkRemove = new QAction(tr("Remove..."), this);
+
+    connect(m_actionBookmarkAdd, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkAdd_triggered()));
+    connect(m_actionBookmarkEdit, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkEdit_triggered()));
+    connect(m_actionBookmarkRemove, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkRemove_triggered()));
 
     QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
     splitter->addWidget(m_navigationView);
@@ -81,12 +102,14 @@ void CCompositWidget::navigation_selection_selectionChanged()
             switch (type)
             {
             case CNavigationItemModel::Favorites:
-                m_filter->setInclusiveOption(Bookmark::FilterOptions(
-                            Bookmark::Favorite|Bookmark::NotTrash));
+                m_filter->setInclusiveOption(
+                            Bookmark::FilterOptions(
+                                Bookmark::Favorite|Bookmark::NotTrash));
                 break;
             case CNavigationItemModel::ReadLater:
-                m_filter->setInclusiveOption(Bookmark::FilterOptions(
-                            Bookmark::ReadLater|Bookmark::NotTrash));
+                m_filter->setInclusiveOption(
+                            Bookmark::FilterOptions(
+                                Bookmark::ReadLater|Bookmark::NotTrash));
                 break;
             case CNavigationItemModel::Rated:
                 m_filter->setRatingRange(
@@ -109,4 +132,48 @@ void CCompositWidget::navigation_selection_selectionChanged()
 
         break; // only first selected item
     }
+}
+
+void CCompositWidget::actionBookmarkAdd_triggered()
+{
+
+}
+
+void CCompositWidget::actionBookmarkEdit_triggered()
+{
+
+}
+
+void CCompositWidget::actionBookmarkRemove_triggered()
+{
+    if (QMessageBox::question(this, tr("Question"), tr("Remove bookmark(s)?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    QList<int> bookmarkIndexes;
+    foreach (const QModelIndex &index,
+             m_bookmarkView->selectionModel()->selectedRows())
+    {
+        CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
+                    index.internalPointer());
+        CBookmark data = item->data();
+        data.setTrash(true);
+        item->setData(data);
+    }
+}
+
+void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
+{
+    QMenu menu(this);
+    menu.addAction(m_actionBookmarkAdd);
+    menu.addAction(m_actionBookmarkEdit);
+    menu.addAction(m_actionBookmarkRemove);
+    menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
+}
+
+void CCompositWidget::updateActions()
+{
+    int selectedCount = m_bookmarkView->selectionModel()->selectedRows().count();
+    m_actionBookmarkEdit->setEnabled((selectedCount == 1));
+    m_actionBookmarkRemove->setEnabled(selectedCount);
 }

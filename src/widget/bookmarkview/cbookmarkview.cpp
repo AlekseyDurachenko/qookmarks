@@ -14,12 +14,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkview.h"
 
-CBookmarkView::CBookmarkView(QWidget *parent) : QTreeView(parent)
+
+CBookmarkView::CBookmarkView(QWidget *parent) :
+    QTreeView(parent)
 {
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setDragDropMode(QAbstractItemView::DragOnly);
-}
-
-CBookmarkView::~CBookmarkView()
-{
+    setContextMenuPolicy(Qt::CustomContextMenu);
 }

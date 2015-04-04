@@ -46,16 +46,16 @@ public:
     inline QAction *actionOpen() const;
     inline QAction *actionSave() const;
     inline QAction *actionClose() const;
+public:
+    static QString xmlPath(const QString &path);
+    static QString iconPath(const QString &path);
+    static QString screenshotPath(const QString &path);
+    static QString downloadsPath(const QString &path);
 signals:
     void opened();
     void closed();
 private slots:
     void somethingChanged();
-private:
-    static QString xmlPath(const QString &path);
-    static QString iconPath(const QString &path);
-    static QString screenshotPath(const QString &path);
-    static QString downloadsPath(const QString &path);
 private:
     void updateActions();
 private:

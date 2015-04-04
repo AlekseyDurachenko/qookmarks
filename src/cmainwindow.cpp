@@ -133,6 +133,14 @@ void CMainWindow::actionCreate_triggered()
     if (dirName.isEmpty())
         return;
 
+    if (QFile(CPrj::xmlPath(dirName)).exists())
+    {
+        if (QMessageBox::question(this, tr("Question"),
+                tr("Project is already created. Replace the project?"),
+                QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Cancel)
+            return;
+    }
+
     QString reason;
     if (!m_project->create(dirName, &reason))
         QMessageBox::warning(this, tr("Warning"), reason);

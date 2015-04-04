@@ -24,6 +24,7 @@ class CBookmarkFilteredItemModel;
 class CBookmarkFilterDataModel;
 class CBookmarkFilter;
 class CPrj;
+class CBookmarkItem;
 
 
 class CCompositWidget : public QWidget
@@ -44,9 +45,14 @@ private slots:
     void actionBookmarkEdit_triggered();
     void actionBookmarkRemove_triggered();
     void actionBookmarkScreenshot_triggered();
+    void actionBookmarkDownload_triggered();
     void bookmarkView_showContextMenu(const QPoint &pos);
     void updateActions();
 
+    void download_next();
+    void download_finishied();
+
+    void screenshot_next();
     void screenshot_finished();
 private:
     CNavigationView *m_navigationView;
@@ -62,6 +68,10 @@ private:
     QAction *m_actionBookmarkEdit;
     QAction *m_actionBookmarkRemove;
     QAction *m_actionBookmarkScreenshot;
+    QAction *m_actionBookmarkDownload;
+
+    QList<CBookmarkItem *> m_list;
+    QList<CBookmarkItem *> m_listDl;
 };
 
 CBookmarkView *CCompositWidget::bookmarkView() const

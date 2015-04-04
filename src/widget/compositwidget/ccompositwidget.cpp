@@ -29,6 +29,7 @@
 #include "cbookmarkitem.h"
 #include "cbookmarkmgr.h"
 #include "cwebpagescreenshot.h"
+#include "cwebpagedownloader.h"
 #include "cprj.h"
 #include <QCryptographicHash>
 #include <QDir>
@@ -66,6 +67,7 @@ CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
     m_actionBookmarkEdit = new QAction(tr("Edit..."), this);
     m_actionBookmarkRemove = new QAction(tr("Remove..."), this);
     m_actionBookmarkScreenshot = new QAction(tr("Screenshot..."), this);
+    m_actionBookmarkDownload = new QAction(tr("Download..."), this);
 
     connect(m_actionBookmarkAdd, SIGNAL(triggered()),
             this, SLOT(actionBookmarkAdd_triggered()));
@@ -75,6 +77,8 @@ CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
             this, SLOT(actionBookmarkRemove_triggered()));
     connect(m_actionBookmarkScreenshot, SIGNAL(triggered()),
             this, SLOT(actionBookmarkScreenshot_triggered()));
+    connect(m_actionBookmarkDownload, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkDownload_triggered()));
 
     QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
     splitter->addWidget(m_navigationView);
@@ -176,17 +180,18 @@ void CCompositWidget::actionBookmarkScreenshot_triggered()
 {
     foreach (const QModelIndex &index,
              m_bookmarkView->selectionModel()->selectedRows())
-    {
-        CWebPageScreenshot *screenshot = new CWebPageScreenshot(m_network, this);
-        connect(screenshot, SIGNAL(finished()), screenshot, SLOT(deleteLater()));
-        connect(screenshot, SIGNAL(finished()), this, SLOT(screenshot_finished()));
+        m_list << reinterpret_cast<CBookmarkItem *>(index.internalPointer());
 
-        CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+    screenshot_next();
+}
 
-        screenshot->setUrl(item->data().url());
-        screenshot->setScreenshotSize(QSize(1280, 1024));
-        screenshot->start();
-    }
+void CCompositWidget::actionBookmarkDownload_triggered()
+{
+    foreach (const QModelIndex &index,
+             m_bookmarkView->selectionModel()->selectedRows())
+        m_listDl << reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+
+    download_next();
 }
 
 void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
@@ -196,6 +201,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.addAction(m_actionBookmarkEdit);
     menu.addAction(m_actionBookmarkRemove);
     menu.addAction(m_actionBookmarkScreenshot);
+    menu.addAction(m_actionBookmarkDownload);
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
 }
 
@@ -205,6 +211,23 @@ void CCompositWidget::updateActions()
     m_actionBookmarkEdit->setEnabled((selectedCount == 1));
     m_actionBookmarkRemove->setEnabled(selectedCount);
     m_actionBookmarkScreenshot->setEnabled(selectedCount);
+}
+
+void CCompositWidget::screenshot_next()
+{
+    if (m_list.isEmpty())
+        return;
+    CBookmarkItem *item = m_list.takeFirst();
+    qDebug() << item->data().url() << " left " << m_list.count();
+
+    CWebPageScreenshot *screenshot = new CWebPageScreenshot(m_network, this);
+    connect(screenshot, SIGNAL(finished()), screenshot, SLOT(deleteLater()));
+    connect(screenshot, SIGNAL(finished()), this, SLOT(screenshot_finished()));
+    connect(screenshot, SIGNAL(finished()), this, SLOT(screenshot_next()));
+
+    screenshot->setUrl(item->data().url());
+    screenshot->setScreenshotSize(QSize(1280, 1024));
+    screenshot->start();
 }
 
 static QString md5(const QString &str)
@@ -236,5 +259,46 @@ void CCompositWidget::screenshot_finished()
     if (!QDir(path + "/" + subdir).exists())
         QDir().mkpath(path + "/" + subdir);
 
+    QFile file(path + "/" + subdir + "/url.txt");
+    file.open(QIODevice::WriteOnly);
+    file.write(screenshot->url().toString().toUtf8());
+    file.close();
+
+
     image.save(res);
 }
+
+void CCompositWidget::download_next()
+{
+    if (m_listDl.isEmpty())
+        return;
+    CBookmarkItem *item = m_listDl.takeFirst();
+    qDebug() << item->data().url() << " left " << m_listDl.count();
+
+
+    CWebPageDownloader *download = new CWebPageDownloader(m_network, this);
+    connect(download, SIGNAL(finished()), download, SLOT(deleteLater()));
+    connect(download, SIGNAL(finished()), this, SLOT(download_finishied()));
+    connect(download, SIGNAL(finished()), this, SLOT(download_next()));
+
+    QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss-zzz");
+    QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
+    QString path = m_project->downloadsPath();
+    QString res = path + "/" + subdir + "/" + fileName;
+    if (!QDir(res).exists())
+        QDir().mkpath(res);
+
+    QFile file(path + "/" + subdir + "/url.txt");
+    file.open(QIODevice::WriteOnly);
+    file.write(item->data().url().toString().toUtf8());
+    file.close();
+
+    download->setUrl(item->data().url());
+    download->setFileName(res + "/index.html");
+    download->start();
+}
+
+void CCompositWidget::download_finishied()
+{
+}
+

@@ -48,8 +48,10 @@ private slots:
 private:
     void readSettings_window();
     void readSettings_lastOpenedBookmarks();
+    QString readSettings_lastBookmarkDirectory();
     void writeSettings_window();
     void writeSettings_lastOpenedBookmarks();
+    void writeSettings_lastBookmarkDirectory(const QString &path);
 private:
     Ui::CMainWindow *ui;
     CPrj *m_project;

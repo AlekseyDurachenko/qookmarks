@@ -120,7 +120,7 @@ void CMainWindow::actionCreate_triggered()
     }
 
     QString dirName = QFileDialog::getExistingDirectory(this,
-            tr("Create bookmarks"), "",
+            tr("Create bookmarks"), readSettings_lastBookmarkDirectory(),
             QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
 
     if (dirName.isEmpty())
@@ -129,9 +129,11 @@ void CMainWindow::actionCreate_triggered()
     QString reason;
     if (!m_project->create(dirName, &reason))
         QMessageBox::warning(this, tr("Warning"), reason);
+    else
+        if (!m_project->open(dirName, &reason))
+            QMessageBox::warning(this, tr("Warning"), reason);
 
-    if (!m_project->open(dirName, &reason))
-        QMessageBox::warning(this, tr("Warning"), reason);
+    writeSettings_lastBookmarkDirectory(dirName);
 }
 
 void CMainWindow::actionOpen_triggered()
@@ -170,7 +172,7 @@ void CMainWindow::actionOpen_triggered()
     }
 
     QString dirName = QFileDialog::getExistingDirectory(this,
-            tr("Open bookmarks"), "",
+            tr("Open bookmarks"), readSettings_lastBookmarkDirectory(),
             QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
 
     if (dirName.isEmpty())
@@ -179,6 +181,8 @@ void CMainWindow::actionOpen_triggered()
     QString reason;
     if (!m_project->open(dirName, &reason))
         QMessageBox::warning(this, tr("Warning"), reason);
+
+    writeSettings_lastBookmarkDirectory(dirName);
 }
 
 void CMainWindow::actionSave_triggered()
@@ -231,6 +235,12 @@ void CMainWindow::readSettings_lastOpenedBookmarks()
             QMessageBox::warning(this, tr("Warning"), reason);
 }
 
+QString CMainWindow::readSettings_lastBookmarkDirectory()
+{
+    G_SETTINGS_INIT();
+    return settings.value("lastBookmarksDirectory", "").toString();
+}
+
 void CMainWindow::writeSettings_window()
 {
     G_SETTINGS_INIT();
@@ -242,4 +252,10 @@ void CMainWindow::writeSettings_lastOpenedBookmarks()
 {
     G_SETTINGS_INIT();
     settings.setValue("lastBookmarks", m_project->path());
+}
+
+void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
+{
+    G_SETTINGS_INIT();
+    settings.setValue("lastBookmarksDirectory", path);
 }

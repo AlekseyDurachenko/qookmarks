@@ -37,6 +37,7 @@
 #include "ctagitem.h"
 #include "ctagmgr.h"
 #include "ctageditdialog.h"
+#include "cbookmarkeditdialog.h"
 
 
 CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
@@ -224,12 +225,48 @@ void CCompositWidget::actionTagRemove_triggered()
 
 void CCompositWidget::actionBookmarkAdd_triggered()
 {
-
+    CBookmarkEditDialog dlg(this);
+    dlg.setWindowTitle(tr("Create new bookmark"));
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        CBookmark data = dlg.toData();
+        if (m_project->manager()->bookmarkMgr()->find(data.url()))
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("The bookmark with "
+                    "the url \"%1\" is already exists")
+                            .arg(data.url().toString()));
+        }
+        else
+        {
+            CBookmarkItem *bookmark = m_project->manager()->bookmarkMgr()->add(dlg.toData());
+            if (!m_filter->tags().isEmpty())
+                foreach (CTagItem *tag, m_filter->tags())
+                    tag->bookmarkAdd(bookmark);
+        }
+    }
 }
 
 void CCompositWidget::actionBookmarkEdit_triggered()
 {
+    CBookmarkItem *item = 0;
+    foreach (const QModelIndex &index,
+             m_bookmarkView->selectionModel()->selectedRows())
+    {
+        item = reinterpret_cast<CBookmarkItem *>(
+                    index.internalPointer());
+        break;
+    }
 
+    if (!item)
+        return;
+
+    CBookmarkEditDialog dlg(this);
+    dlg.setWindowTitle(tr("Edit bookmark"));
+    dlg.setData(item->data());
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        item->setData(dlg.toData());
+    }
 }
 
 void CCompositWidget::actionBookmarkRemove_triggered()

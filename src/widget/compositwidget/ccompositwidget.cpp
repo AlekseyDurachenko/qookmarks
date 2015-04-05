@@ -339,15 +339,15 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
         QString path = m_project->downloadsPath();
-        if (!QDir(path + "/" + subdir).exists())
-            return;
-
-        foreach (const QString &dirName, QDir(path + "/" + subdir).entryList(QDir::Dirs|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
+        if (QDir(path + "/" + subdir).exists())
         {
-            QAction *action = new QAction(dirName, &menu);
-            connect(action, SIGNAL(triggered()), this, SLOT(download_openUrl()));
-            downloadMenu->addAction(action);
-            action->setData(path + "/" + subdir + "/" + dirName + "/" + "index.html");
+            foreach (const QString &dirName, QDir(path + "/" + subdir).entryList(QDir::Dirs|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
+            {
+                QAction *action = new QAction(dirName, &menu);
+                connect(action, SIGNAL(triggered()), this, SLOT(download_openUrl()));
+                downloadMenu->addAction(action);
+                action->setData(path + "/" + subdir + "/" + dirName + "/" + "index.html");
+            }
         }
     }
 
@@ -361,18 +361,18 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
         QString path = m_project->screenshotPath();
-        if (!QDir(path + "/" + subdir).exists())
-            return;
-
-        foreach (const QString &fileName, QDir(path + "/" + subdir).entryList(QDir::Files|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
+        if (QDir(path + "/" + subdir).exists())
         {
-            if (!fileName.endsWith(".png"))
-                continue;
+            foreach (const QString &fileName, QDir(path + "/" + subdir).entryList(QDir::Files|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
+            {
+                if (!fileName.endsWith(".png"))
+                    continue;
 
-            QAction *action = new QAction(fileName, &menu);
-            connect(action, SIGNAL(triggered()), this, SLOT(download_openUrl()));
-            downloadMenu->addAction(action);
-            action->setData(path + "/" + subdir + "/" + fileName);
+                QAction *action = new QAction(fileName, &menu);
+                connect(action, SIGNAL(triggered()), this, SLOT(download_openUrl()));
+                downloadMenu->addAction(action);
+                action->setData(path + "/" + subdir + "/" + fileName);
+            }
         }
     }
 

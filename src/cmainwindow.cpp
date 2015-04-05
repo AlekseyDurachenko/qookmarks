@@ -61,14 +61,14 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_file->addAction(m_project->actionClose());
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_import);
-    ui->menu_file->addAction(ui->action_export);
+    //ui->menu_file->addAction(ui->action_export);
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_quit);
 
     // Menu: Bookmark
-    ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkAdd());
-    ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkEdit());
-    ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkRemove());
+    //ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkAdd());
+    //ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkEdit());
+    //ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkRemove());
 
     project_closed();
     readSettings_window();
@@ -88,7 +88,7 @@ void CMainWindow::project_opened()
     m_mainWidget->setEnabled(true);
     ui->action_import->setEnabled(true);
     ui->action_export->setEnabled(true);
-    ui->menu_bookmark->setEnabled(true);
+    //ui->menu_bookmark->setEnabled(true);
 }
 
 void CMainWindow::project_closed()
@@ -96,7 +96,7 @@ void CMainWindow::project_closed()
     m_mainWidget->setEnabled(false);
     ui->action_import->setEnabled(false);
     ui->action_export->setEnabled(false);
-    ui->menu_bookmark->setEnabled(false);
+    //ui->menu_bookmark->setEnabled(false);
 }
 
 void CMainWindow::actionCreate_triggered()

@@ -34,13 +34,13 @@
     </property>
     <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menu_bookmark">
+   <widget class="QMenu" name="menu_About">
     <property name="title">
-     <string>&amp;Bookmark</string>
+     <string>&amp;About</string>
     </property>
    </widget>
    <addaction name="menu_file"/>
-   <addaction name="menu_bookmark"/>
+   <addaction name="menu_About"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -58,7 +58,7 @@
   </action>
   <action name="action_import">
    <property name="text">
-    <string>&amp;Import...</string>
+    <string>&amp;Import chromium bookmarks</string>
    </property>
   </action>
   <action name="action_export">

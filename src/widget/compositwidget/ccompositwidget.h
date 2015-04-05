@@ -17,6 +17,7 @@
 
 #include <QWidget>
 #include <QNetworkAccessManager>
+#include <QModelIndex>
 class CNavigationItemModel;
 class CNavigationView;
 class CBookmarkView;
@@ -52,6 +53,7 @@ private slots:
     void actionBookmarkScreenshot_triggered();
     void actionBookmarkDownload_triggered();
     void bookmarkView_showContextMenu(const QPoint &pos);
+    void bookmarkView_doubleClicked(const QModelIndex &index);
     void navigationView_showContextMenu(const QPoint &pos);
     void updateActions();
 
@@ -60,6 +62,8 @@ private slots:
 
     void screenshot_next();
     void screenshot_finished();
+
+    void download_openUrl();
 private:
     CNavigationView *m_navigationView;
     CBookmarkView *m_bookmarkView;

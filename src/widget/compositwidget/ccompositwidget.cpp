@@ -18,6 +18,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include "cnavigationview.h"
 #include "cbookmarkview.h"
 #include "cnavigationitemmodel.h"
@@ -39,6 +40,19 @@
 #include "ctageditdialog.h"
 #include "cbookmarkeditdialog.h"
 
+static QString md5(const QString &str)
+{
+    QCryptographicHash hash(QCryptographicHash::Md5);
+    hash.addData(str.toUtf8());
+    return hash.result().toHex();
+}
+
+static QString sha1(const QString &str)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    hash.addData(str.toUtf8());
+    return hash.result().toHex();
+}
 
 CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
     QWidget(parent)
@@ -57,7 +71,8 @@ CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
             this, SLOT(bookmarkView_showContextMenu(QPoint)));
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(updateActions()));
-
+    connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
 
     m_navigationItemModel = new CNavigationItemModel(m_project->manager(), this);
     m_navigationView = new CNavigationView(m_project->manager(), this);
@@ -312,7 +327,65 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.addAction(m_actionBookmarkRemove);
     menu.addAction(m_actionBookmarkScreenshot);
     menu.addAction(m_actionBookmarkDownload);
+
+    if (m_bookmarkView->selectionModel()->selectedRows().count() == 1)
+    {
+        menu.addSeparator();
+        QMenu *downloadMenu = new QMenu(tr("Downloaded web pages"), &menu);
+        menu.addAction(menu.addMenu(downloadMenu));
+
+        CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
+                    m_bookmarkView->selectionModel()->selectedRows().first().internalPointer());
+
+        QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
+        QString path = m_project->downloadsPath();
+        if (!QDir(path + "/" + subdir).exists())
+            return;
+
+        foreach (const QString &dirName, QDir(path + "/" + subdir).entryList(QDir::Dirs|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
+        {
+            QAction *action = new QAction(dirName, &menu);
+            connect(action, SIGNAL(triggered()), this, SLOT(download_openUrl()));
+            downloadMenu->addAction(action);
+            action->setData(path + "/" + subdir + "/" + dirName + "/" + "index.html");
+        }
+    }
+
+    if (m_bookmarkView->selectionModel()->selectedRows().count() == 1)
+    {
+        QMenu *downloadMenu = new QMenu(tr("Screenshots"), &menu);
+        menu.addAction(menu.addMenu(downloadMenu));
+
+        CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
+                    m_bookmarkView->selectionModel()->selectedRows().first().internalPointer());
+
+        QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
+        QString path = m_project->screenshotPath();
+        if (!QDir(path + "/" + subdir).exists())
+            return;
+
+        foreach (const QString &fileName, QDir(path + "/" + subdir).entryList(QDir::Files|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
+        {
+            if (!fileName.endsWith(".png"))
+                continue;
+
+            QAction *action = new QAction(fileName, &menu);
+            connect(action, SIGNAL(triggered()), this, SLOT(download_openUrl()));
+            downloadMenu->addAction(action);
+            action->setData(path + "/" + subdir + "/" + fileName);
+        }
+    }
+
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
+}
+
+void CCompositWidget::bookmarkView_doubleClicked(const QModelIndex &index)
+{
+    CBookmarkItem *item  = reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+    if (!item)
+        return;
+
+    QDesktopServices::openUrl(item->data().url());
 }
 
 void CCompositWidget::navigationView_showContextMenu(const QPoint &pos)
@@ -349,20 +422,6 @@ void CCompositWidget::screenshot_next()
     screenshot->start();
 }
 
-static QString md5(const QString &str)
-{
-    QCryptographicHash hash(QCryptographicHash::Md5);
-    hash.addData(str.toUtf8());
-    return hash.result().toHex();
-}
-
-static QString sha1(const QString &str)
-{
-    QCryptographicHash hash(QCryptographicHash::Sha1);
-    hash.addData(str.toUtf8());
-    return hash.result().toHex();
-}
-
 void CCompositWidget::screenshot_finished()
 {
     CWebPageScreenshot *screenshot = qobject_cast<CWebPageScreenshot *>(sender());
@@ -385,6 +444,12 @@ void CCompositWidget::screenshot_finished()
 
 
     image.save(res);
+}
+
+void CCompositWidget::download_openUrl()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    QDesktopServices::openUrl("file://" + action->data().toString());
 }
 
 void CCompositWidget::download_next()

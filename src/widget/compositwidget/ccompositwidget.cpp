@@ -34,6 +34,9 @@
 #include <QCryptographicHash>
 #include <QDir>
 #include <QDebug>
+#include "ctagitem.h"
+#include "ctagmgr.h"
+#include "ctageditdialog.h"
 
 
 CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
@@ -59,9 +62,12 @@ CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
     m_navigationView = new CNavigationView(m_project->manager(), this);
     m_navigationView->setModel(m_navigationItemModel);
     m_navigationItemModel->setNavigationActions(m_navigationView);
+    connect(m_navigationView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(navigationView_showContextMenu(QPoint)));
     connect(m_navigationView->selectionModel(),
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(navigation_selection_selectionChanged()));
+
 
     m_actionBookmarkAdd = new QAction(tr("Add..."), this);
     m_actionBookmarkEdit = new QAction(tr("Edit..."), this);
@@ -79,6 +85,19 @@ CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
             this, SLOT(actionBookmarkScreenshot_triggered()));
     connect(m_actionBookmarkDownload, SIGNAL(triggered()),
             this, SLOT(actionBookmarkDownload_triggered()));
+
+
+    m_actionTagAdd = new QAction(tr("Add..."), this);
+    m_actionTagEdit = new QAction(tr("Edit..."), this);
+    m_actionTagRemove = new QAction(tr("Remove..."), this);
+
+    connect(m_actionTagAdd, SIGNAL(triggered()),
+            this, SLOT(actionTagAdd_triggered()));
+    connect(m_actionTagEdit, SIGNAL(triggered()),
+            this, SLOT(actionTagEdit_triggered()));
+    connect(m_actionTagRemove, SIGNAL(triggered()),
+            this, SLOT(actionTagRemove_triggered()));
+
 
     QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
     splitter->addWidget(m_navigationView);
@@ -149,6 +168,60 @@ void CCompositWidget::navigation_selection_selectionChanged()
     }
 }
 
+void CCompositWidget::actionTagAdd_triggered()
+{
+    CTagItem *item = 0;
+    foreach (const QModelIndex &index,
+             m_navigationView->selectionModel()->selectedRows())
+    {
+        item = reinterpret_cast<CTagItem *>(
+                    index.internalPointer());
+        break;
+    }
+
+    if (item)
+    {
+        CTagEditDialog dlg(CTagEditDialog::New, item, this);
+        if (dlg.exec() == QDialog::Accepted)
+            item->add(dlg.toData());
+    }
+}
+
+void CCompositWidget::actionTagEdit_triggered()
+{
+    CTagItem *item = 0;
+    foreach (const QModelIndex &index,
+             m_navigationView->selectionModel()->selectedRows())
+    {
+        item = reinterpret_cast<CTagItem *>(
+                    index.internalPointer());
+        break;
+    }
+
+    if (item && item != m_project->manager()->tagMgr()->rootItem())
+    {
+        CTagEditDialog dlg(CTagEditDialog::Edit, item->parent(), this);
+        dlg.setData(item->data());
+        if (dlg.exec() == QDialog::Accepted)
+            item->setData(dlg.toData());
+    }
+}
+
+void CCompositWidget::actionTagRemove_triggered()
+{
+    if (QMessageBox::question(this, tr("Question"), tr("Remove tag?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    foreach (const QModelIndex &index,
+             m_navigationView->selectionModel()->selectedRows())
+    {
+        CTagItem *item = reinterpret_cast<CTagItem *>(
+                    index.internalPointer());
+        item->parent()->removeAt(item->index());
+    }
+}
+
 void CCompositWidget::actionBookmarkAdd_triggered()
 {
 
@@ -203,6 +276,15 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.addAction(m_actionBookmarkScreenshot);
     menu.addAction(m_actionBookmarkDownload);
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
+}
+
+void CCompositWidget::navigationView_showContextMenu(const QPoint &pos)
+{
+    QMenu menu(this);
+    menu.addAction(m_actionTagAdd);
+    menu.addAction(m_actionTagEdit);
+    menu.addAction(m_actionTagRemove);
+    menu.exec(m_navigationView->viewport()->mapToGlobal(pos));
 }
 
 void CCompositWidget::updateActions()

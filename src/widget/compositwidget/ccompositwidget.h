@@ -41,12 +41,18 @@ public:
     inline QAction *actionBookmarkRemove() const;
 private slots:
     void navigation_selection_selectionChanged();
+
+    void actionTagAdd_triggered();
+    void actionTagEdit_triggered();
+    void actionTagRemove_triggered();
+
     void actionBookmarkAdd_triggered();
     void actionBookmarkEdit_triggered();
     void actionBookmarkRemove_triggered();
     void actionBookmarkScreenshot_triggered();
     void actionBookmarkDownload_triggered();
     void bookmarkView_showContextMenu(const QPoint &pos);
+    void navigationView_showContextMenu(const QPoint &pos);
     void updateActions();
 
     void download_next();
@@ -69,6 +75,10 @@ private:
     QAction *m_actionBookmarkRemove;
     QAction *m_actionBookmarkScreenshot;
     QAction *m_actionBookmarkDownload;
+
+    QAction *m_actionTagAdd;
+    QAction *m_actionTagEdit;
+    QAction *m_actionTagRemove;
 
     QList<CBookmarkItem *> m_list;
     QList<CBookmarkItem *> m_listDl;

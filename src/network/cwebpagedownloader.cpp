@@ -234,6 +234,7 @@ QString CWebPageDownloader::addUrlToDownloader(const QString &urlstr, const QStr
 
 void CWebPageDownloader::updateProgress()
 {
+    qDebug() << "updateProgress" << m_resources.count() << m_totalResources;
     if (m_totalResources == 0)
         emit downloadProgress(1, 1);
     else

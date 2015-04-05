@@ -8,6 +8,8 @@ INCLUDEPATH    +=                                                       \
     $$PWD/src/widget/bookmarkview                                       \
     $$PWD/src/widget/navigationview                                     \
     $$PWD/src/widget/compositwidget                                     \
+    $$PWD/src/widget/tageditdialog                                      \
+    $$PWD/src/widget/bookmarkeditdialog                                 \
 
 
 HEADERS        +=                                                       \
@@ -38,7 +40,8 @@ HEADERS        +=                                                       \
     $$PWD/src/settings.h \
     $$PWD/src/network/cwebfiledownloader.h \
     $$PWD/src/network/cwebpagedownloader.h \
-    $$PWD/src/network/cwebpagescreenshot.h
+    $$PWD/src/network/cwebpagescreenshot.h \
+    $$PWD/src/widget/tageditdialog/ctageditdialog.h
 
 
 SOURCES        +=                                                       \
@@ -66,11 +69,13 @@ SOURCES        +=                                                       \
     $$PWD/src/cmainwindow.cpp \
     $$PWD/src/network/cwebfiledownloader.cpp \
     $$PWD/src/network/cwebpagedownloader.cpp \
-    $$PWD/src/network/cwebpagescreenshot.cpp
+    $$PWD/src/network/cwebpagescreenshot.cpp \
+    $$PWD/src/widget/tageditdialog/ctageditdialog.cpp
 
 
 FORMS          +=                                                       \
-    $$PWD/src/cmainwindow.ui
+    $$PWD/src/cmainwindow.ui \
+    $$PWD/src/widget/tageditdialog/ctageditdialog.ui
 
 
 RESOURCES      +=                                                       \

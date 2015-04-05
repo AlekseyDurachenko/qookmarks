@@ -30,6 +30,7 @@ CNavigationView::CNavigationView(CManager *manager, QWidget *parent) :
 
     setSelectionMode(QAbstractItemView::SingleSelection);
     setDragDropMode(QAbstractItemView::DragDrop);
+    setContextMenuPolicy(Qt::CustomContextMenu);
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
 }

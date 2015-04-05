@@ -46,6 +46,11 @@ private slots:
     void actionClose_triggered();
     void on_action_quit_triggered();
     void on_action_import_triggered();
+    void on_action_about_triggered();
+
+    void on_action_aboutQt_triggered();
+protected:
+    void closeEvent(QCloseEvent *event);
 private:
     void readSettings_window();
     void readSettings_lastOpenedBookmarks();

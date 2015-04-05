@@ -38,6 +38,8 @@
     <property name="title">
      <string>&amp;About</string>
     </property>
+    <addaction name="action_about"/>
+    <addaction name="action_aboutQt"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_About"/>
@@ -64,6 +66,16 @@
   <action name="action_export">
    <property name="text">
     <string>&amp;Export...</string>
+   </property>
+  </action>
+  <action name="action_about">
+   <property name="text">
+    <string>&amp;About...</string>
+   </property>
+  </action>
+  <action name="action_aboutQt">
+   <property name="text">
+    <string>About &amp;Qt...</string>
    </property>
   </action>
  </widget>

@@ -17,6 +17,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QtGui>
+#include "caboutdialog.h"
 #include "cmanager.h"
 #include "ctagmgr.h"
 #include "ctagitem.h"
@@ -38,6 +39,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::CMainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("%1").arg(appName()));
 
     m_project = new CPrj(this);
     connect(m_project->actionCreate(), SIGNAL(triggered()),
@@ -89,6 +91,7 @@ void CMainWindow::project_opened()
     ui->action_import->setEnabled(true);
     ui->action_export->setEnabled(true);
     //ui->menu_bookmark->setEnabled(true);
+    setWindowTitle(tr("%1 - %2").arg(appName(), m_project->path()));
 }
 
 void CMainWindow::project_closed()
@@ -97,6 +100,7 @@ void CMainWindow::project_closed()
     ui->action_import->setEnabled(false);
     ui->action_export->setEnabled(false);
     //ui->menu_bookmark->setEnabled(false);
+    setWindowTitle(tr("%1").arg(appName()));
 }
 
 void CMainWindow::actionCreate_triggered()
@@ -291,4 +295,34 @@ void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
 {
     G_SETTINGS_INIT();
     settings.setValue("lastBookmarksDirectory", path);
+}
+
+void CMainWindow::on_action_about_triggered()
+{
+    CAboutDialog dlg(this);
+    dlg.exec();
+}
+
+void CMainWindow::on_action_aboutQt_triggered()
+{
+    qApp->aboutQt();
+}
+
+void CMainWindow::closeEvent(QCloseEvent *event)
+{
+    if (m_project->hasChanges())
+    {
+        if (QMessageBox::question(this, tr("Question"),
+                tr("Opened bookmarks was changed. Save the changes?"),
+                QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
+        {
+            QString reason;
+            if (!m_project->save(&reason))
+            {
+                QMessageBox::critical(this, tr("Critical"), reason);
+            }
+        }
+    }
+
+    QMainWindow::closeEvent(event);
 }

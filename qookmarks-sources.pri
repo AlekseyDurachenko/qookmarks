@@ -42,7 +42,8 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cwebpagedownloader.h \
     $$PWD/src/network/cwebpagescreenshot.h \
     $$PWD/src/widget/tageditdialog/ctageditdialog.h \
-    $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.h
+    $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.h \
+    $$PWD/src/caboutdialog.h
 
 
 SOURCES        +=                                                       \
@@ -72,13 +73,15 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cwebpagedownloader.cpp \
     $$PWD/src/network/cwebpagescreenshot.cpp \
     $$PWD/src/widget/tageditdialog/ctageditdialog.cpp \
-    $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.cpp
+    $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.cpp \
+    $$PWD/src/caboutdialog.cpp
 
 
 FORMS          +=                                                       \
     $$PWD/src/cmainwindow.ui \
     $$PWD/src/widget/tageditdialog/ctageditdialog.ui \
-    $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.ui
+    $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.ui \
+    $$PWD/src/caboutdialog.ui
 
 
 RESOURCES      +=                                                       \

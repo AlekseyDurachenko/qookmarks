@@ -1,5 +1,6 @@
 INCLUDEPATH    +=                                                       \
     $$PWD/src                                                           \
+    $$PWD/src/common                                                    \
     $$PWD/src/bookmarkimport                                            \
     $$PWD/src/project                                                   \
     $$PWD/src/network                                                   \
@@ -43,7 +44,8 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cwebpagescreenshot.h \
     $$PWD/src/widget/tageditdialog/ctageditdialog.h \
     $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.h \
-    $$PWD/src/caboutdialog.h
+    $$PWD/src/caboutdialog.h \
+    $$PWD/src/common/cindexlist.h
 
 
 SOURCES        +=                                                       \
@@ -74,7 +76,8 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cwebpagescreenshot.cpp \
     $$PWD/src/widget/tageditdialog/ctageditdialog.cpp \
     $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.cpp \
-    $$PWD/src/caboutdialog.cpp
+    $$PWD/src/caboutdialog.cpp \
+    $$PWD/src/common/cindexlist.cpp
 
 
 FORMS          +=                                                       \

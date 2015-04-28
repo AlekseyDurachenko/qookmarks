@@ -12,16 +12,4 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include <QApplication>
-#include <QSet>
-
-
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    CMainWindow w;
-    w.show();
-
-    return a.exec();
-}
+#include "cindexlist.h"

@@ -26,7 +26,7 @@ public:
     CIndexList();
 
     inline int count() const;
-    inline const T *at(int index) const;
+    inline T *at(int index) const;
     inline T *value(int index) const;
     inline int indexOf(const T *value) const;
     void push_back(T *value);
@@ -53,7 +53,7 @@ int CIndexList<T>::count() const
 }
 
 template<typename T>
-const T *CIndexList<T>::at(int index) const
+T *CIndexList<T>::at(int index) const
 {
     return m_items.at(index);
 }

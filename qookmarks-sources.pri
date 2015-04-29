@@ -45,7 +45,13 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/tageditdialog/ctageditdialog.h \
     $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.h \
     $$PWD/src/caboutdialog.h \
-    $$PWD/src/common/cindexlist.h
+    $$PWD/src/common/cindexlist.h \
+    $$PWD/src/network/cabstractdownloadreply.h \
+    $$PWD/src/network/cabstractdownloadrequest.h \
+    $$PWD/src/network/cdownloadtobytearrayrequest.h \
+    $$PWD/src/network/cdownloadtobytearrayreply.h \
+    $$PWD/src/network/cdownloadtofilerequest.h \
+    $$PWD/src/network/cdownloadtofilereply.h
 
 
 SOURCES        +=                                                       \
@@ -77,7 +83,13 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/tageditdialog/ctageditdialog.cpp \
     $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.cpp \
     $$PWD/src/caboutdialog.cpp \
-    $$PWD/src/common/cindexlist.cpp
+    $$PWD/src/common/cindexlist.cpp \
+    $$PWD/src/network/cabstractdownloadreply.cpp \
+    $$PWD/src/network/cabstractdownloadrequest.cpp \
+    $$PWD/src/network/cdownloadtobytearrayrequest.cpp \
+    $$PWD/src/network/cdownloadtobytearrayreply.cpp \
+    $$PWD/src/network/cdownloadtofilerequest.cpp \
+    $$PWD/src/network/cdownloadtofilereply.cpp
 
 
 FORMS          +=                                                       \

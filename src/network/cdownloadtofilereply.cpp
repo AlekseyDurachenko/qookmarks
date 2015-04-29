@@ -51,12 +51,15 @@ void CDownloadToFileReply::processData()
 
 void CDownloadToFileReply::processEnd()
 {
-    if (m_isFileOpened)
-    {
-        m_file.close();
-        if (error() != NoError)
-            if (QFile::remove(m_request.fileName()))
-                qWarning() << tr("can't remove the file")
-                           << m_request.fileName();
-    }
+    if (!m_isFileOpened)
+        return;
+
+     m_file.close();
+
+     if (error() == NoError)
+         return;
+
+     if (QFile::remove(m_request.fileName()))
+        qWarning() << tr("can't remove the file")
+                   << m_request.fileName();
 }

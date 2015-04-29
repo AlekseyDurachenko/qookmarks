@@ -43,10 +43,10 @@ void CAbstractDownloadReply::abort()
 
 void CAbstractDownloadReply::reply_readyRead()
 {
-    if (isRedirectFound()
+    if (m_reply == 0
+            || isRedirectFound()
             || isRetryNeeded()
-            || isNotFound()
-            || m_reply == 0
+            || isNotFound()            
             || m_reply->error() != QNetworkReply::NoError)
         return;
 

@@ -22,7 +22,10 @@ CDownloadToFileReply::CDownloadToFileReply(
 {
     m_request = request;
     m_isFileOpened = false;
-    fetchUrl(request.url(), request.maxRetryCount(), request.maxRedirectCount());
+    fetchUrl(request.url(),
+             request.maxRetryCount(),
+             request.maxRedirectCount(),
+             true);
 }
 
 void CDownloadToFileReply::processStart()

@@ -12,31 +12,30 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CDOWNLOADMGR_H
-#define CDOWNLOADMGR_H
+#ifndef CCHECKURLREPLY_H
+#define CCHECKURLREPLY_H
 
-#include <QObject>
-class QNetworkAccessManager;
+#include "cabstractdownloadreply.h"
+#include "ccheckurlrequest.h"
 
 
-class CDownloadMgr : public QObject
+class CCheckUrlReply : public CAbstractDownloadReply
 {
     Q_OBJECT
 public:
-    explicit CDownloadMgr(QNetworkAccessManager *network, QObject *parent = 0);
-    virtual ~CDownloadMgr();
-signals:
-    void itemInserted(int first, int last);
-    void itemRemoved(int first, int last);
-    void itemDataChanged(int first, int last);
+    CCheckUrlReply(const CCheckUrlRequest &request,
+                   QNetworkAccessManager *network,
+                   QObject *parent = 0);
 
-    void onlineStateChanged(bool state);
-    void pauseStateChanged(bool state);
-    void queueSizeChanged(int count);
-public slots:
+    inline const CCheckUrlRequest &request() const;
 private:
-    QNetworkAccessManager *m_network;
+    CCheckUrlRequest m_request;
 };
 
+const CCheckUrlRequest &CCheckUrlReply::request() const
+{
+    return m_request;
+}
 
-#endif // CDOWNLOADMGR_H
+
+#endif // CCHECKURLREPLY_H

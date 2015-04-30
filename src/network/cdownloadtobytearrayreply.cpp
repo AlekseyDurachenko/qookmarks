@@ -22,7 +22,10 @@ CDownloadToByteArrayReply::CDownloadToByteArrayReply(
     CAbstractDownloadReply(network, parent)
 {
     m_request = request;
-    fetchUrl(request.url(), request.maxRetryCount(), request.maxRedirectCount());
+    fetchUrl(request.url(),
+             request.maxRetryCount(),
+             request.maxRedirectCount(),
+             true);
 }
 
 void CDownloadToByteArrayReply::processEnd()

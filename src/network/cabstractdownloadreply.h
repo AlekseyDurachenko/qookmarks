@@ -43,6 +43,8 @@ public:
 
     inline ErrorType error() const;
     inline const QString &errorString() const;
+    inline int httpStatusCode() const;
+    inline const QString &httpReasonPhrase() const;
 signals:
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
     void finished();
@@ -58,7 +60,7 @@ protected:
     QByteArray readAll();
     qint64 bytesAvailable() const;
     void fetchUrl(const QUrl &url, int maxRetryCount = 9,
-                  int maxRedirectCount = 9);
+                  int maxRedirectCount = 9, bool fetchData = true);
     void setError(ErrorType error, const QString &text);
 private:
     QNetworkReply *createReply(const QNetworkRequest &request);
@@ -72,9 +74,12 @@ private:
     QNetworkRequest m_request;
     int m_maxRetryCount;
     int m_maxRedirectCount;
+    bool m_fetchData;
     bool m_firstProgressIteration;
     ErrorType m_error;
     QString m_errorString;
+    int m_httpStatusCode;
+    QString m_httpReasonPhrase;
 };
 
 CAbstractDownloadReply::ErrorType CAbstractDownloadReply::error() const
@@ -85,6 +90,16 @@ CAbstractDownloadReply::ErrorType CAbstractDownloadReply::error() const
 const QString &CAbstractDownloadReply::errorString() const
 {
     return m_errorString;
+}
+
+int CAbstractDownloadReply::httpStatusCode() const
+{
+    return m_httpStatusCode;
+}
+
+const QString &CAbstractDownloadReply::httpReasonPhrase() const
+{
+    return m_httpReasonPhrase;
 }
 
 

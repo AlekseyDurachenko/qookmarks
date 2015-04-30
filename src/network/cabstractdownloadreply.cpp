@@ -22,9 +22,11 @@ CAbstractDownloadReply::CAbstractDownloadReply(QNetworkAccessManager *network,
         QObject *parent) : QObject(parent)
 {
     m_network = network;
+    m_fetchData = true;
     m_firstProgressIteration = true;
     m_reply = 0;
     m_error = NoError;
+    m_httpStatusCode = 0;
 }
 
 CAbstractDownloadReply::~CAbstractDownloadReply()
@@ -46,7 +48,7 @@ void CAbstractDownloadReply::reply_readyRead()
     if (m_reply == 0
             || isRedirectFound()
             || isRetryNeeded()
-            || isNotFound()            
+            || isNotFound()
             || m_reply->error() != QNetworkReply::NoError)
         return;
 
@@ -63,6 +65,9 @@ void CAbstractDownloadReply::reply_readyRead()
 void CAbstractDownloadReply::reply_finished()
 {
     m_reply->deleteLater();
+
+    m_httpStatusCode = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    m_httpReasonPhrase = m_reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
 
     if (m_reply->error() == QNetworkReply::NoError
             && isRedirectFound()
@@ -129,10 +134,11 @@ qint64 CAbstractDownloadReply::bytesAvailable() const
 }
 
 void CAbstractDownloadReply::fetchUrl(const QUrl &url, int maxRetryCount,
-        int maxRedirectCount)
+        int maxRedirectCount, bool fetchData)
 {
     m_maxRetryCount = maxRetryCount;
     m_maxRedirectCount = maxRedirectCount;
+    m_fetchData = fetchData;
     m_request = QNetworkRequest(url);
     m_reply = createReply(m_request);
 }
@@ -147,7 +153,12 @@ void CAbstractDownloadReply::setError(CAbstractDownloadReply::ErrorType error,
 QNetworkReply *CAbstractDownloadReply::createReply(
         const QNetworkRequest &request)
 {
-    QNetworkReply *reply = m_network->get(request);
+    QNetworkReply *reply;
+    if (m_fetchData)
+        reply = m_network->get(request);
+    else
+        reply = m_network->head(request);
+
     connect(reply, SIGNAL(downloadProgress(qint64,qint64)),
             this, SIGNAL(downloadProgress(qint64,qint64)));
     connect(reply, SIGNAL(readyRead()), this, SLOT(reply_readyRead()));

@@ -52,7 +52,9 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cdownloadtobytearrayreply.h \
     $$PWD/src/network/cdownloadtofilerequest.h \
     $$PWD/src/network/cdownloadtofilereply.h \
-    $$PWD/src/network/cdownloadmgr.h
+    $$PWD/src/network/cdownloadmgr.h \
+    $$PWD/src/network/ccheckurlrequest.h \
+    $$PWD/src/network/ccheckurlreply.h
 
 
 SOURCES        +=                                                       \
@@ -91,7 +93,9 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cdownloadtobytearrayreply.cpp \
     $$PWD/src/network/cdownloadtofilerequest.cpp \
     $$PWD/src/network/cdownloadtofilereply.cpp \
-    $$PWD/src/network/cdownloadmgr.cpp
+    $$PWD/src/network/cdownloadmgr.cpp \
+    $$PWD/src/network/ccheckurlrequest.cpp \
+    $$PWD/src/network/ccheckurlreply.cpp
 
 
 FORMS          +=                                                       \

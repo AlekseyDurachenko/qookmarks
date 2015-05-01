@@ -12,16 +12,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include <QApplication>
-#include <QSet>
+#ifndef HASH_FUNCTIONS_H
+#define HASH_FUNCTIONS_H
+
+#include <QString>
 
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    CMainWindow w;
-    w.show();    
-    int ret = a.exec();
-    return ret;
-}
+QString md5(const QString &str);
+QString sha1(const QString &str);
+
+
+#endif // HASH_FUNCTIONS_H
+

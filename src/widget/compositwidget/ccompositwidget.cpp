@@ -40,6 +40,7 @@
 #include "ctageditdialog.h"
 #include "cbookmarkeditdialog.h"
 
+
 static QString md5(const QString &str)
 {
     QCryptographicHash hash(QCryptographicHash::Md5);

@@ -18,23 +18,27 @@
 #include <QObject>
 #include <QIcon>
 #include <QUrl>
+class CPrj;
 
 
-class CIconMgr : public QObject
+class CIconMgr
 {
-    Q_OBJECT
 public:
-    explicit CIconMgr(QObject *parent = 0);
-    virtual ~CIconMgr();
+    CIconMgr();
 
-    void init(const QString &iconPath, const QList<QUrl> &urls);
-    void deinit();
+    void setIconsPath(const QString &iconPath);
+    void loadIcon(const QString &host);
+    void loadIcons(const QList<QUrl> &urls);
+    void unloadIcons();
 
-    const QIcon &icon(const QUrl &url);
-signals:
-    void iconDownloaded(const QUrl &url);
-public slots:
-    void downloadIcon(const QUrl &url);
+    QIcon icon(const QUrl &url, const QIcon &defaultIcon = QIcon()) const;
+    void saveIcon(const QUrl &url, const QIcon &icon);
+private:
+    QString keyFromUrl(const QUrl &url) const;
+    QString iconFileName(const QUrl &url) const;
+    QString iconFileName(const QString &host) const;
+    QString iconFullFileName(const QUrl &url) const;
+    QString iconFullFileName(const QString &host) const;
 private:
     QString m_iconPath;
     QHash<QString, QIcon> m_iconHash;

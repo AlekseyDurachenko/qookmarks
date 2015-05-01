@@ -12,16 +12,21 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include <QApplication>
-#include <QSet>
+#include "hash_functions.h"
+#include <QCryptographicHash>
 
 
-int main(int argc, char *argv[])
+QString md5(const QString &str)
 {
-    QApplication a(argc, argv);
-    CMainWindow w;
-    w.show();    
-    int ret = a.exec();
-    return ret;
+    QCryptographicHash hash(QCryptographicHash::Md5);
+    hash.addData(str.toUtf8());
+    return hash.result().toHex();
 }
+
+QString sha1(const QString &str)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    hash.addData(str.toUtf8());
+    return hash.result().toHex();
+}
+

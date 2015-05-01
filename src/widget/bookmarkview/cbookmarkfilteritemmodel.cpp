@@ -15,6 +15,9 @@
 #include "cbookmarkfilteritemmodel.h"
 #include "cbookmarkfilterdatamodel.h"
 #include "cbookmarkitem.h"
+#include "cprj.h"
+#include "ciconmgr.h"
+#include "singleton.h"
 #include <QIcon>
 #include <QMimeData>
 #include <QDebug>
@@ -121,7 +124,7 @@ QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) co
 
     if (role == Qt::DecorationRole)
         if (index.column() == 0)
-            return QIcon(":/icons/bookmark-item.png");
+            return singleton<CPrj>()->icons()->icon(bookmark->data().url(), QIcon(":/icons/bookmark-item.png"));
 
     if (role == Qt::UserRole)
         return QVariant::fromValue((void *)m_dataModel->at(index.row()));

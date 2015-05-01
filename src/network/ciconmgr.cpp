@@ -13,33 +13,81 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ciconmgr.h"
+#include <QDir>
+#include <QSet>
+#include "hash_functions.h"
 
 
-CIconMgr::CIconMgr(QObject *parent) : QObject(parent)
+CIconMgr::CIconMgr()
 {
 }
 
-CIconMgr::~CIconMgr()
+void CIconMgr::setIconsPath(const QString &iconPath)
 {
+    m_iconPath = iconPath;
 }
 
-void CIconMgr::init(const QString &iconPath, const QList<QUrl> &urls)
+void CIconMgr::loadIcon(const QString &host)
 {
+    if (!QFile::exists(iconFullFileName(host)))
+        return;
 
+    m_iconHash.insert(host, QIcon(iconFullFileName(host)));
 }
 
-void CIconMgr::deinit()
+void CIconMgr::loadIcons(const QList<QUrl> &urls)
 {
+    QSet<QString> hosts;
+    foreach (const QUrl &url, urls)
+        hosts.insert(keyFromUrl(url));
 
+    foreach (const QString &host, hosts)
+        loadIcon(host);
 }
 
-const QIcon &CIconMgr::icon(const QUrl &url)
+void CIconMgr::unloadIcons()
 {
-
+    m_iconHash.clear();
 }
 
-void CIconMgr::downloadIcon(const QUrl &url)
+QIcon CIconMgr::icon(const QUrl &url, const QIcon &defaultIcon) const
 {
-
+    return m_iconHash.value(keyFromUrl(url), defaultIcon);
 }
 
+void CIconMgr::saveIcon(const QUrl &url, const QIcon &icon)
+{
+    if (iconFullFileName(url).isEmpty())
+        return;
+
+    iconFullFileName(url);
+    icon.pixmap(QSize(32, 32)).save(iconFullFileName(url));
+}
+
+QString CIconMgr::keyFromUrl(const QUrl &url) const
+{
+    return url.host();
+}
+
+QString CIconMgr::iconFullFileName(const QUrl &url) const
+{
+    return iconFullFileName(keyFromUrl(url));
+}
+
+QString CIconMgr::iconFullFileName(const QString &host) const
+{
+    if (host.isEmpty() || m_iconPath.isEmpty())
+        return QString();
+
+    return m_iconPath + QDir::separator() + iconFileName(host);
+}
+
+QString CIconMgr::iconFileName(const QUrl &url) const
+{
+    return iconFileName(keyFromUrl(url));
+}
+
+QString CIconMgr::iconFileName(const QString &host) const
+{
+    return sha1(host) + "_" + md5(host) + ".ico";
+}

@@ -56,7 +56,8 @@ HEADERS        +=                                                       \
     $$PWD/src/network/ccheckurlrequest.h \
     $$PWD/src/network/ccheckurlreply.h \
     $$PWD/src/network/ciconmgr.h \
-    $$PWD/src/singleton.h
+    $$PWD/src/common/hash_functions.h \
+    $$PWD/src/common/singleton.h
 
 
 SOURCES        +=                                                       \
@@ -98,7 +99,8 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cdownloadmgr.cpp \
     $$PWD/src/network/ccheckurlrequest.cpp \
     $$PWD/src/network/ccheckurlreply.cpp \
-    $$PWD/src/network/ciconmgr.cpp
+    $$PWD/src/network/ciconmgr.cpp \
+    $$PWD/src/common/hash_functions.cpp
 
 
 FORMS          +=                                                       \

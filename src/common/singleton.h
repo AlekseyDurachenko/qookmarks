@@ -12,16 +12,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include <QApplication>
-#include <QSet>
+#ifndef SINGLETON_H
+#define SINGLETON_H
 
 
-int main(int argc, char *argv[])
+// usage: MyClass *MyClass = singleton<MyClass>();
+template <class Type>
+inline Type *singleton()
 {
-    QApplication a(argc, argv);
-    CMainWindow w;
-    w.show();    
-    int ret = a.exec();
-    return ret;
+    static Type *x = new Type;
+    return x;
 }
+
+
+#endif // SINGLETON_H
+

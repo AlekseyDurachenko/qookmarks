@@ -31,6 +31,7 @@
 #include "cnavigationitemmodel.h"
 #include "settings.h"
 #include "cbookmarkview.h"
+#include "singleton.h"
 #include <QMessageBox>
 #include <QPushButton>
 
@@ -41,7 +42,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(tr("%1").arg(appName()));
 
-    m_project = new CPrj(this);
+    m_project = singleton<CPrj>();//new CPrj(this);
     connect(m_project->actionCreate(), SIGNAL(triggered()),
             this, SLOT(actionCreate_triggered()));
     connect(m_project->actionOpen(), SIGNAL(triggered()),
@@ -78,11 +79,12 @@ CMainWindow::CMainWindow(QWidget *parent) :
 }
 
 CMainWindow::~CMainWindow()
-{
+{        
     writeSettings_window();
     writeSettings_lastOpenedBookmarks();
 
     delete ui;
+    delete singleton<CPrj>();
 }
 
 void CMainWindow::project_opened()

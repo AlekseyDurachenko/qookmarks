@@ -18,6 +18,7 @@
 #include <QObject>
 #include <QAction>
 class CManager;
+class CIconMgr;
 
 
 class CPrj : public QObject
@@ -25,8 +26,10 @@ class CPrj : public QObject
     Q_OBJECT
 public:
     explicit CPrj(QObject *parent = 0);
+    virtual ~CPrj();
 
     inline CManager *manager() const;
+    inline CIconMgr *icons() const;
 
     inline bool isOpen() const;
     inline bool hasChanges() const;
@@ -60,6 +63,7 @@ private:
     void updateActions();
 private:
     CManager *m_manager;
+    CIconMgr *m_icons;
     QAction *m_actionCreate;
     QAction *m_actionOpen;
     QAction *m_actionSave;
@@ -71,6 +75,11 @@ private:
 CManager *CPrj::manager() const
 {
     return m_manager;
+}
+
+CIconMgr *CPrj::icons() const
+{
+    return m_icons;
 }
 
 bool CPrj::isOpen() const

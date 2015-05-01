@@ -15,10 +15,12 @@
 #include "cprj.h"
 #include <QFileInfo>
 #include <QDir>
+#include "ciconmgr.h"
 #include "cmanager.h"
 #include "ctagmgr.h"
 #include "ctagitem.h"
 #include "cbookmarkmgr.h"
+#include "cbookmarkitem.h"
 #include "cprjxml.h"
 #include "bookmarkimportchromium.h"
 
@@ -31,6 +33,7 @@ CPrj::CPrj(QObject *parent) : QObject(parent)
     m_actionClose = new QAction(tr("Close Bookmark Collection..."), this);
 
     m_manager = new CManager(this);
+    m_icons = new CIconMgr();
     connect(m_manager->tagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
             this, SLOT(somethingChanged()));
     connect(m_manager->tagMgr(), SIGNAL(removed(CTagItem*,int,int)),
@@ -51,6 +54,11 @@ CPrj::CPrj(QObject *parent) : QObject(parent)
     m_path = QString();
     m_hasChanges = false;
     updateActions();
+}
+
+CPrj::~CPrj()
+{
+    delete m_icons;
 }
 
 bool CPrj::create(const QString &path, QString *reason)
@@ -106,6 +114,13 @@ bool CPrj::open(const QString &path, QString *reason)
 
         m_path = path;
         m_hasChanges = false;
+
+        QList<QUrl> urls;
+        foreach (CBookmarkItem *item, m_manager->bookmarkMgr()->bookmarks())
+            urls.push_back(item->data().url());
+        m_icons->setIconsPath(iconPath());
+        m_icons->loadIcons(urls);
+
         updateActions();
         emit opened();
 
@@ -151,6 +166,9 @@ void CPrj::close()
     m_manager->bookmarkMgr()->removeAll();
     m_manager->tagMgr()->rootItem()->removeAll();
     blockSignals(false);
+
+    m_icons->unloadIcons();
+    m_icons->setIconsPath(QString());
 
     m_path = QString();
     m_hasChanges = false;

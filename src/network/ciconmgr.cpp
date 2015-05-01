@@ -12,31 +12,34 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
-#include <QApplication>
-#include <QSet>
-#include "singleton.h"
 #include "ciconmgr.h"
 
-void singletonCreate()
+
+CIconMgr::CIconMgr(QObject *parent) : QObject(parent)
 {
-    singleton<CIconMgr>();
 }
 
-void singletonDelete()
+CIconMgr::~CIconMgr()
 {
-    delete singleton<CIconMgr>();
 }
 
-int main(int argc, char *argv[])
+void CIconMgr::init(const QString &iconPath, const QList<QUrl> &urls)
 {
-    singletonCreate();
 
-    QApplication a(argc, argv);
-    CMainWindow w;
-    w.show();    
-    int ret = a.exec();
-
-    singletonDelete();
-    return ret;
 }
+
+void CIconMgr::deinit()
+{
+
+}
+
+const QIcon &CIconMgr::icon(const QUrl &url)
+{
+
+}
+
+void CIconMgr::downloadIcon(const QUrl &url)
+{
+
+}
+

@@ -54,7 +54,9 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cdownloadtofilereply.h \
     $$PWD/src/network/cdownloadmgr.h \
     $$PWD/src/network/ccheckurlrequest.h \
-    $$PWD/src/network/ccheckurlreply.h
+    $$PWD/src/network/ccheckurlreply.h \
+    $$PWD/src/network/ciconmgr.h \
+    $$PWD/src/singleton.h
 
 
 SOURCES        +=                                                       \
@@ -95,7 +97,8 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cdownloadtofilereply.cpp \
     $$PWD/src/network/cdownloadmgr.cpp \
     $$PWD/src/network/ccheckurlrequest.cpp \
-    $$PWD/src/network/ccheckurlreply.cpp
+    $$PWD/src/network/ccheckurlreply.cpp \
+    $$PWD/src/network/ciconmgr.cpp
 
 
 FORMS          +=                                                       \

@@ -140,7 +140,7 @@ void CCompositWidget::navigation_selection_selectionChanged()
         QSet<CTagItem *> tags;
         if (index.internalPointer()
                 && (index.internalPointer()
-                    != singleton<CPrj>()->manager()->tagMgr()->rootItem()))
+                    != GTagMgr()->rootItem()))
         {
             tags.insert(static_cast<CTagItem *>(index.internalPointer()));
         }
@@ -171,7 +171,7 @@ void CCompositWidget::navigation_selection_selectionChanged()
                             Bookmark::FilterOptions(Bookmark::Trash));
                 break;
             case CNavigationItemModel::Untagged:
-                tags.insert(singleton<CPrj>()->manager()->tagMgr()->rootItem());
+                tags.insert(GTagMgr()->rootItem());
                 break;
             default:
                 ;
@@ -215,7 +215,7 @@ void CCompositWidget::actionTagEdit_triggered()
         break;
     }
 
-    if (item && item != singleton<CPrj>()->manager()->tagMgr()->rootItem())
+    if (item && item != GTagMgr()->rootItem())
     {
         CTagEditDialog dlg(CTagEditDialog::Edit, item->parent(), this);
         dlg.setData(item->data());
@@ -246,7 +246,7 @@ void CCompositWidget::actionBookmarkAdd_triggered()
     if (dlg.exec() == QDialog::Accepted)
     {
         CBookmark data = dlg.toData();
-        if (singleton<CPrj>()->manager()->bookmarkMgr()->find(data.url()))
+        if (GBookmarkMgr()->find(data.url()))
         {
             QMessageBox::warning(this, tr("Warning"), tr("The bookmark with "
                     "the url \"%1\" is already exists")
@@ -254,7 +254,7 @@ void CCompositWidget::actionBookmarkAdd_triggered()
         }
         else
         {
-            CBookmarkItem *bookmark = singleton<CPrj>()->manager()->bookmarkMgr()->add(dlg.toData());
+            CBookmarkItem *bookmark = GBookmarkMgr()->add(dlg.toData());
             if (!m_filter->tags().isEmpty())
                 foreach (CTagItem *tag, m_filter->tags())
                     tag->bookmarkAdd(bookmark);

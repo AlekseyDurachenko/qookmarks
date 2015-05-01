@@ -28,13 +28,13 @@ CBookmarkFilterDataModel::CBookmarkFilterDataModel(QObject *parent) :
 {
     m_filter = 0;
 
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(inserted(int,int)),
+    connect(GBookmarkMgr(), SIGNAL(inserted(int,int)),
             this, SLOT(bookmarkMgr_inserted(int,int)));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
+    connect(GBookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
             this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
+    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
             this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*)));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+    connect(GBookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
             this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));
 }
 
@@ -65,7 +65,7 @@ void CBookmarkFilterDataModel::invalidate()
 {
     m_bookmarks.clear();
     if (m_filter)
-        foreach (CBookmarkItem *item, singleton<CPrj>()->manager()->bookmarkMgr()->bookmarks())
+        foreach (CBookmarkItem *item, GBookmarkMgr()->bookmarks())
             if (m_filter->validate(item))
                 m_bookmarks.push_back(item);
 
@@ -118,14 +118,14 @@ void CBookmarkFilterDataModel::filter_destroyed()
 void CBookmarkFilterDataModel::bookmarkMgr_inserted(int first, int last)
 {
     for (int i = first; i <= last; ++i)
-        invalidate(singleton<CPrj>()->manager()->bookmarkMgr()->at(i));
+        invalidate(GBookmarkMgr()->at(i));
 }
 
 void CBookmarkFilterDataModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
 {
     for (int i = first; i <= last; ++i)
     {
-        int index = m_bookmarks.indexOf(singleton<CPrj>()->manager()->bookmarkMgr()->at(i));
+        int index = m_bookmarks.indexOf(GBookmarkMgr()->at(i));
         if (index != -1)
             remove(index);
     }

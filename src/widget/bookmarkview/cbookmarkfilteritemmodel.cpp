@@ -124,7 +124,8 @@ QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) co
 
     if (role == Qt::DecorationRole)
         if (index.column() == 0)
-            return singleton<CPrj>()->iconMgr()->icon(bookmark->data().url(), QIcon(":/icons/bookmark-item.png"));
+            return GIconMgr()->icon(bookmark->data().url(),
+                                    QIcon(":/icons/bookmark-item.png"));
 
     if (role == Qt::UserRole)
         return QVariant::fromValue((void *)m_dataModel->at(index.row()));

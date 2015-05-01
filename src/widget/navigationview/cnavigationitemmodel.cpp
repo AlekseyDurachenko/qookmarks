@@ -34,33 +34,33 @@ CNavigationItemModel::CNavigationItemModel(QObject *parent) :
     initTopLevelItems();
     initTopLevelCounters();
 
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(aboutToBeInserted(CTagItem*,int,int)),
+    connect(GTagMgr(), SIGNAL(aboutToBeInserted(CTagItem*,int,int)),
             this, SLOT(tagMgr_aboutToBeInserted(CTagItem*,int,int)));
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
+    connect(GTagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
             this, SLOT(tagMgr_inserted(CTagItem*,int,int)));
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
+    connect(GTagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
             this, SLOT(tagMgr_aboutToBeRemoved(CTagItem*,int,int)));
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(removed(CTagItem*,int,int)),
+    connect(GTagMgr(), SIGNAL(removed(CTagItem*,int,int)),
             this, SLOT(tagMgr_removed(CTagItem*,int,int)));
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(aboutToBeMoved(CTagItem*,int,int,CTagItem*,int)),
+    connect(GTagMgr(), SIGNAL(aboutToBeMoved(CTagItem*,int,int,CTagItem*,int)),
             this, SLOT(tagMgr_aboutToBeMoved(CTagItem*,int,int,CTagItem*,int)));
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
+    connect(GTagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
             this, SLOT(tagMgr_moved(CTagItem*,int,int,CTagItem*,int)));
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(dataChanged(CTagItem*,CTag,CTag)),
+    connect(GTagMgr(), SIGNAL(dataChanged(CTagItem*,CTag,CTag)),
             this, SLOT(tagMgr_dataChanged(CTagItem*)));
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(bookmarksChanged(CTagItem*)),
+    connect(GTagMgr(), SIGNAL(bookmarksChanged(CTagItem*)),
             this, SLOT(tagMgr_bookmarksChanged(CTagItem*)));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
+    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
             this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*,CBookmark, CBookmark)));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(inserted(int,int)),
+    connect(GBookmarkMgr(), SIGNAL(inserted(int,int)),
             this, SLOT(bookmarkMgr_inserted(int,int)));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
+    connect(GBookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
             this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(removed(int,int)),
+    connect(GBookmarkMgr(), SIGNAL(removed(int,int)),
             this, SLOT(bookmarkMgr_removed()));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(aboutToBeTagsChanged(CBookmarkItem*)),
+    connect(GBookmarkMgr(), SIGNAL(aboutToBeTagsChanged(CBookmarkItem*)),
             this, SLOT(bookmarkMgr_aboutToBeTagsChanged(CBookmarkItem*)));
-    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+    connect(GBookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
             this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));
 
     recalcTopLevelCounters();
@@ -187,7 +187,7 @@ bool CNavigationItemModel::dropMimeData(const QMimeData *data,
         {
             foreach (const QStringList &path, fromMimeTagList(data))
                 foreach (CBookmarkItem *bookmarkItem,
-                         singleton<CPrj>()->manager()->tagMgr()->findByPath(path)->bookmarks())
+                         GTagMgr()->findByPath(path)->bookmarks())
                     bookmarkList.push_back(bookmarkItem->data().url());
         }
 
@@ -231,7 +231,7 @@ QModelIndex CNavigationItemModel::index(int row, int column,
     if (!parent.isValid())
     {
         if (m_topLevelItems.at(row) == BookmarkRoot)
-            return createIndex(row, column, singleton<CPrj>()->manager()->tagMgr()->rootItem());
+            return createIndex(row, column, GTagMgr()->rootItem());
         else
             return createIndex(row, column, 0);
     }
@@ -246,12 +246,12 @@ QModelIndex CNavigationItemModel::parent(const QModelIndex &index) const
         return QModelIndex();
 
     if (index.internalPointer() == 0
-            || index.internalPointer() == singleton<CPrj>()->manager()->tagMgr()->rootItem())
+            || index.internalPointer() == GTagMgr()->rootItem())
         return QModelIndex();
 
     CTagItem *childItem = static_cast<CTagItem *>(index.internalPointer());
     CTagItem *parentItem = childItem->parent();
-    if (parentItem == singleton<CPrj>()->manager()->tagMgr()->rootItem())
+    if (parentItem == GTagMgr()->rootItem())
         return createIndex(bookmarkRootIndex(), 0, parentItem);
 
     return createIndex(parentItem->index(), 0, parentItem);
@@ -282,7 +282,7 @@ int CNavigationItemModel::columnCount(const QModelIndex &parent) const
 void CNavigationItemModel::tagMgr_aboutToBeInserted(CTagItem *parent,
         int first, int last)
 {
-    if (parent == singleton<CPrj>()->manager()->tagMgr()->rootItem())
+    if (parent == GTagMgr()->rootItem())
         beginInsertRows(createIndex(bookmarkRootIndex(), 0, parent), first, last);
     else
         beginInsertRows(createIndex(parent->index(), 0, parent), first, last);
@@ -302,7 +302,7 @@ void CNavigationItemModel::tagMgr_inserted(CTagItem *parent,
 void CNavigationItemModel::tagMgr_aboutToBeRemoved(CTagItem *parent,
         int first, int last)
 {
-    if (parent == singleton<CPrj>()->manager()->tagMgr()->rootItem())
+    if (parent == GTagMgr()->rootItem())
         beginRemoveRows(createIndex(bookmarkRootIndex(), 0, parent), first, last);
     else
         beginRemoveRows(createIndex(parent->index(), 0, parent), first, last);
@@ -322,11 +322,11 @@ void CNavigationItemModel::tagMgr_removed(CTagItem *parent,
 void CNavigationItemModel::tagMgr_aboutToBeMoved(CTagItem *srcParent,
         int srcFirst, int srcLast, CTagItem *dstParent, int dstIndex)
 {
-    QModelIndex si = createIndex(bookmarkRootIndex(), 0, singleton<CPrj>()->manager()->tagMgr()->rootItem());
-    QModelIndex di = createIndex(bookmarkRootIndex(), 0, singleton<CPrj>()->manager()->tagMgr()->rootItem());
-    if (srcParent != singleton<CPrj>()->manager()->tagMgr()->rootItem())
+    QModelIndex si = createIndex(bookmarkRootIndex(), 0, GTagMgr()->rootItem());
+    QModelIndex di = createIndex(bookmarkRootIndex(), 0, GTagMgr()->rootItem());
+    if (srcParent != GTagMgr()->rootItem())
         si = createIndex(srcParent->index(), 0, srcParent);
-    if (dstParent != singleton<CPrj>()->manager()->tagMgr()->rootItem())
+    if (dstParent != GTagMgr()->rootItem())
         di = createIndex(dstParent->index(), 0, dstParent);
     beginMoveRows(si, srcFirst, srcLast, di, dstIndex);
 }
@@ -413,7 +413,7 @@ void CNavigationItemModel::bookmarkMgr_inserted(int first, int last)
 {
     for (int i = first; i <= last; ++i)
     {
-        CBookmarkItem *item = singleton<CPrj>()->manager()->bookmarkMgr()->at(i);
+        CBookmarkItem *item = GBookmarkMgr()->at(i);
         CBookmark data = item->data();
         if (data.isTrash())
         {
@@ -440,7 +440,7 @@ void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
 {
     for (int i = first; i <= last; ++i)
     {
-        CBookmarkItem *item = singleton<CPrj>()->manager()->bookmarkMgr()->at(i);
+        CBookmarkItem *item = GBookmarkMgr()->at(i);
         CBookmark data = item->data();
         if (data.isTrash())
         {
@@ -518,7 +518,7 @@ int CNavigationItemModel::bookmarkRootIndex() const
 
 int CNavigationItemModel::bookmarkRootCount() const
 {
-    return singleton<CPrj>()->manager()->bookmarkMgr()->count() - m_topLevelCounters[Trash];
+    return GBookmarkMgr()->count() - m_topLevelCounters[Trash];
 }
 
 int CNavigationItemModel::bookmarkNotTrashedCount(CTagItem *item,
@@ -535,8 +535,8 @@ int CNavigationItemModel::bookmarkNotTrashedCount(CTagItem *item,
 void CNavigationItemModel::updateBookmarkRootItem()
 {
     int index = bookmarkRootIndex();
-    emit dataChanged(createIndex(index, 0, singleton<CPrj>()->manager()->tagMgr()->rootItem()),
-                     createIndex(index,  columnCount()-1, singleton<CPrj>()->manager()->tagMgr()->rootItem()));
+    emit dataChanged(createIndex(index, 0, GTagMgr()->rootItem()),
+                     createIndex(index,  columnCount()-1, GTagMgr()->rootItem()));
 }
 
 QVariant CNavigationItemModel::topLevelData(const QModelIndex &index,
@@ -602,7 +602,7 @@ QIcon CNavigationItemModel::topLevelIcon(CNavigationItemModel::TopLevelItem item
 void CNavigationItemModel::recalcTopLevelCounters()
 {
     initTopLevelCounters();
-    foreach (CBookmarkItem *item, singleton<CPrj>()->manager()->bookmarkMgr()->bookmarks())
+    foreach (CBookmarkItem *item, GBookmarkMgr()->bookmarks())
     {
         if (item->data().isTrash())
         {

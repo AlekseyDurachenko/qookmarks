@@ -30,7 +30,7 @@ CBookmarkFilter::CBookmarkFilter(QObject *parent) :
     m_minRating = Bookmark::MinRating;
     m_maxRating = Bookmark::MaxRating;
 
-    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
+    connect(GTagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
             this, SLOT(tagMgr_aboutToBeRemoved(CTagItem*,int,int)));
 }
 
@@ -58,7 +58,7 @@ bool CBookmarkFilter::validate(const CBookmarkItem *item) const
 {
     if (!m_tags.isEmpty())
     {
-        if (m_tags.contains(singleton<CPrj>()->manager()->tagMgr()->rootItem()))
+        if (m_tags.contains(GTagMgr()->rootItem()))
         {
             if (!item->tags().isEmpty())
                 return false;

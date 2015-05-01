@@ -43,13 +43,13 @@ CNavigationView::~CNavigationView()
 void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
-    CTagItem *parentItem = singleton<CPrj>()->manager()->tagMgr()->findByPath(parentTag);
+    CTagItem *parentItem = GTagMgr()->findByPath(parentTag);
     if (!parentItem)
         return;
 
     foreach (const QStringList &tag, tags)
     {
-        CTagItem *item = singleton<CPrj>()->manager()->tagMgr()->findByPath(tag);
+        CTagItem *item = GTagMgr()->findByPath(tag);
         if (!item || item == parentItem || item->aboveOf(parentItem))
             continue;
 
@@ -61,7 +61,7 @@ void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags,
 void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
-    CTagItem *parentItem = singleton<CPrj>()->manager()->tagMgr()->findByPath(tag);
+    CTagItem *parentItem = GTagMgr()->findByPath(tag);
     if (!parentItem)
         return;
 
@@ -75,7 +75,7 @@ void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
 
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *bookmarkItem = singleton<CPrj>()->manager()->bookmarkMgr()->find(url);
+        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
         if (!bookmarkItem)
             continue;
 
@@ -98,7 +98,7 @@ void CNavigationView::bookmarksMarkFavorite(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *item = singleton<CPrj>()->manager()->bookmarkMgr()->find(url);
+        CBookmarkItem *item = GBookmarkMgr()->find(url);
         CBookmark data = item->data();
         data.setFavorite(true);
         item->setData(data);
@@ -109,7 +109,7 @@ void CNavigationView::bookmarksMarkReadLater(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *item = singleton<CPrj>()->manager()->bookmarkMgr()->find(url);
+        CBookmarkItem *item = GBookmarkMgr()->find(url);
         CBookmark data = item->data();
         data.setReadLater(true);
         item->setData(data);
@@ -123,7 +123,7 @@ void CNavigationView::bookmarksMarkTrash(const QList<QUrl> &bookmarks)
     {
         foreach (const QUrl &url, bookmarks)
         {
-            CBookmarkItem *item = singleton<CPrj>()->manager()->bookmarkMgr()->find(url);
+            CBookmarkItem *item = GBookmarkMgr()->find(url);
             CBookmark data = item->data();
             data.setTrash(true);
             item->setData(data);

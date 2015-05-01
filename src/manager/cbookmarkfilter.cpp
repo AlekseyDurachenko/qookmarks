@@ -18,55 +18,24 @@
 #include "cbookmarkmgr.h"
 #include "ctagitem.h"
 #include "cbookmarkitem.h"
+#include "cprj.h"
+#include "singleton.h"
 #include <QDebug>
 
 
 CBookmarkFilter::CBookmarkFilter(QObject *parent) :
     CAbstractBookmarkFilter(parent)
 {
-    m_manager = 0;
-    m_inclusiveFilter = ~Bookmark::FilterOptions(Bookmark::Trash);
-    m_minRating = Bookmark::MinRating;
-    m_maxRating = Bookmark::MaxRating;
-}
-
-CBookmarkFilter::CBookmarkFilter(CManager *manager, QObject *parent) :
-    CAbstractBookmarkFilter(parent)
-{
-    m_manager = 0;
     m_inclusiveFilter = ~Bookmark::FilterOptions(Bookmark::Trash);
     m_minRating = Bookmark::MinRating;
     m_maxRating = Bookmark::MaxRating;
 
-    setManager(manager);
+    connect(singleton<CPrj>()->manager()->tagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
+            this, SLOT(tagMgr_aboutToBeRemoved(CTagItem*,int,int)));
 }
 
 CBookmarkFilter::~CBookmarkFilter()
 {
-}
-
-void CBookmarkFilter::setManager(CManager *manager)
-{
-    if (m_manager == manager)
-        return;
-
-    if (m_manager)
-    {
-        disconnect(m_manager->tagMgr(), 0, this, 0);
-        disconnect(m_manager->bookmarkMgr(), 0, this, 0);
-    }
-
-    m_manager = manager;
-    if (m_manager)
-    {
-        connect(m_manager->tagMgr(), SIGNAL(destroyed()),
-                this, SLOT(tagMgr_destroyed()));
-        connect(m_manager->tagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
-                this, SLOT(tagMgr_aboutToBeRemoved(CTagItem*,int,int)));
-    }
-
-    m_tags.clear();
-    update();
 }
 
 void CBookmarkFilter::setTags(const QSet<CTagItem *> &tags)
@@ -87,12 +56,9 @@ void CBookmarkFilter::setRatingRange(int min, int max)
 
 bool CBookmarkFilter::validate(const CBookmarkItem *item) const
 {
-    if (!m_manager)
-        return true;
-
     if (!m_tags.isEmpty())
     {
-        if (m_tags.contains(m_manager->tagMgr()->rootItem()))
+        if (m_tags.contains(singleton<CPrj>()->manager()->tagMgr()->rootItem()))
         {
             if (!item->tags().isEmpty())
                 return false;
@@ -140,10 +106,4 @@ void CBookmarkFilter::tagMgr_aboutToBeRemoved(CTagItem *parent,
 {
     for (int i = first; i <= last; ++i)
         m_tags.remove(parent->at(i));
-}
-
-void CBookmarkFilter::tagMgr_destroyed()
-{
-    m_manager = 0;
-    update();
 }

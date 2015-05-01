@@ -18,56 +18,28 @@
 #include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
 #include "cbookmarkfilter.h"
+#include "singleton.h"
+#include "cprj.h"
 #include <QDebug>
 
 
 CBookmarkFilterDataModel::CBookmarkFilterDataModel(QObject *parent) :
      QObject(parent)
 {
-    m_manager = 0;
-    m_filter = 0;
-}
-
-CBookmarkFilterDataModel::CBookmarkFilterDataModel(CManager *manager,
-        QObject *parent) :  QObject(parent)
-{
-    m_manager = 0;
     m_filter = 0;
 
-    setManager(manager);
+    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(inserted(int,int)),
+            this, SLOT(bookmarkMgr_inserted(int,int)));
+    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
+            this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
+    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
+            this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*)));
+    connect(singleton<CPrj>()->manager()->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+            this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));
 }
 
 CBookmarkFilterDataModel::~CBookmarkFilterDataModel()
 {
-}
-
-void CBookmarkFilterDataModel::setManager(CManager *manager)
-{
-    if (m_manager == manager)
-        return;
-
-    if (m_manager)
-    {
-        disconnect(m_manager->tagMgr(), 0, this, 0);
-        disconnect(m_manager->bookmarkMgr(), 0, this, 0);
-    }
-
-    m_manager = manager;
-    if (m_manager)
-    {
-        connect(m_manager->bookmarkMgr(), SIGNAL(destroyed()),
-                this, SLOT(bookmarkMgr_destroyed()));
-        connect(m_manager->bookmarkMgr(), SIGNAL(inserted(int,int)),
-                this, SLOT(bookmarkMgr_inserted(int,int)));
-        connect(m_manager->bookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
-                this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
-        connect(m_manager->bookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
-                this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*)));
-        connect(m_manager->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
-                this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));
-    }
-
-    invalidate();
 }
 
 void CBookmarkFilterDataModel::setFilter(CAbstractBookmarkFilter *filter)
@@ -92,8 +64,8 @@ void CBookmarkFilterDataModel::setFilter(CAbstractBookmarkFilter *filter)
 void CBookmarkFilterDataModel::invalidate()
 {
     m_bookmarks.clear();
-    if (m_manager && m_filter)
-        foreach (CBookmarkItem *item, m_manager->bookmarkMgr()->bookmarks())
+    if (m_filter)
+        foreach (CBookmarkItem *item, singleton<CPrj>()->manager()->bookmarkMgr()->bookmarks())
             if (m_filter->validate(item))
                 m_bookmarks.push_back(item);
 
@@ -146,14 +118,14 @@ void CBookmarkFilterDataModel::filter_destroyed()
 void CBookmarkFilterDataModel::bookmarkMgr_inserted(int first, int last)
 {
     for (int i = first; i <= last; ++i)
-        invalidate(m_manager->bookmarkMgr()->at(i));
+        invalidate(singleton<CPrj>()->manager()->bookmarkMgr()->at(i));
 }
 
 void CBookmarkFilterDataModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
 {
     for (int i = first; i <= last; ++i)
     {
-        int index = m_bookmarks.indexOf(m_manager->bookmarkMgr()->at(i));
+        int index = m_bookmarks.indexOf(singleton<CPrj>()->manager()->bookmarkMgr()->at(i));
         if (index != -1)
             remove(index);
     }
@@ -167,10 +139,4 @@ void CBookmarkFilterDataModel::bookmarkMgr_dataChanged(CBookmarkItem *item)
 void CBookmarkFilterDataModel::bookmarkMgr_tagsChanged(CBookmarkItem *item)
 {
     invalidate(item);
-}
-
-void CBookmarkFilterDataModel::bookmarkMgr_destroyed()
-{
-    m_manager = 0;
-    invalidate();
 }

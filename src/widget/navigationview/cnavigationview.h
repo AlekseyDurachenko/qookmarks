@@ -24,7 +24,7 @@ class CNavigationView : public QTreeView, public INavigationActions
 {
     Q_OBJECT
 public:
-    CNavigationView(CManager *manager, QWidget *parent = 0);
+    CNavigationView(QWidget *parent = 0);
     virtual ~CNavigationView();
 protected:
     virtual void tagsCopyOrMove(const QList<QStringList> &tags,
@@ -34,8 +34,6 @@ protected:
     virtual void bookmarksMarkFavorite(const QList<QUrl> &bookmarks);
     virtual void bookmarksMarkReadLater(const QList<QUrl> &bookmarks);
     virtual void bookmarksMarkTrash(const QList<QUrl> &bookmarks);
-private:
-    CManager *m_manager;
 };
 
 

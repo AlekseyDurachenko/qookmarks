@@ -32,7 +32,7 @@ class CCompositWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CCompositWidget(CPrj *manager, QWidget *parent = 0);
+    explicit CCompositWidget(QWidget *parent = 0);
     virtual ~CCompositWidget();
 
     inline CBookmarkView *bookmarkView() const;
@@ -71,7 +71,6 @@ private:
     CBookmarkFilterDataModel *m_dataModel;
     CBookmarkFilteredItemModel *m_bookmarkItemModel;
     CNavigationItemModel *m_navigationItemModel;
-    CPrj *m_project;
 
     QNetworkAccessManager *m_network;
     QAction *m_actionBookmarkAdd;

@@ -60,7 +60,6 @@ private:
     void writeSettings_lastBookmarkDirectory(const QString &path);
 private:
     Ui::CMainWindow *ui;
-    CPrj *m_project;
     CCompositWidget *m_mainWidget;
 };
 

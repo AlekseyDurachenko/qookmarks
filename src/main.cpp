@@ -12,16 +12,25 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
 #include <QApplication>
-#include <QSet>
+#include "cmainwindow.h"
+#include "singleton.h"
+#include "cprj.h"
 
 
 int main(int argc, char *argv[])
-{
+{    
     QApplication a(argc, argv);
+
+    // create singletons
+    singleton<CPrj>();
+
     CMainWindow w;
     w.show();    
     int ret = a.exec();
+
+    // destroy singletons
+    delete singleton<CPrj>();
+
     return ret;
 }

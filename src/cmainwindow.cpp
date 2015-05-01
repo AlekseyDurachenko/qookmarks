@@ -42,26 +42,25 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(tr("%1").arg(appName()));
 
-    m_project = singleton<CPrj>();//new CPrj(this);
-    connect(m_project->actionCreate(), SIGNAL(triggered()),
+    connect(singleton<CPrj>()->actionCreate(), SIGNAL(triggered()),
             this, SLOT(actionCreate_triggered()));
-    connect(m_project->actionOpen(), SIGNAL(triggered()),
+    connect(singleton<CPrj>()->actionOpen(), SIGNAL(triggered()),
             this, SLOT(actionOpen_triggered()));
-    connect(m_project->actionSave(), SIGNAL(triggered()),
+    connect(singleton<CPrj>()->actionSave(), SIGNAL(triggered()),
             this, SLOT(actionSave_triggered()));
-    connect(m_project->actionClose(), SIGNAL(triggered()),
+    connect(singleton<CPrj>()->actionClose(), SIGNAL(triggered()),
             this, SLOT(actionClose_triggered()));
-    connect(m_project, SIGNAL(opened()), this, SLOT(project_opened()));
-    connect(m_project, SIGNAL(closed()), this, SLOT(project_closed()));
+    connect(singleton<CPrj>(), SIGNAL(opened()), this, SLOT(project_opened()));
+    connect(singleton<CPrj>(), SIGNAL(closed()), this, SLOT(project_closed()));
 
-    m_mainWidget = new CCompositWidget(m_project, this);
+    m_mainWidget = new CCompositWidget(this);
     setCentralWidget(m_mainWidget);
 
     // Menu: File
-    ui->menu_file->addAction(m_project->actionCreate());
-    ui->menu_file->addAction(m_project->actionOpen());
-    ui->menu_file->addAction(m_project->actionSave());
-    ui->menu_file->addAction(m_project->actionClose());
+    ui->menu_file->addAction(singleton<CPrj>()->actionCreate());
+    ui->menu_file->addAction(singleton<CPrj>()->actionOpen());
+    ui->menu_file->addAction(singleton<CPrj>()->actionSave());
+    ui->menu_file->addAction(singleton<CPrj>()->actionClose());
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_import);
     //ui->menu_file->addAction(ui->action_export);
@@ -84,7 +83,6 @@ CMainWindow::~CMainWindow()
     writeSettings_lastOpenedBookmarks();
 
     delete ui;
-    delete singleton<CPrj>();
 }
 
 void CMainWindow::project_opened()
@@ -93,7 +91,7 @@ void CMainWindow::project_opened()
     ui->action_import->setEnabled(true);
     ui->action_export->setEnabled(true);
     //ui->menu_bookmark->setEnabled(true);
-    setWindowTitle(tr("%1 - %2").arg(appName(), m_project->path()));
+    setWindowTitle(tr("%1 - %2").arg(appName(), singleton<CPrj>()->path()));
 }
 
 void CMainWindow::project_closed()
@@ -107,10 +105,10 @@ void CMainWindow::project_closed()
 
 void CMainWindow::actionCreate_triggered()
 {
-    if (m_project->isOpen())
+    if (singleton<CPrj>()->isOpen())
     {
         int ret = QMessageBox::Ignore;
-        if (m_project->hasChanges())
+        if (singleton<CPrj>()->hasChanges())
         {
             ret = QMessageBox::question(this, tr("Question"),
                     tr("Opened bookmarks was changed. What do you want?"),
@@ -130,14 +128,14 @@ void CMainWindow::actionCreate_triggered()
         else if (ret == QMessageBox::Save)
         {
             QString reason;
-            if (!m_project->save(&reason))
+            if (!singleton<CPrj>()->save(&reason))
             {
                 QMessageBox::critical(this, tr("Critical"), reason);
                 return;
             }
         }
 
-        m_project->close();
+        singleton<CPrj>()->close();
     }
 
     QString dirName = QFileDialog::getExistingDirectory(this,
@@ -156,10 +154,10 @@ void CMainWindow::actionCreate_triggered()
     }
 
     QString reason;
-    if (!m_project->create(dirName, &reason))
+    if (!singleton<CPrj>()->create(dirName, &reason))
         QMessageBox::warning(this, tr("Warning"), reason);
     else
-        if (!m_project->open(dirName, &reason))
+        if (!singleton<CPrj>()->open(dirName, &reason))
             QMessageBox::warning(this, tr("Warning"), reason);
 
     writeSettings_lastBookmarkDirectory(dirName);
@@ -167,10 +165,10 @@ void CMainWindow::actionCreate_triggered()
 
 void CMainWindow::actionOpen_triggered()
 {
-    if (m_project->isOpen())
+    if (singleton<CPrj>()->isOpen())
     {
         int ret = QMessageBox::Ignore;
-        if (m_project->hasChanges())
+        if (singleton<CPrj>()->hasChanges())
         {
             ret = QMessageBox::question(this, tr("Question"),
                     tr("Opened bookmarks was changed. What do you want?"),
@@ -190,14 +188,14 @@ void CMainWindow::actionOpen_triggered()
         else if (ret == QMessageBox::Save)
         {
             QString reason;
-            if (!m_project->save(&reason))
+            if (!singleton<CPrj>()->save(&reason))
             {
                 QMessageBox::critical(this, tr("Critical"), reason);
                 return;
             }
         }
 
-        m_project->close();
+        singleton<CPrj>()->close();
     }
 
     QString dirName = QFileDialog::getExistingDirectory(this,
@@ -208,7 +206,7 @@ void CMainWindow::actionOpen_triggered()
         return;
 
     QString reason;
-    if (!m_project->open(dirName, &reason))
+    if (!singleton<CPrj>()->open(dirName, &reason))
         QMessageBox::warning(this, tr("Warning"), reason);
 
     writeSettings_lastBookmarkDirectory(dirName);
@@ -217,20 +215,20 @@ void CMainWindow::actionOpen_triggered()
 void CMainWindow::actionSave_triggered()
 {
     QString reason;
-    if (!m_project->save(&reason))
+    if (!singleton<CPrj>()->save(&reason))
         QMessageBox::critical(this, tr("Critical"), reason);
 }
 
 void CMainWindow::actionClose_triggered()
 {
-    if (m_project->hasChanges())
+    if (singleton<CPrj>()->hasChanges())
     {
         if (QMessageBox::question(this, tr("Question"),
                 tr("Opened bookmarks was changed. Save the changes?"),
                 QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
         {
             QString reason;
-            if (!m_project->save(&reason))
+            if (!singleton<CPrj>()->save(&reason))
             {
                 QMessageBox::critical(this, tr("Critical"), reason);
                 return;
@@ -241,7 +239,7 @@ void CMainWindow::actionClose_triggered()
     // HACK: removing so slow if selection is exists
     m_mainWidget->bookmarkView()->selectionModel()->clear();
 
-    m_project->close();
+    singleton<CPrj>()->close();
 }
 
 void CMainWindow::on_action_quit_triggered()
@@ -252,7 +250,7 @@ void CMainWindow::on_action_quit_triggered()
 void CMainWindow::on_action_import_triggered()
 {
     QString reason, path = QDir::homePath() + "/.config/chromium/Default/Bookmarks";
-    if (!bookmarkImportChromium(m_project->manager(), path, &reason))
+    if (!bookmarkImportChromium(singleton<CPrj>()->manager(), path, &reason))
         QMessageBox::warning(this, "Warning", reason);
 }
 
@@ -270,7 +268,7 @@ void CMainWindow::readSettings_lastOpenedBookmarks()
     G_SETTINGS_INIT();
     QString reason, path = settings.value("lastBookmarks", "").toString();
     if (!path.isEmpty())
-        if (!m_project->open(path, &reason))
+        if (!singleton<CPrj>()->open(path, &reason))
             QMessageBox::warning(this, tr("Warning"), reason);
 }
 
@@ -290,7 +288,7 @@ void CMainWindow::writeSettings_window()
 void CMainWindow::writeSettings_lastOpenedBookmarks()
 {
     G_SETTINGS_INIT();
-    settings.setValue("lastBookmarks", m_project->path());
+    settings.setValue("lastBookmarks", singleton<CPrj>()->path());
 }
 
 void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
@@ -312,14 +310,14 @@ void CMainWindow::on_action_aboutQt_triggered()
 
 void CMainWindow::closeEvent(QCloseEvent *event)
 {
-    if (m_project->hasChanges())
+    if (singleton<CPrj>()->hasChanges())
     {
         if (QMessageBox::question(this, tr("Question"),
                 tr("Opened bookmarks was changed. Save the changes?"),
                 QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
         {
             QString reason;
-            if (!m_project->save(&reason))
+            if (!singleton<CPrj>()->save(&reason))
             {
                 QMessageBox::critical(this, tr("Critical"), reason);
             }

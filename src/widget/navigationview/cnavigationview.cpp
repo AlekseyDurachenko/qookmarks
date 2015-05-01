@@ -20,14 +20,14 @@
 #include "ctagmgr.h"
 #include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
+#include "singleton.h"
+#include "cprj.h"
 #include <QDebug>
 
 
-CNavigationView::CNavigationView(CManager *manager, QWidget *parent) :
+CNavigationView::CNavigationView(QWidget *parent) :
     QTreeView(parent)
 {
-    m_manager = manager;
-
     setSelectionMode(QAbstractItemView::SingleSelection);
     setDragDropMode(QAbstractItemView::DragDrop);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -43,13 +43,13 @@ CNavigationView::~CNavigationView()
 void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
-    CTagItem *parentItem = m_manager->tagMgr()->findByPath(parentTag);
+    CTagItem *parentItem = singleton<CPrj>()->manager()->tagMgr()->findByPath(parentTag);
     if (!parentItem)
         return;
 
     foreach (const QStringList &tag, tags)
     {
-        CTagItem *item = m_manager->tagMgr()->findByPath(tag);
+        CTagItem *item = singleton<CPrj>()->manager()->tagMgr()->findByPath(tag);
         if (!item || item == parentItem || item->aboveOf(parentItem))
             continue;
 
@@ -61,7 +61,7 @@ void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags,
 void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
-    CTagItem *parentItem = m_manager->tagMgr()->findByPath(tag);
+    CTagItem *parentItem = singleton<CPrj>()->manager()->tagMgr()->findByPath(tag);
     if (!parentItem)
         return;
 
@@ -75,7 +75,7 @@ void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
 
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *bookmarkItem = m_manager->bookmarkMgr()->find(url);
+        CBookmarkItem *bookmarkItem = singleton<CPrj>()->manager()->bookmarkMgr()->find(url);
         if (!bookmarkItem)
             continue;
 
@@ -98,7 +98,7 @@ void CNavigationView::bookmarksMarkFavorite(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *item = m_manager->bookmarkMgr()->find(url);
+        CBookmarkItem *item = singleton<CPrj>()->manager()->bookmarkMgr()->find(url);
         CBookmark data = item->data();
         data.setFavorite(true);
         item->setData(data);
@@ -109,7 +109,7 @@ void CNavigationView::bookmarksMarkReadLater(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *item = m_manager->bookmarkMgr()->find(url);
+        CBookmarkItem *item = singleton<CPrj>()->manager()->bookmarkMgr()->find(url);
         CBookmark data = item->data();
         data.setReadLater(true);
         item->setData(data);
@@ -123,7 +123,7 @@ void CNavigationView::bookmarksMarkTrash(const QList<QUrl> &bookmarks)
     {
         foreach (const QUrl &url, bookmarks)
         {
-            CBookmarkItem *item = m_manager->bookmarkMgr()->find(url);
+            CBookmarkItem *item = singleton<CPrj>()->manager()->bookmarkMgr()->find(url);
             CBookmark data = item->data();
             data.setTrash(true);
             item->setData(data);

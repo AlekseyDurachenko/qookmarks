@@ -26,11 +26,7 @@ class CBookmarkFilterDataModel : public QObject
     Q_OBJECT
 public:
     explicit CBookmarkFilterDataModel(QObject *parent = 0);
-    explicit CBookmarkFilterDataModel(CManager *manager, QObject *parent = 0);
     virtual ~CBookmarkFilterDataModel();
-
-    inline CManager *manager() const;
-    void setManager(CManager *manager);
 
     inline CAbstractBookmarkFilter *filter() const;
     void setFilter(CAbstractBookmarkFilter *filter);
@@ -58,17 +54,11 @@ private slots:
     void bookmarkMgr_aboutToBeRemoved(int first, int last);
     void bookmarkMgr_dataChanged(CBookmarkItem *item);
     void bookmarkMgr_tagsChanged(CBookmarkItem *item);
-    void bookmarkMgr_destroyed();
 private:
-    CManager *m_manager;
     QList<CBookmarkItem *> m_bookmarks;
     CAbstractBookmarkFilter *m_filter;
 };
 
-CManager *CBookmarkFilterDataModel::manager() const
-{
-    return m_manager;
-}
 
 CAbstractBookmarkFilter *CBookmarkFilterDataModel::filter() const
 {

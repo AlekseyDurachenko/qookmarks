@@ -15,6 +15,11 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
+#include "cprj.h"
+#include "cmanager.h"
+#include "ctagmgr.h"
+#include "cbookmarkmgr.h"
+
 
 // usage: MyClass *MyClass = singleton<MyClass>();
 template <class Type>
@@ -22,6 +27,26 @@ inline Type *singleton()
 {
     static Type *x = new Type;
     return x;
+}
+
+inline CPrj *GPrj()
+{
+    return singleton<CPrj>();
+}
+
+inline CTagMgr *GTagMgr()
+{
+    return singleton<CPrj>()->manager()->tagMgr();
+}
+
+inline CBookmarkMgr *GBookmarkMgr()
+{
+    return singleton<CPrj>()->manager()->bookmarkMgr();
+}
+
+inline CIconMgr *GIconMgr()
+{
+    return singleton<CPrj>()->iconMgr();
 }
 
 

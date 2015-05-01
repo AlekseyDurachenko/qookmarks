@@ -41,11 +41,7 @@ public:
     };
 
     explicit CNavigationItemModel(QObject *parent = 0);
-    explicit CNavigationItemModel(CManager *manager, QObject *parent = 0);
     virtual ~CNavigationItemModel();
-
-    inline CManager *manager() const;
-    void setManager(CManager *manager);
 
     inline INavigationActions *navigationActions() const;
     void setNavigationActions(INavigationActions *navigationActions);
@@ -81,7 +77,6 @@ private slots:
     void bookmarkMgr_removed();
     void bookmarkMgr_aboutToBeTagsChanged(CBookmarkItem *item);
     void bookmarkMgr_tagsChanged(CBookmarkItem *item);
-    void manager_destroyed();
     void navigationActions_destroyed();
 private:
     void initTopLevelItems();
@@ -101,16 +96,10 @@ private:
     QList<QStringList> fromMimeTagList(const QMimeData *data);
     QList<QUrl> fromMimeBookmarkList(const QMimeData *data);
 private:
-    CManager *m_manager;
     INavigationActions *m_navigationActions;
     QVector<TopLevelItem> m_topLevelItems;
     QHash<TopLevelItem, int> m_topLevelCounters;
 };
-
-CManager *CNavigationItemModel::manager() const
-{
-    return m_manager;
-}
 
 INavigationActions *CNavigationItemModel::navigationActions() const
 {

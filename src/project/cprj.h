@@ -29,7 +29,7 @@ public:
     virtual ~CPrj();
 
     inline CManager *manager() const;
-    inline CIconMgr *icons() const;
+    inline CIconMgr *iconMgr() const;
 
     inline bool isOpen() const;
     inline bool hasChanges() const;
@@ -63,7 +63,7 @@ private:
     void updateActions();
 private:
     CManager *m_manager;
-    CIconMgr *m_icons;
+    CIconMgr *m_iconMgr;
     QAction *m_actionCreate;
     QAction *m_actionOpen;
     QAction *m_actionSave;
@@ -77,9 +77,9 @@ CManager *CPrj::manager() const
     return m_manager;
 }
 
-CIconMgr *CPrj::icons() const
+CIconMgr *CPrj::iconMgr() const
 {
-    return m_icons;
+    return m_iconMgr;
 }
 
 bool CPrj::isOpen() const

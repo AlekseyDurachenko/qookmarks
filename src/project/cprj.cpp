@@ -33,7 +33,7 @@ CPrj::CPrj(QObject *parent) : QObject(parent)
     m_actionClose = new QAction(tr("Close Bookmark Collection..."), this);
 
     m_manager = new CManager(this);
-    m_icons = new CIconMgr();
+    m_iconMgr = new CIconMgr();
     connect(m_manager->tagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
             this, SLOT(somethingChanged()));
     connect(m_manager->tagMgr(), SIGNAL(removed(CTagItem*,int,int)),
@@ -58,7 +58,7 @@ CPrj::CPrj(QObject *parent) : QObject(parent)
 
 CPrj::~CPrj()
 {
-    delete m_icons;
+    delete m_iconMgr;
 }
 
 bool CPrj::create(const QString &path, QString *reason)
@@ -118,8 +118,8 @@ bool CPrj::open(const QString &path, QString *reason)
         QList<QUrl> urls;
         foreach (CBookmarkItem *item, m_manager->bookmarkMgr()->bookmarks())
             urls.push_back(item->data().url());
-        m_icons->setIconsPath(iconPath());
-        m_icons->loadIcons(urls);
+        m_iconMgr->setIconsPath(iconPath());
+        m_iconMgr->loadIcons(urls);
 
         updateActions();
         emit opened();
@@ -167,8 +167,8 @@ void CPrj::close()
     m_manager->tagMgr()->rootItem()->removeAll();
     blockSignals(false);
 
-    m_icons->unloadIcons();
-    m_icons->setIconsPath(QString());
+    m_iconMgr->unloadIcons();
+    m_iconMgr->setIconsPath(QString());
 
     m_path = QString();
     m_hasChanges = false;

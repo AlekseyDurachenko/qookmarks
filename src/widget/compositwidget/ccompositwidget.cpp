@@ -39,6 +39,8 @@
 #include "ctagmgr.h"
 #include "ctageditdialog.h"
 #include "cbookmarkeditdialog.h"
+#include "singleton.h"
+#include "cprj.h"
 
 
 static QString md5(const QString &str)
@@ -55,15 +57,13 @@ static QString sha1(const QString &str)
     return hash.result().toHex();
 }
 
-CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
+CCompositWidget::CCompositWidget(QWidget *parent) :
     QWidget(parent)
 {
     m_network = new QNetworkAccessManager(this);
 
-    m_project = project;
-
-    m_filter = new CBookmarkFilter(m_project->manager(), this);
-    m_dataModel = new CBookmarkFilterDataModel(m_project->manager(), this);
+    m_filter = new CBookmarkFilter(this);
+    m_dataModel = new CBookmarkFilterDataModel(this);
     m_dataModel->setFilter(m_filter);
     m_bookmarkItemModel = new CBookmarkFilteredItemModel(m_dataModel, this);
     m_bookmarkView = new CBookmarkView(this);
@@ -75,8 +75,8 @@ CCompositWidget::CCompositWidget(CPrj *project, QWidget *parent) :
     connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
 
-    m_navigationItemModel = new CNavigationItemModel(m_project->manager(), this);
-    m_navigationView = new CNavigationView(m_project->manager(), this);
+    m_navigationItemModel = new CNavigationItemModel(this);
+    m_navigationView = new CNavigationView(this);
     m_navigationView->setModel(m_navigationItemModel);
     m_navigationItemModel->setNavigationActions(m_navigationView);
     connect(m_navigationView, SIGNAL(customContextMenuRequested(QPoint)),
@@ -140,7 +140,7 @@ void CCompositWidget::navigation_selection_selectionChanged()
         QSet<CTagItem *> tags;
         if (index.internalPointer()
                 && (index.internalPointer()
-                    != m_project->manager()->tagMgr()->rootItem()))
+                    != singleton<CPrj>()->manager()->tagMgr()->rootItem()))
         {
             tags.insert(static_cast<CTagItem *>(index.internalPointer()));
         }
@@ -171,7 +171,7 @@ void CCompositWidget::navigation_selection_selectionChanged()
                             Bookmark::FilterOptions(Bookmark::Trash));
                 break;
             case CNavigationItemModel::Untagged:
-                tags.insert(m_project->manager()->tagMgr()->rootItem());
+                tags.insert(singleton<CPrj>()->manager()->tagMgr()->rootItem());
                 break;
             default:
                 ;
@@ -215,7 +215,7 @@ void CCompositWidget::actionTagEdit_triggered()
         break;
     }
 
-    if (item && item != m_project->manager()->tagMgr()->rootItem())
+    if (item && item != singleton<CPrj>()->manager()->tagMgr()->rootItem())
     {
         CTagEditDialog dlg(CTagEditDialog::Edit, item->parent(), this);
         dlg.setData(item->data());
@@ -246,7 +246,7 @@ void CCompositWidget::actionBookmarkAdd_triggered()
     if (dlg.exec() == QDialog::Accepted)
     {
         CBookmark data = dlg.toData();
-        if (m_project->manager()->bookmarkMgr()->find(data.url()))
+        if (singleton<CPrj>()->manager()->bookmarkMgr()->find(data.url()))
         {
             QMessageBox::warning(this, tr("Warning"), tr("The bookmark with "
                     "the url \"%1\" is already exists")
@@ -254,7 +254,7 @@ void CCompositWidget::actionBookmarkAdd_triggered()
         }
         else
         {
-            CBookmarkItem *bookmark = m_project->manager()->bookmarkMgr()->add(dlg.toData());
+            CBookmarkItem *bookmark = singleton<CPrj>()->manager()->bookmarkMgr()->add(dlg.toData());
             if (!m_filter->tags().isEmpty())
                 foreach (CTagItem *tag, m_filter->tags())
                     tag->bookmarkAdd(bookmark);
@@ -339,7 +339,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
                     m_bookmarkView->selectionModel()->selectedRows().first().internalPointer());
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
-        QString path = m_project->downloadsPath();
+        QString path = singleton<CPrj>()->downloadsPath();
         if (QDir(path + "/" + subdir).exists())
         {
             foreach (const QString &dirName, QDir(path + "/" + subdir).entryList(QDir::Dirs|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
@@ -361,7 +361,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
                     m_bookmarkView->selectionModel()->selectedRows().first().internalPointer());
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
-        QString path = m_project->screenshotPath();
+        QString path = singleton<CPrj>()->screenshotPath();
         if (QDir(path + "/" + subdir).exists())
         {
             foreach (const QString &fileName, QDir(path + "/" + subdir).entryList(QDir::Files|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
@@ -433,7 +433,7 @@ void CCompositWidget::screenshot_finished()
 
     QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss-zzz.png");
     QString subdir = sha1(screenshot->url().toString()) + "_" + md5(screenshot->url().toString());
-    QString path = m_project->screenshotPath();
+    QString path = singleton<CPrj>()->screenshotPath();
     QString res = path + "/" + subdir + "/" + fileName;
     if (!QDir(path + "/" + subdir).exists())
         QDir().mkpath(path + "/" + subdir);
@@ -468,7 +468,7 @@ void CCompositWidget::download_next()
 
     QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss-zzz");
     QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
-    QString path = m_project->downloadsPath();
+    QString path = singleton<CPrj>()->downloadsPath();
     QString res = path + "/" + subdir + "/" + fileName;
     if (!QDir(res).exists())
         QDir().mkpath(res);

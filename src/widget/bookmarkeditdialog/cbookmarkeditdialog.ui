@@ -228,7 +228,7 @@
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QTreeView" name="treeView_tags"/>
+         <widget class="CCheckedTagView" name="treeView_tags"/>
          <widget class="QWidget" name="layoutWidget">
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
@@ -465,6 +465,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CCheckedTagView</class>
+   <extends>QTreeView</extends>
+   <header>ccheckedtagview.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>lineEdit_url</tabstop>

@@ -61,7 +61,9 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/aboutdialog/caboutdialog.h \
     $$PWD/src/network/cnetworkmgr.h \
     $$PWD/src/network/cdownloadfaviconrequest.h \
-    $$PWD/src/network/cdownloadfaviconreply.h
+    $$PWD/src/network/cdownloadfaviconreply.h \
+    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagitemmodel.h \
+    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.h
 
 
 SOURCES        +=                                                       \
@@ -107,7 +109,9 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/aboutdialog/caboutdialog.cpp \
     $$PWD/src/network/cnetworkmgr.cpp \
     $$PWD/src/network/cdownloadfaviconrequest.cpp \
-    $$PWD/src/network/cdownloadfaviconreply.cpp
+    $$PWD/src/network/cdownloadfaviconreply.cpp \
+    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagitemmodel.cpp \
+    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.cpp
 
 
 FORMS          +=                                                       \

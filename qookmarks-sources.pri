@@ -6,6 +6,7 @@ INCLUDEPATH    +=                                                       \
     $$PWD/src/network                                                   \
     $$PWD/src/manager                                                   \
     $$PWD/src/widget                                                    \
+    $$PWD/src/widget/aboutdialog                                        \
     $$PWD/src/widget/bookmarkview                                       \
     $$PWD/src/widget/navigationview                                     \
     $$PWD/src/widget/compositwidget                                     \
@@ -44,7 +45,6 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cwebpagescreenshot.h \
     $$PWD/src/widget/tageditdialog/ctageditdialog.h \
     $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.h \
-    $$PWD/src/caboutdialog.h \
     $$PWD/src/common/cindexlist.h \
     $$PWD/src/network/cabstractdownloadreply.h \
     $$PWD/src/network/cabstractdownloadrequest.h \
@@ -57,7 +57,8 @@ HEADERS        +=                                                       \
     $$PWD/src/network/ccheckurlreply.h \
     $$PWD/src/network/ciconmgr.h \
     $$PWD/src/common/hash_functions.h \
-    $$PWD/src/common/singleton.h
+    $$PWD/src/common/singleton.h \
+    $$PWD/src/widget/aboutdialog/caboutdialog.h
 
 
 SOURCES        +=                                                       \
@@ -88,7 +89,6 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cwebpagescreenshot.cpp \
     $$PWD/src/widget/tageditdialog/ctageditdialog.cpp \
     $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.cpp \
-    $$PWD/src/caboutdialog.cpp \
     $$PWD/src/common/cindexlist.cpp \
     $$PWD/src/network/cabstractdownloadreply.cpp \
     $$PWD/src/network/cabstractdownloadrequest.cpp \
@@ -100,7 +100,8 @@ SOURCES        +=                                                       \
     $$PWD/src/network/ccheckurlrequest.cpp \
     $$PWD/src/network/ccheckurlreply.cpp \
     $$PWD/src/network/ciconmgr.cpp \
-    $$PWD/src/common/hash_functions.cpp
+    $$PWD/src/common/hash_functions.cpp \
+    $$PWD/src/widget/aboutdialog/caboutdialog.cpp
 
 
 FORMS          +=                                                       \

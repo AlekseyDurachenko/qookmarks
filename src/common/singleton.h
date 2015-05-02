@@ -19,6 +19,7 @@
 #include "cmanager.h"
 #include "ctagmgr.h"
 #include "cbookmarkmgr.h"
+#include "cnetworkmgr.h"
 
 
 // usage: MyClass *MyClass = singleton<MyClass>();
@@ -49,6 +50,10 @@ inline CIconMgr *GIconMgr()
     return singleton<CPrj>()->iconMgr();
 }
 
+inline CNetworkMgr *GNetworkMgr()
+{
+    return singleton<CNetworkMgr>();
+}
 
 #endif // SINGLETON_H
 

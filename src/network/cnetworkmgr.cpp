@@ -13,17 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnetworkmgr.h"
+#include <QNetworkAccessManager>
+#include "cdownloadfaviconreply.h"
 
 
 CNetworkMgr::CNetworkMgr(QObject *parent) : QObject(parent)
 {
+    m_network = 0;
 }
 
 CNetworkMgr::~CNetworkMgr()
 {
 }
 
-void CNetworkMgr::setNetwork(QNetworkAccessMananger *network)
+void CNetworkMgr::setNetwork(QNetworkAccessManager *network)
 {
     m_network = network;
+}
+
+CDownloadFavIconReply *CNetworkMgr::favIcon(
+        const CDownloadFavIconRequest &request)
+{
+    return new CDownloadFavIconReply(request, m_network, this);
 }

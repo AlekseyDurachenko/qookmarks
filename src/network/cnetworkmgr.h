@@ -16,7 +16,9 @@
 #define CNETWORKMGR_H
 
 #include <QObject>
-class QNetworkAccessMananger;
+#include "cdownloadfaviconrequest.h"
+class QNetworkAccessManager;
+class CDownloadFavIconReply;
 
 
 class CNetworkMgr : public QObject
@@ -26,13 +28,15 @@ public:
     explicit CNetworkMgr(QObject *parent = 0);
     virtual ~CNetworkMgr();
 
-    inline QNetworkAccessMananger *network() const;
-    void setNetwork(QNetworkAccessMananger *network);
+    inline QNetworkAccessManager *network() const;
+    void setNetwork(QNetworkAccessManager *network);
+
+    CDownloadFavIconReply *favIcon(const CDownloadFavIconRequest &request);
 private:
-    QNetworkAccessMananger *m_network;
+    QNetworkAccessManager *m_network;
 };
 
-QNetworkAccessMananger *CNetworkMgr::network() const
+QNetworkAccessManager *CNetworkMgr::network() const
 {
     return m_network;
 }

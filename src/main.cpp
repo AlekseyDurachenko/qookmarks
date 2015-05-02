@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     // create singletons
+    singleton<CNetworkMgr>();
     singleton<CPrj>();
 
     CMainWindow w;
@@ -31,6 +32,7 @@ int main(int argc, char *argv[])
 
     // destroy singletons
     delete singleton<CPrj>();
+    delete singleton<CNetworkMgr>();
 
     return ret;
 }

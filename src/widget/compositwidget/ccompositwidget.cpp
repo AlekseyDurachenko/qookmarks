@@ -339,7 +339,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
                     m_bookmarkView->selectionModel()->selectedRows().first().internalPointer());
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
-        QString path = singleton<CPrj>()->downloadsPath();
+        QString path = GPrj()->downloadsPath();
         if (QDir(path + "/" + subdir).exists())
         {
             foreach (const QString &dirName, QDir(path + "/" + subdir).entryList(QDir::Dirs|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
@@ -361,7 +361,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
                     m_bookmarkView->selectionModel()->selectedRows().first().internalPointer());
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
-        QString path = singleton<CPrj>()->screenshotPath();
+        QString path = GPrj()->screenshotPath();
         if (QDir(path + "/" + subdir).exists())
         {
             foreach (const QString &fileName, QDir(path + "/" + subdir).entryList(QDir::Files|QDir::NoDotAndDotDot, QDir::Name|QDir::Reversed))
@@ -433,7 +433,7 @@ void CCompositWidget::screenshot_finished()
 
     QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss-zzz.png");
     QString subdir = sha1(screenshot->url().toString()) + "_" + md5(screenshot->url().toString());
-    QString path = singleton<CPrj>()->screenshotPath();
+    QString path = GPrj()->screenshotPath();
     QString res = path + "/" + subdir + "/" + fileName;
     if (!QDir(path + "/" + subdir).exists())
         QDir().mkpath(path + "/" + subdir);
@@ -468,7 +468,7 @@ void CCompositWidget::download_next()
 
     QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss-zzz");
     QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
-    QString path = singleton<CPrj>()->downloadsPath();
+    QString path = GPrj()->downloadsPath();
     QString res = path + "/" + subdir + "/" + fileName;
     if (!QDir(res).exists())
         QDir().mkpath(res);

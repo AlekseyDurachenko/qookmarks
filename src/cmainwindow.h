@@ -16,15 +16,8 @@
 #define CMAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDragEnterEvent>
-#include "ctagitem.h"
-#include "cbookmarkitem.h"
-#include "inavigationactions.h"
 #include "ccompositwidget.h"
-#include "project/cprj.h"
-class CBookmarkFilterDataModel;
-class CBookmarkFilter;
-class CManager;
+
 
 namespace Ui {
 class CMainWindow;
@@ -33,34 +26,37 @@ class CMainWindow;
 class CMainWindow : public QMainWindow //, public INavigationActions
 {
     Q_OBJECT
-
 public:
     explicit CMainWindow(QWidget *parent = 0);
     virtual ~CMainWindow();
 private slots:
     void project_opened();
     void project_closed();
+
     void actionCreate_triggered();
     void actionOpen_triggered();
     void actionSave_triggered();
     void actionClose_triggered();
+
     void on_action_quit_triggered();
     void on_action_import_triggered();
     void on_action_about_triggered();
-
     void on_action_aboutQt_triggered();
 protected:
     void closeEvent(QCloseEvent *event);
 private:
     void readSettings_window();
-    void readSettings_lastOpenedBookmarks();
-    QString readSettings_lastBookmarkDirectory();
     void writeSettings_window();
+
+    void readSettings_lastOpenedBookmarks();
     void writeSettings_lastOpenedBookmarks();
+
+    QString readSettings_lastBookmarkDirectory();
     void writeSettings_lastBookmarkDirectory(const QString &path);
 private:
     Ui::CMainWindow *ui;
     CCompositWidget *m_mainWidget;
 };
+
 
 #endif // CMAINWINDOW_H

@@ -14,26 +14,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cmainwindow.h"
 #include "ui_cmainwindow.h"
-#include <QDebug>
-#include <QDir>
-#include <QtGui>
-#include "caboutdialog.h"
-#include "cmanager.h"
-#include "ctagmgr.h"
-#include "ctagitem.h"
-#include "cbookmarkmgr.h"
-#include "cbookmarkitem.h"
-#include "bookmarkimportchromium.h"
-#include "cbookmarkfilter.h"
-#include "cbookmarkfilterdatamodel.h"
-#include "cbookmarkfilter.h"
-#include "cbookmarkfilteritemmodel.h"
-#include "cnavigationitemmodel.h"
-#include "settings.h"
-#include "cbookmarkview.h"
-#include "singleton.h"
 #include <QMessageBox>
-#include <QPushButton>
+#include <QFileDialog>
+#include <QSettings>
+#include <QCloseEvent>
+#include "caboutdialog.h"
+#include "cbookmarkview.h"
+#include "bookmarkimportchromium.h"
+#include "singleton.h"
+#include "settings.h"
 
 
 CMainWindow::CMainWindow(QWidget *parent) :
@@ -41,6 +30,9 @@ CMainWindow::CMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("%1").arg(appName()));
+
+    m_mainWidget = new CCompositWidget(this);
+    setCentralWidget(m_mainWidget);
 
     connect(GPrj()->actionCreate(), SIGNAL(triggered()),
             this, SLOT(actionCreate_triggered()));
@@ -52,9 +44,6 @@ CMainWindow::CMainWindow(QWidget *parent) :
             this, SLOT(actionClose_triggered()));
     connect(GPrj(), SIGNAL(opened()), this, SLOT(project_opened()));
     connect(GPrj(), SIGNAL(closed()), this, SLOT(project_closed()));
-
-    m_mainWidget = new CCompositWidget(this);
-    setCentralWidget(m_mainWidget);
 
     // Menu: File
     ui->menu_file->addAction(GPrj()->actionCreate());
@@ -263,6 +252,13 @@ void CMainWindow::readSettings_window()
                         "CMainWindow/geometry",saveGeometry()).toByteArray());
 }
 
+void CMainWindow::writeSettings_window()
+{
+    G_SETTINGS_INIT();
+    settings.setValue("CMainWindow/state", saveState());
+    settings.setValue("CMainWindow/geometry", saveGeometry());
+}
+
 void CMainWindow::readSettings_lastOpenedBookmarks()
 {
     G_SETTINGS_INIT();
@@ -272,23 +268,16 @@ void CMainWindow::readSettings_lastOpenedBookmarks()
             QMessageBox::warning(this, tr("Warning"), reason);
 }
 
-QString CMainWindow::readSettings_lastBookmarkDirectory()
-{
-    G_SETTINGS_INIT();
-    return settings.value("lastBookmarksDirectory", "").toString();
-}
-
-void CMainWindow::writeSettings_window()
-{
-    G_SETTINGS_INIT();
-    settings.setValue("CMainWindow/state", saveState());
-    settings.setValue("CMainWindow/geometry", saveGeometry());
-}
-
 void CMainWindow::writeSettings_lastOpenedBookmarks()
 {
     G_SETTINGS_INIT();
     settings.setValue("lastBookmarks", GPrj()->path());
+}
+
+QString CMainWindow::readSettings_lastBookmarkDirectory()
+{
+    G_SETTINGS_INIT();
+    return settings.value("lastBookmarksDirectory", "").toString();
 }
 
 void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
@@ -299,8 +288,8 @@ void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
 
 void CMainWindow::on_action_about_triggered()
 {
-    CAboutDialog dlg(this);
-    dlg.exec();
+    CAboutDialog aboutDialog(this);
+    aboutDialog.exec();
 }
 
 void CMainWindow::on_action_aboutQt_triggered()
@@ -320,6 +309,7 @@ void CMainWindow::closeEvent(QCloseEvent *event)
             if (!GPrj()->save(&reason))
             {
                 QMessageBox::critical(this, tr("Critical"), reason);
+                event->ignore();
             }
         }
     }

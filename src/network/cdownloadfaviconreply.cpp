@@ -21,7 +21,10 @@ CDownloadFavIconReply::CDownloadFavIconReply(
     CAbstractDownloadReply(network, parent)
 {
     m_request = request;
-    fetchUrl(request.url(),
+    QUrl favIconUrl;
+    favIconUrl.setHost(request.url().host());
+    favIconUrl.setPath("/favicon.ico");
+    fetchUrl(favIconUrl,
              request.maxRetryCount(),
              request.maxRedirectCount(),
              true);

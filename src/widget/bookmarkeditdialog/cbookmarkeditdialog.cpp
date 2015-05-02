@@ -14,6 +14,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkeditdialog.h"
 #include "ui_cbookmarkeditdialog.h"
+#include "cdownloadfaviconreply.h"
+#include <QDebug>
 
 
 CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
@@ -76,15 +78,27 @@ void CBookmarkEditDialog::setData(const CBookmark &data)
     ui->dateTimeEdit_metadata_lastVisited->setDateTime(data.lastVisitedDateTime());
 }
 
-//void CBookmarkEditDialog::setTags(CTagItem *rootItem,
-//        const QSet<CTagItem *> &tags)
-//{
-//    m_model->setRootItem(rootItem);
-//    foreach (CTagItem *item, tags)
-//        m_model->selectTag(item);
-//}
+void CBookmarkEditDialog::setTags(const QSet<CTagItem *> &tags)
+{
+    ui->treeView_tags->setCheckedTags(tags);
+}
 
-//QSet<CTagItem *> CBookmarkEditDialog::checkedTags()
-//{
-//    return m_model->checkedTags();
-//}
+const QSet<CTagItem *> CBookmarkEditDialog::checkedTags() const
+{
+    return ui->treeView_tags->checkedTags();
+}
+
+void CBookmarkEditDialog::on_toolButton_downloadFavIcon_clicked()
+{
+    CDownloadFavIconRequest request(ui->lineEdit_url->text());
+    m_faviconReply = GNetworkMgr()->favIcon(request);
+    connect(m_faviconReply, SIGNAL(finished()), this, SLOT(faviconReply_finished()));
+}
+
+void CBookmarkEditDialog::faviconReply_finished()
+{
+    qDebug() << m_faviconReply->errorString();
+    ui->toolButton_downloadFavIcon->setIcon(m_faviconReply->favIcon());
+    m_faviconReply->deleteLater();
+    m_faviconReply = 0;
+}

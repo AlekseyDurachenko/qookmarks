@@ -34,6 +34,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_mainWidget = new CCompositWidget(this);
     setCentralWidget(m_mainWidget);
 
+    GNetworkMgr()->setNetwork(new QNetworkAccessManager(this));
+
     connect(GPrj()->actionCreate(), SIGNAL(triggered()),
             this, SLOT(actionCreate_triggered()));
     connect(GPrj()->actionOpen(), SIGNAL(triggered()),

@@ -279,9 +279,10 @@ void CCompositWidget::actionBookmarkEdit_triggered()
     CBookmarkEditDialog dlg(this);
     dlg.setWindowTitle(tr("Edit bookmark"));
     dlg.setData(item->data());
+    dlg.setTags(item->tags());
     if (dlg.exec() == QDialog::Accepted)
     {
-        item->setData(dlg.toData());
+        item->setData(dlg.toData());        
     }
 }
 

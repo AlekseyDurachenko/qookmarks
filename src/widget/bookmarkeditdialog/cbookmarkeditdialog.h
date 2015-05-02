@@ -18,6 +18,7 @@
 #include "cbookmarkitem.h"
 //#include "ccheckabletagitemmodel.h"
 #include <QDialog>
+#include "singleton.h"
 
 
 namespace Ui {
@@ -34,12 +35,15 @@ public:
     CBookmark toData() const;
     void setData(const CBookmark &toData);
 
-    //void setTags(CTagItem *rootItem, const QSet<CTagItem *> &tags);
-    //QSet<CTagItem *> checkedTags();
+    void setTags(const QSet<CTagItem *> &tags);
+    const QSet<CTagItem *> checkedTags() const;
+private slots:
+    void on_toolButton_downloadFavIcon_clicked();
+    void faviconReply_finished();
 private:
     Ui::CBookmarkEditDialog *ui;
-    //CCheckableTagItemModel *m_model;
     CBookmark m_data;
+    CDownloadFavIconReply *m_faviconReply;
 };
 
 

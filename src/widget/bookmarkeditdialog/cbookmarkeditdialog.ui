@@ -25,34 +25,6 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_url">
-           <property name="text">
-            <string>URL</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_url"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_retreiveFromWebsite">
-           <property name="text">
-            <string>Retreive from website</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="1" column="1">
           <widget class="QLineEdit" name="lineEdit_title"/>
@@ -74,7 +46,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_favicon">
            <property name="text">
-            <string>Favicon</string>
+            <string>URL</string>
            </property>
           </widget>
          </item>
@@ -94,49 +66,19 @@
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
-            <widget class="QLabel" name="faviconPlace">
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="scaledContents">
-              <bool>true</bool>
+            <widget class="QLineEdit" name="lineEdit_url"/>
+           </item>
+           <item>
+            <widget class="QToolButton" name="toolButton_downloadFavIcon">
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_exampleText">
+            <widget class="QToolButton" name="toolButton_downloadPageInformation">
              <property name="text">
-              <string>Example Text</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_selectFont">
-             <property name="text">
-              <string>Font...</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_selectColor">
-             <property name="text">
-              <string>Color...</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_selectBackgroundColor">
-             <property name="text">
-              <string>Background color...</string>
+              <string>download information</string>
              </property>
             </widget>
            </item>
@@ -156,7 +98,7 @@
          <item>
           <widget class="QCheckBox" name="checkBox_favorite">
            <property name="text">
-            <string>Favorite</string>
+            <string>favorite</string>
            </property>
           </widget>
          </item>
@@ -170,7 +112,7 @@
          <item>
           <widget class="QCheckBox" name="checkBox_readItLater">
            <property name="text">
-            <string>Read it Later</string>
+            <string>read it later</string>
            </property>
           </widget>
          </item>
@@ -208,6 +150,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_trash">
+           <property name="text">
+            <string>move to trash</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -216,6 +165,64 @@
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_httpResponseCode">
+           <property name="text">
+            <string>Code</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinBox_httpResponseCode">
+           <property name="minimum">
+            <number>-999999</number>
+           </property>
+           <property name="maximum">
+            <number>999999</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_httpResponseText">
+           <property name="text">
+            <string>Reason</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_httpResponseText"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_lastCheck">
+           <property name="text">
+            <string>Last check date</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDateTimeEdit" name="dateTimeEdit_lastCheck">
+           <property name="minimumSize">
+            <size>
+             <width>180</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="displayFormat">
+            <string>yyyy-MM-dd HH:mm:ss</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButton_checkHttpStatus">
+           <property name="text">
+            <string>check</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QSplitter" name="splitter">
@@ -232,73 +239,31 @@
          <widget class="QWidget" name="layoutWidget">
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QLabel" name="label_httpResponseCode">
-               <property name="text">
-                <string>Code</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="spinBox_httpResponseCode">
-               <property name="minimum">
-                <number>-999999</number>
-               </property>
-               <property name="maximum">
-                <number>999999</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_httpResponseText">
-               <property name="text">
-                <string>Reason</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="lineEdit_httpResponseText"/>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_lastCheck">
-               <property name="text">
-                <string>Last check date</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDateTimeEdit" name="dateTimeEdit_lastCheck">
-               <property name="minimumSize">
-                <size>
-                 <width>180</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="displayFormat">
-                <string>yyyy-MM-dd HH:mm:ss</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="screenshot">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>Screenshot</string>
              </property>
-             <property name="text">
-              <string>No screenshot</string>
-             </property>
-             <property name="scaledContents">
-              <bool>true</bool>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <widget class="QLabel" name="screenshot">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>No screenshot</string>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -473,13 +438,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>lineEdit_url</tabstop>
-  <tabstop>pushButton_retreiveFromWebsite</tabstop>
-  <tabstop>lineEdit_exampleText</tabstop>
-  <tabstop>pushButton_selectFont</tabstop>
-  <tabstop>pushButton_selectColor</tabstop>
-  <tabstop>pushButton_selectBackgroundColor</tabstop>
   <tabstop>lineEdit_title</tabstop>
   <tabstop>lineEdit_description</tabstop>
   <tabstop>lineEdit_keywords</tabstop>

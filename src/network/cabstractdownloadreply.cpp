@@ -15,6 +15,7 @@
 #include "cabstractdownloadreply.h"
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include "version.h"
 #include <QDebug>
 
 
@@ -140,6 +141,7 @@ void CAbstractDownloadReply::fetchUrl(const QUrl &url, int maxRetryCount,
     m_maxRedirectCount = maxRedirectCount;
     m_fetchData = fetchData;
     m_request = QNetworkRequest(url);
+    m_request.setRawHeader("User-Agent", appName());
     m_reply = createReply(m_request);
 }
 

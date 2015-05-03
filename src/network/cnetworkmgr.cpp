@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnetworkmgr.h"
 #include <QNetworkAccessManager>
+#include "cdownloadwebpageinforeply.h"
 #include "cdownloadfaviconreply.h"
 #include "ccheckurlreply.h"
 
@@ -30,6 +31,11 @@ CNetworkMgr::~CNetworkMgr()
 void CNetworkMgr::setNetwork(QNetworkAccessManager *network)
 {
     m_network = network;
+}
+
+CDownloadWebPageInfoReply *CNetworkMgr::webPageInfo(const CDownloadWebPageInfoRequest &request)
+{
+    return new CDownloadWebPageInfoReply(request, m_network, this);
 }
 
 CDownloadFaviconReply *CNetworkMgr::favicon(

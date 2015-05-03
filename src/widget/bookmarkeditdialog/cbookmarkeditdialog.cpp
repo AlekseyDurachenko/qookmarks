@@ -16,6 +16,7 @@
 #include "ui_cbookmarkeditdialog.h"
 #include "cdownloadfaviconreply.h"
 #include "ccheckurlreply.h"
+#include "cdownloadwebpageinforeply.h"
 #include <QDebug>
 
 
@@ -99,7 +100,7 @@ void CBookmarkEditDialog::on_toolButton_downloadFavIcon_clicked()
 
 void CBookmarkEditDialog::faviconReply_finished()
 {
-    qDebug() << m_checkUrlReply->error() << m_checkUrlReply->errorString();
+    qDebug() << m_faviconReply->error() << m_faviconReply->errorString();
     ui->toolButton_downloadFavIcon->setIcon(m_faviconReply->favicon());
     m_faviconReply->deleteLater();
     m_faviconReply = 0;
@@ -121,4 +122,22 @@ void CBookmarkEditDialog::checkUrlReply_finished()
     ui->dateTimeEdit_lastCheck->setDateTime(QDateTime::currentDateTime());
     m_checkUrlReply->deleteLater();
     m_checkUrlReply = 0;
+}
+
+void CBookmarkEditDialog::on_toolButton_downloadPageInformation_clicked()
+{
+    CDownloadWebPageInfoRequest request(ui->lineEdit_url->text());
+    m_webPageInfoReply = GNetworkMgr()->webPageInfo(request);
+    connect(m_webPageInfoReply, SIGNAL(finished()),
+            this, SLOT(webPageInfoReply_finished()));
+}
+
+void CBookmarkEditDialog::webPageInfoReply_finished()
+{
+    qDebug() << m_webPageInfoReply->error() << m_webPageInfoReply->errorString();
+    ui->lineEdit_title->setText(m_webPageInfoReply->title());
+    ui->lineEdit_description->setText(m_webPageInfoReply->description());
+    ui->lineEdit_keywords->setText(m_webPageInfoReply->keywords());
+    m_webPageInfoReply->deleteLater();
+    m_webPageInfoReply = 0;
 }

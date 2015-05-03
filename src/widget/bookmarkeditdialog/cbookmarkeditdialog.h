@@ -41,12 +41,15 @@ private slots:
     void on_toolButton_downloadFavIcon_clicked();
     void faviconReply_finished();
     void on_toolButton_checkHttpStatus_clicked();
-    void checkUrlReply_finished();
+    void checkUrlReply_finished();    
+    void on_toolButton_downloadPageInformation_clicked();
+    void webPageInfoReply_finished();
 private:
     Ui::CBookmarkEditDialog *ui;
     CBookmark m_data;
     CDownloadFaviconReply *m_faviconReply;
     CCheckUrlReply *m_checkUrlReply;
+    CDownloadWebPageInfoReply *m_webPageInfoReply;
 };
 
 

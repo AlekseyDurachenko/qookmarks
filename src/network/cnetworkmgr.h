@@ -16,11 +16,14 @@
 #define CNETWORKMGR_H
 
 #include <QObject>
+#include "cdownloadwebpageinforeply.h"
 #include "cdownloadfaviconrequest.h"
 #include "ccheckurlrequest.h"
 class QNetworkAccessManager;
+class CDownloadWebPageInfoReply;
 class CDownloadFaviconReply;
 class CCheckUrlReply;
+
 
 class CNetworkMgr : public QObject
 {
@@ -32,8 +35,9 @@ public:
     inline QNetworkAccessManager *network() const;
     void setNetwork(QNetworkAccessManager *network);
 
+    CDownloadWebPageInfoReply *webPageInfo(const CDownloadWebPageInfoRequest &request);
     CDownloadFaviconReply *favicon(const CDownloadFaviconRequest &request);
-    CCheckUrlReply *checkUrl(const CCheckUrlRequest &request);
+    CCheckUrlReply *checkUrl(const CCheckUrlRequest &request);    
 private:
     QNetworkAccessManager *m_network;
 };

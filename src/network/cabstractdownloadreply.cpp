@@ -74,7 +74,6 @@ void CAbstractDownloadReply::reply_finished()
 
     foreach (QByteArray name, m_reply->rawHeaderList())
     {
-//        qDebug() << name << m_reply->rawHeader(name);
         if (name.toLower() == "content-type")
         {
             QList<QByteArray> parts = m_reply->rawHeader(name).split(';');

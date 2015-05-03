@@ -34,10 +34,6 @@ CDownloadWebPageInfoReply::CDownloadWebPageInfoReply(
 void CDownloadWebPageInfoReply::processEnd()
 {
     QByteArray srcData = readAll();
-//    QTextCodec *codec = QTextCodec::codecForName(charset());
-//    QString unicode = codec->toUnicode(srcData);
-//    QByteArray data = unicode.toUtf8();
-//    qDebug() << QString::fromUtf8(data);
 
     xmlDoc* doc = htmlReadDoc((const xmlChar *)srcData.constData(), NULL, charset().data(),
                     HTML_PARSE_RECOVER|HTML_PARSE_NOERROR|HTML_PARSE_NOWARNING);

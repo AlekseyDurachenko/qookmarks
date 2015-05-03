@@ -15,8 +15,8 @@
 #include "cdownloadfaviconreply.h"
 
 
-CDownloadFavIconReply::CDownloadFavIconReply(
-        const CDownloadFavIconRequest &request,
+CDownloadFaviconReply::CDownloadFaviconReply(
+        const CDownloadFaviconRequest &request,
         QNetworkAccessManager *network, QObject *parent) :
     CAbstractDownloadReply(network, parent)
 {
@@ -31,11 +31,11 @@ CDownloadFavIconReply::CDownloadFavIconReply(
              true);
 }
 
-void CDownloadFavIconReply::processEnd()
+void CDownloadFaviconReply::processEnd()
 {    
     QPixmap pixmap;
     if (!pixmap.loadFromData(readAll()))
-        m_favIcon = QIcon();
+        m_favicon = QIcon();
     else
-        m_favIcon = pixmap;
+        m_favicon = pixmap;
 }

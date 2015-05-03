@@ -20,29 +20,29 @@
 #include "cdownloadfaviconrequest.h"
 
 
-class CDownloadFavIconReply : public CAbstractDownloadReply
+class CDownloadFaviconReply : public CAbstractDownloadReply
 {
     Q_OBJECT
 public:
-    CDownloadFavIconReply(const CDownloadFavIconRequest &request,
+    CDownloadFaviconReply(const CDownloadFaviconRequest &request,
                           QNetworkAccessManager *network,
                           QObject *parent = 0);
 
-    inline const CDownloadFavIconRequest &request() const;
-    inline const QIcon &favIcon() const;
+    inline const CDownloadFaviconRequest &request() const;
+    inline const QIcon &favicon() const;
 protected:
     virtual void processEnd();
 private:
-    CDownloadFavIconRequest m_request;
-    QIcon m_favIcon;
+    CDownloadFaviconRequest m_request;
+    QIcon m_favicon;
 };
 
-const QIcon &CDownloadFavIconReply::favIcon() const
+const QIcon &CDownloadFaviconReply::favicon() const
 {
-    return m_favIcon;
+    return m_favicon;
 }
 
-const CDownloadFavIconRequest &CDownloadFavIconReply::request() const
+const CDownloadFaviconRequest &CDownloadFaviconReply::request() const
 {
     return m_request;
 }

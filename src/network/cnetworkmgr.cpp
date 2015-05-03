@@ -15,6 +15,7 @@
 #include "cnetworkmgr.h"
 #include <QNetworkAccessManager>
 #include "cdownloadfaviconreply.h"
+#include "ccheckurlreply.h"
 
 
 CNetworkMgr::CNetworkMgr(QObject *parent) : QObject(parent)
@@ -31,8 +32,13 @@ void CNetworkMgr::setNetwork(QNetworkAccessManager *network)
     m_network = network;
 }
 
-CDownloadFavIconReply *CNetworkMgr::favIcon(
-        const CDownloadFavIconRequest &request)
+CDownloadFaviconReply *CNetworkMgr::favicon(
+        const CDownloadFaviconRequest &request)
 {
-    return new CDownloadFavIconReply(request, m_network, this);
+    return new CDownloadFaviconReply(request, m_network, this);
+}
+
+CCheckUrlReply *CNetworkMgr::checkUrl(const CCheckUrlRequest &request)
+{
+    return new CCheckUrlReply(request, m_network, this);
 }

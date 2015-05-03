@@ -18,10 +18,10 @@
 #include "cabstractdownloadrequest.h"
 
 
-class CDownloadFavIconRequest : public CAbstractDownloadRequest
+class CDownloadFaviconRequest : public CAbstractDownloadRequest
 {
 public:
-    explicit CDownloadFavIconRequest(const QUrl &url = QUrl(),
+    explicit CDownloadFaviconRequest(const QUrl &url = QUrl(),
                                      int maxRetryCount = 9,
                                      int maxRedirectCount = 9);
 };

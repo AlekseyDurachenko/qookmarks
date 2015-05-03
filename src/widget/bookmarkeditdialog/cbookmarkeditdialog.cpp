@@ -15,6 +15,7 @@
 #include "cbookmarkeditdialog.h"
 #include "ui_cbookmarkeditdialog.h"
 #include "cdownloadfaviconreply.h"
+#include "ccheckurlreply.h"
 #include <QDebug>
 
 
@@ -90,15 +91,34 @@ const QSet<CTagItem *> CBookmarkEditDialog::checkedTags() const
 
 void CBookmarkEditDialog::on_toolButton_downloadFavIcon_clicked()
 {
-    CDownloadFavIconRequest request(ui->lineEdit_url->text());
-    m_faviconReply = GNetworkMgr()->favIcon(request);
-    connect(m_faviconReply, SIGNAL(finished()), this, SLOT(faviconReply_finished()));
+    CDownloadFaviconRequest request(ui->lineEdit_url->text());
+    m_faviconReply = GNetworkMgr()->favicon(request);
+    connect(m_faviconReply, SIGNAL(finished()),
+            this, SLOT(faviconReply_finished()));
 }
 
 void CBookmarkEditDialog::faviconReply_finished()
 {
-    qDebug() << m_faviconReply->errorString();
-    ui->toolButton_downloadFavIcon->setIcon(m_faviconReply->favIcon());
+    qDebug() << m_checkUrlReply->error() << m_checkUrlReply->errorString();
+    ui->toolButton_downloadFavIcon->setIcon(m_faviconReply->favicon());
     m_faviconReply->deleteLater();
     m_faviconReply = 0;
+}
+
+void CBookmarkEditDialog::on_toolButton_checkHttpStatus_clicked()
+{
+    CCheckUrlRequest request(ui->lineEdit_url->text());
+    m_checkUrlReply = GNetworkMgr()->checkUrl(request);
+    connect(m_checkUrlReply, SIGNAL(finished()),
+            this, SLOT(checkUrlReply_finished()));
+}
+
+void CBookmarkEditDialog::checkUrlReply_finished()
+{
+    qDebug() << m_checkUrlReply->error() << m_checkUrlReply->errorString();
+    ui->spinBox_httpResponseCode->setValue(m_checkUrlReply->httpStatusCode());
+    ui->lineEdit_httpResponseText->setText(m_checkUrlReply->httpReasonPhrase());
+    ui->dateTimeEdit_lastCheck->setDateTime(QDateTime::currentDateTime());
+    m_checkUrlReply->deleteLater();
+    m_checkUrlReply = 0;
 }

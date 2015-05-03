@@ -15,7 +15,7 @@
 #include "cdownloadfaviconrequest.h"
 
 
-CDownloadFavIconRequest::CDownloadFavIconRequest(const QUrl &url,
+CDownloadFaviconRequest::CDownloadFaviconRequest(const QUrl &url,
         int maxRetryCount, int maxRedirectCount)
 {
     setUrl(url);

@@ -17,9 +17,10 @@
 
 #include <QObject>
 #include "cdownloadfaviconrequest.h"
+#include "ccheckurlrequest.h"
 class QNetworkAccessManager;
-class CDownloadFavIconReply;
-
+class CDownloadFaviconReply;
+class CCheckUrlReply;
 
 class CNetworkMgr : public QObject
 {
@@ -31,7 +32,8 @@ public:
     inline QNetworkAccessManager *network() const;
     void setNetwork(QNetworkAccessManager *network);
 
-    CDownloadFavIconReply *favIcon(const CDownloadFavIconRequest &request);
+    CDownloadFaviconReply *favicon(const CDownloadFaviconRequest &request);
+    CCheckUrlReply *checkUrl(const CCheckUrlRequest &request);
 private:
     QNetworkAccessManager *m_network;
 };

@@ -29,17 +29,13 @@
          <item row="1" column="1">
           <widget class="QLineEdit" name="lineEdit_title"/>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_description">
-           <property name="text">
-            <string>Description</string>
-           </property>
-          </widget>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="lineEdit_keywords"/>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_title">
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_keywords">
            <property name="text">
-            <string>Title</string>
+            <string>Keywords</string>
            </property>
           </widget>
          </item>
@@ -50,39 +46,41 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_description"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_keywords">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_title">
            <property name="text">
-            <string>Keywords</string>
+            <string>Title</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="lineEdit_keywords"/>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="lineEdit_description"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_description">
+           <property name="text">
+            <string>Description</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QToolButton" name="toolButton_downloadPageInformation">
+           <property name="icon">
+            <iconset resource="../../../qrc/icons.qrc">
+             <normaloff>:/icons/download-webpage-info.png</normaloff>:/icons/download-webpage-info.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QToolButton" name="toolButton_downloadFavIcon">
+           <property name="icon">
+            <iconset resource="../../../qrc/icons.qrc">
+             <normaloff>:/icons/bookmark-item.png</normaloff>:/icons/bookmark-item.png</iconset>
+           </property>
+          </widget>
          </item>
          <item row="0" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLineEdit" name="lineEdit_url"/>
-           </item>
-           <item>
-            <widget class="QToolButton" name="toolButton_downloadFavIcon">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="toolButton_downloadPageInformation">
-             <property name="text">
-              <string>download information</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QLineEdit" name="lineEdit_url"/>
          </item>
         </layout>
        </item>
@@ -457,7 +455,9 @@
   <tabstop>pushButton_history_remove</tabstop>
   <tabstop>pushButton_history_removeAll</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../../../qrc/icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

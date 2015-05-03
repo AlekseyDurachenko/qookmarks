@@ -72,6 +72,27 @@ void CAbstractDownloadReply::reply_finished()
     m_httpReasonPhrase = m_reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
     m_networkError = m_reply->error();
 
+    foreach (QByteArray name, m_reply->rawHeaderList())
+    {
+//        qDebug() << name << m_reply->rawHeader(name);
+        if (name.toLower() == "content-type")
+        {
+            QList<QByteArray> parts = m_reply->rawHeader(name).split(';');
+
+            if (parts.count() > 0)
+                m_mimeType = parts.at(0).trimmed();
+
+            for (int i = 1; i < parts.count(); ++i)
+            {
+                QList<QByteArray> keyValue = parts.at(i).split('=');
+                if (keyValue.count() != 2)
+                    continue;
+                if (keyValue.at(0).trimmed().toLower() == "charset")
+                    m_charset = keyValue.at(1).trimmed();
+            }
+        }
+    }
+
     if (m_reply->error() == QNetworkReply::NoError
             && isRedirectFound()
             && m_maxRedirectCount > 0)

@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cdownloadwebpageinforeply.h"
+#include <QTextCodec>
 #include <libxml2/libxml/parser.h>
 #include <libxml2/libxml/HTMLparser.h>
 #include <QDebug>
@@ -32,9 +33,13 @@ CDownloadWebPageInfoReply::CDownloadWebPageInfoReply(
 
 void CDownloadWebPageInfoReply::processEnd()
 {
-    QByteArray data = readAll();
+    QByteArray srcData = readAll();
+//    QTextCodec *codec = QTextCodec::codecForName(charset());
+//    QString unicode = codec->toUnicode(srcData);
+//    QByteArray data = unicode.toUtf8();
+//    qDebug() << QString::fromUtf8(data);
 
-    xmlDoc* doc = htmlReadDoc((const xmlChar *)data.constData(), NULL, NULL,
+    xmlDoc* doc = htmlReadDoc((const xmlChar *)srcData.constData(), NULL, charset().data(),
                     HTML_PARSE_RECOVER|HTML_PARSE_NOERROR|HTML_PARSE_NOWARNING);
 
     xmlNode *root = xmlDocGetRootElement(doc);

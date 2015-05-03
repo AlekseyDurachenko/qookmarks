@@ -46,6 +46,8 @@ public:
     inline int httpStatusCode() const;
     inline const QString &httpReasonPhrase() const;
     inline QNetworkReply::NetworkError networkError() const;
+    inline const QByteArray &mimeType() const;
+    inline const QByteArray &charset() const;
 signals:
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
     void finished();
@@ -82,6 +84,8 @@ private:
     int m_httpStatusCode;
     QString m_httpReasonPhrase;
     QNetworkReply::NetworkError m_networkError;
+    QByteArray m_mimeType;
+    QByteArray m_charset;
 };
 
 CAbstractDownloadReply::ErrorType CAbstractDownloadReply::error() const
@@ -107,6 +111,16 @@ const QString &CAbstractDownloadReply::httpReasonPhrase() const
 QNetworkReply::NetworkError CAbstractDownloadReply::networkError() const
 {
     return m_networkError;
+}
+
+const QByteArray &CAbstractDownloadReply::mimeType() const
+{
+    return m_mimeType;
+}
+
+const QByteArray &CAbstractDownloadReply::charset() const
+{
+    return m_charset;
 }
 
 

@@ -18,8 +18,8 @@
 #include <QObject>
 #include <QUrl>
 #include <QNetworkRequest>
+#include <QNetworkReply>
 class QNetworkAccessManager;
-class QNetworkReply;
 
 
 class CAbstractDownloadReply : public QObject
@@ -45,6 +45,7 @@ public:
     inline const QString &errorString() const;
     inline int httpStatusCode() const;
     inline const QString &httpReasonPhrase() const;
+    inline QNetworkReply::NetworkError networkError() const;
 signals:
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
     void finished();
@@ -80,6 +81,7 @@ private:
     QString m_errorString;
     int m_httpStatusCode;
     QString m_httpReasonPhrase;
+    QNetworkReply::NetworkError m_networkError;
 };
 
 CAbstractDownloadReply::ErrorType CAbstractDownloadReply::error() const
@@ -100,6 +102,11 @@ int CAbstractDownloadReply::httpStatusCode() const
 const QString &CAbstractDownloadReply::httpReasonPhrase() const
 {
     return m_httpReasonPhrase;
+}
+
+QNetworkReply::NetworkError CAbstractDownloadReply::networkError() const
+{
+    return m_networkError;
 }
 
 

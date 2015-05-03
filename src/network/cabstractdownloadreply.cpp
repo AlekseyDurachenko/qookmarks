@@ -28,6 +28,7 @@ CAbstractDownloadReply::CAbstractDownloadReply(QNetworkAccessManager *network,
     m_reply = 0;
     m_error = NoError;
     m_httpStatusCode = 0;
+    m_networkError = QNetworkReply::NoError;
 }
 
 CAbstractDownloadReply::~CAbstractDownloadReply()
@@ -69,6 +70,7 @@ void CAbstractDownloadReply::reply_finished()
 
     m_httpStatusCode = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     m_httpReasonPhrase = m_reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+    m_networkError = m_reply->error();
 
     if (m_reply->error() == QNetworkReply::NoError
             && isRedirectFound()

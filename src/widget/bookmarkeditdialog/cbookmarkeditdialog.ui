@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>605</height>
+    <width>751</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,16 +26,10 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_title"/>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="lineEdit_keywords"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_keywords">
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_rating">
            <property name="text">
-            <string>Keywords</string>
+            <string>Rating</string>
            </property>
           </widget>
          </item>
@@ -53,18 +47,11 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_description"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_description">
-           <property name="text">
-            <string>Description</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="2">
           <widget class="QToolButton" name="toolButton_downloadPageInformation">
+           <property name="toolTip">
+            <string>Get a page information</string>
+           </property>
            <property name="icon">
             <iconset resource="../../../qrc/icons.qrc">
              <normaloff>:/icons/download-webpage-info.png</normaloff>:/icons/download-webpage-info.png</iconset>
@@ -73,6 +60,9 @@
          </item>
          <item row="0" column="2">
           <widget class="QToolButton" name="toolButton_downloadFavIcon">
+           <property name="toolTip">
+            <string>Get a web site favicon</string>
+           </property>
            <property name="icon">
             <iconset resource="../../../qrc/icons.qrc">
              <normaloff>:/icons/bookmark-item.png</normaloff>:/icons/bookmark-item.png</iconset>
@@ -82,191 +72,138 @@
          <item row="0" column="1">
           <widget class="QLineEdit" name="lineEdit_url"/>
          </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="Line" name="line_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QCheckBox" name="checkBox_favorite">
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_title"/>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="lineEdit_keywords"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_keywords">
            <property name="text">
-            <string>favorite</string>
+            <string>Keywords</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="Line" name="line_3">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
+         <item row="10" column="2">
+          <widget class="QToolButton" name="toolButton_checkHttpStatus">
+           <property name="icon">
+            <iconset resource="../../../qrc/icons.qrc">
+             <normaloff>:/icons/check-url.png</normaloff>:/icons/check-url.png</iconset>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_description">
+           <property name="text">
+            <string>Description</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QCheckBox" name="checkBox_trash">
+           <property name="text">
+            <string>trash</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../qrc/icons.qrc">
+             <normaloff>:/icons/bookmark-trash.png</normaloff>:/icons/bookmark-trash.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QSpinBox" name="spinBox_httpResponseCode">
+             <property name="minimum">
+              <number>-999999</number>
+             </property>
+             <property name="maximum">
+              <number>999999</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_httpResponseText"/>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="dateTimeEdit_lastCheck">
+             <property name="minimumSize">
+              <size>
+               <width>180</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="displayFormat">
+              <string>yyyy-MM-dd HH:mm:ss</string>
+             </property>
+             <property name="calendarPopup">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="10" column="0">
+          <widget class="QLabel" name="label_httpResponseCode">
+           <property name="text">
+            <string>Status</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="lineEdit_description"/>
+         </item>
+         <item row="6" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QSlider" name="horizontalSlider_rating">
+             <property name="maximum">
+              <number>10</number>
+             </property>
+             <property name="pageStep">
+              <number>5</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="spinBox_rating">
+             <property name="maximum">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="8" column="1">
           <widget class="QCheckBox" name="checkBox_readItLater">
            <property name="text">
             <string>read it later</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="line_4">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
+           <property name="icon">
+            <iconset resource="../../../qrc/icons.qrc">
+             <normaloff>:/icons/bookmark-readlater.png</normaloff>:/icons/bookmark-readlater.png</iconset>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QLabel" name="label_rating">
+         <item row="7" column="1">
+          <widget class="QCheckBox" name="checkBox_favorite">
            <property name="text">
-            <string>Rating</string>
+            <string>favorite</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="horizontalSlider_rating">
-           <property name="maximum">
-            <number>10</number>
-           </property>
-           <property name="pageStep">
-            <number>5</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBox_rating">
-           <property name="maximum">
-            <number>10</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_trash">
-           <property name="text">
-            <string>move to trash</string>
+           <property name="icon">
+            <iconset resource="../../../qrc/icons.qrc">
+             <normaloff>:/icons/bookmark-favorites.png</normaloff>:/icons/bookmark-favorites.png</iconset>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="Line" name="line_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QLabel" name="label_httpResponseCode">
-           <property name="text">
-            <string>Code</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBox_httpResponseCode">
-           <property name="minimum">
-            <number>-999999</number>
-           </property>
-           <property name="maximum">
-            <number>999999</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_httpResponseText">
-           <property name="text">
-            <string>Reason</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_httpResponseText"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_lastCheck">
-           <property name="text">
-            <string>Last check date</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QDateTimeEdit" name="dateTimeEdit_lastCheck">
-           <property name="minimumSize">
-            <size>
-             <width>180</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="displayFormat">
-            <string>yyyy-MM-dd HH:mm:ss</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButton_checkHttpStatus">
-           <property name="text">
-            <string>check</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QSplitter" name="splitter">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <widget class="CCheckedTagView" name="treeView_tags"/>
-         <widget class="QWidget" name="layoutWidget">
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <item>
-            <widget class="QGroupBox" name="groupBox">
-             <property name="title">
-              <string>Screenshot</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7">
-              <item>
-               <widget class="QLabel" name="screenshot">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>No screenshot</string>
-                </property>
-                <property name="scaledContents">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
+        <widget class="CCheckedTagView" name="treeView_tags"/>
        </item>
       </layout>
      </widget>
@@ -439,8 +376,6 @@
   <tabstop>lineEdit_title</tabstop>
   <tabstop>lineEdit_description</tabstop>
   <tabstop>lineEdit_keywords</tabstop>
-  <tabstop>checkBox_favorite</tabstop>
-  <tabstop>checkBox_readItLater</tabstop>
   <tabstop>horizontalSlider_rating</tabstop>
   <tabstop>spinBox_rating</tabstop>
   <tabstop>spinBox_httpResponseCode</tabstop>

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/check-url.png</file>
     <file>icons/download-webpage-info.png</file>
     <file>icons/action-about-qt.png</file>
     <file>icons/action-exit.png</file>

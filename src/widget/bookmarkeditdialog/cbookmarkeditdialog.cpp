@@ -238,7 +238,7 @@ void CBookmarkEditDialog::on_toolButton_textWrap_toggled(bool checked)
 
 void CBookmarkEditDialog::on_checkBox_autoPageinfo_toggled(bool checked)
 {
-    if (ui->checkBox_autoPageinfo->isChecked())
+    if (checked)
         m_autoPageinfoTimer->start();
     else
         m_autoPageinfoTimer->stop();

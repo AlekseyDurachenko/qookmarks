@@ -38,45 +38,37 @@ public:
     const QSet<CTagItem *> toCheckedTags() const;
     void setCheckedTags(const QSet<CTagItem *> &toCheckedTags);
 
-    inline const QIcon &favicon() const;
+    QIcon toFavicon() const;
+    void setFavicon(const QIcon &icon) const;
 
     bool isAddToDownloadQueue() const;
     void setAddToDownloadQueue(bool state);
 private slots:
     void on_toolButton_favicon_clicked();
     void faviconReply_finished();
+
     void on_toolButton_httpCheck_clicked();
-    void checkUrlReply_finished();    
+    void httpCheckReply_finished();
+
     void on_toolButton_pageinfo_clicked();
-    void webPageInfoReply_finished();
+    void pageinfoReply_finished();
 
     void on_toolButton_loadFromFile_clicked();
     void on_toolButton_saveToFile_clicked();
     void on_toolButton_clear_clicked();
     void on_toolButton_textWrap_toggled(bool checked);
-
-    void on_checkBox_autoPageinfo_toggled(bool checked);
-    void on_lineEdit_url_textChanged(const QString &test);
-    void autoPageinfoTimer_timeout();
 private:
     void readSettings();
     void writeSettings();
 private:
     Ui::CBookmarkEditDialog *ui;
-    QTimer *m_autoPageinfoTimer;
 
     CBookmark m_data;
-    QIcon m_favicon;
 
-    CDownloadWebPageInfoReply *m_pageinfoReply;
     CDownloadFaviconReply *m_faviconReply;
+    CDownloadWebPageInfoReply *m_pageinfoReply;
     CCheckUrlReply *m_httpCheckReply;
 };
-
-const QIcon &CBookmarkEditDialog::favicon() const
-{
-    return m_favicon;
-}
 
 
 #endif // CBOOKMARKEDITDIALOG_H

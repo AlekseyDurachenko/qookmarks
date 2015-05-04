@@ -21,8 +21,8 @@
 #include "cdownloadfaviconreply.h"
 #include "ccheckurlreply.h"
 #include "cdownloadwebpageinforeply.h"
+#include "ciconmgr.h"
 #include "settings.h"
-#include <QDebug>
 
 
 CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
@@ -30,11 +30,9 @@ CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_autoPageinfoTimer = new QTimer(this);
-    m_autoPageinfoTimer->setInterval(1000);
-    m_autoPageinfoTimer->setSingleShot(true);
-    connect(m_autoPageinfoTimer, SIGNAL(timeout()),
-            this, SLOT(autoPageinfoTimer_timeout()));
+    m_faviconReply = 0;
+    m_pageinfoReply = 0;
+    m_httpCheckReply = 0;
 
     readSettings();
 }
@@ -42,6 +40,27 @@ CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
 CBookmarkEditDialog::~CBookmarkEditDialog()
 {
     writeSettings();
+
+    if (m_faviconReply)
+    {
+        disconnect(m_faviconReply, 0, this, 0);
+        m_faviconReply->abort();
+        m_faviconReply->deleteLater();
+    }
+
+    if (m_pageinfoReply)
+    {
+        disconnect(m_pageinfoReply, 0, this, 0);
+        m_pageinfoReply->abort();
+        m_pageinfoReply->deleteLater();
+    }
+
+    if (m_httpCheckReply)
+    {
+        disconnect(m_httpCheckReply, 0, this, 0);
+        m_httpCheckReply->abort();
+        m_httpCheckReply->deleteLater();
+    }
 
     delete ui;
 }
@@ -96,6 +115,16 @@ void CBookmarkEditDialog::setCheckedTags(const QSet<CTagItem *> &checkedTags)
     ui->treeView_checkedTags->checkedTagItemModel()->setCheckedTags(checkedTags);
 }
 
+QIcon CBookmarkEditDialog::toFavicon() const
+{
+    return ui->toolButton_favicon->icon();
+}
+
+void CBookmarkEditDialog::setFavicon(const QIcon &icon) const
+{
+    ui->toolButton_favicon->setIcon(icon);
+}
+
 bool CBookmarkEditDialog::isAddToDownloadQueue() const
 {
     return ui->checkBox_addToDownloadQueue->isChecked();
@@ -113,6 +142,8 @@ const QSet<CTagItem *> CBookmarkEditDialog::toCheckedTags() const
 
 void CBookmarkEditDialog::on_toolButton_favicon_clicked()
 {
+    ui->toolButton_favicon->setEnabled(false);
+
     CDownloadFaviconRequest request(ui->lineEdit_url->text());
     m_faviconReply = GNetworkMgr()->favicon(request);
     connect(m_faviconReply, SIGNAL(finished()),
@@ -121,44 +152,73 @@ void CBookmarkEditDialog::on_toolButton_favicon_clicked()
 
 void CBookmarkEditDialog::faviconReply_finished()
 {
-    qDebug() << m_faviconReply->error() << m_faviconReply->errorString();
+    ui->toolButton_favicon->setEnabled(true);
+
     ui->toolButton_favicon->setIcon(m_faviconReply->favicon());
+
     m_faviconReply->deleteLater();
     m_faviconReply = 0;
 }
 
 void CBookmarkEditDialog::on_toolButton_httpCheck_clicked()
 {
+    ui->toolButton_httpCheck->setEnabled(false);
+    ui->spinBox_httpStatusCode->setEnabled(false);
+    ui->lineEdit_httpReasonPhrase->setEnabled(false);
+    ui->dateTimeEdit_httpCheck->setEnabled(false);
+
     CCheckUrlRequest request(ui->lineEdit_url->text());
     m_httpCheckReply = GNetworkMgr()->checkUrl(request);
     connect(m_httpCheckReply, SIGNAL(finished()),
-            this, SLOT(checkUrlReply_finished()));
+            this, SLOT(httpCheckReply_finished()));
 }
 
-void CBookmarkEditDialog::checkUrlReply_finished()
+void CBookmarkEditDialog::httpCheckReply_finished()
 {
-    qDebug() << m_httpCheckReply->error() << m_httpCheckReply->errorString();
-    ui->spinBox_httpStatusCode->setValue(m_httpCheckReply->httpStatusCode());
-    ui->lineEdit_httpReasonPhrase->setText(m_httpCheckReply->httpReasonPhrase());
-    ui->dateTimeEdit_httpCheck->setDateTime(QDateTime::currentDateTime());
+    ui->toolButton_httpCheck->setEnabled(true);
+    ui->spinBox_httpStatusCode->setEnabled(true);
+    ui->lineEdit_httpReasonPhrase->setEnabled(true);
+    ui->dateTimeEdit_httpCheck->setEnabled(true);
+
+    if (m_httpCheckReply->error() == CAbstractDownloadReply::NoError)
+    {
+        ui->spinBox_httpStatusCode->setValue(m_httpCheckReply->httpStatusCode());
+        ui->lineEdit_httpReasonPhrase->setText(m_httpCheckReply->httpReasonPhrase());
+        ui->dateTimeEdit_httpCheck->setDateTime(QDateTime::currentDateTime());
+    }
+
     m_httpCheckReply->deleteLater();
     m_httpCheckReply = 0;
 }
 
 void CBookmarkEditDialog::on_toolButton_pageinfo_clicked()
 {
+    ui->toolButton_pageinfo->setEnabled(false);
+    ui->lineEdit_title->setEnabled(false);
+    ui->lineEdit_description->setEnabled(false);
+    ui->lineEdit_keywords->setEnabled(false);
+
     CDownloadWebPageInfoRequest request(ui->lineEdit_url->text());
     m_pageinfoReply = GNetworkMgr()->webPageInfo(request);
     connect(m_pageinfoReply, SIGNAL(finished()),
-            this, SLOT(webPageInfoReply_finished()));
+            this, SLOT(pageinfoReply_finished()));
 }
 
-void CBookmarkEditDialog::webPageInfoReply_finished()
+void CBookmarkEditDialog::pageinfoReply_finished()
 {
-    qDebug() << m_pageinfoReply->error() << m_pageinfoReply->errorString();
-    ui->lineEdit_title->setText(m_pageinfoReply->title());
-    ui->lineEdit_description->setText(m_pageinfoReply->description());
-    ui->lineEdit_keywords->setText(m_pageinfoReply->keywords());
+    ui->toolButton_pageinfo->setEnabled(true);
+    ui->lineEdit_title->setEnabled(true);
+    ui->lineEdit_description->setEnabled(true);
+    ui->lineEdit_keywords->setEnabled(true);
+
+    if (m_pageinfoReply->error() != CAbstractDownloadReply::NoError
+            && m_pageinfoReply->mimeType() == "text/html")
+    {
+        ui->lineEdit_title->setText(m_pageinfoReply->title());
+        ui->lineEdit_description->setText(m_pageinfoReply->description());
+        ui->lineEdit_keywords->setText(m_pageinfoReply->keywords());
+    }
+
     m_pageinfoReply->deleteLater();
     m_pageinfoReply = 0;
 }
@@ -236,37 +296,17 @@ void CBookmarkEditDialog::on_toolButton_textWrap_toggled(bool checked)
         ui->plainTextEdit_notes->setLineWrapMode(QPlainTextEdit::NoWrap);
 }
 
-void CBookmarkEditDialog::on_checkBox_autoPageinfo_toggled(bool checked)
-{
-    if (checked)
-        m_autoPageinfoTimer->start();
-    else
-        m_autoPageinfoTimer->stop();
-}
-
-void CBookmarkEditDialog::on_lineEdit_url_textChanged(const QString &text)
-{
-    if (ui->checkBox_autoPageinfo->isChecked())
-        m_autoPageinfoTimer->start();
-}
-
-void CBookmarkEditDialog::autoPageinfoTimer_timeout()
-{
-    qDebug() << "fix!";
-}
-
 void CBookmarkEditDialog::readSettings()
 {
     G_SETTINGS_INIT();
-    ui->checkBox_autoPageinfo->setChecked(
-                settings.value("CBookmarkEditDialog/checkBox_autoPageInfo",
+    ui->toolButton_textWrap->setChecked(
+                settings.value("CBookmarkEditDialog/toolButton_textWrap",
                                false).toBool());
 }
 
 void CBookmarkEditDialog::writeSettings()
 {
     G_SETTINGS_INIT();
-    settings.setValue("CBookmarkEditDialog/checkBox_autoPageInfo",
-                      ui->checkBox_autoPageinfo->isChecked());
+    settings.setValue("CBookmarkEditDialog/toolButton_textWrap",
+                      ui->toolButton_textWrap->isChecked());
 }
-

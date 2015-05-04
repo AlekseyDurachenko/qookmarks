@@ -80,9 +80,9 @@ void CBookmarkEditDialog::setData(const CBookmark &data)
     ui->dateTimeEdit_lastVisited->setDateTime(data.lastVisitedDateTime());
 }
 
-void CBookmarkEditDialog::setTags(const QSet<CTagItem *> &tags)
+void CBookmarkEditDialog::setCheckedTags(const QSet<CTagItem *> &checkedTags)
 {
-    ui->treeView_checkedTags->checkedTagItemModel()->setCheckedTags(tags);
+    ui->treeView_checkedTags->checkedTagItemModel()->setCheckedTags(checkedTags);
 }
 
 const QSet<CTagItem *> CBookmarkEditDialog::checkedTags() const

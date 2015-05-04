@@ -35,7 +35,7 @@ public:
     CBookmark toData() const;
     void setData(const CBookmark &toData);
 
-    void setTags(const QSet<CTagItem *> &tags);
+    void setCheckedTags(const QSet<CTagItem *> &checkedTags);
     const QSet<CTagItem *> checkedTags() const;
 private slots:
     void on_toolButton_favicon_clicked();

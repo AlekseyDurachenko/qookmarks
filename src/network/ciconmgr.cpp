@@ -50,6 +50,11 @@ void CIconMgr::unloadIcons()
     m_iconHash.clear();
 }
 
+bool CIconMgr::hasIcon(const QUrl &url) const
+{
+    return m_iconHash.contains(keyFromUrl(url));
+}
+
 QIcon CIconMgr::icon(const QUrl &url, const QIcon &defaultIcon) const
 {
     return m_iconHash.value(keyFromUrl(url), defaultIcon);
@@ -62,6 +67,10 @@ void CIconMgr::saveIcon(const QUrl &url, const QIcon &icon)
 
     iconFullFileName(url);
     icon.pixmap(QSize(32, 32)).save(iconFullFileName(url));
+
+    m_iconHash[keyFromUrl(url)] = icon;
+
+    // TODO: update bookmarks
 }
 
 QString CIconMgr::keyFromUrl(const QUrl &url) const

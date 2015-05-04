@@ -211,7 +211,7 @@ void CBookmarkEditDialog::pageinfoReply_finished()
     ui->lineEdit_description->setEnabled(true);
     ui->lineEdit_keywords->setEnabled(true);
 
-    if (m_pageinfoReply->error() != CAbstractDownloadReply::NoError
+    if (m_pageinfoReply->error() == CAbstractDownloadReply::NoError
             && m_pageinfoReply->mimeType() == "text/html")
     {
         ui->lineEdit_title->setText(m_pageinfoReply->title());

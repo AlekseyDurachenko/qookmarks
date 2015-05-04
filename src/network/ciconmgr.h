@@ -31,6 +31,7 @@ public:
     void loadIcons(const QList<QUrl> &urls);
     void unloadIcons();
 
+    bool hasIcon(const QUrl &url) const;
     QIcon icon(const QUrl &url, const QIcon &defaultIcon = QIcon()) const;
     void saveIcon(const QUrl &url, const QIcon &icon);
 private:

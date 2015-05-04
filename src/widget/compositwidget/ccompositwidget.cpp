@@ -41,6 +41,7 @@
 #include "cbookmarkeditdialog.h"
 #include "singleton.h"
 #include "cprj.h"
+#include "ciconmgr.h"
 
 
 static QString md5(const QString &str)
@@ -241,48 +242,66 @@ void CCompositWidget::actionTagRemove_triggered()
 
 void CCompositWidget::actionBookmarkAdd_triggered()
 {
-    CBookmarkEditDialog dlg(this);
-    dlg.setWindowTitle(tr("Create new bookmark"));
-    if (dlg.exec() == QDialog::Accepted)
+    CBookmarkEditDialog newBookmarkDialog(this);
+    newBookmarkDialog.setWindowTitle(tr("New bookmark"));
+
+    if (newBookmarkDialog.exec() == QDialog::Accepted)
     {
-        CBookmark data = dlg.toData();
+        CBookmark data = newBookmarkDialog.toData();
         if (GBookmarkMgr()->find(data.url()))
         {
-            QMessageBox::warning(this, tr("Warning"), tr("The bookmark with "
-                    "the url \"%1\" is already exists")
-                            .arg(data.url().toString()));
+            QMessageBox::warning(this, tr("Warning"),
+                                 tr("The url \"%1\" is already exists")
+                                    .arg(data.url().toString()));
         }
         else
         {
-            CBookmarkItem *bookmark = GBookmarkMgr()->add(dlg.toData());
-            if (!m_filter->tags().isEmpty())
-                foreach (CTagItem *tag, m_filter->tags())
-                    tag->bookmarkAdd(bookmark);
+            CBookmark bookmark = newBookmarkDialog.toData();
+            QIcon favicon = newBookmarkDialog.toFavicon();
+            QSet<CTagItem *> checkedTags = newBookmarkDialog.toCheckedTags();
+
+            CBookmarkItem *bookmarkItem = GBookmarkMgr()->add(bookmark);
+            GIconMgr()->saveIcon(bookmark.url(), favicon);
+
+            foreach (CTagItem *tag, checkedTags)
+                tag->bookmarkAdd(bookmarkItem);
         }
     }
 }
 
 void CCompositWidget::actionBookmarkEdit_triggered()
 {
-    CBookmarkItem *item = 0;
+    CBookmarkItem *bookmarkItem = 0;
     foreach (const QModelIndex &index,
              m_bookmarkView->selectionModel()->selectedRows())
     {
-        item = reinterpret_cast<CBookmarkItem *>(
-                    index.internalPointer());
+        bookmarkItem = reinterpret_cast<CBookmarkItem *>(index.internalPointer());
         break;
     }
 
-    if (!item)
+    if (!bookmarkItem)
         return;
 
-    CBookmarkEditDialog dlg(this);
-    dlg.setWindowTitle(tr("Edit bookmark"));
-    dlg.setData(item->data());
-    dlg.setCheckedTags(item->tags());
-    if (dlg.exec() == QDialog::Accepted)
+    CBookmarkEditDialog editBookmarkDialog(this);
+    editBookmarkDialog.setWindowTitle(tr("Edit bookmark"));
+    editBookmarkDialog.setData(bookmarkItem->data());
+    editBookmarkDialog.setFavicon(GIconMgr()->icon(bookmarkItem->data().url()));
+    editBookmarkDialog.setCheckedTags(bookmarkItem->tags());
+    if (editBookmarkDialog.exec() == QDialog::Accepted)
     {
-        item->setData(dlg.toData());        
+        CBookmark bookmark = editBookmarkDialog.toData();
+        QIcon favicon = editBookmarkDialog.toFavicon();
+        QSet<CTagItem *> checkedTags = editBookmarkDialog.toCheckedTags();
+
+        bookmarkItem->setData(bookmark);
+        if (!favicon.isNull())
+            GIconMgr()->saveIcon(bookmark.url(), favicon);
+
+        // TODO: optimize me!!!
+        foreach (CTagItem *tagItem, bookmarkItem->tags())
+            tagItem->bookmarkRemove(bookmarkItem);
+        foreach (CTagItem *tagItem, checkedTags)
+            tagItem->bookmarkAdd(bookmarkItem);
     }
 }
 

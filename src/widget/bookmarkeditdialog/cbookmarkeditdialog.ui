@@ -42,7 +42,7 @@
          <item row="4" column="1">
           <widget class="QLineEdit" name="lineEdit_description"/>
          </item>
-         <item row="11" column="1">
+         <item row="9" column="1">
           <widget class="QCheckBox" name="checkBox_trash">
            <property name="text">
             <string>trash</string>
@@ -53,7 +53,7 @@
            </property>
           </widget>
          </item>
-         <item row="12" column="1">
+         <item row="10" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_httpCheck">
            <item>
             <widget class="QSpinBox" name="spinBox_httpStatusCode">
@@ -80,14 +80,14 @@
            </item>
           </layout>
          </item>
-         <item row="12" column="0">
+         <item row="10" column="0">
           <widget class="QLabel" name="label_httpStatusCode">
            <property name="text">
             <string>Status</string>
            </property>
           </widget>
          </item>
-         <item row="8" column="1">
+         <item row="6" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_rating">
            <item>
             <widget class="QSlider" name="horizontalSlider_rating">
@@ -111,7 +111,7 @@
            </item>
           </layout>
          </item>
-         <item row="10" column="1">
+         <item row="8" column="1">
           <widget class="QCheckBox" name="checkBox_readItLater">
            <property name="text">
             <string>read it later</string>
@@ -122,7 +122,21 @@
            </property>
           </widget>
          </item>
-         <item row="9" column="1">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_url">
+           <property name="text">
+            <string>URL</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_rating">
+           <property name="text">
+            <string>Rating</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
           <widget class="QCheckBox" name="checkBox_favorite">
            <property name="text">
             <string>favorite</string>
@@ -133,19 +147,8 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_rating">
-           <property name="text">
-            <string>Rating</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_url">
-           <property name="text">
-            <string>URL</string>
-           </property>
-          </widget>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_url"/>
          </item>
          <item row="3" column="2">
           <widget class="QToolButton" name="toolButton_pageinfo">
@@ -169,19 +172,16 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_url"/>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="lineEdit_title"/>
          </item>
-         <item row="12" column="2">
+         <item row="10" column="2">
           <widget class="QToolButton" name="toolButton_httpCheck">
            <property name="icon">
             <iconset resource="../../../qrc/icons.qrc">
              <normaloff>:/icons/check-url.png</normaloff>:/icons/check-url.png</iconset>
            </property>
           </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="lineEdit_title"/>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_title">
@@ -190,15 +190,15 @@
            </property>
           </widget>
          </item>
+         <item row="5" column="1">
+          <widget class="QLineEdit" name="lineEdit_keywords"/>
+         </item>
          <item row="4" column="0">
           <widget class="QLabel" name="label_description">
            <property name="text">
             <string>Description</string>
            </property>
           </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QLineEdit" name="lineEdit_keywords"/>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_keywords">
@@ -222,7 +222,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_notesButtons">
          <item>
-          <widget class="QToolButton" name="toolButton">
+          <widget class="QToolButton" name="toolButton_loadFromFile">
            <property name="text">
             <string>Load from file...</string>
            </property>
@@ -236,7 +236,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_2">
+          <widget class="QToolButton" name="toolButton_saveToFile">
            <property name="text">
             <string>Save to file...</string>
            </property>
@@ -250,9 +250,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_3">
+          <widget class="QToolButton" name="toolButton_clear">
            <property name="text">
-            <string>Erase...</string>
+            <string>Clear...</string>
            </property>
            <property name="icon">
             <iconset resource="../../../qrc/icons.qrc">
@@ -277,7 +277,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_4">
+          <widget class="QToolButton" name="toolButton_textWrap">
            <property name="text">
             <string>Text wrap</string>
            </property>
@@ -411,7 +411,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_bottom">
      <item>
-      <widget class="QCheckBox" name="checkBox_addToDownload">
+      <widget class="QCheckBox" name="checkBox_addToDownloadQueue">
        <property name="text">
         <string>add this page to the download queue</string>
        </property>
@@ -470,16 +470,16 @@
   <tabstop>dateTimeEdit_httpCheck</tabstop>
   <tabstop>toolButton_httpCheck</tabstop>
   <tabstop>treeView_checkedTags</tabstop>
-  <tabstop>toolButton</tabstop>
-  <tabstop>toolButton_2</tabstop>
-  <tabstop>toolButton_3</tabstop>
-  <tabstop>toolButton_4</tabstop>
+  <tabstop>toolButton_loadFromFile</tabstop>
+  <tabstop>toolButton_saveToFile</tabstop>
+  <tabstop>toolButton_clear</tabstop>
+  <tabstop>toolButton_textWrap</tabstop>
   <tabstop>plainTextEdit_notes</tabstop>
   <tabstop>dateTimeEdit_created</tabstop>
   <tabstop>dateTimeEdit_edited</tabstop>
   <tabstop>dateTimeEdit_lastVisited</tabstop>
   <tabstop>spinBox_visitCount</tabstop>
-  <tabstop>checkBox_addToDownload</tabstop>
+  <tabstop>checkBox_addToDownloadQueue</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>

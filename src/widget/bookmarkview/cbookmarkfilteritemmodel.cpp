@@ -94,7 +94,7 @@ QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) co
         case 2:
             return bookmark->data().description();
         case 3:
-            return bookmark->data().note();
+            return bookmark->data().notes();
         case 4:
             return joinSet(bookmark->data().keywords(), ",");
         case 5:
@@ -114,11 +114,11 @@ QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) co
         case 12:
             return bookmark->data().visitCount();
         case 13:
-            return bookmark->data().httpResponseCode();
+            return bookmark->data().httpStatusCode();
         case 14:
-            return bookmark->data().httpResponseText();
+            return bookmark->data().httpReasonPhrase();
         case 15:
-            return bookmark->data().lastCheckDateTime();
+            return bookmark->data().httpCheckDateTime();
         }
     }
 

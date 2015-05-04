@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
     int ret = a.exec();
 
     // destroy singletons
-    delete singleton<CPrj>();
-    delete singleton<CNetworkMgr>();
+    //delete singleton<CPrj>();
+    //delete singleton<CNetworkMgr>();
 
     return ret;
 }

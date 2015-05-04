@@ -134,7 +134,7 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
     elem.setAttribute("title",  item->data().title());
     elem.setAttribute("url",    item->data().url().toString());
     elem.setAttribute("desc",   item->data().description());
-    elem.setAttribute("note",   item->data().note());
+    elem.setAttribute("note",   item->data().notes());
     elem.setAttribute("readLater",  item->data().isReadLater());
     elem.setAttribute("favorite",   item->data().isFavorite());
     elem.setAttribute("trash",      item->data().isTrash());
@@ -150,10 +150,10 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
     elem.setAttribute("lastVisitedDateTime",
                       dateTimeToString(item->data().lastVisitedDateTime()));
     elem.setAttribute("visitCount", item->data().visitCount());
-    elem.setAttribute("httpResponseCode",   item->data().httpResponseCode());
-    elem.setAttribute("httpResponseText",   item->data().httpResponseText());
+    elem.setAttribute("httpResponseCode",   item->data().httpStatusCode());
+    elem.setAttribute("httpResponseText",   item->data().httpReasonPhrase());
     elem.setAttribute("lastCheckDateTime",
-                      dateTimeToString(item->data().lastCheckDateTime()));
+                      dateTimeToString(item->data().httpCheckDateTime()));
 
     foreach (const QString &keyword, item->data().keywords())
     {
@@ -263,7 +263,7 @@ CBookmark CPrjXml::createBookmarkData(QDomElement elem)
     bookmark.setTitle(elem.attribute("title", "untitled"));
     bookmark.setUrl(elem.attribute("url", ""));
     bookmark.setDescription(elem.attribute("desc", ""));
-    bookmark.setNote(elem.attribute("note", ""));
+    bookmark.setNotes(elem.attribute("note", ""));
     bookmark.setReadLater(elem.attribute("readLater", "0").toInt());
     bookmark.setFavorite(elem.attribute("favorite", "0").toInt());
     bookmark.setTrash(elem.attribute("trash", "0").toInt());
@@ -279,10 +279,10 @@ CBookmark CPrjXml::createBookmarkData(QDomElement elem)
     bookmark.setLastVisitedDateTime(
                 dateTimeFromString(elem.attribute("lastVisitedDateTime", "")));
     bookmark.setVisitCount(elem.attribute("visitCount", "0").toInt());
-    bookmark.setHttpResponseCode(
+    bookmark.setHttpStatusCode(
                 elem.attribute("httpResponseCode", "0").toInt());
-    bookmark.setHttpResponseText(elem.attribute("httpResponseText", "0"));
-    bookmark.setLastCheckDateTime(
+    bookmark.setHttpReasonPhrase(elem.attribute("httpResponseText", "0"));
+    bookmark.setHttpCheckDateTime(
                 dateTimeFromString(elem.attribute("lastCheckDateTime", "")));
     return bookmark;
 }

@@ -30,7 +30,7 @@ public:
     QUrl url;
     QString description;
     // ext
-    QString note;
+    QString notes;
     QSet<QString> keywords;
     bool isReadLater;
     bool isFavorite;
@@ -45,9 +45,9 @@ public:
     QDateTime lastVisitedDateTime;
     int visitCount;
     // status
-    int httpResponseCode;
-    QString httpResponseText;
-    QDateTime lastCheckDateTime;
+    int httpStatusCode;
+    QString httpReasonPhrase;
+    QDateTime checkDateTime;
 };
 
 
@@ -68,8 +68,8 @@ public:
     inline const QString &description() const;
     void setDescription(const QString &description);
 
-    inline const QString &note() const;
-    void setNote(const QString &note);
+    inline const QString &notes() const;
+    void setNotes(const QString &notes);
 
     inline const QSet<QString> &keywords() const;
     void setKeywords(const QSet<QString> &keywords);
@@ -104,14 +104,14 @@ public:
     inline int visitCount() const;
     void setVisitCount(int visitCount);
 
-    inline int httpResponseCode() const;
-    void setHttpResponseCode(int httpResponseCode);
+    inline int httpStatusCode() const;
+    void setHttpStatusCode(int httpStatusCode);
 
-    inline const QString &httpResponseText() const;
-    void setHttpResponseText(const QString &httpResponseText);
+    inline const QString &httpReasonPhrase() const;
+    void setHttpReasonPhrase(const QString &httpReasonPhrase);
 
-    inline const QDateTime &lastCheckDateTime() const;
-    void setLastCheckDateTime(const QDateTime &lastCheckDateTime);
+    inline const QDateTime &httpCheckDateTime() const;
+    void setHttpCheckDateTime(const QDateTime &httpCheckDateTime);
 
     inline bool operator ==(const CBookmark &other);
     inline bool operator !=(const CBookmark &other);
@@ -134,9 +134,9 @@ const QString &CBookmark::description() const
     return data->description;
 }
 
-const QString &CBookmark::note() const
+const QString &CBookmark::notes() const
 {
-    return data->note;
+    return data->notes;
 }
 
 const QSet<QString> &CBookmark::keywords() const
@@ -194,19 +194,19 @@ int CBookmark::visitCount() const
     return data->visitCount;
 }
 
-int CBookmark::httpResponseCode() const
+int CBookmark::httpStatusCode() const
 {
-    return data->httpResponseCode;
+    return data->httpStatusCode;
 }
 
-const QString &CBookmark::httpResponseText() const
+const QString &CBookmark::httpReasonPhrase() const
 {
-    return data->httpResponseText;
+    return data->httpReasonPhrase;
 }
 
-const QDateTime &CBookmark::lastCheckDateTime() const
+const QDateTime &CBookmark::httpCheckDateTime() const
 {
-    return data->lastCheckDateTime;
+    return data->checkDateTime;
 }
 
 bool CBookmark::operator ==(const CBookmark &other)
@@ -214,7 +214,7 @@ bool CBookmark::operator ==(const CBookmark &other)
     return (data->title == other.data->title
             && data->url == other.data->url
             && data->description == other.data->description
-            && data->note == other.data->note
+            && data->notes == other.data->notes
             && data->keywords == other.data->keywords
             && data->isReadLater == other.data->isReadLater
             && data->isFavorite == other.data->isFavorite
@@ -226,9 +226,9 @@ bool CBookmark::operator ==(const CBookmark &other)
             && data->editedDateTime == other.data->editedDateTime
             && data->lastVisitedDateTime == other.data->lastVisitedDateTime
             && data->visitCount == other.data->visitCount
-            && data->httpResponseCode == other.data->httpResponseCode
-            && data->httpResponseText == other.data->httpResponseText
-            && data->lastCheckDateTime == other.data->lastCheckDateTime);
+            && data->httpStatusCode == other.data->httpStatusCode
+            && data->httpReasonPhrase == other.data->httpReasonPhrase
+            && data->checkDateTime == other.data->checkDateTime);
 }
 
 bool CBookmark::operator !=(const CBookmark &other)
@@ -236,7 +236,7 @@ bool CBookmark::operator !=(const CBookmark &other)
     return (data->title != other.data->title
             || data->url != other.data->url
             || data->description != other.data->description
-            || data->note != other.data->note
+            || data->notes != other.data->notes
             || data->keywords != other.data->keywords
             || data->isReadLater != other.data->isReadLater
             || data->isFavorite != other.data->isFavorite
@@ -248,9 +248,9 @@ bool CBookmark::operator !=(const CBookmark &other)
             || data->editedDateTime != other.data->editedDateTime
             || data->lastVisitedDateTime != other.data->lastVisitedDateTime
             || data->visitCount != other.data->visitCount
-            || data->httpResponseCode != other.data->httpResponseCode
-            || data->httpResponseText != other.data->httpResponseText
-            || data->lastCheckDateTime != other.data->lastCheckDateTime);
+            || data->httpStatusCode != other.data->httpStatusCode
+            || data->httpReasonPhrase != other.data->httpReasonPhrase
+            || data->checkDateTime != other.data->checkDateTime);
 }
 
 

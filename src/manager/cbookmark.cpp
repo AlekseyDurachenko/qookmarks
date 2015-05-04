@@ -23,7 +23,7 @@ CBookmark::CBookmark() : data(new CBookmarkData)
     data->isTrash = false;
     data->rating = 0;
     data->visitCount = 0;
-    data->httpResponseCode = 0;
+    data->httpStatusCode = 0;
 }
 
 CBookmark::CBookmark(const CBookmark &rhs) : data(rhs.data)
@@ -56,9 +56,9 @@ void CBookmark::setDescription(const QString &description)
     data->description = description;
 }
 
-void CBookmark::setNote(const QString &note)
+void CBookmark::setNotes(const QString &notes)
 {
-    data->note = note;
+    data->notes = notes;
 }
 
 void CBookmark::setKeywords(const QSet<QString> &keywords)
@@ -116,17 +116,17 @@ void CBookmark::setVisitCount(int visitCount)
     data->visitCount = visitCount;
 }
 
-void CBookmark::setHttpResponseCode(int httpResponseCode)
+void CBookmark::setHttpStatusCode(int httpResponseCode)
 {
-    data->httpResponseCode = httpResponseCode;
+    data->httpStatusCode = httpResponseCode;
 }
 
-void CBookmark::setHttpResponseText(const QString &httpResponseText)
+void CBookmark::setHttpReasonPhrase(const QString &httpReasonPhrase)
 {
-    data->httpResponseText = httpResponseText;
+    data->httpReasonPhrase = httpReasonPhrase;
 }
 
-void CBookmark::setLastCheckDateTime(const QDateTime &lastCheckDateTime)
+void CBookmark::setHttpCheckDateTime(const QDateTime &httpCheckDateTime)
 {
-    data->lastCheckDateTime = lastCheckDateTime;
+    data->checkDateTime = httpCheckDateTime;
 }

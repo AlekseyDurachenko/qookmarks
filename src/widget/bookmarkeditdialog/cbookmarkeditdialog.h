@@ -38,11 +38,11 @@ public:
     void setTags(const QSet<CTagItem *> &tags);
     const QSet<CTagItem *> checkedTags() const;
 private slots:
-    void on_toolButton_downloadFavIcon_clicked();
+    void on_toolButton_favicon_clicked();
     void faviconReply_finished();
-    void on_toolButton_checkHttpStatus_clicked();
+    void on_toolButton_httpCheck_clicked();
     void checkUrlReply_finished();    
-    void on_toolButton_downloadPageInformation_clicked();
+    void on_toolButton_pageinfo_clicked();
     void webPageInfoReply_finished();
 private:
     Ui::CBookmarkEditDialog *ui;

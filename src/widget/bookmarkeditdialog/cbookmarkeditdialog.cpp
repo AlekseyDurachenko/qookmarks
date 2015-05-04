@@ -44,13 +44,13 @@ CBookmark CBookmarkEditDialog::toData() const
     data.setFavorite(ui->checkBox_favorite->isChecked());
     data.setReadLater(ui->checkBox_readItLater->isChecked());
     data.setRating(ui->spinBox_rating->value());
-    data.setHttpResponseCode(ui->spinBox_httpResponseCode->value());
-    data.setHttpResponseText(ui->lineEdit_httpResponseText->text());
-    data.setLastCheckDateTime(ui->dateTimeEdit_lastCheck->dateTime());
-    data.setNote(ui->plainTextEdit_comments->toPlainText());
-    data.setCreatedDateTime(ui->dateTimeEdit_metadata_created->dateTime());
-    data.setEditedDateTime(ui->dateTimeEdit_metadata_edited->dateTime());
-    data.setLastVisitedDateTime(ui->dateTimeEdit_metadata_lastVisited->dateTime());
+    data.setHttpResponseCode(ui->spinBox_httpStatusCode->value());
+    data.setHttpResponseText(ui->lineEdit_httpReasonPhrase->text());
+    data.setLastCheckDateTime(ui->dateTimeEdit_httpCheck->dateTime());
+    data.setNote(ui->plainTextEdit_notes->toPlainText());
+    data.setCreatedDateTime(ui->dateTimeEdit_created->dateTime());
+    data.setEditedDateTime(ui->dateTimeEdit_edited->dateTime());
+    data.setLastVisitedDateTime(ui->dateTimeEdit_lastVisited->dateTime());
     return data;
 }
 
@@ -70,27 +70,27 @@ void CBookmarkEditDialog::setData(const CBookmark &data)
     ui->checkBox_favorite->setChecked(data.isFavorite());
     ui->checkBox_readItLater->setChecked(data.isReadLater());
     ui->spinBox_rating->setValue(data.rating());
-    ui->spinBox_httpResponseCode->setValue(data.httpResponseCode());
-    ui->lineEdit_httpResponseText->setText(data.httpResponseText());
-    ui->dateTimeEdit_lastCheck->setDateTime(data.lastCheckDateTime());
+    ui->spinBox_httpStatusCode->setValue(data.httpResponseCode());
+    ui->lineEdit_httpReasonPhrase->setText(data.httpResponseText());
+    ui->dateTimeEdit_httpCheck->setDateTime(data.lastCheckDateTime());
     // TODO: show screenshot if exists
-    ui->plainTextEdit_comments->setPlainText(data.note());
-    ui->dateTimeEdit_metadata_created->setDateTime(data.createdDateTime());
-    ui->dateTimeEdit_metadata_edited->setDateTime(data.editedDateTime());
-    ui->dateTimeEdit_metadata_lastVisited->setDateTime(data.lastVisitedDateTime());
+    ui->plainTextEdit_notes->setPlainText(data.note());
+    ui->dateTimeEdit_created->setDateTime(data.createdDateTime());
+    ui->dateTimeEdit_edited->setDateTime(data.editedDateTime());
+    ui->dateTimeEdit_lastVisited->setDateTime(data.lastVisitedDateTime());
 }
 
 void CBookmarkEditDialog::setTags(const QSet<CTagItem *> &tags)
 {
-    ui->treeView_tags->checkedTagItemModel()->setCheckedTags(tags);
+    ui->treeView_checkedTags->checkedTagItemModel()->setCheckedTags(tags);
 }
 
 const QSet<CTagItem *> CBookmarkEditDialog::checkedTags() const
 {
-    return ui->treeView_tags->checkedTagItemModel()->checkedTags();
+    return ui->treeView_checkedTags->checkedTagItemModel()->checkedTags();
 }
 
-void CBookmarkEditDialog::on_toolButton_downloadFavIcon_clicked()
+void CBookmarkEditDialog::on_toolButton_favicon_clicked()
 {
     CDownloadFaviconRequest request(ui->lineEdit_url->text());
     m_faviconReply = GNetworkMgr()->favicon(request);
@@ -101,12 +101,12 @@ void CBookmarkEditDialog::on_toolButton_downloadFavIcon_clicked()
 void CBookmarkEditDialog::faviconReply_finished()
 {
     qDebug() << m_faviconReply->error() << m_faviconReply->errorString();
-    ui->toolButton_downloadFavIcon->setIcon(m_faviconReply->favicon());
+    ui->toolButton_favicon->setIcon(m_faviconReply->favicon());
     m_faviconReply->deleteLater();
     m_faviconReply = 0;
 }
 
-void CBookmarkEditDialog::on_toolButton_checkHttpStatus_clicked()
+void CBookmarkEditDialog::on_toolButton_httpCheck_clicked()
 {
     CCheckUrlRequest request(ui->lineEdit_url->text());
     m_checkUrlReply = GNetworkMgr()->checkUrl(request);
@@ -117,14 +117,14 @@ void CBookmarkEditDialog::on_toolButton_checkHttpStatus_clicked()
 void CBookmarkEditDialog::checkUrlReply_finished()
 {
     qDebug() << m_checkUrlReply->error() << m_checkUrlReply->errorString();
-    ui->spinBox_httpResponseCode->setValue(m_checkUrlReply->httpStatusCode());
-    ui->lineEdit_httpResponseText->setText(m_checkUrlReply->httpReasonPhrase());
-    ui->dateTimeEdit_lastCheck->setDateTime(QDateTime::currentDateTime());
+    ui->spinBox_httpStatusCode->setValue(m_checkUrlReply->httpStatusCode());
+    ui->lineEdit_httpReasonPhrase->setText(m_checkUrlReply->httpReasonPhrase());
+    ui->dateTimeEdit_httpCheck->setDateTime(QDateTime::currentDateTime());
     m_checkUrlReply->deleteLater();
     m_checkUrlReply = 0;
 }
 
-void CBookmarkEditDialog::on_toolButton_downloadPageInformation_clicked()
+void CBookmarkEditDialog::on_toolButton_pageinfo_clicked()
 {
     CDownloadWebPageInfoRequest request(ui->lineEdit_url->text());
     m_webPageInfoReply = GNetworkMgr()->webPageInfo(request);

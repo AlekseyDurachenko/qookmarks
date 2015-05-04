@@ -1,20 +1,24 @@
 <RCC>
-  <qresource prefix="/">
-    <file>icons/check-url.png</file>
-    <file>icons/download-webpage-info.png</file>
-    <file>icons/action-about-qt.png</file>
-    <file>icons/action-exit.png</file>
-    <file>icons/qookmarks.png</file>
-    <file>icons/action-configure.png</file>
-    <file>icons/bookmark-favorites.png</file>
-    <file>icons/bookmark-rated.png</file>
-    <file>icons/bookmark-readlater.png</file>
-    <file>icons/bookmark-bookmarks.png</file>
-    <file>icons/bookmark-tag.png</file>
-    <file>icons/bookmark-trash.png</file>
-    <file>icons/bookmark-untagged.png</file>
-    <file>icons/bookmark-item.png</file>
-    <file>icons/browser-firefox.png</file>
-    <file>icons/browser-chromium.png</file>
-  </qresource>
+    <qresource prefix="/">
+        <file>icons/check-url.png</file>
+        <file>icons/download-webpage-info.png</file>
+        <file>icons/action-about-qt.png</file>
+        <file>icons/action-exit.png</file>
+        <file>icons/qookmarks.png</file>
+        <file>icons/action-configure.png</file>
+        <file>icons/bookmark-favorites.png</file>
+        <file>icons/bookmark-rated.png</file>
+        <file>icons/bookmark-readlater.png</file>
+        <file>icons/bookmark-bookmarks.png</file>
+        <file>icons/bookmark-tag.png</file>
+        <file>icons/bookmark-trash.png</file>
+        <file>icons/bookmark-untagged.png</file>
+        <file>icons/bookmark-item.png</file>
+        <file>icons/browser-firefox.png</file>
+        <file>icons/browser-chromium.png</file>
+        <file>icons/action-erase.png</file>
+        <file>icons/action-open.png</file>
+        <file>icons/action-save.png</file>
+        <file>icons/action-text-wrap.png</file>
+    </qresource>
 </RCC>

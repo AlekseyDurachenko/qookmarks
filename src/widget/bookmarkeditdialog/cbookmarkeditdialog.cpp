@@ -82,12 +82,12 @@ void CBookmarkEditDialog::setData(const CBookmark &data)
 
 void CBookmarkEditDialog::setTags(const QSet<CTagItem *> &tags)
 {
-    ui->treeView_tags->setCheckedTags(tags);
+    ui->treeView_tags->checkedTagItemModel()->setCheckedTags(tags);
 }
 
 const QSet<CTagItem *> CBookmarkEditDialog::checkedTags() const
 {
-    return ui->treeView_tags->checkedTags();
+    return ui->treeView_tags->checkedTagItemModel()->checkedTags();
 }
 
 void CBookmarkEditDialog::on_toolButton_downloadFavIcon_clicked()

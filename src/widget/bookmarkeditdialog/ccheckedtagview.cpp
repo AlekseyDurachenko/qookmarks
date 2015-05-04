@@ -31,8 +31,3 @@ CCheckedTagView::CCheckedTagView(QWidget *parent) : QTreeView(parent)
 CCheckedTagView::~CCheckedTagView()
 {
 }
-
-void CCheckedTagView::setCheckedTags(const QSet<CTagItem *> &checkedTags)
-{
-    m_itemModel->setCheckedTags(checkedTags);
-}

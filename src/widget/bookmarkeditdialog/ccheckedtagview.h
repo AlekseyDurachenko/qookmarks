@@ -25,15 +25,14 @@ public:
     explicit CCheckedTagView(QWidget *parent = 0);
     virtual ~CCheckedTagView();
 
-    inline QSet<CTagItem *> checkedTags() const;
-    void setCheckedTags(const QSet<CTagItem *> &checkedTags);
+    inline CCheckedTagItemModel *checkedTagItemModel() const;
 private:
     CCheckedTagItemModel *m_itemModel;
 };
 
-QSet<CTagItem *> CCheckedTagView::checkedTags() const
+CCheckedTagItemModel *CCheckedTagView::checkedTagItemModel() const
 {
-    return m_itemModel->checkedTags();
+    return m_itemModel;
 }
 
 

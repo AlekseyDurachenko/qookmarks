@@ -9,4 +9,4 @@ Current status: dirty draft!
 install
 -------
 
-sudo apt-get install libxml++2.6-dev
+sudo apt-get install libxml2-dev

@@ -21,7 +21,8 @@ CCheckedTagSortFilterProxyModel::CCheckedTagSortFilterProxyModel(
 {
 }
 
-// this solution from: http://stackoverflow.com/questions/250890/using-qsortfilterproxymodel-with-a-tree-model
+// this solution was taken from:
+// http://stackoverflow.com/questions/250890/using-qsortfilterproxymodel-with-a-tree-model
 bool CCheckedTagSortFilterProxyModel::filterAcceptsRow(int source_row,
         const QModelIndex &source_parent) const
 {

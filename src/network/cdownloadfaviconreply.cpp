@@ -13,6 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cdownloadfaviconreply.h"
+#if QT_VERSION >= 0x050000
+#include <QUrlQuery>
+#endif
 
 
 CDownloadFaviconReply::CDownloadFaviconReply(
@@ -24,7 +27,11 @@ CDownloadFaviconReply::CDownloadFaviconReply(
     QUrl favIconUrl = request.url();
     favIconUrl.setPath("/favicon.ico");
     favIconUrl.setFragment(QString());
-    favIconUrl.setEncodedQuery(QByteArray());
+#if QT_VERSION >= 0x050000
+    favIconUrl.setQuery(QUrlQuery());
+#else
+    favIconUrl.setQueryItems(QList<QPair<QString, QString> >());
+#endif
     fetchUrl(favIconUrl,
              request.maxRetryCount(),
              request.maxRedirectCount(),
@@ -32,7 +39,7 @@ CDownloadFaviconReply::CDownloadFaviconReply(
 }
 
 void CDownloadFaviconReply::processEnd()
-{    
+{
     QPixmap pixmap;
     if (!pixmap.loadFromData(readAll()))
         m_favicon = QIcon();

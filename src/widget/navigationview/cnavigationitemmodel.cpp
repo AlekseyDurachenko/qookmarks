@@ -64,7 +64,9 @@ CNavigationItemModel::CNavigationItemModel(QObject *parent) :
             this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));
 
     recalcTopLevelCounters();
-    reset();
+    beginResetModel();
+    endResetModel();
+
 }
 
 
@@ -233,7 +235,7 @@ QModelIndex CNavigationItemModel::index(int row, int column,
         if (m_topLevelItems.at(row) == BookmarkRoot)
             return createIndex(row, column, GTagMgr()->rootItem());
         else
-            return createIndex(row, column, 0);
+            return createIndex(row, column, (void *)0);
     }
 
     CTagItem *parentItem = static_cast<CTagItem *>(parent.internalPointer());
@@ -405,8 +407,8 @@ void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item,
             m_topLevelCounters[Untagged] -= 1;
     }
 
-    emit dataChanged(createIndex(0, 0, 0),
-                     createIndex(m_topLevelItems.count(), 0, 0));
+    emit dataChanged(createIndex(0, 0, (void *)0),
+                     createIndex(m_topLevelItems.count(), 0, (void *)0));
 }
 
 void CNavigationItemModel::bookmarkMgr_inserted(int first, int last)
@@ -432,8 +434,8 @@ void CNavigationItemModel::bookmarkMgr_inserted(int first, int last)
         }
     }
 
-    emit dataChanged(createIndex(0, 0, 0),
-                     createIndex(m_topLevelItems.count(), 0, 0));
+    emit dataChanged(createIndex(0, 0, (void *)0),
+                     createIndex(m_topLevelItems.count(), 0, (void *)0));
 }
 
 void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
@@ -459,8 +461,8 @@ void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
         }
     }
 
-    emit dataChanged(createIndex(0, 0, 0),
-                     createIndex(m_topLevelItems.count(), 0, 0));
+    emit dataChanged(createIndex(0, 0, (void *)0),
+                     createIndex(m_topLevelItems.count(), 0, (void *)0));
 }
 
 void CNavigationItemModel::bookmarkMgr_removed()
@@ -473,8 +475,8 @@ void CNavigationItemModel::bookmarkMgr_aboutToBeTagsChanged(CBookmarkItem *item)
     if (item->tags().isEmpty() && !item->data().isTrash())
         m_topLevelCounters[Untagged] -= 1;
 
-    emit dataChanged(createIndex(0, 0, 0),
-                     createIndex(m_topLevelItems.count(), 0, 0));
+    emit dataChanged(createIndex(0, 0, (void *)0),
+                     createIndex(m_topLevelItems.count(), 0, (void *)0));
 }
 
 void CNavigationItemModel::bookmarkMgr_tagsChanged(CBookmarkItem *item)
@@ -482,8 +484,8 @@ void CNavigationItemModel::bookmarkMgr_tagsChanged(CBookmarkItem *item)
     if (item->tags().isEmpty() && !item->data().isTrash())
         m_topLevelCounters[Untagged] += 1;
 
-    emit dataChanged(createIndex(0, 0, 0),
-                     createIndex(m_topLevelItems.count(), 0, 0));
+    emit dataChanged(createIndex(0, 0, (void *)0),
+                     createIndex(m_topLevelItems.count(), 0, (void *)0));
 }
 
 void CNavigationItemModel::navigationActions_destroyed()

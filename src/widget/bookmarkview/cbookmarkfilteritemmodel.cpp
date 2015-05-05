@@ -74,7 +74,8 @@ void CBookmarkFilteredItemModel::setDataModel(CBookmarkFilterDataModel *dataMode
                 this, SLOT(dataModel_destroyed()));
     }
 
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) const
@@ -284,11 +285,14 @@ void CBookmarkFilteredItemModel::dataModel_dataChanged(int first, int last)
 
 void CBookmarkFilteredItemModel::dataModel_reseted()
 {
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 void CBookmarkFilteredItemModel::dataModel_destroyed()
 {
     m_dataModel = 0;
-    reset();
+    beginResetModel();
+    endResetModel();
+
 }

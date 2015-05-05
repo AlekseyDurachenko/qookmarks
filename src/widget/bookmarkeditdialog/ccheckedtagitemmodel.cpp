@@ -42,7 +42,8 @@ CCheckedTagItemModel::~CCheckedTagItemModel()
 void CCheckedTagItemModel::setCheckedTags(const QSet<CTagItem *> &checkedTags)
 {
     m_checkedTags = checkedTags;
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 QVariant CCheckedTagItemModel::data(const QModelIndex &index, int role) const

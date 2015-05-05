@@ -27,7 +27,6 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/ctagitem.h                                        \
     $$PWD/src/manager/ctagmgr.h                                         \
     $$PWD/src/widget/bookmarkview/cbookmarkfilteritemmodel.h            \
-    $$PWD/src/widget/bookmarkview/cbookmarkreadlaterdelegate.h          \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.h              \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
@@ -66,7 +65,7 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
     $$PWD/src/network/cdownloadwebpageinforequest.h \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkflagdelegate.h
+    $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.h
 
 
 SOURCES        +=                                                       \
@@ -82,7 +81,6 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/ctagitem.cpp                                      \
     $$PWD/src/manager/ctagmgr.cpp                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkfilteritemmodel.cpp          \
-    $$PWD/src/widget/bookmarkview/cbookmarkreadlaterdelegate.cpp        \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.cpp            \
     $$PWD/src/version.cpp                                               \
     $$PWD/src/widget/compositwidget/ccompositwidget.cpp \
@@ -117,7 +115,7 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
     $$PWD/src/network/cdownloadwebpageinforequest.cpp \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkflagdelegate.cpp
+    $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.cpp
 
 
 FORMS          +=                                                       \

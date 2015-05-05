@@ -77,8 +77,12 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
 
+    m_bookmarkView->header()->setResizeMode(5, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(6, QHeaderView::ResizeToContents);
-    //m_bookmarkView->resizeColumnToContents(6);
+    m_bookmarkView->header()->setResizeMode(7, QHeaderView::ResizeToContents);
+    m_bookmarkView->resizeColumnToContents(5);
+    m_bookmarkView->resizeColumnToContents(6);
+    m_bookmarkView->resizeColumnToContents(7);
 
 
     m_navigationItemModel = new CNavigationItemModel(this);

@@ -1,4 +1,4 @@
-// Copyright 2014-2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,29 +12,42 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKFLAGDELEGATE_H
-#define CBOOKMARKFLAGDELEGATE_H
+#ifndef CBOOKMARKBOOLEANICONDELEGATE_H
+#define CBOOKMARKBOOLEANICONDELEGATE_H
 
 #include <QItemDelegate>
 
 
-class CBookmarkFlagDelegate : public QItemDelegate
+class CBookmarkBooleanIconDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    explicit CBookmarkFlagDelegate(QObject *parent = 0);
+    explicit CBookmarkBooleanIconDelegate(QObject *parent = 0);
+
+    inline const QIcon &iconOn() const;
+    void setIconOn(const QIcon &icon);
+
+    inline const QIcon &iconOff() const;
+    void setIconOff(const QIcon &icon);
+
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
                        const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option,
                            const QModelIndex &index) const;
 private:
-    QIcon m_favoriteIconOn;
-    QIcon m_favoriteIconOff;
-    QIcon m_readItLaterIconOn;
-    QIcon m_readItLaterIconOff;
-    QIcon m_trashIconOn;
-    QIcon m_trashIconOff;
+    QIcon m_iconOn;
+    QIcon m_iconOff;
 };
 
+const QIcon &CBookmarkBooleanIconDelegate::iconOn() const
+{
+    return m_iconOn;
+}
 
-#endif // CBOOKMARKFLAGDELEGATE_H
+const QIcon &CBookmarkBooleanIconDelegate::iconOff() const
+{
+    return m_iconOff;
+}
+
+
+#endif // CBOOKMARKBOOLEANICONDELEGATE_H

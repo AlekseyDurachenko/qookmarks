@@ -14,8 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkview.h"
 #include <QHeaderView>
-#include "cbookmarkflagdelegate.h"
-#include "cbookmarkreadlaterdelegate.h"
+#include "cbookmarkbooleanicondelegate.h"
 
 
 CBookmarkView::CBookmarkView(QWidget *parent) :
@@ -26,6 +25,23 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setDragDropMode(QAbstractItemView::DragOnly);
     setContextMenuPolicy(Qt::CustomContextMenu);
-    CBookmarkFlagDelegate *delegate = new CBookmarkFlagDelegate(this);
-    setItemDelegateForColumn(6, delegate);
+
+    CBookmarkBooleanIconDelegate *favoriteItemDelegate
+            = new CBookmarkBooleanIconDelegate(this);
+    favoriteItemDelegate->setIconOn(QIcon(":/icons/bookmark-favorites.png"));
+    favoriteItemDelegate->setIconOff(QIcon(":/icons/bookmark-noflag.png"));
+
+    CBookmarkBooleanIconDelegate *readItLaterItemDelegate
+            = new CBookmarkBooleanIconDelegate(this);
+    readItLaterItemDelegate->setIconOn(QIcon(":/icons/bookmark-readlater.png"));
+    readItLaterItemDelegate->setIconOff(QIcon(":/icons/bookmark-noflag.png"));
+
+    CBookmarkBooleanIconDelegate *trashItemDelegate
+            = new CBookmarkBooleanIconDelegate(this);
+    trashItemDelegate->setIconOn(QIcon(":/icons/bookmark-trash.png"));
+    trashItemDelegate->setIconOff(QIcon(":/icons/bookmark-noflag.png"));
+
+    setItemDelegateForColumn(5, favoriteItemDelegate);
+    setItemDelegateForColumn(6, readItLaterItemDelegate);
+    setItemDelegateForColumn(7, trashItemDelegate);
 }

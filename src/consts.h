@@ -18,6 +18,8 @@
 #include <QtGlobal>
 
 
+const char gDateTimeFormat[] = "yyyy-MM-dd HH:mm:ss";
+
 namespace Bookmark {
     const int MinRating = 0;
     const int MaxRating = 10;

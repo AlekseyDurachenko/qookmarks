@@ -12,43 +12,51 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkreadlaterdelegate.h"
+#include "cbookmarkbooleanicondelegate.h"
 #include "cbookmarkitem.h"
 #include <QPainter>
 #include <QDebug>
 
-
-static CBookmarkItem *indexToItem(const QModelIndex &index)
-{
-    return static_cast<CBookmarkItem *>(index.data(Qt::UserRole).value<void *>());
-}
-
-CBookmarkReadLaterDelegate::CBookmarkReadLaterDelegate(QObject *parent) :
+CBookmarkBooleanIconDelegate::CBookmarkBooleanIconDelegate(QObject *parent) :
     QItemDelegate(parent)
 {
 }
 
-void CBookmarkReadLaterDelegate::paint(QPainter *painter,
+void CBookmarkBooleanIconDelegate::setIconOn(const QIcon &icon)
+{
+    m_iconOn = icon;
+}
+
+void CBookmarkBooleanIconDelegate::setIconOff(const QIcon &icon)
+{
+    m_iconOff = icon;
+}
+
+void CBookmarkBooleanIconDelegate::paint(QPainter *painter,
         const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     drawBackground(painter, option, index);
     drawFocus(painter, option, option.rect);
 
-    CBookmarkItem *item = indexToItem(index);
     int size = qMin(option.rect.width(), option.rect.height());
-
-    if (item->data().isReadItLater())
+    if (index.data(Qt::DisplayRole).toBool())
     {
-        painter->drawPixmap(option.rect.left() + (option.rect.width()-size)/2,
-                            option.rect.top() + (option.rect.height()-size)/2,
-                            QIcon(":/icons/bookmark-readlater.png")
-                                    .pixmap(QSize(size, size)));
+        painter->drawPixmap(option.rect.left(),
+                            option.rect.top(),
+                            m_iconOn.pixmap(QSize(size, size)));
     }
     else
     {
-        painter->drawPixmap(option.rect.left() + (option.rect.width()-size)/2,
-                            option.rect.top() + (option.rect.height()-size)/2,
-                            QIcon(":/icons/bookmark-readlater.png")
-                                    .pixmap(QSize(size, size), QIcon::Disabled));
+        painter->drawPixmap(option.rect.left(),
+                            option.rect.top(),
+                            m_iconOff.pixmap(QSize(size, size)));
     }
+}
+
+QSize CBookmarkBooleanIconDelegate::sizeHint(const QStyleOptionViewItem &option,
+        const QModelIndex &index) const
+{
+    QSize size = QItemDelegate::sizeHint(option, index);
+    size.setWidth(qMin(option.rect.width(), option.rect.height()));
+    return size;
 }

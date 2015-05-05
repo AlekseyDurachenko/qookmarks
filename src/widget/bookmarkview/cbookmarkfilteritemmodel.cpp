@@ -18,6 +18,7 @@
 #include "cprj.h"
 #include "ciconmgr.h"
 #include "singleton.h"
+#include "consts.h"
 #include <QIcon>
 #include <QMimeData>
 #include <QDebug>
@@ -43,7 +44,8 @@ CBookmarkFilteredItemModel::CBookmarkFilteredItemModel(QObject *parent) :
     m_dataModel = 0;
 }
 
-CBookmarkFilteredItemModel::CBookmarkFilteredItemModel(CBookmarkFilterDataModel *dataModel, QObject *parent) :
+CBookmarkFilteredItemModel::CBookmarkFilteredItemModel(
+        CBookmarkFilterDataModel *dataModel, QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_dataModel = 0;
@@ -89,44 +91,43 @@ QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) co
         switch (index.column())
         {
         case 0:
-            return bookmark->data().title();
+            return QString(bookmark->data().title()).replace("\n", " ");
         case 1:
-            return bookmark->data().url();
+            return bookmark->data().url().toString().replace("\n", " ");
         case 2:
-            return bookmark->data().description();
+            return QString(bookmark->data().description()).replace("\n", " ");
         case 3:
-            return bookmark->data().notes();
+            return joinSet(bookmark->data().keywords(), ",").replace("\n", " ");
         case 4:
-            return joinSet(bookmark->data().keywords(), ",");
+            return bookmark->data().rating();
         case 5:
-            return bookmark->data().isReadItLater();
-        case 6:
             return bookmark->data().isFavorite();
+        case 6:
+            return bookmark->data().isReadItLater();
         case 7:
             return bookmark->data().isTrash();
         case 8:
-            return bookmark->data().rating();
-        case 9:
-            return bookmark->data().createdDateTime();
-        case 10:
-            return bookmark->data().editedDateTime();
-        case 11:
-            return bookmark->data().lastVisitedDateTime();
-        case 12:
-            return bookmark->data().visitCount();
-        case 13:
             return bookmark->data().httpStatusCode();
+        case 9:
+            return QString(bookmark->data().httpReasonPhrase()).replace("\n", " ");;
+        case 10:
+            return bookmark->data().httpCheckDateTime().toString(gDateTimeFormat);
+        case 11:
+            return bookmark->data().createdDateTime().toString(gDateTimeFormat);
+        case 12:
+            return bookmark->data().editedDateTime().toString(gDateTimeFormat);
+        case 13:
+            return bookmark->data().lastVisitedDateTime().toString(gDateTimeFormat);
         case 14:
-            return bookmark->data().httpReasonPhrase();
+            return bookmark->data().visitCount();
         case 15:
-            return bookmark->data().httpCheckDateTime();
+            return QString(bookmark->data().notes()).replace("\n", " ");
         }
     }
 
     if (role == Qt::DecorationRole)
         if (index.column() == 0)
-            return GIconMgr()->icon(bookmark->data().url(),
-                                    QIcon(":/icons/bookmark-item.png"));
+            return GIconMgr()->icon(bookmark->data().url(), QIcon(":/icons/bookmark-item.png"));
 
     if (role == Qt::UserRole)
         return QVariant::fromValue((void *)m_dataModel->at(index.row()));
@@ -142,9 +143,6 @@ Qt::ItemFlags CBookmarkFilteredItemModel::flags(const QModelIndex &index) const
     Qt::ItemFlags f = Qt::ItemIsEnabled
             |Qt::ItemIsSelectable
             |Qt::ItemIsDragEnabled;
-
-//    if (index.column() == 5)
-//        f |= Qt::ItemIsEditable;
 
     return f;
 }
@@ -168,6 +166,21 @@ QMimeData *CBookmarkFilteredItemModel::mimeData(const QModelIndexList &indexes) 
 QVariant CBookmarkFilteredItemModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
+    if (orientation == Qt::Horizontal && role == Qt::DecorationRole)
+    {
+        switch (section)
+        {
+        case 5:
+            return QIcon(":/icons/bookmark-favorites.png");
+        case 6:
+            return QIcon(":/icons/bookmark-readlater.png");
+        case 7:
+            return QIcon(":/icons/bookmark-trash.png");
+        default:
+            return QVariant();
+        }
+    }
+
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
         switch(section)
@@ -179,47 +192,33 @@ QVariant CBookmarkFilteredItemModel::headerData(int section,
         case 2:
             return tr("Description");
         case 3:
-            return tr("Note");
-        case 4:
             return tr("Keywords");
-        case 5:
-            //return QVariant();
-            return tr("Read Later");
-        case 6:
-            //return QVariant();
-            return tr("Favorite");
-        case 7:
-            //return QVariant();
-            return tr("Trash");
-        case 8:
+        case 4:
             return tr("Rating");
+        case 5:
+            return QVariant();
+        case 6:
+            return QVariant();
+        case 7:
+            return QVariant();
+        case 8:
+            return tr("Http status code");
         case 9:
-            return tr("Created");
+            return tr("Http response phase");
         case 10:
-            return tr("Edited");
+            return tr("Http check datetime");
         case 11:
-            return tr("Last Visited");
+            return tr("Created datetime");
         case 12:
-            return tr("Visit count");
+            return tr("Edited datetime");
         case 13:
-            return tr("Http code");
+            return tr("Last Visited datetime");
         case 14:
-            return tr("Http text");
+            return tr("Visit count");
         case 15:
-            return tr("Check date");
+            return tr("Note");
         }
     }
-
-//    if (orientation == Qt::Horizontal && role == Qt::DecorationRole)
-//    {
-//        switch (section)
-//        {
-//        case 5:
-//            return QIcon(":/icons/bookmark-readlater.png");
-//        default:
-//            return QVariant();
-//        }
-//    }
 
     return QVariant();
 }

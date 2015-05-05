@@ -26,6 +26,7 @@
 #include "cdownloadwebpageinforeply.h"
 #include "ciconmgr.h"
 #include "settings.h"
+#include <QDebug>
 
 
 CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
@@ -194,6 +195,19 @@ void CBookmarkEditDialog::httpCheckReply_finished()
         ui->spinBox_httpStatusCode->setValue(m_httpCheckReply->httpStatusCode());
         ui->lineEdit_httpReasonPhrase->setText(m_httpCheckReply->httpReasonPhrase());
         ui->dateTimeEdit_httpCheck->setDateTime(QDateTime::currentDateTime());
+    }
+    else if (m_httpCheckReply->error() == CAbstractDownloadReply::NetworkError)
+    {
+        switch (m_httpCheckReply->networkError())
+        {
+        case QNetworkReply::ContentNotFoundError:
+            ui->spinBox_httpStatusCode->setValue(404);
+            ui->lineEdit_httpReasonPhrase->setText(tr("The remote content was not found at the server"));
+            ui->dateTimeEdit_httpCheck->setDateTime(QDateTime::currentDateTime());
+            break;
+        default:
+            ;
+        }
     }
 
     m_httpCheckReply->deleteLater();

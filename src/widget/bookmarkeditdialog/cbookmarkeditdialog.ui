@@ -435,6 +435,10 @@
        <property name="text">
         <string>add this page to the download queue</string>
        </property>
+       <property name="icon">
+        <iconset resource="../../../qrc/about.qrc">
+         <normaloff>:/icons/action-download.png</normaloff>:/icons/action-download.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
@@ -504,6 +508,7 @@
  </tabstops>
  <resources>
   <include location="../../../qrc/icons.qrc"/>
+  <include location="../../../qrc/about.qrc"/>
  </resources>
  <connections>
   <connection>

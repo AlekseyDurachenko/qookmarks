@@ -53,6 +53,8 @@ private slots:
     void on_toolButton_pageinfo_clicked();
     void pageinfoReply_finished();
 
+    void on_toolButton_showExtendedOptions_toggled(bool checked);
+
     void on_toolButton_loadFromFile_clicked();
     void on_toolButton_saveToFile_clicked();
     void on_toolButton_clear_clicked();

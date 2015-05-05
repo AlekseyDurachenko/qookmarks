@@ -223,6 +223,20 @@ void CBookmarkEditDialog::pageinfoReply_finished()
     m_pageinfoReply = 0;
 }
 
+void CBookmarkEditDialog::on_toolButton_showExtendedOptions_toggled(bool checked)
+{
+    if (checked)
+    {
+        ui->toolButton_showExtendedOptions->setArrowType(Qt::DownArrow);
+        ui->widget_extendedOptions->setVisible(true);
+    }
+    else
+    {
+        ui->toolButton_showExtendedOptions->setArrowType(Qt::RightArrow);
+        ui->widget_extendedOptions->setVisible(false);
+    }
+}
+
 void CBookmarkEditDialog::on_toolButton_loadFromFile_clicked()
 {
     G_SETTINGS_INIT();
@@ -302,6 +316,10 @@ void CBookmarkEditDialog::readSettings()
     ui->toolButton_textWrap->setChecked(
                 settings.value("CBookmarkEditDialog/toolButton_textWrap",
                                false).toBool());
+    ui->toolButton_showExtendedOptions->setChecked(
+                settings.value("CBookmarkEditDialog/toolButton_showExtendedOptions",
+                               false).toBool());
+
 }
 
 void CBookmarkEditDialog::writeSettings()
@@ -309,4 +327,6 @@ void CBookmarkEditDialog::writeSettings()
     G_SETTINGS_INIT();
     settings.setValue("CBookmarkEditDialog/toolButton_textWrap",
                       ui->toolButton_textWrap->isChecked());
+    settings.setValue("CBookmarkEditDialog/toolButton_showExtendedOptions",
+                      ui->toolButton_showExtendedOptions->isChecked());
 }

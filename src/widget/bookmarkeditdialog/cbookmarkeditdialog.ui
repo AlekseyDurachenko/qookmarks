@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>544</width>
-    <height>627</height>
+    <width>543</width>
+    <height>620</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -199,6 +199,132 @@
         </layout>
        </item>
        <item>
+        <widget class="QToolButton" name="toolButton_showExtendedOptions">
+         <property name="text">
+          <string>show extended options</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::DownArrow</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_extendedOptions" native="true">
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_metadata_lastVisited">
+            <property name="text">
+             <string>Date of last visit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDateTimeEdit" name="dateTimeEdit_created">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="displayFormat">
+             <string>yyyy-MM-dd HH:mm:ss</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDateTimeEdit" name="dateTimeEdit_lastVisited">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="displayFormat">
+             <string>yyyy-MM-dd HH:mm:ss</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_metadata_created">
+            <property name="text">
+             <string>Date of creation</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_metadata_edited">
+            <property name="text">
+             <string>Latest editing</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QDateTimeEdit" name="dateTimeEdit_edited">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="displayFormat">
+             <string>yyyy-MM-dd HH:mm:ss</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_metadata_visitCount">
+            <property name="text">
+             <string>Number of visits</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QSpinBox" name="spinBox_visitCount">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="CCheckedTagView" name="treeView_checkedTags"/>
        </item>
       </layout>
@@ -293,108 +419,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_extended">
-      <attribute name="title">
-       <string>Extended</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_metadata_visitCount">
-           <property name="text">
-            <string>Number of visits</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSpinBox" name="spinBox_visitCount">
-           <property name="maximum">
-            <number>999999999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QDateTimeEdit" name="dateTimeEdit_edited">
-           <property name="displayFormat">
-            <string>yyyy-MM-dd HH:mm:ss</string>
-           </property>
-           <property name="calendarPopup">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_metadata_edited">
-           <property name="text">
-            <string>Latest editing</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QDateTimeEdit" name="dateTimeEdit_created">
-           <property name="displayFormat">
-            <string>yyyy-MM-dd HH:mm:ss</string>
-           </property>
-           <property name="calendarPopup">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_metadata_created">
-           <property name="text">
-            <string>Date of creation</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_metadata_lastVisited">
-           <property name="text">
-            <string>Date of last visit</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QDateTimeEdit" name="dateTimeEdit_lastVisited">
-           <property name="displayFormat">
-            <string>yyyy-MM-dd HH:mm:ss</string>
-           </property>
-           <property name="calendarPopup">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
    <item>
@@ -457,16 +481,17 @@
   <tabstop>lineEdit_httpReasonPhrase</tabstop>
   <tabstop>dateTimeEdit_httpCheck</tabstop>
   <tabstop>toolButton_httpCheck</tabstop>
+  <tabstop>toolButton_showExtendedOptions</tabstop>
+  <tabstop>dateTimeEdit_created</tabstop>
+  <tabstop>dateTimeEdit_edited</tabstop>
+  <tabstop>dateTimeEdit_lastVisited</tabstop>
+  <tabstop>spinBox_visitCount</tabstop>
   <tabstop>treeView_checkedTags</tabstop>
   <tabstop>toolButton_loadFromFile</tabstop>
   <tabstop>toolButton_saveToFile</tabstop>
   <tabstop>toolButton_clear</tabstop>
   <tabstop>toolButton_textWrap</tabstop>
   <tabstop>plainTextEdit_notes</tabstop>
-  <tabstop>dateTimeEdit_created</tabstop>
-  <tabstop>dateTimeEdit_edited</tabstop>
-  <tabstop>dateTimeEdit_lastVisited</tabstop>
-  <tabstop>spinBox_visitCount</tabstop>
   <tabstop>checkBox_addToDownloadQueue</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>

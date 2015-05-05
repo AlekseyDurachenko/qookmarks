@@ -37,7 +37,7 @@ void CBookmarkReadLaterDelegate::paint(QPainter *painter,
     CBookmarkItem *item = indexToItem(index);
     int size = qMin(option.rect.width(), option.rect.height());
 
-    if (item->data().isReadLater())
+    if (item->data().isReadItLater())
     {
         painter->drawPixmap(option.rect.left() + (option.rect.width()-size)/2,
                             option.rect.top() + (option.rect.height()-size)/2,

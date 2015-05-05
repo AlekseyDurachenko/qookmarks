@@ -99,7 +99,7 @@ QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) co
         case 4:
             return joinSet(bookmark->data().keywords(), ",");
         case 5:
-            return bookmark->data().isReadLater();
+            return bookmark->data().isReadItLater();
         case 6:
             return bookmark->data().isFavorite();
         case 7:

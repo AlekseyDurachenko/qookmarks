@@ -13,12 +13,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkview.h"
+#include <QHeaderView>
+#include "cbookmarkflagdelegate.h"
+#include "cbookmarkreadlaterdelegate.h"
 
 
 CBookmarkView::CBookmarkView(QWidget *parent) :
     QTreeView(parent)
 {
+    setRootIsDecorated(false);
+    setAlternatingRowColors(true);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setDragDropMode(QAbstractItemView::DragOnly);
     setContextMenuPolicy(Qt::CustomContextMenu);
+    CBookmarkFlagDelegate *delegate = new CBookmarkFlagDelegate(this);
+    setItemDelegateForColumn(6, delegate);
 }

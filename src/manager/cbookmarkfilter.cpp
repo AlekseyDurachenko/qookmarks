@@ -85,9 +85,9 @@ bool CBookmarkFilter::validate(const CBookmarkItem *item) const
     if (m_inclusiveFilter.testFlag(Bookmark::ReadLater)
             || m_inclusiveFilter.testFlag(Bookmark::NotReadLater))
         if (!((m_inclusiveFilter.testFlag(Bookmark::ReadLater)
-             && item->data().isReadLater() == true) ||
+             && item->data().isReadItLater() == true) ||
                 (m_inclusiveFilter.testFlag(Bookmark::NotReadLater)
-                 && item->data().isReadLater() == false)))
+                 && item->data().isReadItLater() == false)))
             return false;
 
     if (m_inclusiveFilter.testFlag(Bookmark::Trash)

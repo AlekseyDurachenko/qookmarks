@@ -370,7 +370,7 @@ void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item,
         const CBookmark &oldData, const CBookmark &newData)
 {
     if (oldData.isFavorite() == newData.isFavorite()
-            && oldData.isReadLater() == newData.isReadLater()
+            && oldData.isReadItLater() == newData.isReadItLater()
             && oldData.isTrash() == newData.isTrash()
             && oldData.rating() == newData.rating())
         return;
@@ -385,7 +385,7 @@ void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item,
             m_topLevelCounters[Favorites] -= 1;
         if (oldData.rating())
             m_topLevelCounters[Rated] -= 1;
-        if (oldData.isReadLater())
+        if (oldData.isReadItLater())
             m_topLevelCounters[ReadLater] -= 1;
         if (item->tags().isEmpty())
             m_topLevelCounters[Untagged] -= 1;
@@ -401,7 +401,7 @@ void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item,
             m_topLevelCounters[Favorites] += 1;
         if (newData.rating())
             m_topLevelCounters[Rated] += 1;
-        if (newData.isReadLater())
+        if (newData.isReadItLater())
             m_topLevelCounters[ReadLater] += 1;
         if (item->tags().isEmpty())
             m_topLevelCounters[Untagged] -= 1;
@@ -427,7 +427,7 @@ void CNavigationItemModel::bookmarkMgr_inserted(int first, int last)
                 m_topLevelCounters[Favorites] += 1;
             if (data.rating())
                 m_topLevelCounters[Rated] += 1;
-            if (data.isReadLater())
+            if (data.isReadItLater())
                 m_topLevelCounters[ReadLater] += 1;
             if (item->tags().isEmpty())
                 m_topLevelCounters[Untagged] += 1;
@@ -454,7 +454,7 @@ void CNavigationItemModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
                 m_topLevelCounters[Favorites] -= 1;
             if (data.rating())
                 m_topLevelCounters[Rated] -= 1;
-            if (data.isReadLater())
+            if (data.isReadItLater())
                 m_topLevelCounters[ReadLater] -= 1;
             if (item->tags().isEmpty())
                 m_topLevelCounters[Untagged] -= 1;
@@ -616,7 +616,7 @@ void CNavigationItemModel::recalcTopLevelCounters()
             m_topLevelCounters[Favorites] += 1;
         if (item->data().rating())
             m_topLevelCounters[Rated] += 1;
-        if (item->data().isReadLater())
+        if (item->data().isReadItLater())
             m_topLevelCounters[ReadLater] += 1;
         if (item->tags().isEmpty())
             m_topLevelCounters[Untagged] += 1;

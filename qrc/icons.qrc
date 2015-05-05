@@ -20,5 +20,6 @@
         <file>icons/action-open.png</file>
         <file>icons/action-save.png</file>
         <file>icons/action-text-wrap.png</file>
+        <file>icons/bookmark-noflag.png</file>
     </qresource>
 </RCC>

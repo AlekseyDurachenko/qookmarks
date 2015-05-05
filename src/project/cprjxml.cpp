@@ -135,7 +135,7 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
     elem.setAttribute("url",    item->data().url().toString());
     elem.setAttribute("desc",   item->data().description());
     elem.setAttribute("note",   item->data().notes());
-    elem.setAttribute("readLater",  item->data().isReadLater());
+    elem.setAttribute("readLater",  item->data().isReadItLater());
     elem.setAttribute("favorite",   item->data().isFavorite());
     elem.setAttribute("trash",      item->data().isTrash());
     elem.setAttribute("rating",     item->data().rating());
@@ -264,7 +264,7 @@ CBookmark CPrjXml::createBookmarkData(QDomElement elem)
     bookmark.setUrl(elem.attribute("url", ""));
     bookmark.setDescription(elem.attribute("desc", ""));
     bookmark.setNotes(elem.attribute("note", ""));
-    bookmark.setReadLater(elem.attribute("readLater", "0").toInt());
+    bookmark.setReadItLater(elem.attribute("readLater", "0").toInt());
     bookmark.setFavorite(elem.attribute("favorite", "0").toInt());
     bookmark.setTrash(elem.attribute("trash", "0").toInt());
     bookmark.setRating(elem.attribute("rating", "0").toInt());

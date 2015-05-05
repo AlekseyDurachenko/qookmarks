@@ -17,6 +17,7 @@
 #include <QSplitter>
 #include <QAction>
 #include <QMenu>
+#include <QHeaderView>
 #include <QMessageBox>
 #include <QDesktopServices>
 #include "cnavigationview.h"
@@ -75,6 +76,10 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
             this, SLOT(updateActions()));
     connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
+
+    m_bookmarkView->header()->setResizeMode(6, QHeaderView::ResizeToContents);
+    //m_bookmarkView->resizeColumnToContents(6);
+
 
     m_navigationItemModel = new CNavigationItemModel(this);
     m_navigationView = new CNavigationView(this);

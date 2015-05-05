@@ -32,7 +32,7 @@ public:
     // ext
     QString notes;
     QSet<QString> keywords;
-    bool isReadLater;
+    bool isReadItLater;
     bool isFavorite;
     bool isTrash;
     int rating;
@@ -74,8 +74,8 @@ public:
     inline const QSet<QString> &keywords() const;
     void setKeywords(const QSet<QString> &keywords);
 
-    inline bool isReadLater() const;
-    void setReadLater(bool state);
+    inline bool isReadItLater() const;
+    void setReadItLater(bool state);
 
     inline bool isFavorite() const;
     void setFavorite(bool state);
@@ -144,9 +144,9 @@ const QSet<QString> &CBookmark::keywords() const
     return data->keywords;
 }
 
-bool CBookmark::isReadLater() const
+bool CBookmark::isReadItLater() const
 {
-    return data->isReadLater;
+    return data->isReadItLater;
 }
 
 bool CBookmark::isFavorite() const
@@ -216,7 +216,7 @@ bool CBookmark::operator ==(const CBookmark &other)
             && data->description == other.data->description
             && data->notes == other.data->notes
             && data->keywords == other.data->keywords
-            && data->isReadLater == other.data->isReadLater
+            && data->isReadItLater == other.data->isReadItLater
             && data->isFavorite == other.data->isFavorite
             && data->isTrash == other.data->isTrash
             && data->rating == other.data->rating
@@ -238,7 +238,7 @@ bool CBookmark::operator !=(const CBookmark &other)
             || data->description != other.data->description
             || data->notes != other.data->notes
             || data->keywords != other.data->keywords
-            || data->isReadLater != other.data->isReadLater
+            || data->isReadItLater != other.data->isReadItLater
             || data->isFavorite != other.data->isFavorite
             || data->isTrash != other.data->isTrash
             || data->rating != other.data->rating

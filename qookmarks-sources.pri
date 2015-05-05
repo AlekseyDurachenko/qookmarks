@@ -26,7 +26,6 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/ctag.h                                            \
     $$PWD/src/manager/ctagitem.h                                        \
     $$PWD/src/manager/ctagmgr.h                                         \
-    $$PWD/src/widget/bookmarkview/cbookmarkfavoritesdelegate.h          \
     $$PWD/src/widget/bookmarkview/cbookmarkfilteritemmodel.h            \
     $$PWD/src/widget/bookmarkview/cbookmarkreadlaterdelegate.h          \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.h              \
@@ -66,7 +65,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.h \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
     $$PWD/src/network/cdownloadwebpageinforequest.h \
-    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.h
+    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.h \
+    $$PWD/src/widget/bookmarkview/cbookmarkflagdelegate.h
 
 
 SOURCES        +=                                                       \
@@ -81,7 +81,6 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/ctag.cpp                                          \
     $$PWD/src/manager/ctagitem.cpp                                      \
     $$PWD/src/manager/ctagmgr.cpp                                       \
-    $$PWD/src/widget/bookmarkview/cbookmarkfavoritesdelegate.cpp        \
     $$PWD/src/widget/bookmarkview/cbookmarkfilteritemmodel.cpp          \
     $$PWD/src/widget/bookmarkview/cbookmarkreadlaterdelegate.cpp        \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.cpp            \
@@ -117,7 +116,8 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.cpp \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
     $$PWD/src/network/cdownloadwebpageinforequest.cpp \
-    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.cpp
+    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.cpp \
+    $$PWD/src/widget/bookmarkview/cbookmarkflagdelegate.cpp
 
 
 FORMS          +=                                                       \

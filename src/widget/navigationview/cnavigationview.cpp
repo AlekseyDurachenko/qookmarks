@@ -111,7 +111,7 @@ void CNavigationView::bookmarksMarkReadLater(const QList<QUrl> &bookmarks)
     {
         CBookmarkItem *item = GBookmarkMgr()->find(url);
         CBookmark data = item->data();
-        data.setReadLater(true);
+        data.setReadItLater(true);
         item->setData(data);
     }
 }

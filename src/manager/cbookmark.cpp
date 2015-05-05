@@ -19,7 +19,7 @@ CBookmark::CBookmark() : data(new CBookmarkData)
 {
     data->title = QObject::tr("untitled");
     data->isFavorite = false;
-    data->isReadLater = false;
+    data->isReadItLater = false;
     data->isTrash = false;
     data->rating = 0;
     data->visitCount = 0;
@@ -66,9 +66,9 @@ void CBookmark::setKeywords(const QSet<QString> &keywords)
     data->keywords = keywords;
 }
 
-void CBookmark::setReadLater(bool state)
+void CBookmark::setReadItLater(bool state)
 {
-    data->isReadLater = state;
+    data->isReadItLater = state;
 }
 
 void CBookmark::setFavorite(bool state)

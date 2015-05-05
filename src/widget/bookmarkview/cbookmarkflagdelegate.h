@@ -1,4 +1,4 @@
-// Copyright 2014, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2014-2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,20 +12,29 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKFAVORITESDELEGATE_H
-#define CBOOKMARKFAVORITESDELEGATE_H
+#ifndef CBOOKMARKFLAGDELEGATE_H
+#define CBOOKMARKFLAGDELEGATE_H
 
 #include <QItemDelegate>
 
 
-class CBookmarkFavoritesDelegate : public QItemDelegate
+class CBookmarkFlagDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    explicit CBookmarkFavoritesDelegate(QObject *parent = 0);
+    explicit CBookmarkFlagDelegate(QObject *parent = 0);
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
                        const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option,
+                           const QModelIndex &index) const;
+private:
+    QIcon m_favoriteIconOn;
+    QIcon m_favoriteIconOff;
+    QIcon m_readItLaterIconOn;
+    QIcon m_readItLaterIconOff;
+    QIcon m_trashIconOn;
+    QIcon m_trashIconOff;
 };
 
 
-#endif // CBOOKMARKFAVORITESDELEGATE_H
+#endif // CBOOKMARKFLAGDELEGATE_H

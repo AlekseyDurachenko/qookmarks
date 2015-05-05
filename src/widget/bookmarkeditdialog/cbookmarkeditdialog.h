@@ -16,7 +16,6 @@
 #define CBOOKMARKEDITDIALOG_H
 
 #include "cbookmarkitem.h"
-//#include "ccheckabletagitemmodel.h"
 #include <QDialog>
 #include "singleton.h"
 
@@ -54,6 +53,7 @@ private slots:
     void pageinfoReply_finished();
 
     void on_toolButton_showExtendedOptions_toggled(bool checked);
+    void on_lineEdit_tagFind_textChanged(const QString &text);
 
     void on_toolButton_loadFromFile_clicked();
     void on_toolButton_saveToFile_clicked();

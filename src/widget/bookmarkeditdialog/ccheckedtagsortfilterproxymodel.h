@@ -12,25 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ccheckedtagview.h"
+#ifndef CCHECKEDTAGSORTFILTERPROXYMODEL_H
+#define CCHECKEDTAGSORTFILTERPROXYMODEL_H
+
 #include <QSortFilterProxyModel>
-#include "ccheckedtagitemmodel.h"
-#include "ccheckedtagsortfilterproxymodel.h"
 
 
-CCheckedTagView::CCheckedTagView(QWidget *parent) : QTreeView(parent)
+class CCheckedTagSortFilterProxyModel : public QSortFilterProxyModel
 {
-    m_itemModel = new CCheckedTagItemModel(this);
-    m_sortFilterProxyModel = new CCheckedTagSortFilterProxyModel(this);
-    m_sortFilterProxyModel->setSourceModel(m_itemModel);
-    m_sortFilterProxyModel->setDynamicSortFilter(true);
-    m_sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    setModel(m_sortFilterProxyModel);
-    setSortingEnabled(true);
-    sortByColumn(0, Qt::AscendingOrder);
-    setHeaderHidden(true);
-}
+public:
+    explicit CCheckedTagSortFilterProxyModel(QObject *parent = 0);
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+};
 
-CCheckedTagView::~CCheckedTagView()
-{
-}
+
+#endif // CCHECKEDTAGSORTFILTERPROXYMODEL_H

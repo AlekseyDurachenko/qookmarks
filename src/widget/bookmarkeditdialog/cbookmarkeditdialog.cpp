@@ -18,6 +18,8 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QTimer>
+#include "ccheckedtagitemmodel.h"
+#include "ccheckedtagsortfilterproxymodel.h"
 #include "cdownloadfaviconreply.h"
 #include "ccheckurlreply.h"
 #include "cdownloadwebpageinforeply.h"
@@ -29,6 +31,10 @@ CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::CBookmarkEditDialog)
 {
     ui->setupUi(this);
+#if QT_VERSION >= 0x050200
+    ui->lineEdit_tagFind->setButtonEnabled(true);
+#endif
+    ui->treeView_checkedTags->expandAll();
 
     m_faviconReply = 0;
     m_pageinfoReply = 0;
@@ -113,6 +119,7 @@ void CBookmarkEditDialog::setData(const CBookmark &data)
 void CBookmarkEditDialog::setCheckedTags(const QSet<CTagItem *> &checkedTags)
 {
     ui->treeView_checkedTags->checkedTagItemModel()->setCheckedTags(checkedTags);
+    ui->treeView_checkedTags->expandAll();
 }
 
 QIcon CBookmarkEditDialog::toFavicon() const
@@ -235,6 +242,12 @@ void CBookmarkEditDialog::on_toolButton_showExtendedOptions_toggled(bool checked
         ui->toolButton_showExtendedOptions->setArrowType(Qt::RightArrow);
         ui->widget_extendedOptions->setVisible(false);
     }
+}
+
+void CBookmarkEditDialog::on_lineEdit_tagFind_textChanged(const QString &text)
+{
+    ui->treeView_checkedTags->sortFilterProxyModel()->setFilterFixedString(text);
+    ui->treeView_checkedTags->expandAll();
 }
 
 void CBookmarkEditDialog::on_toolButton_loadFromFile_clicked()

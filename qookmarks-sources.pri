@@ -65,7 +65,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagitemmodel.h \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.h \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
-    $$PWD/src/network/cdownloadwebpageinforequest.h
+    $$PWD/src/network/cdownloadwebpageinforequest.h \
+    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.h
 
 
 SOURCES        +=                                                       \
@@ -115,7 +116,8 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagitemmodel.cpp \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.cpp \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
-    $$PWD/src/network/cdownloadwebpageinforequest.cpp
+    $$PWD/src/network/cdownloadwebpageinforequest.cpp \
+    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.cpp
 
 
 FORMS          +=                                                       \

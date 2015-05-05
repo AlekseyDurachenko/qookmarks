@@ -325,6 +325,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QLineEdit" name="lineEdit_tagFind">
+         <property name="placeholderText">
+          <string>type search text here</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="CCheckedTagView" name="treeView_checkedTags"/>
        </item>
       </layout>

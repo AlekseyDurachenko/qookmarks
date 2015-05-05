@@ -1,4 +1,4 @@
-// Copyright 2014-2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
 #define CCHECKEDTAGVIEW_H
 
 #include <QTreeView>
-#include "ccheckedtagitemmodel.h"
+class CCheckedTagItemModel;
+class CCheckedTagSortFilterProxyModel;
 
 
 class CCheckedTagView : public QTreeView
@@ -26,13 +27,20 @@ public:
     virtual ~CCheckedTagView();
 
     inline CCheckedTagItemModel *checkedTagItemModel() const;
+    inline CCheckedTagSortFilterProxyModel *sortFilterProxyModel() const;
 private:
     CCheckedTagItemModel *m_itemModel;
+    CCheckedTagSortFilterProxyModel *m_sortFilterProxyModel;
 };
 
 CCheckedTagItemModel *CCheckedTagView::checkedTagItemModel() const
 {
     return m_itemModel;
+}
+
+CCheckedTagSortFilterProxyModel *CCheckedTagView::sortFilterProxyModel() const
+{
+    return m_sortFilterProxyModel;
 }
 
 

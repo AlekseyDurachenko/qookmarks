@@ -19,6 +19,7 @@ TARGET          = qookmarks
 
 CONFIG         += console debug_and_release
 QT             += core gui network webkit xml
+greaterThan(QT_MAJOR_VERSION, 4):QT+=widgets
 
 
 # release build options

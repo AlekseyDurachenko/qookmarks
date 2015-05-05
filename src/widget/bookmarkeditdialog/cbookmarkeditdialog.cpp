@@ -16,6 +16,7 @@
 #include "ui_cbookmarkeditdialog.h"
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QPushButton>
 #include <QSettings>
 #include <QTimer>
 #include "ccheckedtagitemmodel.h"
@@ -40,6 +41,7 @@ CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
     m_pageinfoReply = 0;
     m_httpCheckReply = 0;
 
+    on_lineEdit_url_textChanged(ui->lineEdit_url->text());
     readSettings();
 }
 
@@ -228,6 +230,31 @@ void CBookmarkEditDialog::pageinfoReply_finished()
 
     m_pageinfoReply->deleteLater();
     m_pageinfoReply = 0;
+}
+
+void CBookmarkEditDialog::on_lineEdit_url_textChanged(const QString &text)
+{
+    QPushButton *button = ui->buttonBox->button(QDialogButtonBox::Ok);
+    if (text.isEmpty()
+            || !QUrl(text).isValid())
+    {
+        button->setEnabled(false);
+    }
+    else
+    {
+        button->setEnabled(true);
+    }
+
+    if (button->isEnabled())
+    {
+        ui->lineEdit_url->setPalette(QPalette());
+    }
+    else
+    {
+        QPalette palette = ui->lineEdit_url->palette();
+        palette.setColor(QPalette::Text, Qt::red);
+        ui->lineEdit_url->setPalette(palette);
+    }
 }
 
 void CBookmarkEditDialog::on_toolButton_showExtendedOptions_toggled(bool checked)

@@ -52,6 +52,7 @@ private slots:
     void on_toolButton_pageinfo_clicked();
     void pageinfoReply_finished();
 
+    void on_lineEdit_url_textChanged(const QString &text);
     void on_toolButton_showExtendedOptions_toggled(bool checked);
     void on_lineEdit_tagFind_textChanged(const QString &text);
 

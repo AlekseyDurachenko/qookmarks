@@ -77,9 +77,15 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
 
+#if QT_VERSION >= 0x050000
+    m_bookmarkView->header()->setSectionResizeMode(5, QHeaderView::ResizeToContents);
+    m_bookmarkView->header()->setSectionResizeMode(6, QHeaderView::ResizeToContents);
+    m_bookmarkView->header()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
+#else
     m_bookmarkView->header()->setResizeMode(5, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(6, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(7, QHeaderView::ResizeToContents);
+#endif
     m_bookmarkView->resizeColumnToContents(5);
     m_bookmarkView->resizeColumnToContents(6);
     m_bookmarkView->resizeColumnToContents(7);

@@ -12,19 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKFILTERITEMMODEL_H
-#define CBOOKMARKFILTERITEMMODEL_H
+#ifndef CBOOKMARKITEMMODEL_H
+#define CBOOKMARKITEMMODEL_H
 
 #include <QAbstractItemModel>
 class CBookmarkFilterDataModel;
 
 
-class CBookmarkFilteredItemModel : public QAbstractItemModel
+class CBookmarkItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    explicit CBookmarkFilteredItemModel(QObject *parent = 0);
-    explicit CBookmarkFilteredItemModel(CBookmarkFilterDataModel *dataModel,
+    explicit CBookmarkItemModel(QObject *parent = 0);
+    explicit CBookmarkItemModel(CBookmarkFilterDataModel *dataModel,
                                         QObject *parent = 0);
 
     inline CBookmarkFilterDataModel *dataModel() const;
@@ -52,10 +52,10 @@ private:
     CBookmarkFilterDataModel *m_dataModel;
 };
 
-CBookmarkFilterDataModel *CBookmarkFilteredItemModel::dataModel() const
+CBookmarkFilterDataModel *CBookmarkItemModel::dataModel() const
 {
     return m_dataModel;
 }
 
 
-#endif // CBOOKMARKFILTERITEMMODEL_H
+#endif // CBOOKMARKITEMMODEL_H

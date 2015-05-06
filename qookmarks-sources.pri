@@ -26,7 +26,6 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/ctag.h                                            \
     $$PWD/src/manager/ctagitem.h                                        \
     $$PWD/src/manager/ctagmgr.h                                         \
-    $$PWD/src/widget/bookmarkview/cbookmarkfilteritemmodel.h            \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.h              \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
@@ -67,7 +66,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.h \
     $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.h \
     $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkheaderview.h
+    $$PWD/src/widget/bookmarkview/cbookmarkheaderview.h \
+    $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.h
 
 
 SOURCES        +=                                                       \
@@ -82,7 +82,6 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/ctag.cpp                                          \
     $$PWD/src/manager/ctagitem.cpp                                      \
     $$PWD/src/manager/ctagmgr.cpp                                       \
-    $$PWD/src/widget/bookmarkview/cbookmarkfilteritemmodel.cpp          \
     $$PWD/src/widget/navigationview/cnavigationitemmodel.cpp            \
     $$PWD/src/version.cpp                                               \
     $$PWD/src/widget/compositwidget/ccompositwidget.cpp \
@@ -119,7 +118,8 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkheaderview.cpp
+    $$PWD/src/widget/bookmarkview/cbookmarkheaderview.cpp \
+    $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.cpp
 
 
 FORMS          +=                                                       \

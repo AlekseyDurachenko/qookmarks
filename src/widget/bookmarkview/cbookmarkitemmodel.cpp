@@ -12,7 +12,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkfilteritemmodel.h"
+#include "cbookmarkitemmodel.h"
 #include "cbookmarkfilterdatamodel.h"
 #include "cbookmarkitem.h"
 #include "cprj.h"
@@ -38,13 +38,13 @@ static QString joinSet(const QSet<QString> &set, const QString &sep)
     return result;
 }
 
-CBookmarkFilteredItemModel::CBookmarkFilteredItemModel(QObject *parent) :
+CBookmarkItemModel::CBookmarkItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_dataModel = 0;
 }
 
-CBookmarkFilteredItemModel::CBookmarkFilteredItemModel(
+CBookmarkItemModel::CBookmarkItemModel(
         CBookmarkFilterDataModel *dataModel, QObject *parent) :
     QAbstractItemModel(parent)
 {
@@ -52,7 +52,7 @@ CBookmarkFilteredItemModel::CBookmarkFilteredItemModel(
     setDataModel(dataModel);
 }
 
-void CBookmarkFilteredItemModel::setDataModel(CBookmarkFilterDataModel *dataModel)
+void CBookmarkItemModel::setDataModel(CBookmarkFilterDataModel *dataModel)
 {
     if (m_dataModel)
         disconnect(m_dataModel, 0, this, 0);
@@ -80,7 +80,7 @@ void CBookmarkFilteredItemModel::setDataModel(CBookmarkFilterDataModel *dataMode
     endResetModel();
 }
 
-QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) const
+QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || !m_dataModel)
         return QVariant();
@@ -135,7 +135,7 @@ QVariant CBookmarkFilteredItemModel::data(const QModelIndex &index, int role) co
     return QVariant();
 }
 
-Qt::ItemFlags CBookmarkFilteredItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags CBookmarkItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
@@ -147,7 +147,7 @@ Qt::ItemFlags CBookmarkFilteredItemModel::flags(const QModelIndex &index) const
     return f;
 }
 
-QMimeData *CBookmarkFilteredItemModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *CBookmarkItemModel::mimeData(const QModelIndexList &indexes) const
 {
     QList<QUrl> bookmarkUrls;
     foreach (QModelIndex index, indexes)
@@ -163,7 +163,7 @@ QMimeData *CBookmarkFilteredItemModel::mimeData(const QModelIndexList &indexes) 
     return mimeData;
 }
 
-QVariant CBookmarkFilteredItemModel::headerData(int section,
+QVariant CBookmarkItemModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::TextAlignmentRole)
@@ -228,7 +228,7 @@ QVariant CBookmarkFilteredItemModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex CBookmarkFilteredItemModel::index(int row, int column,
+QModelIndex CBookmarkItemModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent) || !m_dataModel)
@@ -237,12 +237,12 @@ QModelIndex CBookmarkFilteredItemModel::index(int row, int column,
     return createIndex(row, column, m_dataModel->at(row));
 }
 
-QModelIndex CBookmarkFilteredItemModel::parent(const QModelIndex &) const
+QModelIndex CBookmarkItemModel::parent(const QModelIndex &) const
 {
     return QModelIndex();
 }
 
-int CBookmarkFilteredItemModel::rowCount(const QModelIndex &parent) const
+int CBookmarkItemModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid() || !m_dataModel)
         return 0;
@@ -250,53 +250,46 @@ int CBookmarkFilteredItemModel::rowCount(const QModelIndex &parent) const
     return m_dataModel->count();
 }
 
-int CBookmarkFilteredItemModel::columnCount(const QModelIndex &/*parent*/) const
+int CBookmarkItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
     return 16;
 }
 
-void CBookmarkFilteredItemModel::dataModel_aboutToBeInserted(int first, int last)
+void CBookmarkItemModel::dataModel_aboutToBeInserted(int first, int last)
 {
     beginInsertRows(QModelIndex(), first, last);
 }
 
-void CBookmarkFilteredItemModel::dataModel_inserted(int first, int last)
+void CBookmarkItemModel::dataModel_inserted(int /*first*/, int /*last*/)
 {
-    Q_UNUSED(first);
-    Q_UNUSED(last);
-
     endInsertRows();
 }
 
-void CBookmarkFilteredItemModel::dataModel_aboutToBeRemoved(int first, int last)
+void CBookmarkItemModel::dataModel_aboutToBeRemoved(int first, int last)
 {
     beginRemoveRows(QModelIndex(), first, last);
 }
 
-void CBookmarkFilteredItemModel::dataModel_removed(int first, int last)
+void CBookmarkItemModel::dataModel_removed(int /*first*/, int /*last*/)
 {
-    Q_UNUSED(first);
-    Q_UNUSED(last);
-
     endRemoveRows();
 }
 
-void CBookmarkFilteredItemModel::dataModel_dataChanged(int first, int last)
+void CBookmarkItemModel::dataModel_dataChanged(int first, int last)
 {
     emit dataChanged(createIndex(first, 0),
                      createIndex(last, columnCount()-1));
 }
 
-void CBookmarkFilteredItemModel::dataModel_reseted()
+void CBookmarkItemModel::dataModel_reseted()
 {
     beginResetModel();
     endResetModel();
 }
 
-void CBookmarkFilteredItemModel::dataModel_destroyed()
+void CBookmarkItemModel::dataModel_destroyed()
 {
     m_dataModel = 0;
     beginResetModel();
     endResetModel();
-
 }

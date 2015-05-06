@@ -21,7 +21,7 @@
 class CNavigationItemModel;
 class CNavigationView;
 class CBookmarkView;
-class CBookmarkFilteredItemModel;
+class CBookmarkItemModel;
 class CBookmarkFilterDataModel;
 class CBookmarkFilter;
 class CPrj;
@@ -69,7 +69,7 @@ private:
     CBookmarkView *m_bookmarkView;
     CBookmarkFilter *m_filter;
     CBookmarkFilterDataModel *m_dataModel;
-    CBookmarkFilteredItemModel *m_bookmarkItemModel;
+    CBookmarkItemModel *m_bookmarkItemModel;
     CNavigationItemModel *m_navigationItemModel;
 
     QNetworkAccessManager *m_network;

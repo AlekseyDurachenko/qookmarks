@@ -24,7 +24,7 @@
 #include "cbookmarkview.h"
 #include "cnavigationitemmodel.h"
 #include "cbookmarkfilter.h"
-#include "cbookmarkfilteritemmodel.h"
+#include "cbookmarkitemmodel.h"
 #include "cbookmarkfilterdatamodel.h"
 #include "cmanager.h"
 #include "ctagmgr.h"
@@ -70,7 +70,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_filter = new CBookmarkFilter(this);
     m_dataModel = new CBookmarkFilterDataModel(this);
     m_dataModel->setFilter(m_filter);
-    m_bookmarkItemModel = new CBookmarkFilteredItemModel(m_dataModel, this);
+    m_bookmarkItemModel = new CBookmarkItemModel(m_dataModel, this);
     m_bookmarkView = new CBookmarkView(this);
     m_bookmarkView->setModel(m_bookmarkItemModel);
     connect(m_bookmarkView, SIGNAL(customContextMenuRequested(QPoint)),

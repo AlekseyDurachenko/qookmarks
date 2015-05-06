@@ -67,7 +67,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.h \
     $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.h \
     $$PWD/src/widget/bookmarkview/cbookmarkheaderview.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.h
+    $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.h \
+    $$PWD/src/manager/cabstractbookmarkdatamodel.h
 
 
 SOURCES        +=                                                       \
@@ -119,7 +120,8 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkheaderview.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.cpp
+    $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.cpp \
+    $$PWD/src/manager/cabstractbookmarkdatamodel.cpp
 
 
 FORMS          +=                                                       \

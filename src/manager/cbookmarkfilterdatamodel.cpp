@@ -24,7 +24,7 @@
 
 
 CBookmarkFilterDataModel::CBookmarkFilterDataModel(QObject *parent) :
-     QObject(parent)
+     CAbstractBookmarkDataModel(parent)
 {
     m_filter = 0;
 
@@ -59,6 +59,16 @@ void CBookmarkFilterDataModel::setFilter(CAbstractBookmarkFilter *filter)
     }
 
     invalidate();
+}
+
+int CBookmarkFilterDataModel::count() const
+{
+    return m_bookmarks.count();
+}
+
+CBookmarkItem *CBookmarkFilterDataModel::at(int index) const
+{
+    return m_bookmarks.at(index);
 }
 
 void CBookmarkFilterDataModel::invalidate()

@@ -16,12 +16,12 @@
 #define CBOOKMARKFILTERDATAMODEL_H
 
 #include <QObject>
+#include "cabstractbookmarkdatamodel.h"
 class CManager;
-class CBookmarkItem;
 class CAbstractBookmarkFilter;
 
 
-class CBookmarkFilterDataModel : public QObject
+class CBookmarkFilterDataModel : public CAbstractBookmarkDataModel
 {
     Q_OBJECT
 public:
@@ -31,17 +31,10 @@ public:
     inline CAbstractBookmarkFilter *filter() const;
     void setFilter(CAbstractBookmarkFilter *filter);
 
-    inline int count() const;
+    virtual int count() const;
+    virtual CBookmarkItem *at(int index) const;
     inline int indexOf(CBookmarkItem *item) const;
-    inline CBookmarkItem *at(int index) const;
     inline QList<CBookmarkItem *> bookmarks() const;
-signals:
-    void aboutToBeInserted(int first, int last);
-    void inserted(int first, int last);
-    void aboutToBeRemoved(int first, int last);
-    void removed(int first, int last);
-    void dataChanged(int first, int last);
-    void reseted();
 private:
     void invalidate();
     void invalidate(CBookmarkItem *item, bool hasDataChanges = false);
@@ -65,19 +58,9 @@ CAbstractBookmarkFilter *CBookmarkFilterDataModel::filter() const
     return m_filter;
 }
 
-int CBookmarkFilterDataModel::count() const
-{
-    return m_bookmarks.count();
-}
-
 int CBookmarkFilterDataModel::indexOf(CBookmarkItem *item) const
 {
     return m_bookmarks.indexOf(item);
-}
-
-CBookmarkItem *CBookmarkFilterDataModel::at(int index) const
-{
-    return m_bookmarks.at(index);
 }
 
 QList<CBookmarkItem *> CBookmarkFilterDataModel::bookmarks() const

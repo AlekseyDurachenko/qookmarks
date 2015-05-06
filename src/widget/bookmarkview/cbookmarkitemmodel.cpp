@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkitemmodel.h"
-#include "cbookmarkfilterdatamodel.h"
+#include "cabstractbookmarkdatamodel.h"
 #include "cbookmarkitem.h"
 #include "cprj.h"
 #include "ciconmgr.h"
@@ -45,14 +45,14 @@ CBookmarkItemModel::CBookmarkItemModel(QObject *parent) :
 }
 
 CBookmarkItemModel::CBookmarkItemModel(
-        CBookmarkFilterDataModel *dataModel, QObject *parent) :
+        CAbstractBookmarkDataModel *dataModel, QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_dataModel = 0;
     setDataModel(dataModel);
 }
 
-void CBookmarkItemModel::setDataModel(CBookmarkFilterDataModel *dataModel)
+void CBookmarkItemModel::setDataModel(CAbstractBookmarkDataModel *dataModel)
 {
     if (m_dataModel)
         disconnect(m_dataModel, 0, this, 0);

@@ -44,6 +44,8 @@
 #include "singleton.h"
 #include "cprj.h"
 #include "ciconmgr.h"
+#include "settings.h"
+#include <QSettings>
 
 
 static QString md5(const QString &str)
@@ -80,14 +82,15 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
 
     m_bookmarkView->setHeader(new CBookmarkHeaderView(Qt::Horizontal, m_bookmarkView));
     m_bookmarkView->header()->setMinimumSectionSize(10);
-    m_bookmarkView->header()->setSectionsMovable(true);
     m_bookmarkView->setSortingEnabled(true);
 #if QT_VERSION >= 0x050000
+    m_bookmarkView->header()->setSectionsMovable(true);
     m_bookmarkView->header()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setSectionResizeMode(5, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setSectionResizeMode(6, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
 #else
+    m_bookmarkView->header()->setMovable(true);
     m_bookmarkView->header()->setResizeMode(4, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(5, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(6, QHeaderView::ResizeToContents);

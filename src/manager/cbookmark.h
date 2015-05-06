@@ -16,7 +16,6 @@
 #define CBOOKMARK_H
 
 #include <QSharedDataPointer>
-#include <QSet>
 #include <QUrl>
 #include <QColor>
 #include <QDateTime>
@@ -31,7 +30,7 @@ public:
     QString description;
     // ext
     QString notes;
-    QSet<QString> keywords;
+    QString keywords;
     bool isReadItLater;
     bool isFavorite;
     bool isTrash;
@@ -71,8 +70,8 @@ public:
     inline const QString &notes() const;
     void setNotes(const QString &notes);
 
-    inline const QSet<QString> &keywords() const;
-    void setKeywords(const QSet<QString> &keywords);
+    inline const QString &keywords() const;
+    void setKeywords(const QString &keywords);
 
     inline bool isReadItLater() const;
     void setReadItLater(bool state);
@@ -139,7 +138,7 @@ const QString &CBookmark::notes() const
     return data->notes;
 }
 
-const QSet<QString> &CBookmark::keywords() const
+const QString &CBookmark::keywords() const
 {
     return data->keywords;
 }

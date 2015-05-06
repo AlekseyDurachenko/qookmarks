@@ -61,7 +61,7 @@ void CBookmark::setNotes(const QString &notes)
     data->notes = notes;
 }
 
-void CBookmark::setKeywords(const QSet<QString> &keywords)
+void CBookmark::setKeywords(const QString &keywords)
 {
     data->keywords = keywords;
 }

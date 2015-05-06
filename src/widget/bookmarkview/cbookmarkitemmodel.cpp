@@ -24,20 +24,6 @@
 #include <QDebug>
 
 
-static QString joinSet(const QSet<QString> &set, const QString &sep)
-{
-    QStringList list = set.toList();
-    list.sort();
-
-    QString result;
-    for (int i = 0; i < list.count()-1; ++i)
-        result += list.at(i) + sep;
-    if (!list.isEmpty())
-        result += list.last();
-
-    return result;
-}
-
 CBookmarkItemModel::CBookmarkItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
@@ -97,7 +83,7 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
         case 2:
             return QString(bookmark->data().description()).replace("\n", " ");
         case 3:
-            return joinSet(bookmark->data().keywords(), ",").replace("\n", " ");
+            return QString(bookmark->data().keywords()).replace("\n", " ");
         case 4:
             return bookmark->data().rating();
         case 5:

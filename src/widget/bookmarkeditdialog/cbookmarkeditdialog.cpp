@@ -80,7 +80,7 @@ CBookmark CBookmarkEditDialog::toData() const
     data.setUrl(ui->lineEdit_url->text());
     data.setTitle(ui->lineEdit_title->text());
     data.setDescription(ui->lineEdit_description->text());
-    data.setKeywords(ui->lineEdit_keywords->text().split(",").toSet());
+    data.setKeywords(ui->lineEdit_keywords->text());
     data.setRating(ui->spinBox_rating->value());
     data.setFavorite(ui->checkBox_favorite->isChecked());
     data.setReadItLater(ui->checkBox_readItLater->isChecked());
@@ -102,7 +102,7 @@ void CBookmarkEditDialog::setData(const CBookmark &data)
     ui->lineEdit_url->setText(data.url().toString());
     ui->lineEdit_title->setText(data.title());
     ui->lineEdit_description->setText(data.description());
-    ui->lineEdit_keywords->setText(QStringList(data.keywords().toList()).join(","));
+    ui->lineEdit_keywords->setText(data.keywords());
     ui->spinBox_rating->setValue(data.rating());
     ui->checkBox_favorite->setChecked(data.isFavorite());
     ui->checkBox_readItLater->setChecked(data.isReadItLater());

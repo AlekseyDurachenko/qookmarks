@@ -29,7 +29,6 @@ const char *nsPrj       = "PROJECT";
 const char *nsTagItem       = "TAG";
 const char *nsBookmarkMgr   = "BOOKMARKS";
 const char *nsBookmarkItem      = "BOOKMARK";
-const char *nsBookmarkKeyword   = "KEYWORD";
 const char *nsBookmarkTag       = "TAG";
 const char *nsBookmarkTagPath       = "PATH";
 
@@ -133,34 +132,22 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
     QDomElement elem = doc.createElement(nsBookmarkItem);
     elem.setAttribute("title",  item->data().title());
     elem.setAttribute("url",    item->data().url().toString());
-    elem.setAttribute("desc",   item->data().description());
-    elem.setAttribute("note",   item->data().notes());
-    elem.setAttribute("readLater",  item->data().isReadItLater());
+    elem.setAttribute("description",item->data().description());
+    elem.setAttribute("keywords",   item->data().keywords());
+    elem.setAttribute("notes",      item->data().notes());
+    elem.setAttribute("readItLater",item->data().isReadItLater());
     elem.setAttribute("favorite",   item->data().isFavorite());
     elem.setAttribute("trash",      item->data().isTrash());
     elem.setAttribute("rating",     item->data().rating());
-    elem.setAttribute("textColor",
-                      colorToString(item->data().textColor()));
-    elem.setAttribute("backgroundColor",
-                      colorToString(item->data().backgroundColor()));
-    elem.setAttribute("createdDateTime",
-                      dateTimeToString(item->data().createdDateTime()));
-    elem.setAttribute("editedDateTime",
-                      dateTimeToString(item->data().editedDateTime()));
-    elem.setAttribute("lastVisitedDateTime",
-                      dateTimeToString(item->data().lastVisitedDateTime()));
-    elem.setAttribute("visitCount", item->data().visitCount());
-    elem.setAttribute("httpResponseCode",   item->data().httpStatusCode());
-    elem.setAttribute("httpResponseText",   item->data().httpReasonPhrase());
-    elem.setAttribute("lastCheckDateTime",
-                      dateTimeToString(item->data().httpCheckDateTime()));
-
-    foreach (const QString &keyword, item->data().keywords())
-    {
-        QDomElement keywordElem = doc.createElement(nsBookmarkKeyword);
-        keywordElem.setAttribute("value", keyword);
-        elem.appendChild(keywordElem);
-    }
+    elem.setAttribute("textColor",          colorToString(item->data().textColor()));
+    elem.setAttribute("backgroundColor",    colorToString(item->data().backgroundColor()));
+    elem.setAttribute("createdDateTime",    dateTimeToString(item->data().createdDateTime()));
+    elem.setAttribute("editedDateTime",     dateTimeToString(item->data().editedDateTime()));
+    elem.setAttribute("lastVisitedDateTime",dateTimeToString(item->data().lastVisitedDateTime()));
+    elem.setAttribute("visitCount",         item->data().visitCount());
+    elem.setAttribute("httpStatusCode",     item->data().httpStatusCode());
+    elem.setAttribute("httpReasonPhrase",   item->data().httpReasonPhrase());
+    elem.setAttribute("httpCheckDateTime",  dateTimeToString(item->data().httpCheckDateTime()));
 
     foreach (CTagItem *tagItem, item->tags())
         elem.appendChild(createBookmarkTagElem(doc, tagItem));
@@ -233,7 +220,6 @@ void CPrjXml::parseBookmarkNode(CManager *manager, QDomNode node)
 {
     QDomElement elem = node.toElement();
     CBookmark bookmarkData = createBookmarkData(elem);
-    bookmarkData.setKeywords(createBookmarkKeyworkds(node.firstChild()));
     CBookmarkItem *bookmarkItem = manager->bookmarkMgr()->add(bookmarkData);
 
     node = node.firstChild();
@@ -262,43 +248,23 @@ CBookmark CPrjXml::createBookmarkData(QDomElement elem)
     CBookmark bookmark;
     bookmark.setTitle(elem.attribute("title", "untitled"));
     bookmark.setUrl(elem.attribute("url", ""));
-    bookmark.setDescription(elem.attribute("desc", ""));
-    bookmark.setNotes(elem.attribute("note", ""));
-    bookmark.setReadItLater(elem.attribute("readLater", "0").toInt());
+    bookmark.setDescription(elem.attribute("description", ""));
+    bookmark.setKeywords(elem.attribute("keywords", ""));
+    bookmark.setNotes(elem.attribute("notes", ""));
+    bookmark.setReadItLater(elem.attribute("readItLater", "0").toInt());
     bookmark.setFavorite(elem.attribute("favorite", "0").toInt());
     bookmark.setTrash(elem.attribute("trash", "0").toInt());
     bookmark.setRating(elem.attribute("rating", "0").toInt());
-    bookmark.setTextColor(
-                colorFromString(elem.attribute("textColor", "")));
-    bookmark.setBackgroundColor(
-                colorFromString(elem.attribute("backgroundColor", "")));
-    bookmark.setCreatedDateTime(
-                dateTimeFromString(elem.attribute("createdDateTime", "")));
-    bookmark.setEditedDateTime(
-                dateTimeFromString(elem.attribute("editedDateTime", "")));
-    bookmark.setLastVisitedDateTime(
-                dateTimeFromString(elem.attribute("lastVisitedDateTime", "")));
+    bookmark.setTextColor(colorFromString(elem.attribute("textColor", "")));
+    bookmark.setBackgroundColor(colorFromString(elem.attribute("backgroundColor", "")));
+    bookmark.setCreatedDateTime(dateTimeFromString(elem.attribute("createdDateTime", "")));
+    bookmark.setEditedDateTime(dateTimeFromString(elem.attribute("editedDateTime", "")));
+    bookmark.setLastVisitedDateTime(dateTimeFromString(elem.attribute("lastVisitedDateTime", "")));
     bookmark.setVisitCount(elem.attribute("visitCount", "0").toInt());
-    bookmark.setHttpStatusCode(
-                elem.attribute("httpResponseCode", "0").toInt());
-    bookmark.setHttpReasonPhrase(elem.attribute("httpResponseText", "0"));
-    bookmark.setHttpCheckDateTime(
-                dateTimeFromString(elem.attribute("lastCheckDateTime", "")));
+    bookmark.setHttpStatusCode(elem.attribute("httpStatusCode", "0").toInt());
+    bookmark.setHttpReasonPhrase(elem.attribute("httpReasonPhrase", "0"));
+    bookmark.setHttpCheckDateTime(dateTimeFromString(elem.attribute("httpCheckDateTime", "")));
     return bookmark;
-}
-
-QSet<QString> CPrjXml::createBookmarkKeyworkds(QDomNode node)
-{
-    QSet<QString> keyworkds;
-    while (!node.isNull())
-    {
-        if (node.nodeName() == nsBookmarkKeyword)
-            keyworkds.insert(node.toElement().attribute("value"));
-
-        node = node.nextSibling();
-    }
-
-    return keyworkds;
 }
 
 QStringList CPrjXml::createBookmarkTagPath(QDomNode node)

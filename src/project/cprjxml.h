@@ -43,7 +43,6 @@ private:
     static void parseBookmarkNode(CManager *manager, QDomNode node);
     static CTag createTagData(QDomElement elem);
     static CBookmark createBookmarkData(QDomElement elem);
-    static QSet<QString> createBookmarkKeyworkds(QDomNode node);
     static QStringList createBookmarkTagPath(QDomNode node);
 };
 

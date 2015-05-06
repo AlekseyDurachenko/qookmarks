@@ -21,5 +21,8 @@
         <file>icons/action-save.png</file>
         <file>icons/action-text-wrap.png</file>
         <file>icons/bookmark-noflag.png</file>
+        <file>icons/bookmark-star-none.png</file>
+        <file>icons/bookmark-star.png</file>
+        <file>icons/bookmark-star-half.png</file>
     </qresource>
 </RCC>

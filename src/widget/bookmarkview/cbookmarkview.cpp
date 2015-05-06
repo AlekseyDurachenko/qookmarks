@@ -15,6 +15,7 @@
 #include "cbookmarkview.h"
 #include <QHeaderView>
 #include "cbookmarkbooleanicondelegate.h"
+#include "cbookmarkratingdelegate.h"
 
 
 CBookmarkView::CBookmarkView(QWidget *parent) :
@@ -41,6 +42,10 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
     trashItemDelegate->setIconOn(QIcon(":/icons/bookmark-trash.png"));
     trashItemDelegate->setIconOff(QIcon(":/icons/bookmark-noflag.png"));
 
+    CBookmarkRatingDelegate *ratingItemDelegate
+            = new CBookmarkRatingDelegate(this);
+
+    setItemDelegateForColumn(4, ratingItemDelegate);
     setItemDelegateForColumn(5, favoriteItemDelegate);
     setItemDelegateForColumn(6, readItLaterItemDelegate);
     setItemDelegateForColumn(7, trashItemDelegate);

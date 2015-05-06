@@ -1,0 +1,63 @@
+// Copyright 2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "cbookmarkratingdelegate.h"
+#include <QPainter>
+#include <QTreeView>
+#include <QHeaderView>
+#include "cbookmarkitem.h"
+#include "consts.h"
+
+
+CBookmarkRatingDelegate::CBookmarkRatingDelegate(QObject *parent) :
+    QItemDelegate(parent)
+{
+    m_starIcon = QIcon(":/icons/bookmark-star.png");
+    m_halfStarIcon = QIcon(":/icons/bookmark-star-half.png");
+    m_noStarIcon = QIcon(":/icons/bookmark-star-none.png");
+}
+
+void CBookmarkRatingDelegate::paint(QPainter *painter,
+        const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    drawBackground(painter, option, index);
+    drawFocus(painter, option, option.rect);
+
+    const int rating = index.data(Qt::DisplayRole).toInt();
+    const int size = sizeHint(option, index).height();
+    const int top  = option.rect.top();
+    int left = option.rect.left();
+    int i = 2;
+
+    for (; i <= rating; i += 2, left += size)
+        painter->drawPixmap(left, top, m_starIcon.pixmap(QSize(size, size)));
+
+    if (rating % 2 != 0)
+    {
+        painter->drawPixmap(left, top, m_halfStarIcon.pixmap(QSize(size, size)));
+        i += 2;
+        left += size;
+    }
+
+    for (; i <= Bookmark::MaxRating; i +=2, left += size)
+        painter->drawPixmap(left, top, m_noStarIcon.pixmap(QSize(size, size)));
+}
+
+QSize CBookmarkRatingDelegate::sizeHint(const QStyleOptionViewItem &option,
+        const QModelIndex &index) const
+{
+    QSize size = QItemDelegate::sizeHint(option, index);
+    size.setWidth(size.height()*5+size.height()/2);
+    return size;
+}

@@ -82,6 +82,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_bookmarkView->header()->setSectionResizeMode(6, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
 #else
+    m_bookmarkView->header()->setResizeMode(4, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(5, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(6, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(7, QHeaderView::ResizeToContents);

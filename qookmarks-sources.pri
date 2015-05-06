@@ -65,7 +65,8 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
     $$PWD/src/network/cdownloadwebpageinforequest.h \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.h
+    $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.h \
+    $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.h
 
 
 SOURCES        +=                                                       \
@@ -115,7 +116,8 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
     $$PWD/src/network/cdownloadwebpageinforequest.cpp \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.cpp
+    $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.cpp \
+    $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.cpp
 
 
 FORMS          +=                                                       \

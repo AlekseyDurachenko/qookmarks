@@ -47,6 +47,8 @@
 #include "settings.h"
 #include <QSettings>
 #include <QSortFilterProxyModel>
+#include <QActionGroup>
+
 
 static QString md5(const QString &str)
 {
@@ -361,6 +363,26 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.addAction(m_actionBookmarkAdd);
     menu.addAction(m_actionBookmarkEdit);
     menu.addAction(m_actionBookmarkRemove);
+    menu.addSeparator();
+    //actionFavorite->setIcon(QIcon(":/icons/bookmark-favorites.png"));
+    //actionFavorite->setCheckable(true);
+    QMenu *test = new QMenu("Favorite", this);
+    QActionGroup *group = new QActionGroup(this);
+    QAction *yes = test->addAction("Yes");
+    QAction *no = test->addAction("No");
+    group->addAction(yes);
+    group->addAction(no);
+    yes->setCheckable(true);
+    no->setCheckable(true);
+    yes->setChecked(true);
+
+    QAction *readItLaterFavorite = new QAction("Read it later", this);
+    readItLaterFavorite->setCheckable(true);
+
+    menu.addAction(test->menuAction());
+    menu.addAction(readItLaterFavorite);
+
+    menu.addSeparator();
     menu.addAction(m_actionBookmarkScreenshot);
     menu.addAction(m_actionBookmarkDownload);
 
@@ -521,4 +543,5 @@ void CCompositWidget::download_next()
 void CCompositWidget::download_finishied()
 {
 }
+
 

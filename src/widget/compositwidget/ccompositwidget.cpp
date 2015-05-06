@@ -71,35 +71,22 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_dataModel = new CBookmarkFilterDataModel(this);
     m_dataModel->setFilter(m_filter);
     m_bookmarkItemModel = new CBookmarkItemModel(m_dataModel, this);
+
     m_bookmarkView = new CBookmarkView(this);
-    m_sortFilterItemModel = new QSortFilterProxyModel(this);
-    m_sortFilterItemModel->setSourceModel(m_bookmarkItemModel);
-    m_sortFilterItemModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-    m_sortFilterItemModel->setDynamicSortFilter(true);
-    m_bookmarkView->setModel(m_sortFilterItemModel);
+    m_bookmarkView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_bookmarkView->setBookmarkModel(m_bookmarkItemModel);
+
+    //m_sortFilterItemModel = new QSortFilterProxyModel(this);
+    //m_sortFilterItemModel->setSourceModel(m_bookmarkItemModel);
+    //m_sortFilterItemModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    //m_sortFilterItemModel->setDynamicSortFilter(true);
+    //m_bookmarkView->setModel(m_sortFilterItemModel);
     connect(m_bookmarkView, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(bookmarkView_showContextMenu(QPoint)));
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(updateActions()));
     connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
-
-    m_bookmarkView->setHeader(new CBookmarkHeaderView(Qt::Horizontal, m_bookmarkView));
-    m_bookmarkView->header()->setMinimumSectionSize(10);
-    m_bookmarkView->setSortingEnabled(true);
-#if QT_VERSION >= 0x050000
-    m_bookmarkView->header()->setSectionsMovable(true);
-    m_bookmarkView->header()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
-    m_bookmarkView->header()->setSectionResizeMode(5, QHeaderView::ResizeToContents);
-    m_bookmarkView->header()->setSectionResizeMode(6, QHeaderView::ResizeToContents);
-    m_bookmarkView->header()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
-#else
-    m_bookmarkView->header()->setMovable(true);
-    m_bookmarkView->header()->setResizeMode(4, QHeaderView::ResizeToContents);
-    m_bookmarkView->header()->setResizeMode(5, QHeaderView::ResizeToContents);
-    m_bookmarkView->header()->setResizeMode(6, QHeaderView::ResizeToContents);
-    m_bookmarkView->header()->setResizeMode(7, QHeaderView::ResizeToContents);
-#endif
 
     m_navigationItemModel = new CNavigationItemModel(this);
     m_navigationView = new CNavigationView(this);
@@ -297,11 +284,10 @@ void CCompositWidget::actionBookmarkAdd_triggered()
 void CCompositWidget::actionBookmarkEdit_triggered()
 {
     CBookmarkItem *bookmarkItem = 0;
-    foreach (const QModelIndex &indexF,
+    foreach (const QModelIndex &index,
              m_bookmarkView->selectionModel()->selectedRows())
     {
-        QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
-        bookmarkItem = reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+        bookmarkItem = CBookmarkItem::variantToPtr(index.data(Qt::UserRole));
         break;
     }
 
@@ -337,12 +323,10 @@ void CCompositWidget::actionBookmarkRemove_triggered()
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
         return;
 
-    foreach (const QModelIndex &indexF,
+    foreach (const QModelIndex &index,
              m_bookmarkView->selectionModel()->selectedRows())
     {
-        QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
-        CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
-                    index.internalPointer());
+        CBookmarkItem *item = CBookmarkItem::variantToPtr(index.data(Qt::UserRole));
         CBookmark data = item->data();
         data.setTrash(true);
         item->setData(data);
@@ -351,11 +335,10 @@ void CCompositWidget::actionBookmarkRemove_triggered()
 
 void CCompositWidget::actionBookmarkScreenshot_triggered()
 {
-    foreach (const QModelIndex &indexF,
+    foreach (const QModelIndex &index,
              m_bookmarkView->selectionModel()->selectedRows())
     {
-        QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
-        m_list << reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+        m_list << CBookmarkItem::variantToPtr(index.data(Qt::UserRole));
     }
 
     screenshot_next();
@@ -363,11 +346,10 @@ void CCompositWidget::actionBookmarkScreenshot_triggered()
 
 void CCompositWidget::actionBookmarkDownload_triggered()
 {
-    foreach (const QModelIndex &indexF,
+    foreach (const QModelIndex &index,
              m_bookmarkView->selectionModel()->selectedRows())
     {
-        QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
-        m_listDl << reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+        m_listDl << CBookmarkItem::variantToPtr(index.data(Qt::UserRole));
     }
 
     download_next();
@@ -388,8 +370,8 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
         QMenu *downloadMenu = new QMenu(tr("Downloaded web pages"), &menu);
         menu.addAction(menu.addMenu(downloadMenu));
 
-        CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
-                    m_sortFilterItemModel->mapToSource(m_bookmarkView->selectionModel()->selectedRows().first()).internalPointer());
+        CBookmarkItem *item = CBookmarkItem::variantToPtr(
+                    m_bookmarkView->selectionModel()->selectedRows().first().data(Qt::UserRole));
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
         QString path = GPrj()->downloadsPath();
@@ -410,8 +392,8 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
         QMenu *downloadMenu = new QMenu(tr("Screenshots"), &menu);
         menu.addAction(menu.addMenu(downloadMenu));
 
-        CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
-                    m_sortFilterItemModel->mapToSource(m_bookmarkView->selectionModel()->selectedRows().first()).internalPointer());
+        CBookmarkItem *item = CBookmarkItem::variantToPtr(
+                    m_bookmarkView->selectionModel()->selectedRows().first().data(Qt::UserRole));
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
         QString path = GPrj()->screenshotPath();
@@ -433,10 +415,9 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
 }
 
-void CCompositWidget::bookmarkView_doubleClicked(const QModelIndex &indexF)
+void CCompositWidget::bookmarkView_doubleClicked(const QModelIndex &index)
 {
-    QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
-    CBookmarkItem *item  = reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+    CBookmarkItem *item  = CBookmarkItem::variantToPtr(index.data(Qt::UserRole));
     if (!item)
         return;
 

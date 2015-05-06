@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cbookmarkitem.h"
+#include <QVariant>
 #include "ctagitem.h"
 #include "cbookmarkmgr.h"
 
@@ -50,6 +51,16 @@ bool CBookmarkItem::setData(const CBookmark &data)
     }
 
     return true;
+}
+
+QVariant CBookmarkItem::variantFromPtr(CBookmarkItem *item)
+{
+    return QVariant::fromValue<void *>(static_cast<void *>(item));
+}
+
+CBookmarkItem *CBookmarkItem::variantToPtr(const QVariant &data)
+{
+    return static_cast<CBookmarkItem *>(data.value<void *>());
 }
 
 void CBookmarkItem::notifyTagAboutDestroyed()

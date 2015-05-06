@@ -36,6 +36,9 @@ public:
     bool setData(const CBookmark &data);
 
     inline const QSet<CTagItem *> &tags() const;
+public:
+    static QVariant variantFromPtr(CBookmarkItem *item);
+    static CBookmarkItem *variantToPtr(const QVariant &data);
 private:
     void notifyTagAboutDestroyed();
 private:
@@ -46,6 +49,7 @@ private:
     CBookmarkMgr *m_bookmarkMgr;
     QSet<CTagItem *> m_tags;
 };
+
 
 CBookmarkMgr *CBookmarkItem::bookmarkMgr() const
 {

@@ -116,7 +116,7 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
             return GIconMgr()->icon(bookmark->data().url(), QIcon(":/icons/bookmark-item.png"));
 
     if (role == Qt::UserRole)
-        return QVariant::fromValue((void *)m_dataModel->at(index.row()));
+        return CBookmarkItem::variantFromPtr(m_dataModel->at(index.row()));
 
     return QVariant();
 }
@@ -138,7 +138,7 @@ QMimeData *CBookmarkItemModel::mimeData(const QModelIndexList &indexes) const
     QList<QUrl> bookmarkUrls;
     foreach (QModelIndex index, indexes)
         if (index.isValid() && index.column() == 0)
-            bookmarkUrls << static_cast<CBookmarkItem *>(index.internalPointer())->data().url();
+            bookmarkUrls << CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url();
 
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);

@@ -72,7 +72,6 @@ private:
     CBookmarkFilterDataModel *m_dataModel;
     CBookmarkItemModel *m_bookmarkItemModel;
     CNavigationItemModel *m_navigationItemModel;
-    QSortFilterProxyModel *m_sortFilterItemModel;
 
     QNetworkAccessManager *m_network;
     QAction *m_actionBookmarkAdd;

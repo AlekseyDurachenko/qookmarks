@@ -32,6 +32,7 @@
 #include "cbookmarkmgr.h"
 #include "cwebpagescreenshot.h"
 #include "cwebpagedownloader.h"
+#include "cbookmarkheaderview.h"
 #include "cprj.h"
 #include <QCryptographicHash>
 #include <QDir>
@@ -77,7 +78,12 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
 
+    m_bookmarkView->setHeader(new CBookmarkHeaderView(Qt::Horizontal, m_bookmarkView));
+    m_bookmarkView->header()->setMinimumSectionSize(10);
+    m_bookmarkView->header()->setSectionsMovable(true);
+    m_bookmarkView->setSortingEnabled(true);
 #if QT_VERSION >= 0x050000
+    m_bookmarkView->header()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setSectionResizeMode(5, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setSectionResizeMode(6, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
@@ -87,10 +93,6 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_bookmarkView->header()->setResizeMode(6, QHeaderView::ResizeToContents);
     m_bookmarkView->header()->setResizeMode(7, QHeaderView::ResizeToContents);
 #endif
-    m_bookmarkView->resizeColumnToContents(5);
-    m_bookmarkView->resizeColumnToContents(6);
-    m_bookmarkView->resizeColumnToContents(7);
-
 
     m_navigationItemModel = new CNavigationItemModel(this);
     m_navigationView = new CNavigationView(this);

@@ -1,4 +1,4 @@
-// Copyright 20142015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
+// Copyright 2014-2015, Durachenko Aleksey V. <durachenko.aleksey@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -166,6 +166,11 @@ QMimeData *CBookmarkFilteredItemModel::mimeData(const QModelIndexList &indexes) 
 QVariant CBookmarkFilteredItemModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
+    if (orientation == Qt::Horizontal && role == Qt::TextAlignmentRole)
+    {
+        return Qt::AlignLeft;
+    }
+
     if (orientation == Qt::Horizontal && role == Qt::DecorationRole)
     {
         switch (section)

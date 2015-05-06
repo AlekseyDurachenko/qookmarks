@@ -38,16 +38,16 @@ void CBookmarkBooleanIconDelegate::paint(QPainter *painter,
     drawBackground(painter, option, index);
     drawFocus(painter, option, option.rect);
 
-    int size = qMin(option.rect.width(), option.rect.height());
+    int size = sizeHint(option, index).height();
     if (index.data(Qt::DisplayRole).toBool())
     {
-        painter->drawPixmap(option.rect.left(),
+        painter->drawPixmap(option.rect.left() + (option.rect.width()-size)/2,
                             option.rect.top(),
                             m_iconOn.pixmap(QSize(size, size)));
     }
     else
     {
-        painter->drawPixmap(option.rect.left(),
+        painter->drawPixmap(option.rect.left() + (option.rect.width()-size)/2,
                             option.rect.top(),
                             m_iconOff.pixmap(QSize(size, size)));
     }
@@ -57,6 +57,6 @@ QSize CBookmarkBooleanIconDelegate::sizeHint(const QStyleOptionViewItem &option,
         const QModelIndex &index) const
 {
     QSize size = QItemDelegate::sizeHint(option, index);
-    size.setWidth(qMin(option.rect.width(), option.rect.height()));
+    size.setWidth(size.height()+size.height()/2);
     return size;
 }

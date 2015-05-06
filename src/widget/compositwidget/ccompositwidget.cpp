@@ -46,7 +46,7 @@
 #include "ciconmgr.h"
 #include "settings.h"
 #include <QSettings>
-
+#include <QSortFilterProxyModel>
 
 static QString md5(const QString &str)
 {
@@ -72,7 +72,11 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_dataModel->setFilter(m_filter);
     m_bookmarkItemModel = new CBookmarkItemModel(m_dataModel, this);
     m_bookmarkView = new CBookmarkView(this);
-    m_bookmarkView->setModel(m_bookmarkItemModel);
+    m_sortFilterItemModel = new QSortFilterProxyModel(this);
+    m_sortFilterItemModel->setSourceModel(m_bookmarkItemModel);
+    m_sortFilterItemModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_sortFilterItemModel->setDynamicSortFilter(true);
+    m_bookmarkView->setModel(m_sortFilterItemModel);
     connect(m_bookmarkView, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(bookmarkView_showContextMenu(QPoint)));
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -293,9 +297,10 @@ void CCompositWidget::actionBookmarkAdd_triggered()
 void CCompositWidget::actionBookmarkEdit_triggered()
 {
     CBookmarkItem *bookmarkItem = 0;
-    foreach (const QModelIndex &index,
+    foreach (const QModelIndex &indexF,
              m_bookmarkView->selectionModel()->selectedRows())
     {
+        QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
         bookmarkItem = reinterpret_cast<CBookmarkItem *>(index.internalPointer());
         break;
     }
@@ -332,9 +337,10 @@ void CCompositWidget::actionBookmarkRemove_triggered()
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
         return;
 
-    foreach (const QModelIndex &index,
+    foreach (const QModelIndex &indexF,
              m_bookmarkView->selectionModel()->selectedRows())
     {
+        QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
         CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
                     index.internalPointer());
         CBookmark data = item->data();
@@ -345,18 +351,24 @@ void CCompositWidget::actionBookmarkRemove_triggered()
 
 void CCompositWidget::actionBookmarkScreenshot_triggered()
 {
-    foreach (const QModelIndex &index,
+    foreach (const QModelIndex &indexF,
              m_bookmarkView->selectionModel()->selectedRows())
+    {
+        QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
         m_list << reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+    }
 
     screenshot_next();
 }
 
 void CCompositWidget::actionBookmarkDownload_triggered()
 {
-    foreach (const QModelIndex &index,
+    foreach (const QModelIndex &indexF,
              m_bookmarkView->selectionModel()->selectedRows())
+    {
+        QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
         m_listDl << reinterpret_cast<CBookmarkItem *>(index.internalPointer());
+    }
 
     download_next();
 }
@@ -377,7 +389,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
         menu.addAction(menu.addMenu(downloadMenu));
 
         CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
-                    m_bookmarkView->selectionModel()->selectedRows().first().internalPointer());
+                    m_sortFilterItemModel->mapToSource(m_bookmarkView->selectionModel()->selectedRows().first()).internalPointer());
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
         QString path = GPrj()->downloadsPath();
@@ -399,7 +411,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
         menu.addAction(menu.addMenu(downloadMenu));
 
         CBookmarkItem *item = reinterpret_cast<CBookmarkItem *>(
-                    m_bookmarkView->selectionModel()->selectedRows().first().internalPointer());
+                    m_sortFilterItemModel->mapToSource(m_bookmarkView->selectionModel()->selectedRows().first()).internalPointer());
 
         QString subdir = sha1(item->data().url().toString()) + "_" + md5(item->data().url().toString());
         QString path = GPrj()->screenshotPath();
@@ -421,8 +433,9 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
 }
 
-void CCompositWidget::bookmarkView_doubleClicked(const QModelIndex &index)
+void CCompositWidget::bookmarkView_doubleClicked(const QModelIndex &indexF)
 {
+    QModelIndex index = m_sortFilterItemModel->mapToSource(indexF);
     CBookmarkItem *item  = reinterpret_cast<CBookmarkItem *>(index.internalPointer());
     if (!item)
         return;

@@ -77,13 +77,13 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
         switch (index.column())
         {
         case 0:
-            return QString(bookmark->data().title()).replace("\n", " ");
+            return QString(bookmark->data().title()).replace("\n", " ").replace("\r", " ");
         case 1:
-            return bookmark->data().url().toString().replace("\n", " ");
+            return bookmark->data().url().toString().replace("\n", " ").replace("\r", " ");
         case 2:
-            return QString(bookmark->data().description()).replace("\n", " ");
+            return QString(bookmark->data().description()).replace("\n", " ").replace("\r", " ");
         case 3:
-            return QString(bookmark->data().keywords()).replace("\n", " ");
+            return QString(bookmark->data().keywords()).replace("\n", " ").replace("\r", " ");
         case 4:
             return bookmark->data().rating();
         case 5:
@@ -95,7 +95,7 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
         case 8:
             return bookmark->data().httpStatusCode();
         case 9:
-            return QString(bookmark->data().httpReasonPhrase()).replace("\n", " ");;
+            return QString(bookmark->data().httpReasonPhrase()).replace("\n", " ").replace("\r", " ");
         case 10:
             return bookmark->data().httpCheckDateTime().toString(gDateTimeFormat);
         case 11:
@@ -107,7 +107,7 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
         case 14:
             return bookmark->data().visitCount();
         case 15:
-            return QString(bookmark->data().notes()).replace("\n", " ");
+            return QString(bookmark->data().notes()).replace("\n", " ").replace("\r", " ");
         }
     }
 

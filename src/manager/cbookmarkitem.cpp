@@ -42,7 +42,6 @@ bool CBookmarkItem::setData(const CBookmark &data)
 
     if (m_data != data)
     {
-        CBookmark old = m_data;
         m_bookmarkMgr->callbackAboutToBeDataChanged(this);
         m_data = data;
         m_bookmarkMgr->callbackDataChanged(this);

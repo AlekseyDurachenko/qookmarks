@@ -15,11 +15,13 @@
 #include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
 #include "cmanager.h"
+#include "consts.h"
 
 
 CBookmarkMgr::CBookmarkMgr(CManager *mgr) : QObject(mgr)
 {
     m_mgr = mgr;
+    counterReset();
 }
 
 CBookmarkMgr::~CBookmarkMgr()
@@ -58,6 +60,7 @@ CBookmarkItem *CBookmarkMgr::add(const CBookmark &data)
 
     emit aboutToBeInserted(index, index);
     m_bookmarkItems.push_back(item);
+    counterItemInsert(item);
     emit inserted(index, index);
 
     return item;
@@ -77,6 +80,7 @@ CBookmarkItem *CBookmarkMgr::replace(const CBookmark &data)
 
         emit aboutToBeInserted(index, index);
         m_bookmarkItems.push_back(item);
+        counterItemInsert(item);
         emit inserted(index, index);
     }
     return item;
@@ -85,6 +89,7 @@ CBookmarkItem *CBookmarkMgr::replace(const CBookmark &data)
 void CBookmarkMgr::removeAt(int index)
 {
     emit aboutToBeRemoved(index, index);
+    counterItemRemove(m_bookmarkItems.at(index));
     delete m_bookmarkItems.takeAt(index);
     emit removed(index, index);
 }
@@ -97,6 +102,7 @@ void CBookmarkMgr::removeAll()
     int last = m_bookmarkItems.count() - 1;
 
     emit aboutToBeRemoved(0, last);
+    counterReset();
     while (m_bookmarkItems.count())
         delete m_bookmarkItems.takeLast();
     emit removed(0, last);
@@ -104,21 +110,119 @@ void CBookmarkMgr::removeAll()
 
 void CBookmarkMgr::callbackAboutToBeDataChanged(CBookmarkItem *item)
 {
+    counterAboutToBeDataChanged(item);
     emit aboutToBeDataChanged(item);
 }
 
 void CBookmarkMgr::callbackDataChanged(CBookmarkItem *item)
 {
+    counterDataChanged(item);
     emit dataChanged(item);
 }
 
 void CBookmarkMgr::callbackAboutToBeTagsChanged(CBookmarkItem *item)
 {
+    counterAboutToBeTagsChanged(item);
     emit aboutToBeTagsChanged(item);
 }
 
 void CBookmarkMgr::callbackTagsChanged(CBookmarkItem *item)
 {
+    counterTagsChanged(item);
     emit tagsChanged(item);
 }
 
+void CBookmarkMgr::counterAboutToBeTagsChanged(CBookmarkItem *item)
+{
+    if (item->tags().count())
+        m_counterUntagged -= 1;
+
+    if (item->data().isTrash() && item->tags().count())
+        m_counterTrashUntagged -= 1;
+}
+
+void CBookmarkMgr::counterTagsChanged(CBookmarkItem *item)
+{
+    if (item->tags().count())
+        m_counterUntagged += 1;
+
+    if (item->data().isTrash() && item->tags().count())
+        m_counterTrashUntagged += 1;
+}
+
+void CBookmarkMgr::counterAboutToBeDataChanged(CBookmarkItem *item)
+{
+    if (item->data().isFavorite())
+        m_counterFavorite -= 1;
+
+    if (item->data().isReadItLater())
+        m_counterReadItLater -= 1;
+
+    if (item->data().rating() > Bookmark::MinRating)
+        m_counterRated -= 1;
+
+    if (item->data().isTrash())
+    {
+        if (item->data().isFavorite())
+            m_counterTrashFavorite -= 1;
+
+        if (item->data().isReadItLater())
+            m_counterTrashReadItLater -= 1;
+
+        if (item->data().rating() > Bookmark::MinRating)
+            m_counterTrashRated -= 1;
+
+        m_counterTrash -= 1;
+    }
+}
+
+void CBookmarkMgr::counterDataChanged(CBookmarkItem *item)
+{
+    if (item->data().isFavorite())
+        m_counterFavorite += 1;
+
+    if (item->data().isReadItLater())
+        m_counterReadItLater += 1;
+
+    if (item->data().rating() > Bookmark::MinRating)
+        m_counterRated += 1;
+
+    if (item->data().isTrash())
+    {
+        if (item->data().isFavorite())
+            m_counterTrashFavorite += 1;
+
+        if (item->data().isReadItLater())
+            m_counterTrashReadItLater += 1;
+
+        if (item->data().rating() > Bookmark::MinRating)
+            m_counterTrashRated += 1;
+
+        m_counterTrash += 1;
+    }
+}
+
+void CBookmarkMgr::counterItemRemove(CBookmarkItem *item)
+{
+    counterAboutToBeTagsChanged(item);
+    counterAboutToBeDataChanged(item);
+}
+
+void CBookmarkMgr::counterItemInsert(CBookmarkItem *item)
+{
+    counterTagsChanged(item);
+    counterDataChanged(item);
+}
+
+void CBookmarkMgr::counterReset()
+{
+    m_counterFavorite       = 0;
+    m_counterReadItLater    = 0;
+    m_counterRated          = 0;
+    m_counterUntagged       = 0;
+    m_counterTrash          = 0;
+    m_counterTrashFavorite  = 0;
+    m_counterTrashReadItLater   = 0;
+    m_counterTrashRated     = 0;
+    m_counterTrashUntagged  = 0;
+}

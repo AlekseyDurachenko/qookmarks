@@ -44,6 +44,16 @@ public:
     CBookmarkItem *replace(const CBookmark &data);
     void removeAt(int index);
     void removeAll();
+
+    inline int favoriteCount() const;
+    inline int readItLaterCount() const;
+    inline int ratedCount() const;
+    inline int untaggedCount() const;
+    inline int trashCount() const;
+    inline int trashFavoriteCount() const;
+    inline int trashReadItLaterCount() const;
+    inline int trashRatedCount() const;
+    inline int trashUntaggedCount() const;
 signals:
     void aboutToBeInserted(int first, int last);
     void inserted(int first, int last);
@@ -59,8 +69,25 @@ private:
     void callbackAboutToBeTagsChanged(CBookmarkItem *item);
     void callbackTagsChanged(CBookmarkItem *item);
 private:
+    void counterAboutToBeTagsChanged(CBookmarkItem *item);
+    void counterTagsChanged(CBookmarkItem *item);
+    void counterAboutToBeDataChanged(CBookmarkItem *item);
+    void counterDataChanged(CBookmarkItem *item);
+    void counterItemRemove(CBookmarkItem *item);
+    void counterItemInsert(CBookmarkItem *item);
+    void counterReset();
+private:
     QList<CBookmarkItem *> m_bookmarkItems;
     CManager *m_mgr;
+    int m_counterFavorite;
+    int m_counterReadItLater;
+    int m_counterRated;
+    int m_counterUntagged;
+    int m_counterTrash;
+    int m_counterTrashFavorite;
+    int m_counterTrashReadItLater;
+    int m_counterTrashRated;
+    int m_counterTrashUntagged;
 };
 
 CManager *CBookmarkMgr::mgr() const
@@ -81,6 +108,51 @@ const QList<CBookmarkItem *> &CBookmarkMgr::bookmarks() const
 CBookmarkItem *CBookmarkMgr::at(int index) const
 {
     return m_bookmarkItems.at(index);
+}
+
+int CBookmarkMgr::favoriteCount() const
+{
+    return m_counterFavorite;
+}
+
+int CBookmarkMgr::readItLaterCount() const
+{
+    return m_counterReadItLater;
+}
+
+int CBookmarkMgr::ratedCount() const
+{
+    return m_counterRated;
+}
+
+int CBookmarkMgr::untaggedCount() const
+{
+    return m_counterUntagged;
+}
+
+int CBookmarkMgr::trashCount() const
+{
+    return m_counterTrash;
+}
+
+int CBookmarkMgr::trashFavoriteCount() const
+{
+    return m_counterTrashFavorite;
+}
+
+int CBookmarkMgr::trashReadItLaterCount() const
+{
+    return m_counterTrashReadItLater;
+}
+
+int CBookmarkMgr::trashRatedCount() const
+{
+    return m_counterTrashRated;
+}
+
+int CBookmarkMgr::trashUntaggedCount() const
+{
+    return m_counterTrashUntagged;
 }
 
 

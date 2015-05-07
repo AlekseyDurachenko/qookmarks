@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../qrc/icons.qrc">
+    <normaloff>:/icons/qookmarks.png</normaloff>:/icons/qookmarks.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
@@ -80,6 +84,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../qrc/icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

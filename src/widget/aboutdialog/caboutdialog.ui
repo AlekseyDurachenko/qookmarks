@@ -37,7 +37,7 @@
         </size>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../qrc/icons.qrc">:/icons/swtool.png</pixmap>
+        <pixmap resource="../../../qrc/icons.qrc">:/icons/qookmarks.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -169,7 +169,7 @@
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="../../qrc/icons.qrc"/>
+  <include location="../../../qrc/icons.qrc"/>
  </resources>
  <connections>
   <connection>

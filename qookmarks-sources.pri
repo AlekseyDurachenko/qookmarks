@@ -128,7 +128,7 @@ FORMS          +=                                                       \
     $$PWD/src/cmainwindow.ui \
     $$PWD/src/widget/tageditdialog/ctageditdialog.ui \
     $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.ui \
-    $$PWD/src/caboutdialog.ui
+    $$PWD/src/widget/aboutdialog/caboutdialog.ui
 
 
 RESOURCES      +=                                                       \

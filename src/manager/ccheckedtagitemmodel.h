@@ -31,6 +31,8 @@ public:
     virtual bool setData(const QModelIndex &index,
                          const QVariant &value, int role);
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+protected slots:
+    virtual void tagMgr_aboutToBeRemoved(CTagItem *parent, int first, int last);
 private:
     QSet<CTagItem *> m_checkedTags;
 };

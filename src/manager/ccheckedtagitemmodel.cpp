@@ -66,3 +66,24 @@ Qt::ItemFlags CCheckedTagItemModel::flags(const QModelIndex &index) const
 
    return flags;
 }
+
+static QSet<CTagItem *> tagRecursiveFind(CTagItem *parent)
+{
+    QSet<CTagItem *> tags;
+    foreach (CTagItem *item, parent->children())
+        tags += tagRecursiveFind(item);
+    return tags;
+}
+
+void CCheckedTagItemModel::tagMgr_aboutToBeRemoved(CTagItem *parent,
+        int first, int last)
+{
+    QSet<CTagItem *> tags;
+    for (int index = first; index <= last; ++index)
+        tags += tagRecursiveFind(parent->at(index));
+
+    foreach (CTagItem *item, tags)
+        m_checkedTags.remove(item);
+
+    CTagItemModel::tagMgr_aboutToBeRemoved(parent, first, last);
+}

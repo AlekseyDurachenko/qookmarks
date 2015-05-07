@@ -34,10 +34,10 @@ public:
     virtual QModelIndex parent(const QModelIndex &index) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-private slots:
+protected slots:
     void tagMgr_aboutToBeInserted(CTagItem *parent ,int first, int last);
     void tagMgr_inserted(CTagItem *parent, int first, int last);
-    void tagMgr_aboutToBeRemoved(CTagItem *parent, int first, int last);
+    virtual void tagMgr_aboutToBeRemoved(CTagItem *parent, int first, int last);
     void tagMgr_removed(CTagItem *parent, int first, int last);
     void tagMgr_aboutToBeMoved(CTagItem *srcParent, int srcFirst, int srcLast,
                                CTagItem *dstParent, int dstIndex);

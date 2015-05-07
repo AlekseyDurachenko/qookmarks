@@ -50,7 +50,7 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
             return QIcon(":/icons/bookmark-tag.png");
 
     if (role == Qt::UserRole)
-        return QVariant::fromValue(index.internalPointer());
+        return CTagItem::variantFromPtr(item);
 
     return QVariant();
 }

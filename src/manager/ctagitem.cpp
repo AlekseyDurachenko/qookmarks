@@ -209,6 +209,16 @@ bool CTagItem::checkIntersection(const QSet<CTagItem *> &a,
     return false;
 }
 
+QVariant CTagItem::variantFromPtr(CTagItem *item)
+{
+    return QVariant::fromValue<void *>(static_cast<void *>(item));
+}
+
+CTagItem *CTagItem::variantToPtr(const QVariant &data)
+{
+    return static_cast<CTagItem *>(data.value<void *>());
+}
+
 void CTagItem::setParent(CTagItem *parent)
 {
     m_parent = parent;

@@ -16,6 +16,7 @@
 #define CTAGITEM_H
 
 #include <QSet>
+#include <QVariant>
 #include "ctag.h"
 class CTagMgr;
 class CBookmarkItem;
@@ -65,6 +66,9 @@ public:
      */
     static bool checkIntersection(const QSet<CTagItem *> &a,
                                   const QSet<CTagItem *> &b);
+public:
+    static QVariant variantFromPtr(CTagItem *item);
+    static CTagItem *variantToPtr(const QVariant &data);
 private:
     void setParent(CTagItem *parent);
     void add(CTagItem *item);

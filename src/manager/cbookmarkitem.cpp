@@ -46,8 +46,6 @@ bool CBookmarkItem::setData(const CBookmark &data)
         m_bookmarkMgr->callbackAboutToBeDataChanged(this);
         m_data = data;
         m_bookmarkMgr->callbackDataChanged(this);
-        // TODO: deprecated?
-        m_bookmarkMgr->callbackDataChanged(this, old, data);
     }
 
     return true;

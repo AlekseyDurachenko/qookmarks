@@ -46,12 +46,14 @@ CNavigationItemModel::CNavigationItemModel(QObject *parent) :
             this, SLOT(tagMgr_aboutToBeMoved(CTagItem*,int,int,CTagItem*,int)));
     connect(GTagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
             this, SLOT(tagMgr_moved(CTagItem*,int,int,CTagItem*,int)));
-    connect(GTagMgr(), SIGNAL(dataChanged(CTagItem*,CTag,CTag)),
+    connect(GTagMgr(), SIGNAL(dataChanged(CTagItem*)),
             this, SLOT(tagMgr_dataChanged(CTagItem*)));
     connect(GTagMgr(), SIGNAL(bookmarksChanged(CTagItem*)),
             this, SLOT(tagMgr_bookmarksChanged(CTagItem*)));
-    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
-            this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*,CBookmark, CBookmark)));
+    connect(GBookmarkMgr(), SIGNAL(aboutToBeDataChanged(CBookmarkItem*)),
+            this, SLOT(bookmarkMgr_aboutToBeDataChanged(CBookmarkItem*)));
+    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
+            this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*)));
     connect(GBookmarkMgr(), SIGNAL(inserted(int,int)),
             this, SLOT(bookmarkMgr_inserted(int,int)));
     connect(GBookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
@@ -366,42 +368,46 @@ void CNavigationItemModel::tagMgr_bookmarksChanged(CTagItem *item)
     tagMgr_dataChanged(item);
 }
 
-void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item,
-        const CBookmark &oldData, const CBookmark &newData)
+void CNavigationItemModel::bookmarkMgr_aboutToBeDataChanged(CBookmarkItem *item)
 {
-    if (oldData.isFavorite() == newData.isFavorite()
-            && oldData.isReadItLater() == newData.isReadItLater()
-            && oldData.isTrash() == newData.isTrash()
-            && oldData.rating() == newData.rating())
+    m_oldBookmarkData = item->data();
+}
+
+void CNavigationItemModel::bookmarkMgr_dataChanged(CBookmarkItem *item)
+{
+    if (m_oldBookmarkData.isFavorite() == item->data().isFavorite()
+            && m_oldBookmarkData.isReadItLater() == item->data().isReadItLater()
+            && m_oldBookmarkData.isTrash() == item->data().isTrash()
+            && m_oldBookmarkData.rating() == item->data().rating())
         return;
 
-    if (oldData.isTrash())
+    if (m_oldBookmarkData.isTrash())
     {
         m_topLevelCounters[Trash] -= 1;
     }
     else
     {
-        if (oldData.isFavorite())
+        if (m_oldBookmarkData.isFavorite())
             m_topLevelCounters[Favorites] -= 1;
-        if (oldData.rating())
+        if (m_oldBookmarkData.rating())
             m_topLevelCounters[Rated] -= 1;
-        if (oldData.isReadItLater())
+        if (m_oldBookmarkData.isReadItLater())
             m_topLevelCounters[ReadLater] -= 1;
         if (item->tags().isEmpty())
             m_topLevelCounters[Untagged] -= 1;
     }
 
-    if (newData.isTrash())
+    if (item->data().isTrash())
     {
         m_topLevelCounters[Trash] += 1;
     }
     else
     {
-        if (newData.isFavorite())
+        if (item->data().isFavorite())
             m_topLevelCounters[Favorites] += 1;
-        if (newData.rating())
+        if (item->data().rating())
             m_topLevelCounters[Rated] += 1;
-        if (newData.isReadItLater())
+        if (item->data().isReadItLater())
             m_topLevelCounters[ReadLater] += 1;
         if (item->tags().isEmpty())
             m_topLevelCounters[Untagged] -= 1;

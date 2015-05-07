@@ -122,8 +122,3 @@ void CBookmarkMgr::callbackTagsChanged(CBookmarkItem *item)
     emit tagsChanged(item);
 }
 
-void CBookmarkMgr::callbackDataChanged(CBookmarkItem *item,
-        const CBookmark& oldData, const CBookmark &newData)
-{
-    emit dataChanged(item, oldData, newData);
-}

@@ -38,7 +38,7 @@ CPrj::CPrj(QObject *parent) : QObject(parent)
             this, SLOT(somethingChanged()));
     connect(m_manager->tagMgr(), SIGNAL(removed(CTagItem*,int,int)),
             this, SLOT(somethingChanged()));
-    connect(m_manager->tagMgr(), SIGNAL(dataChanged(CTagItem*,CTag,CTag)),
+    connect(m_manager->tagMgr(), SIGNAL(dataChanged(CTagItem*)),
             this, SLOT(somethingChanged()));
     connect(m_manager->tagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
             this, SLOT(somethingChanged()));
@@ -46,7 +46,7 @@ CPrj::CPrj(QObject *parent) : QObject(parent)
             this, SLOT(somethingChanged()));
     connect(m_manager->bookmarkMgr(), SIGNAL(removed(int,int)),
             this, SLOT(somethingChanged()));
-    connect(m_manager->bookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
+    connect(m_manager->bookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
             this, SLOT(somethingChanged()));
     connect(m_manager->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
             this, SLOT(somethingChanged()));
@@ -65,7 +65,7 @@ bool CPrj::create(const QString &path, QString *reason)
 {
     try
     {
-        QString absPath = QFileInfo(path).absoluteFilePath();       
+        QString absPath = QFileInfo(path).absoluteFilePath();
 
         // create path for icons
         if (!QDir(iconPath(absPath)).exists())

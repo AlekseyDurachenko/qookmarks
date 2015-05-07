@@ -95,12 +95,6 @@ void CTagMgr::callbackDataChanged(CTagItem *item)
     emit dataChanged(item);
 }
 
-void CTagMgr::callbackDataChanged(CTagItem *item, const CTag &oldTag,
-        const CTag &newTag)
-{
-    emit dataChanged(item, oldTag, newTag);
-}
-
 void CTagMgr::callbackBookmarksChanged(CTagItem *item)
 {
     emit bookmarksChanged(item);

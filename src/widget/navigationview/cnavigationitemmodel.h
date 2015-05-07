@@ -70,8 +70,8 @@ private slots:
                       CTagItem *dstParent, int dstIndex);
     void tagMgr_dataChanged(CTagItem *item);
     void tagMgr_bookmarksChanged(CTagItem *item);
-    void bookmarkMgr_dataChanged(CBookmarkItem *item, const CBookmark& oldData,
-                                 const CBookmark &newData);
+    void bookmarkMgr_aboutToBeDataChanged(CBookmarkItem *item);
+    void bookmarkMgr_dataChanged(CBookmarkItem *item);
     void bookmarkMgr_inserted(int first, int last);
     void bookmarkMgr_aboutToBeRemoved(int first, int last);
     void bookmarkMgr_removed();
@@ -99,6 +99,7 @@ private:
     INavigationActions *m_navigationActions;
     QVector<TopLevelItem> m_topLevelItems;
     QHash<TopLevelItem, int> m_topLevelCounters;
+    CBookmark m_oldBookmarkData;
 };
 
 INavigationActions *CNavigationItemModel::navigationActions() const

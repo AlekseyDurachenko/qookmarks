@@ -46,7 +46,6 @@ signals:
                CTagItem *destinationParent, int destinationIndex);
     void aboutToBeDataChanged(CTagItem *item);
     void dataChanged(CTagItem *item);
-    void dataChanged(CTagItem *item, const CTag &oldTag, const CTag &newTag);
     void bookmarksChanged(CTagItem *item);
 private:
     void callbackAboutToBeInserted(CTagItem *parent ,int first, int last);
@@ -62,8 +61,6 @@ private:
     void callbackMoved(CTagItem *item);
     void callbackAboutToBeDataChanged(CTagItem *item);
     void callbackDataChanged(CTagItem *item);
-    void callbackDataChanged(CTagItem *item, const CTag &oldTag,
-                             const CTag &newTag);
     void callbackBookmarksChanged(CTagItem *item);
 private:
     CManager *m_mgr;

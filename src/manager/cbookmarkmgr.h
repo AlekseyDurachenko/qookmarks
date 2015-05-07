@@ -53,17 +53,11 @@ signals:
     void dataChanged(CBookmarkItem *item);
     void aboutToBeTagsChanged(CBookmarkItem *item);
     void tagsChanged(CBookmarkItem *item);
-    // TODO: deprecated?
-    void dataChanged(CBookmarkItem *item, const CBookmark& oldData,
-                     const CBookmark &newData);
 private:
     void callbackAboutToBeDataChanged(CBookmarkItem *item);
     void callbackDataChanged(CBookmarkItem *item);
     void callbackAboutToBeTagsChanged(CBookmarkItem *item);
     void callbackTagsChanged(CBookmarkItem *item);
-    // TODO: deprecated?
-    void callbackDataChanged(CBookmarkItem *item, const CBookmark& oldData,
-                             const CBookmark &newData);
 private:
     QList<CBookmarkItem *> m_bookmarkItems;
     CManager *m_mgr;

@@ -190,12 +190,9 @@ bool CTagItem::setData(const CTag &data)
 
     if (m_data != data)
     {
-        CTag old = m_data;
         m_tagMgr->callbackAboutToBeDataChanged(this);
         m_data = data;
         m_tagMgr->callbackDataChanged(this);
-        // TODO: deprecated?
-        m_tagMgr->callbackDataChanged(this, old, data);
     }
 
     return true;

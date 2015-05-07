@@ -32,7 +32,7 @@ CBookmarkFilterDataModel::CBookmarkFilterDataModel(QObject *parent) :
             this, SLOT(bookmarkMgr_inserted(int,int)));
     connect(GBookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
             this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
-    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*,CBookmark,CBookmark)),
+    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
             this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*)));
     connect(GBookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
             this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));

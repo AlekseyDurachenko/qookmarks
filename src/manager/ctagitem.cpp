@@ -69,6 +69,17 @@ int CTagItem::indexOf(const QString &name) const
     return -1;
 }
 
+QSet<CTagItem *> CTagItem::recursiveChildren() const
+{
+    QSet<CTagItem *> tags;
+
+    tags += const_cast<CTagItem *>(this);
+    foreach (CTagItem *item, m_children)
+        tags += item->recursiveChildren();
+
+    return tags;
+}
+
 CTagItem *CTagItem::find(const QString &name) const
 {
     foreach (CTagItem *tag, m_children)

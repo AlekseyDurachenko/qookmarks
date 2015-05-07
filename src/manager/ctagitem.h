@@ -44,6 +44,7 @@ public:
     inline int indexOf(CTagItem *item) const;
     int indexOf(const QString &name) const;
     inline const QList<CTagItem *> &children() const;
+    QSet<CTagItem *> recursiveChildren() const;
     inline CTagItem *at(int index) const;
     CTagItem *find(const QString &name) const;
     bool aboveOf(CTagItem *item) const;

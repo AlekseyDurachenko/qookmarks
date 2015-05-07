@@ -59,7 +59,7 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cnetworkmgr.h \
     $$PWD/src/network/cdownloadfaviconrequest.h \
     $$PWD/src/network/cdownloadfaviconreply.h \
-    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagitemmodel.h \
+    $$PWD/src/manager/ccheckedtagitemmodel.h \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.h \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
     $$PWD/src/network/cdownloadwebpageinforequest.h \
@@ -68,7 +68,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.h \
     $$PWD/src/widget/bookmarkview/cbookmarkheaderview.h \
     $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.h \
-    $$PWD/src/manager/cabstractbookmarkdatamodel.h
+    $$PWD/src/manager/cabstractbookmarkdatamodel.h \
+    $$PWD/src/manager/ctagitemmodel.h
 
 
 SOURCES        +=                                                       \
@@ -112,7 +113,7 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cnetworkmgr.cpp \
     $$PWD/src/network/cdownloadfaviconrequest.cpp \
     $$PWD/src/network/cdownloadfaviconreply.cpp \
-    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagitemmodel.cpp \
+    $$PWD/src/manager/ccheckedtagitemmodel.cpp \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.cpp \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
     $$PWD/src/network/cdownloadwebpageinforequest.cpp \
@@ -121,7 +122,8 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkheaderview.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.cpp \
-    $$PWD/src/manager/cabstractbookmarkdatamodel.cpp
+    $$PWD/src/manager/cabstractbookmarkdatamodel.cpp \
+    $$PWD/src/manager/ctagitemmodel.cpp
 
 
 FORMS          +=                                                       \

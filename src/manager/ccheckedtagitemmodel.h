@@ -15,16 +15,14 @@
 #ifndef CCHECKEDTAGITEMMODEL_H
 #define CCHECKEDTAGITEMMODEL_H
 
-#include <QAbstractItemModel>
-#include "ctagitem.h"
+#include "ctagitemmodel.h"
 
 
-class CCheckedTagItemModel : public QAbstractItemModel
+class CCheckedTagItemModel : public CTagItemModel
 {
     Q_OBJECT
 public:
     explicit CCheckedTagItemModel(QObject *parent = 0);
-    virtual ~CCheckedTagItemModel();
 
     inline const QSet<CTagItem *> &checkedTags() const;
     void setCheckedTags(const QSet<CTagItem *> &checkedTags);
@@ -33,23 +31,6 @@ public:
     virtual bool setData(const QModelIndex &index,
                          const QVariant &value, int role);
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation,
-                                int role = Qt::DisplayRole) const;
-    virtual QModelIndex index(int row, int column,
-                              const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &index) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-private slots:
-    void tagMgr_aboutToBeInserted(CTagItem *parent ,int first, int last);
-    void tagMgr_inserted(CTagItem *parent, int first, int last);
-    void tagMgr_aboutToBeRemoved(CTagItem *parent, int first, int last);
-    void tagMgr_removed(CTagItem *parent, int first, int last);
-    void tagMgr_aboutToBeMoved(CTagItem *srcParent, int srcFirst, int srcLast,
-                               CTagItem *dstParent, int dstIndex);
-    void tagMgr_moved(CTagItem *srcParent, int srcFirst, int srcLast,
-                      CTagItem *dstParent, int dstIndex);
-    void tagMgr_dataChanged(CTagItem *item);
 private:
     QSet<CTagItem *> m_checkedTags;
 };

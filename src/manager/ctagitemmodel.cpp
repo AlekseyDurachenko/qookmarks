@@ -12,11 +12,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ccheckedtagitemmodel.h"
+#include "ctagitemmodel.h"
 #include "singleton.h"
 
 
-CCheckedTagItemModel::CCheckedTagItemModel(QObject *parent) :
+CTagItemModel::CTagItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     connect(GTagMgr(), SIGNAL(aboutToBeInserted(CTagItem*,int,int)),
@@ -35,18 +35,7 @@ CCheckedTagItemModel::CCheckedTagItemModel(QObject *parent) :
             this, SLOT(tagMgr_dataChanged(CTagItem*)));
 }
 
-CCheckedTagItemModel::~CCheckedTagItemModel()
-{
-}
-
-void CCheckedTagItemModel::setCheckedTags(const QSet<CTagItem *> &checkedTags)
-{
-    m_checkedTags = checkedTags;
-    beginResetModel();
-    endResetModel();
-}
-
-QVariant CCheckedTagItemModel::data(const QModelIndex &index, int role) const
+QVariant CTagItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -63,41 +52,18 @@ QVariant CCheckedTagItemModel::data(const QModelIndex &index, int role) const
     if (role == Qt::UserRole)
         return QVariant::fromValue(index.internalPointer());
 
-    if (role == Qt::CheckStateRole && index.column() == 0)
-        return m_checkedTags.contains(item) ? Qt::Checked : Qt::Unchecked;
-
     return QVariant();
 }
 
-bool CCheckedTagItemModel::setData(const QModelIndex &index,
-        const QVariant &/*value*/, int role)
-{
-    if (role != Qt::CheckStateRole || index.column() != 0)
-        return false;
-
-    CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
-    if (m_checkedTags.contains(item))
-        m_checkedTags.remove(item);
-    else
-        m_checkedTags.insert(item);
-
-    return true;
-}
-
-Qt::ItemFlags CCheckedTagItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags CTagItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
 
-   Qt::ItemFlags flags = Qt::ItemIsEnabled|Qt::ItemIsSelectable;
-
-   if (index.column() == 0)
-       flags |= Qt::ItemIsUserCheckable;
-
-   return flags;
+   return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
 }
 
-QVariant CCheckedTagItemModel::headerData(int section,
+QVariant CTagItemModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal
@@ -108,7 +74,7 @@ QVariant CCheckedTagItemModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex CCheckedTagItemModel::index(int row, int column,
+QModelIndex CTagItemModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -123,7 +89,7 @@ QModelIndex CCheckedTagItemModel::index(int row, int column,
     return createIndex(row, column, parentItem->at(row));
 }
 
-QModelIndex CCheckedTagItemModel::parent(const QModelIndex &index) const
+QModelIndex CTagItemModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())
         return QModelIndex();
@@ -137,7 +103,7 @@ QModelIndex CCheckedTagItemModel::parent(const QModelIndex &index) const
     return createIndex(parentItem->index(), 0, parentItem);
 }
 
-int CCheckedTagItemModel::rowCount(const QModelIndex &parent) const
+int CTagItemModel::rowCount(const QModelIndex &parent) const
 {
      if (parent.column() > 0)
          return 0;
@@ -151,12 +117,12 @@ int CCheckedTagItemModel::rowCount(const QModelIndex &parent) const
      return parentItem->count();
 }
 
-int CCheckedTagItemModel::columnCount(const QModelIndex &/*parent*/) const
+int CTagItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
     return 1;
 }
 
-void CCheckedTagItemModel::tagMgr_aboutToBeInserted(CTagItem *parent,
+void CTagItemModel::tagMgr_aboutToBeInserted(CTagItem *parent,
         int first, int last)
 {
     if (parent == GTagMgr()->rootItem())
@@ -165,13 +131,13 @@ void CCheckedTagItemModel::tagMgr_aboutToBeInserted(CTagItem *parent,
         beginInsertRows(createIndex(parent->index(), 0, parent), first, last);
 }
 
-void CCheckedTagItemModel::tagMgr_inserted(CTagItem */*parent*/,
+void CTagItemModel::tagMgr_inserted(CTagItem */*parent*/,
         int /*first*/, int /*last*/)
 {
     endInsertRows();
 }
 
-void CCheckedTagItemModel::tagMgr_aboutToBeRemoved(CTagItem *parent,
+void CTagItemModel::tagMgr_aboutToBeRemoved(CTagItem *parent,
         int first, int last)
 {
     if (parent == GTagMgr()->rootItem())
@@ -180,13 +146,13 @@ void CCheckedTagItemModel::tagMgr_aboutToBeRemoved(CTagItem *parent,
         beginRemoveRows(createIndex(parent->index(), 0, parent), first, last);
 }
 
-void CCheckedTagItemModel::tagMgr_removed(CTagItem */*parent*/,
+void CTagItemModel::tagMgr_removed(CTagItem */*parent*/,
         int /*first*/, int /*last*/)
 {
     endRemoveRows();
 }
 
-void CCheckedTagItemModel::tagMgr_aboutToBeMoved(CTagItem *srcParent,
+void CTagItemModel::tagMgr_aboutToBeMoved(CTagItem *srcParent,
         int srcFirst, int srcLast, CTagItem *dstParent, int dstIndex)
 {
     QModelIndex si = QModelIndex();
@@ -198,14 +164,14 @@ void CCheckedTagItemModel::tagMgr_aboutToBeMoved(CTagItem *srcParent,
     beginMoveRows(si, srcFirst, srcLast, di, dstIndex);
 }
 
-void CCheckedTagItemModel::tagMgr_moved(CTagItem */*srcParent*/,
+void CTagItemModel::tagMgr_moved(CTagItem */*srcParent*/,
         int /*srcFirst*/, int /*srcLast*/,
         CTagItem */*dstParent*/, int /*dstIndex*/)
 {
     endMoveRows();
 }
 
-void CCheckedTagItemModel::tagMgr_dataChanged(CTagItem *item)
+void CTagItemModel::tagMgr_dataChanged(CTagItem *item)
 {
     int index = item->index();
     emit dataChanged(createIndex(index, 0, item),

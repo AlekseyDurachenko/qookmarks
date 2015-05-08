@@ -60,7 +60,6 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cdownloadfaviconrequest.h \
     $$PWD/src/network/cdownloadfaviconreply.h \
     $$PWD/src/manager/ccheckedtagitemmodel.h \
-    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.h \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
     $$PWD/src/network/cdownloadwebpageinforequest.h \
     $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.h \
@@ -116,7 +115,6 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cdownloadfaviconrequest.cpp \
     $$PWD/src/network/cdownloadfaviconreply.cpp \
     $$PWD/src/manager/ccheckedtagitemmodel.cpp \
-    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.cpp \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
     $$PWD/src/network/cdownloadwebpageinforequest.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.cpp \

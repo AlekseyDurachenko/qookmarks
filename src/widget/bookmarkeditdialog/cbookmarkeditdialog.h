@@ -15,9 +15,11 @@
 #ifndef CBOOKMARKEDITDIALOG_H
 #define CBOOKMARKEDITDIALOG_H
 
-#include "cbookmarkitem.h"
 #include <QDialog>
+#include "cbookmarkitem.h"
 #include "singleton.h"
+class CTagSortFilterProxyModel;
+class CCheckedTagItemModel;
 
 
 namespace Ui {
@@ -65,6 +67,8 @@ private:
     void writeSettings();
 private:
     Ui::CBookmarkEditDialog *ui;
+    CCheckedTagItemModel *m_checkedTagItemModel;
+    CTagSortFilterProxyModel *m_tagSortFilterProxyModel;
 
     CBookmark m_data;
 

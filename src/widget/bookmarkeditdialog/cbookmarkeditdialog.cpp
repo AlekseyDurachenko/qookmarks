@@ -33,6 +33,18 @@ CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::CBookmarkEditDialog)
 {
     ui->setupUi(this);
+
+    // configure the checked tag treeview
+    m_checkedTagItemModel = new CCheckedTagItemModel(this);
+    m_tagSortFilterProxyModel = new CTagSortFilterProxyModel(this);
+    m_tagSortFilterProxyModel->setSourceModel(m_checkedTagItemModel);
+    m_tagSortFilterProxyModel->setDynamicSortFilter(true);
+    m_tagSortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    ui->treeView_checkedTags->setModel(m_tagSortFilterProxyModel);
+    ui->treeView_checkedTags->setSortingEnabled(true);
+    ui->treeView_checkedTags->sortByColumn(0, Qt::AscendingOrder);
+    ui->treeView_checkedTags->setHeaderHidden(true);
+
 #if QT_VERSION >= 0x050200
     ui->lineEdit_tagFind->setClearButtonEnabled(true);
 #endif
@@ -121,7 +133,7 @@ void CBookmarkEditDialog::setData(const CBookmark &data)
 
 void CBookmarkEditDialog::setCheckedTags(const QSet<CTagItem *> &checkedTags)
 {
-    ui->treeView_checkedTags->checkedTagItemModel()->setCheckedTags(checkedTags);
+    m_checkedTagItemModel->setCheckedTags(checkedTags);
     ui->treeView_checkedTags->expandAll();
 }
 
@@ -147,7 +159,7 @@ void CBookmarkEditDialog::setAddToDownloadQueue(bool state)
 
 const QSet<CTagItem *> CBookmarkEditDialog::toCheckedTags() const
 {
-    return ui->treeView_checkedTags->checkedTagItemModel()->checkedTags();
+    return m_checkedTagItemModel->checkedTags();
 }
 
 void CBookmarkEditDialog::on_toolButton_favicon_clicked()
@@ -249,8 +261,7 @@ void CBookmarkEditDialog::pageinfoReply_finished()
 void CBookmarkEditDialog::on_lineEdit_url_textChanged(const QString &text)
 {
     QPushButton *button = ui->buttonBox->button(QDialogButtonBox::Ok);
-    if (text.isEmpty()
-            || !QUrl(text).isValid())
+    if (text.isEmpty() || !QUrl(text).isValid())
     {
         button->setEnabled(false);
     }
@@ -287,7 +298,7 @@ void CBookmarkEditDialog::on_toolButton_showExtendedOptions_toggled(bool checked
 
 void CBookmarkEditDialog::on_lineEdit_tagFind_textChanged(const QString &text)
 {
-    ui->treeView_checkedTags->sortFilterProxyModel()->setFilterFixedString(text);
+    m_tagSortFilterProxyModel->setFilterFixedString(text);
     ui->treeView_checkedTags->expandAll();
 }
 
@@ -337,19 +348,19 @@ void CBookmarkEditDialog::on_toolButton_saveToFile_clicked()
         QByteArray content = ui->plainTextEdit_notes->toPlainText().toUtf8();
         if (file.write(content) != content.size())
             throw file.errorString();
-
-        settings.setValue("lastNotesDirectory", QFileInfo(fileName).absolutePath());
     }
     catch (const QString &error)
     {
         QMessageBox::critical(this, tr("Critical"), error);
     }
+
+    settings.setValue("lastNotesDirectory", QFileInfo(fileName).absolutePath());
 }
 
 void CBookmarkEditDialog::on_toolButton_clear_clicked()
 {
     if (QMessageBox::question(this, tr("Question"),
-            tr("you sure you want to clear the text?"),
+            tr("Are you sure you want to clear the text?"),
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
         return;
 
@@ -368,19 +379,18 @@ void CBookmarkEditDialog::readSettings()
 {
     G_SETTINGS_INIT();
     ui->toolButton_textWrap->setChecked(
-                settings.value("CBookmarkEditDialog/toolButton_textWrap",
+                settings.value("CBookmarkEditDialog/toolButton_textWrap/checked",
                                false).toBool());
     ui->toolButton_showExtendedOptions->setChecked(
-                settings.value("CBookmarkEditDialog/toolButton_showExtendedOptions",
+                settings.value("CBookmarkEditDialog/toolButton_showExtendedOptions/checked",
                                false).toBool());
-
 }
 
 void CBookmarkEditDialog::writeSettings()
 {
     G_SETTINGS_INIT();
-    settings.setValue("CBookmarkEditDialog/toolButton_textWrap",
+    settings.setValue("CBookmarkEditDialog/toolButton_textWrap/checked",
                       ui->toolButton_textWrap->isChecked());
-    settings.setValue("CBookmarkEditDialog/toolButton_showExtendedOptions",
+    settings.setValue("CBookmarkEditDialog/toolButton_showExtendedOptions/checked",
                       ui->toolButton_showExtendedOptions->isChecked());
 }

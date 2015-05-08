@@ -12,19 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CCHECKEDTAGSORTFILTERPROXYMODEL_H
-#define CCHECKEDTAGSORTFILTERPROXYMODEL_H
+#ifndef CTAGSORTFILTERPROXYMODEL_H
+#define CTAGSORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 
-class CCheckedTagSortFilterProxyModel : public QSortFilterProxyModel
+class CTagSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
-    explicit CCheckedTagSortFilterProxyModel(QObject *parent = 0);
+    explicit CTagSortFilterProxyModel(QObject *parent = 0);
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 };
 
 
-#endif // CCHECKEDTAGSORTFILTERPROXYMODEL_H
+#endif // CTAGSORTFILTERPROXYMODEL_H

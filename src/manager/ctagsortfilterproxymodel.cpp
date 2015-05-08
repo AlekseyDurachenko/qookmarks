@@ -12,18 +12,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ccheckedtagsortfilterproxymodel.h"
+#include "ctagsortfilterproxymodel.h"
 #include <QDebug>
 
 
-CCheckedTagSortFilterProxyModel::CCheckedTagSortFilterProxyModel(
+CTagSortFilterProxyModel::CTagSortFilterProxyModel(
         QObject *parent) :QSortFilterProxyModel(parent)
 {
 }
 
 // this solution was taken from:
 // http://stackoverflow.com/questions/250890/using-qsortfilterproxymodel-with-a-tree-model
-bool CCheckedTagSortFilterProxyModel::filterAcceptsRow(int source_row,
+bool CTagSortFilterProxyModel::filterAcceptsRow(int source_row,
         const QModelIndex &source_parent) const
 {
     if(filterRegExp().isEmpty() == false)
@@ -34,10 +34,10 @@ bool CCheckedTagSortFilterProxyModel::filterAcceptsRow(int source_row,
             int nb = sourceModel()->rowCount(source_index) ;
             for(int i = 0; i < nb; ++i)
                 if(filterAcceptsRow(i, source_index))
-                    return true ;
+                    return true;
 
             QString key = sourceModel()->data(source_index, filterRole()).toString();
-            return key.contains(filterRegExp()) ;
+            return key.contains(filterRegExp());
         }
     }
 

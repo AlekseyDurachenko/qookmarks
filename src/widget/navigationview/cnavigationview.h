@@ -34,6 +34,7 @@ protected:
     virtual void bookmarksMarkFavorite(const QList<QUrl> &bookmarks);
     virtual void bookmarksMarkReadLater(const QList<QUrl> &bookmarks);
     virtual void bookmarksMarkTrash(const QList<QUrl> &bookmarks);
+    virtual void bookmarksClearTags(const QList<QUrl> &bookmarks);
 };
 
 

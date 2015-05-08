@@ -20,7 +20,7 @@
 #include <QSettings>
 #include <QTimer>
 #include "ccheckedtagitemmodel.h"
-#include "ccheckedtagsortfilterproxymodel.h"
+#include "ctagsortfilterproxymodel.h"
 #include "cdownloadfaviconreply.h"
 #include "ccheckurlreply.h"
 #include "cdownloadwebpageinforeply.h"

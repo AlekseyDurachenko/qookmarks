@@ -24,5 +24,13 @@
         <file>icons/bookmark-star-none.png</file>
         <file>icons/bookmark-star.png</file>
         <file>icons/bookmark-star-half.png</file>
+        <file>icons/action-download.png</file>
+        <file>icons/anchor-all.png</file>
+        <file>icons/anchor-favorite.png</file>
+        <file>icons/anchor-rated.png</file>
+        <file>icons/anchor-readitlater.png</file>
+        <file>icons/anchor-trash.png</file>
+        <file>icons/anchor-untagged.png</file>
+        <file>icons/tag-icon-default.png</file>
     </qresource>
 </RCC>

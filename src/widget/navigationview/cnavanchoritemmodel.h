@@ -17,7 +17,6 @@
 
 #include <QAbstractItemModel>
 #include <QVector>
-class CBookmarkItem;
 class INavigationActions;
 
 
@@ -30,8 +29,8 @@ private:
         All             = 0x00,
         Untagged        = 0x01,
         Favorites       = 0x02,
-        Rated           = 0x03,
-        ReadLater       = 0x04,
+        ReadItLater     = 0x03,
+        Rated           = 0x04,
         Trash           = 0x05
     };
 public:
@@ -39,7 +38,7 @@ public:
     explicit CNavAnchorItemModel(QObject *parent = 0);
 
     inline INavigationActions *navigationActions() const;
-    void setNavigationActions(INavigationActions *navigationActions);
+    void setNavigationActions(INavigationActions *interface);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -54,11 +53,7 @@ public:
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 private slots:
-    void bookmarkMgr_inserted();
-    void bookmarkMgr_removed();
-    void bookmarkMgr_tagsChanged();
-    void bookmarkMgr_dataChanged();
-
+    void updateAnchorItems();
     void navigationActions_destroyed();
 private:
     void initAnchorItems();

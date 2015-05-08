@@ -14,16 +14,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnavanchoritemmodel.h"
 #include <QMimeData>
-#include <QStringList>
-#include <QIcon>
-#include <typeinfo>
-#include "cmanager.h"
-#include "ctagmgr.h"
 #include "ctagitem.h"
-#include "cbookmarkmgr.h"
 #include "cbookmarkitem.h"
 #include "inavigationactions.h"
-#include "cprj.h"
 #include "singleton.h"
 
 
@@ -31,34 +24,34 @@ CNavAnchorItemModel::CNavAnchorItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_navigationActions = 0;
-    initAnchorItems();
 
     connect(GBookmarkMgr(), SIGNAL(inserted(int,int)),
-            this, SLOT(bookmarkMgr_inserted()));
+            this, SLOT(updateAnchorItems()));
     connect(GBookmarkMgr(), SIGNAL(removed(int,int)),
-            this, SLOT(bookmarkMgr_removed()));
+            this, SLOT(updateAnchorItems()));
     connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
-            this, SLOT(bookmarkMgr_dataChanged()));
+            this, SLOT(updateAnchorItems()));
     connect(GBookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
-            this, SLOT(bookmarkMgr_tagsChanged()));
+            this, SLOT(updateAnchorItems()));
+
+    initAnchorItems();
 
     beginResetModel();
     endResetModel();
 }
 
-void CNavAnchorItemModel::setNavigationActions(
-        INavigationActions *navigationActionInterface)
+void CNavAnchorItemModel::setNavigationActions(INavigationActions *interface)
 {
     QObject *obj = dynamic_cast<QObject *>(m_navigationActions);
     if (obj)
         disconnect(obj, 0, this, 0);
 
-    obj = dynamic_cast<QObject *>(navigationActionInterface);
+    obj = dynamic_cast<QObject *>(interface);
     if (obj)
         connect(obj, SIGNAL(destroyed()),
                 this, SLOT(navigationActions_destroyed()));
 
-    m_navigationActions = navigationActionInterface;
+    m_navigationActions = interface;
 }
 
 QVariant CNavAnchorItemModel::data(const QModelIndex &index, int role) const
@@ -122,10 +115,12 @@ bool CNavAnchorItemModel::dropMimeData(const QMimeData *data,
         AnchorType type = m_anchorItems.at(parent.row());
         switch (type)
         {
+        case Untagged:
+            m_navigationActions->bookmarksClearTags(bookmarkList);
         case Favorites:
             m_navigationActions->bookmarksMarkFavorite(bookmarkList);
             break;
-        case ReadLater:
+        case ReadItLater:
             m_navigationActions->bookmarksMarkReadLater(bookmarkList);
             break;
         case Trash:
@@ -177,25 +172,7 @@ int CNavAnchorItemModel::columnCount(const QModelIndex &/*parent*/) const
     return 1;
 }
 
-void CNavAnchorItemModel::bookmarkMgr_dataChanged()
-{
-    emit dataChanged(createIndex(0, 0),
-                     createIndex(m_anchorItems.count()-1, 0));
-}
-
-void CNavAnchorItemModel::bookmarkMgr_inserted()
-{
-    emit dataChanged(createIndex(0, 0),
-                     createIndex(m_anchorItems.count()-1, 0));
-}
-
-void CNavAnchorItemModel::bookmarkMgr_removed()
-{
-    emit dataChanged(createIndex(0, 0),
-                     createIndex(m_anchorItems.count()-1, 0));
-}
-
-void CNavAnchorItemModel::bookmarkMgr_tagsChanged()
+void CNavAnchorItemModel::updateAnchorItems()
 {
     emit dataChanged(createIndex(0, 0),
                      createIndex(m_anchorItems.count()-1, 0));
@@ -210,10 +187,10 @@ void CNavAnchorItemModel::initAnchorItems()
 {
     m_anchorItems
             << All
-            << Favorites
-            << Rated
-            << ReadLater
             << Untagged
+            << Favorites
+            << ReadItLater
+            << Rated
             << Trash;
 }
 
@@ -222,15 +199,15 @@ QString CNavAnchorItemModel::anchorName(CNavAnchorItemModel::AnchorType type) co
     switch (type)
     {
     case All:
-        return tr("Bookmarks (%1)").arg(GBookmarkMgr()->count());
-    case Favorites:
-        return tr("Favorites (%1)").arg(GBookmarkMgr()->favoriteCount());
-    case Rated:
-        return tr("Rated Bookmarks (%1)").arg(GBookmarkMgr()->ratedCount());
-    case ReadLater:
-        return tr("Read it Later (%1)").arg(GBookmarkMgr()->readItLaterCount());
+        return tr("All (%1)").arg(GBookmarkMgr()->count());
     case Untagged:
         return tr("Untagged (%1)").arg(GBookmarkMgr()->untaggedCount());
+    case Favorites:
+        return tr("Favorites (%1)").arg(GBookmarkMgr()->favoriteCount());
+    case ReadItLater:
+        return tr("Read it Later (%1)").arg(GBookmarkMgr()->readItLaterCount());
+    case Rated:
+        return tr("Rated (%1)").arg(GBookmarkMgr()->ratedCount());
     case Trash:
         return tr("Trash (%1)").arg(GBookmarkMgr()->trashCount());
     }
@@ -243,17 +220,17 @@ QIcon CNavAnchorItemModel::anchorIcon(CNavAnchorItemModel::AnchorType type) cons
     switch (type)
     {
     case All:
-        return QIcon(":/icons/bookmark-bookmarks.png");
-    case Favorites:
-        return QIcon(":/icons/bookmark-favorites.png");
-    case Rated:
-        return QIcon(":/icons/bookmark-rated.png");
-    case ReadLater:
-        return QIcon(":/icons/bookmark-readlater.png");
+        return QIcon(":/icons/anchor-all.png");
     case Untagged:
-        return QIcon(":/icons/bookmark-untagged.png");
+        return QIcon(":/icons/anchor-untagged.png");
+    case Favorites:
+        return QIcon(":/icons/anchor-favorite.png");
+    case ReadItLater:
+        return QIcon(":/icons/anchor-readitlater.png");
+    case Rated:
+        return QIcon(":/icons/anchor-rated.png");
     case Trash:
-        return QIcon(":/icons/bookmark-trash.png");
+        return QIcon(":/icons/anchor-trash.png");
     }
 
     return QIcon();

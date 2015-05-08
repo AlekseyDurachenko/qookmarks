@@ -62,7 +62,7 @@ void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(tag);
-    if (!parentItem)
+    if (!parentItem || parentItem == GTagMgr()->rootItem())
         return;
 
     QMessageBox msgBox(QMessageBox::Question, tr("Action"), tr("What do you want?"));
@@ -129,4 +129,9 @@ void CNavigationView::bookmarksMarkTrash(const QList<QUrl> &bookmarks)
             item->setData(data);
         }
     }
+}
+
+void CNavigationView::bookmarksClearTags(const QList<QUrl> &bookmarks)
+{
+
 }

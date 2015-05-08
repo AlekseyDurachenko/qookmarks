@@ -30,6 +30,7 @@ public:
     virtual void bookmarksMarkFavorite(const QList<QUrl> &bookmarks) = 0;
     virtual void bookmarksMarkReadLater(const QList<QUrl> &bookmarks) = 0;
     virtual void bookmarksMarkTrash(const QList<QUrl> &bookmarks) = 0;
+    virtual void bookmarksClearTags(const QList<QUrl> &bookmarks) = 0;
 };
 
 

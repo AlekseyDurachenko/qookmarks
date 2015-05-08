@@ -15,13 +15,13 @@
 #include "ccheckedtagview.h"
 #include <QSortFilterProxyModel>
 #include "ccheckedtagitemmodel.h"
-#include "ccheckedtagsortfilterproxymodel.h"
+#include "ctagsortfilterproxymodel.h"
 
 
 CCheckedTagView::CCheckedTagView(QWidget *parent) : QTreeView(parent)
 {
     m_itemModel = new CCheckedTagItemModel(this);
-    m_sortFilterProxyModel = new CCheckedTagSortFilterProxyModel(this);
+    m_sortFilterProxyModel = new CTagSortFilterProxyModel(this);
     m_sortFilterProxyModel->setSourceModel(m_itemModel);
     m_sortFilterProxyModel->setDynamicSortFilter(true);
     m_sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);

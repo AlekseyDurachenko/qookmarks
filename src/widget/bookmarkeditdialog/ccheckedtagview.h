@@ -17,7 +17,7 @@
 
 #include <QTreeView>
 class CCheckedTagItemModel;
-class CCheckedTagSortFilterProxyModel;
+class CTagSortFilterProxyModel;
 
 
 class CCheckedTagView : public QTreeView
@@ -27,10 +27,10 @@ public:
     virtual ~CCheckedTagView();
 
     inline CCheckedTagItemModel *checkedTagItemModel() const;
-    inline CCheckedTagSortFilterProxyModel *sortFilterProxyModel() const;
+    inline CTagSortFilterProxyModel *sortFilterProxyModel() const;
 private:
     CCheckedTagItemModel *m_itemModel;
-    CCheckedTagSortFilterProxyModel *m_sortFilterProxyModel;
+    CTagSortFilterProxyModel *m_sortFilterProxyModel;
 };
 
 CCheckedTagItemModel *CCheckedTagView::checkedTagItemModel() const
@@ -38,7 +38,7 @@ CCheckedTagItemModel *CCheckedTagView::checkedTagItemModel() const
     return m_itemModel;
 }
 
-CCheckedTagSortFilterProxyModel *CCheckedTagView::sortFilterProxyModel() const
+CTagSortFilterProxyModel *CCheckedTagView::sortFilterProxyModel() const
 {
     return m_sortFilterProxyModel;
 }

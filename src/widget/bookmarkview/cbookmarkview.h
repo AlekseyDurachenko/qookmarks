@@ -27,7 +27,9 @@ class CBookmarkView : public QTreeView
 public:
     CBookmarkView(QWidget *parent = 0);
 
+    inline CBookmarkItemModel *bookmarkModel() const;
     void setBookmarkModel(CBookmarkItemModel *model);
+
     QList<CBookmarkItem *> selectedBookmarks() const;
 protected:
     virtual void setModel(QAbstractItemModel *model);
@@ -35,6 +37,11 @@ private:
     CBookmarkItemModel *m_bookmarkItemModel;
     QSortFilterProxyModel *m_sortFilterProxyModel;
 };
+
+CBookmarkItemModel *CBookmarkView::bookmarkModel() const
+{
+    return m_bookmarkItemModel;
+}
 
 
 #endif // CBOOKMARKVIEW_H

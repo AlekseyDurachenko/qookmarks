@@ -32,6 +32,9 @@ CTagMgr::~CTagMgr()
 
 CTagItem *CTagMgr::findByPath(const QStringList &path) const
 {
+    if (path.isEmpty())
+        return m_rootItem;
+
     CTagItem *item = rootItem();
     for (int index = 0; index < path.count() && item; ++index)
         item = item->find(path.at(index));

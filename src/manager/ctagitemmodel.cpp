@@ -31,7 +31,7 @@ CTagItemModel::CTagItemModel(QObject *parent) :
             this, SLOT(tagMgr_aboutToBeMoved(CTagItem*,int,int,CTagItem*,int)));
     connect(GTagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
             this, SLOT(tagMgr_moved(CTagItem*,int,int,CTagItem*,int)));
-    connect(GTagMgr(), SIGNAL(dataChanged(CTagItem*,CTag,CTag)),
+    connect(GTagMgr(), SIGNAL(dataChanged(CTagItem*)),
             this, SLOT(tagMgr_dataChanged(CTagItem*)));
 }
 
@@ -47,7 +47,7 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DecorationRole)
         if (index.column() == 0)
-            return QIcon(":/icons/bookmark-tag.png");
+            return QIcon(":/icons/tag-icon-default.png");
 
     if (role == Qt::UserRole)
         return CTagItem::variantFromPtr(item);

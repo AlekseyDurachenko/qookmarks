@@ -63,14 +63,15 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.h \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
     $$PWD/src/network/cdownloadwebpageinforequest.h \
-    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.h \
     $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.h \
     $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.h \
     $$PWD/src/widget/bookmarkview/cbookmarkheaderview.h \
     $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.h \
     $$PWD/src/manager/cabstractbookmarkdatamodel.h \
     $$PWD/src/manager/ctagitemmodel.h \
-    $$PWD/src/widget/navigationview/cnavanchoritemmodel.h
+    $$PWD/src/widget/navigationview/cnavanchoritemmodel.h \
+    $$PWD/src/manager/ctagsortfilterproxymodel.h \
+    $$PWD/src/widget/navigationview/cnavtagitemmodel.h
 
 
 SOURCES        +=                                                       \
@@ -118,14 +119,15 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkeditdialog/ccheckedtagview.cpp \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
     $$PWD/src/network/cdownloadwebpageinforequest.cpp \
-    $$PWD/src/widget/bookmarkeditdialog/ccheckedtagsortfilterproxymodel.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkheaderview.cpp \
     $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.cpp \
     $$PWD/src/manager/cabstractbookmarkdatamodel.cpp \
     $$PWD/src/manager/ctagitemmodel.cpp \
-    $$PWD/src/widget/navigationview/cnavanchoritemmodel.cpp
+    $$PWD/src/widget/navigationview/cnavanchoritemmodel.cpp \
+    $$PWD/src/manager/ctagsortfilterproxymodel.cpp \
+    $$PWD/src/widget/navigationview/cnavtagitemmodel.cpp
 
 
 FORMS          +=                                                       \

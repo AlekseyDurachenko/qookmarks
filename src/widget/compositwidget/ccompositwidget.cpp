@@ -23,6 +23,7 @@
 #include "cnavigationview.h"
 #include "cbookmarkview.h"
 #include "cnavigationitemmodel.h"
+#include "cnavtagitemmodel.h"
 #include "cbookmarkfilter.h"
 #include "cbookmarkitemmodel.h"
 #include "cbookmarkfilterdatamodel.h"
@@ -48,6 +49,8 @@
 #include <QSettings>
 #include <QSortFilterProxyModel>
 #include <QActionGroup>
+#include "cnavanchoritemmodel.h"
+#include "ctagitemmodel.h"
 
 
 static QString md5(const QString &str)
@@ -131,8 +134,44 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
             this, SLOT(actionTagRemove_triggered()));
 
 
+    QSplitter *s = new QSplitter(Qt::Vertical, this);
+
+    CNavAnchorItemModel *anchorModel = new CNavAnchorItemModel(this);
+    anchorModel->setNavigationActions(m_navigationView);
+    QTreeView *anchorView = new QTreeView(this);
+    anchorView->setHeaderHidden(true);
+    anchorView->setModel(anchorModel);
+    anchorView->setRootIsDecorated(true);
+    anchorView->setSelectionMode(QAbstractItemView::SingleSelection);
+    anchorView->setDragDropMode(QAbstractItemView::DropOnly);
+    anchorView->setContextMenuPolicy(Qt::CustomContextMenu);
+    anchorView->viewport()->setAcceptDrops(true);
+    anchorView->setDropIndicatorShown(true);
+
+    CNavTagItemModel *tagItemModel = new CNavTagItemModel(this);
+    tagItemModel->setNavigationActions(m_navigationView);
+    QTreeView *x = new QTreeView(this);
+    x->setModel(tagItemModel);
+    x->setHeaderHidden(true);
+    x->setRootIsDecorated(true);
+    x->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    x->setDragDropMode(QAbstractItemView::DragDrop);
+    x->setContextMenuPolicy(Qt::CustomContextMenu);
+    x->viewport()->setAcceptDrops(true);
+    x->setDropIndicatorShown(true);
+
+    s->addWidget(anchorView);
+    //s->addWidget(m_navigationView);
+    s->addWidget(x);
+
+    m_navigationView->setRootIsDecorated(false);
+    m_navigationView->setHeaderHidden(true);
+    m_navigationView->hide();
+
     QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
-    splitter->addWidget(m_navigationView);
+    //splitter->addWidget(anchorView);
+    //splitter->addWidget(m_navigationView);
+    splitter->addWidget(s);
     splitter->addWidget(m_bookmarkView);
 
     QHBoxLayout *hbox = new QHBoxLayout;

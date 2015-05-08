@@ -133,5 +133,14 @@ void CNavigationView::bookmarksMarkTrash(const QList<QUrl> &bookmarks)
 
 void CNavigationView::bookmarksClearTags(const QList<QUrl> &bookmarks)
 {
-
+    if (QMessageBox::question(this, tr("Clear tags"), tr("Are you shure?"),
+            QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)
+    {
+        foreach (const QUrl &url, bookmarks)
+        {
+            CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+            foreach (CTagItem *tagItem, bookmarkItem->tags())
+                tagItem->bookmarkRemove(bookmarkItem);
+        }
+    }
 }

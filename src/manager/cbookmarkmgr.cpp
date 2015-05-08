@@ -134,19 +134,19 @@ void CBookmarkMgr::callbackTagsChanged(CBookmarkItem *item)
 
 void CBookmarkMgr::counterAboutToBeTagsChanged(CBookmarkItem *item)
 {
-    if (item->tags().count())
+    if (item->tags().isEmpty())
         m_counterUntagged -= 1;
 
-    if (item->data().isTrash() && item->tags().count())
+    if (item->data().isTrash() && item->tags().isEmpty())
         m_counterTrashUntagged -= 1;
 }
 
 void CBookmarkMgr::counterTagsChanged(CBookmarkItem *item)
 {
-    if (item->tags().count())
+    if (item->tags().isEmpty())
         m_counterUntagged += 1;
 
-    if (item->data().isTrash() && item->tags().count())
+    if (item->data().isTrash() && item->tags().isEmpty())
         m_counterTrashUntagged += 1;
 }
 

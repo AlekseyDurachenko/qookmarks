@@ -54,20 +54,20 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
 
     // favorite
     CBookmarkBooleanIconDelegate *favoriteItemDelegate = new CBookmarkBooleanIconDelegate(this);
-    favoriteItemDelegate->setIconOn(QIcon(":/icons/bookmark-favorites.png"));
-    favoriteItemDelegate->setIconOff(QIcon(":/icons/bookmark-noflag.png"));
+    favoriteItemDelegate->setIconOn(QIcon(":/icons/anchor-favorite.png"));
+    favoriteItemDelegate->setIconOff(QIcon(":/icons/anchor-non-favorite.png"));
     setItemDelegateForColumn(5, favoriteItemDelegate);
 
     // read it later
     CBookmarkBooleanIconDelegate *readItLaterItemDelegate = new CBookmarkBooleanIconDelegate(this);
-    readItLaterItemDelegate->setIconOn(QIcon(":/icons/bookmark-readlater.png"));
-    readItLaterItemDelegate->setIconOff(QIcon(":/icons/bookmark-noflag.png"));
+    readItLaterItemDelegate->setIconOn(QIcon(":/icons/anchor-readitlater.png"));
+    readItLaterItemDelegate->setIconOff(QIcon(":/icons/anchor-non-readitlater.png"));
     setItemDelegateForColumn(6, readItLaterItemDelegate);
 
     // trash
     CBookmarkBooleanIconDelegate *trashItemDelegate = new CBookmarkBooleanIconDelegate(this);
-    trashItemDelegate->setIconOn(QIcon(":/icons/bookmark-trash.png"));
-    trashItemDelegate->setIconOff(QIcon(":/icons/bookmark-noflag.png"));
+    trashItemDelegate->setIconOn(QIcon(":/icons/anchor-trash.png"));
+    trashItemDelegate->setIconOff(QIcon(":/icons/anchor-non-trash.png"));
     setItemDelegateForColumn(7, trashItemDelegate);
 }
 

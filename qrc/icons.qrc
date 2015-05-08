@@ -32,5 +32,8 @@
         <file>icons/anchor-trash.png</file>
         <file>icons/anchor-untagged.png</file>
         <file>icons/tag-icon-default.png</file>
+        <file>icons/anchor-non-favorite.png</file>
+        <file>icons/anchor-non-readitlater.png</file>
+        <file>icons/anchor-non-trash.png</file>
     </qresource>
 </RCC>

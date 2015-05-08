@@ -34,7 +34,7 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
     // first bookmark item model is not setted
     m_bookmarkItemModel = 0;
 
-    // for sort and quick filter
+    // for quick sort and filter
     m_sortFilterProxyModel = new QSortFilterProxyModel(this);
     m_sortFilterProxyModel->setDynamicSortFilter(true);
     m_sortFilterProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
@@ -42,6 +42,7 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
 
     // header view
     setHeader(new CBookmarkHeaderView(Qt::Horizontal, this));
+    // some hack for width (default width is too wide for icon)
     header()->setMinimumSectionSize(10);
 #if QT_VERSION >= 0x050000
     header()->setSectionsMovable(true);

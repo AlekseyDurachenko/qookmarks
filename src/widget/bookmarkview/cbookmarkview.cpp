@@ -29,7 +29,6 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
     setRootIsDecorated(false);
     setAlternatingRowColors(true);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
-    setDragDropMode(QAbstractItemView::DragOnly);
 
     // first bookmark item model is not setted
     m_bookmarkItemModel = 0;

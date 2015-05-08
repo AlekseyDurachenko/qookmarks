@@ -18,6 +18,8 @@
 #include <QWidget>
 #include <QNetworkAccessManager>
 #include <QModelIndex>
+#include <QSplitter>
+#include "inavigationactions.h"
 class QSortFilterProxyModel;
 class CNavigationItemModel;
 class CNavigationView;
@@ -26,10 +28,14 @@ class CBookmarkItemModel;
 class CBookmarkFilterDataModel;
 class CBookmarkFilter;
 class CPrj;
+class QTreeView;
 class CBookmarkItem;
+class CNavAnchorItemModel;
+class CNavTagItemModel;
+class CTagSortFilterProxyModel;
 
 
-class CCompositWidget : public QWidget
+class CCompositWidget : public QWidget, INavigationActions
 {
     Q_OBJECT
 public:
@@ -38,54 +44,38 @@ public:
 
     inline CBookmarkView *bookmarkView() const;
 
-    inline QAction *actionBookmarkAdd() const;
-    inline QAction *actionBookmarkEdit() const;
-    inline QAction *actionBookmarkRemove() const;
 private slots:
-    void navigation_selection_selectionChanged();
-
-    void actionTagAdd_triggered();
-    void actionTagEdit_triggered();
-    void actionTagRemove_triggered();
-
-    void actionBookmarkAdd_triggered();
-    void actionBookmarkEdit_triggered();
-    void actionBookmarkRemove_triggered();
-    void actionBookmarkScreenshot_triggered();
-    void actionBookmarkDownload_triggered();
-    void bookmarkView_showContextMenu(const QPoint &pos);
-    void bookmarkView_doubleClicked(const QModelIndex &index);
-    void navigationView_showContextMenu(const QPoint &pos);
-    void updateActions();
-
-    void download_next();
-    void download_finishied();
-
-    void screenshot_next();
-    void screenshot_finished();
-
-    void download_openUrl();
+    void navAnchorView_selectionModel_selectionChanged();
+    void navTagView_selectionModel_selectionChanged();
+protected:
+    virtual void tagsCopyOrMove(const QList<QStringList> &tags,
+                                const QStringList &parentTag);
+    virtual void bookmarksAssignTag(const QList<QUrl> &bookmarks,
+                                    const QStringList& tag);
+    virtual void bookmarksMarkFavorite(const QList<QUrl> &bookmarks);
+    virtual void bookmarksMarkReadLater(const QList<QUrl> &bookmarks);
+    virtual void bookmarksMarkTrash(const QList<QUrl> &bookmarks);
+    virtual void bookmarksClearTags(const QList<QUrl> &bookmarks);
 private:
-    CNavigationView *m_navigationView;
+    void updateBookmarkFilter();
+private:
     CBookmarkView *m_bookmarkView;
-    CBookmarkFilter *m_filter;
-    CBookmarkFilterDataModel *m_dataModel;
+    CBookmarkFilter *m_bookmarkFilter;
+    CBookmarkFilterDataModel *m_bookmarkFilterDataModel;
     CBookmarkItemModel *m_bookmarkItemModel;
-    CNavigationItemModel *m_navigationItemModel;
 
-    QNetworkAccessManager *m_network;
-    QAction *m_actionBookmarkAdd;
-    QAction *m_actionBookmarkEdit;
-    QAction *m_actionBookmarkRemove;
-    QAction *m_actionBookmarkScreenshot;
-    QAction *m_actionBookmarkDownload;
+    QTreeView *m_navAnchorView;
+    CNavAnchorItemModel *m_navAnchorItemModel;
 
-    QAction *m_actionTagAdd;
-    QAction *m_actionTagEdit;
-    QAction *m_actionTagRemove;
+    QTreeView *m_navTagView;
+    CNavTagItemModel *m_navTagItemModel;
+    CTagSortFilterProxyModel *m_navTagSortFilterProxyModel;
 
-    QList<CBookmarkItem *> m_list;
-    QList<CBookmarkItem *> m_listDl;
+    QSplitter *m_navSplitter;
+    QSplitter *m_splitter;
+
+    bool m_isClearingNavAnchor;
+    bool m_isClearingNavTag;
 };
 
 CBookmarkView *CCompositWidget::bookmarkView() const
@@ -93,20 +83,84 @@ CBookmarkView *CCompositWidget::bookmarkView() const
     return m_bookmarkView;
 }
 
-QAction *CCompositWidget::actionBookmarkAdd() const
-{
-    return m_actionBookmarkAdd;
-}
+//class CCompositWidget : public QWidget
+//{
+//    Q_OBJECT
+//public:
+//    explicit CCompositWidget(QWidget *parent = 0);
+//    virtual ~CCompositWidget();
 
-QAction *CCompositWidget::actionBookmarkEdit() const
-{
-    return m_actionBookmarkEdit;
-}
+//    inline CBookmarkView *bookmarkView() const;
 
-QAction *CCompositWidget::actionBookmarkRemove() const
-{
-    return m_actionBookmarkRemove;
-}
+//    inline QAction *actionBookmarkAdd() const;
+//    inline QAction *actionBookmarkEdit() const;
+//    inline QAction *actionBookmarkRemove() const;
+//private slots:
+//    void navigation_selection_selectionChanged();
+
+//    void actionTagAdd_triggered();
+//    void actionTagEdit_triggered();
+//    void actionTagRemove_triggered();
+
+//    void actionBookmarkAdd_triggered();
+//    void actionBookmarkEdit_triggered();
+//    void actionBookmarkRemove_triggered();
+//    void actionBookmarkScreenshot_triggered();
+//    void actionBookmarkDownload_triggered();
+//    void bookmarkView_showContextMenu(const QPoint &pos);
+//    void bookmarkView_doubleClicked(const QModelIndex &index);
+//    void navigationView_showContextMenu(const QPoint &pos);
+//    void updateActions();
+
+//    void download_next();
+//    void download_finishied();
+
+//    void screenshot_next();
+//    void screenshot_finished();
+
+//    void download_openUrl();
+//private:
+//    CNavigationView *m_navigationView;
+//    CBookmarkView *m_bookmarkView;
+//    CBookmarkFilter *m_filter;
+//    CBookmarkFilterDataModel *m_dataModel;
+//    CBookmarkItemModel *m_bookmarkItemModel;
+//    CNavigationItemModel *m_navigationItemModel;
+
+//    QNetworkAccessManager *m_network;
+//    QAction *m_actionBookmarkAdd;
+//    QAction *m_actionBookmarkEdit;
+//    QAction *m_actionBookmarkRemove;
+//    QAction *m_actionBookmarkScreenshot;
+//    QAction *m_actionBookmarkDownload;
+
+//    QAction *m_actionTagAdd;
+//    QAction *m_actionTagEdit;
+//    QAction *m_actionTagRemove;
+
+//    QList<CBookmarkItem *> m_list;
+//    QList<CBookmarkItem *> m_listDl;
+//};
+
+//CBookmarkView *CCompositWidget::bookmarkView() const
+//{
+//    return m_bookmarkView;
+//}
+
+//QAction *CCompositWidget::actionBookmarkAdd() const
+//{
+//    return m_actionBookmarkAdd;
+//}
+
+//QAction *CCompositWidget::actionBookmarkEdit() const
+//{
+//    return m_actionBookmarkEdit;
+//}
+
+//QAction *CCompositWidget::actionBookmarkRemove() const
+//{
+//    return m_actionBookmarkRemove;
+//}
 
 
 #endif // CCOMPOSITWIDGET_H

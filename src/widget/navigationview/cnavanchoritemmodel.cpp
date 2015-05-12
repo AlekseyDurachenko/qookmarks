@@ -199,15 +199,15 @@ QString CNavAnchorItemModel::anchorName(CNavAnchorItemModel::AnchorType type) co
     switch (type)
     {
     case All:
-        return tr("All (%1)").arg(GBookmarkMgr()->count());
+        return tr("All (%1)").arg(GBookmarkMgr()->notTrashCount());
     case Untagged:
-        return tr("Untagged (%1)").arg(GBookmarkMgr()->untaggedCount());
+        return tr("Untagged (%1)").arg(GBookmarkMgr()->notTrashUntaggedCount());
     case Favorites:
-        return tr("Favorites (%1)").arg(GBookmarkMgr()->favoriteCount());
+        return tr("Favorites (%1)").arg(GBookmarkMgr()->notTrashFavoriteCount());
     case ReadItLater:
-        return tr("Read it Later (%1)").arg(GBookmarkMgr()->readItLaterCount());
+        return tr("Read it Later (%1)").arg(GBookmarkMgr()->notTrashReadItLaterCount());
     case Rated:
-        return tr("Rated (%1)").arg(GBookmarkMgr()->ratedCount());
+        return tr("Rated (%1)").arg(GBookmarkMgr()->notTrashRatedCount());
     case Trash:
         return tr("Trash (%1)").arg(GBookmarkMgr()->trashCount());
     }

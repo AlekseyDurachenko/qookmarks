@@ -58,6 +58,8 @@ protected:
     virtual void bookmarksClearTags(const QList<QUrl> &bookmarks);
 private:
     void updateBookmarkFilter();
+    void updateBookmarkAnchorFilter();
+    void updateBookmarkTagFilter();
 private:
     CBookmarkView *m_bookmarkView;
     CBookmarkFilter *m_bookmarkFilter;

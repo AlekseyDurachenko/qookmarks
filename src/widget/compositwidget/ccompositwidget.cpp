@@ -145,6 +145,8 @@ void CCompositWidget::navAnchorView_selectionModel_selectionChanged()
     m_isClearingNavAnchor = true;
     m_navTagView->clearSelection();
     m_isClearingNavAnchor = false;
+
+    updateBookmarkFilter();
 }
 
 void CCompositWidget::navTagView_selectionModel_selectionChanged()
@@ -155,6 +157,8 @@ void CCompositWidget::navTagView_selectionModel_selectionChanged()
     m_isClearingNavTag = true;
     m_navAnchorView->clearSelection();
     m_isClearingNavTag = false;
+
+    updateBookmarkFilter();
 }
 
 void CCompositWidget::tagsCopyOrMove(const QList<QStringList> &tags,
@@ -185,9 +189,61 @@ void CCompositWidget::bookmarksClearTags(const QList<QUrl> &bookmarks)
 
 void CCompositWidget::updateBookmarkFilter()
 {
-    // TODO: update the bookmark filter
+    if (!m_navAnchorView->selectionModel()->selectedRows().isEmpty())
+        updateBookmarkAnchorFilter();
+    else if (!m_navTagView->selectionModel()->selectedRows().isEmpty())
+        updateBookmarkTagFilter();
 }
 
+void CCompositWidget::updateBookmarkAnchorFilter()
+{
+    // default filter options (equal to CNavAnchorItemModel::All)
+    m_bookmarkFilter->setInclusiveOption(~Bookmark::FilterOptions(Bookmark::Trash));
+    m_bookmarkFilter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
+    m_bookmarkFilter->clearTags();
+
+    switch (m_navAnchorView->currentIndex().data(Qt::UserRole).toInt())
+    {
+    case CNavAnchorItemModel::All:
+        break;
+    case CNavAnchorItemModel::Untagged:
+        m_bookmarkFilter->setTag(GTagMgr()->rootItem());
+        break;
+    case CNavAnchorItemModel::Favorites:
+        m_bookmarkFilter->setInclusiveOption(
+                    Bookmark::FilterOptions(
+                        Bookmark::Favorite|Bookmark::NotTrash));
+        break;
+    case CNavAnchorItemModel::ReadItLater:
+        m_bookmarkFilter->setInclusiveOption(
+                    Bookmark::FilterOptions(
+                        Bookmark::ReadItLater|Bookmark::NotTrash));
+        break;
+    case CNavAnchorItemModel::Rated:
+        m_bookmarkFilter->setRatingRange(
+                    Bookmark::MinRating+1, Bookmark::MaxRating);
+        break;
+    case CNavAnchorItemModel::Trash:
+        m_bookmarkFilter->setInclusiveOption(
+                    Bookmark::FilterOptions(Bookmark::Trash));
+        break;
+    }
+
+    m_bookmarkFilter->update();
+}
+
+void CCompositWidget::updateBookmarkTagFilter()
+{
+    QSet<CTagItem *> selectedTags;
+    foreach (const QModelIndex &index,
+             m_navTagView->selectionModel()->selectedRows())
+        selectedTags.insert(CTagItem::variantToPtr(index.data(Qt::UserRole)));
+
+    m_bookmarkFilter->setInclusiveOption(~Bookmark::FilterOptions(Bookmark::Trash));
+    m_bookmarkFilter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
+    m_bookmarkFilter->setTags(selectedTags);
+    m_bookmarkFilter->update();
+}
 
 
 

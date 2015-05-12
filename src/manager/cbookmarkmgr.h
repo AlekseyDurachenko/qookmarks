@@ -54,6 +54,11 @@ public:
     inline int trashReadItLaterCount() const;
     inline int trashRatedCount() const;
     inline int trashUntaggedCount() const;
+    inline int notTrashCount() const;
+    inline int notTrashFavoriteCount() const;
+    inline int notTrashReadItLaterCount() const;
+    inline int notTrashRatedCount() const;
+    inline int notTrashUntaggedCount() const;
 signals:
     void aboutToBeInserted(int first, int last);
     void inserted(int first, int last);
@@ -155,5 +160,29 @@ int CBookmarkMgr::trashUntaggedCount() const
     return m_counterTrashUntagged;
 }
 
+int CBookmarkMgr::notTrashCount() const
+{
+    return m_bookmarkItems.count() - m_counterTrash;
+}
+
+int CBookmarkMgr::notTrashFavoriteCount() const
+{
+    return m_counterFavorite - m_counterTrashFavorite;
+}
+
+int CBookmarkMgr::notTrashReadItLaterCount() const
+{
+    return m_counterReadItLater - m_counterTrashReadItLater;
+}
+
+int CBookmarkMgr::notTrashRatedCount() const
+{
+    return m_counterRated - m_counterTrashRated;
+}
+
+int CBookmarkMgr::notTrashUntaggedCount() const
+{
+    return m_counterUntagged - m_counterTrashUntagged;
+}
 
 #endif // CBOOKMARKMGR_H

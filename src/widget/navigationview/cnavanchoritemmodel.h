@@ -23,7 +23,8 @@ class INavigationActions;
 class CNavAnchorItemModel : public QAbstractItemModel
 {
     Q_OBJECT
-private:
+    Q_FLAGS(AnchorType)
+public:
     enum AnchorType
     {
         All             = 0x00,
@@ -34,7 +35,6 @@ private:
         Trash           = 0x05
     };
 public:
-
     explicit CNavAnchorItemModel(QObject *parent = 0);
 
     inline INavigationActions *navigationActions() const;

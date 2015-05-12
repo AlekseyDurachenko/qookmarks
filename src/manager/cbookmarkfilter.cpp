@@ -43,6 +43,17 @@ void CBookmarkFilter::setTags(const QSet<CTagItem *> &tags)
     m_tags = tags;
 }
 
+void CBookmarkFilter::setTag(CTagItem *tag)
+{
+    m_tags.clear();
+    m_tags.insert(tag);
+}
+
+void CBookmarkFilter::clearTags()
+{
+    m_tags.clear();
+}
+
 void CBookmarkFilter::setInclusiveOption(const Bookmark::FilterOptions &options)
 {
     m_inclusiveFilter = options;
@@ -82,11 +93,11 @@ bool CBookmarkFilter::validate(const CBookmarkItem *item) const
                  && item->data().isFavorite() == false)))
             return false;
 
-    if (m_inclusiveFilter.testFlag(Bookmark::ReadLater)
-            || m_inclusiveFilter.testFlag(Bookmark::NotReadLater))
-        if (!((m_inclusiveFilter.testFlag(Bookmark::ReadLater)
+    if (m_inclusiveFilter.testFlag(Bookmark::ReadItLater)
+            || m_inclusiveFilter.testFlag(Bookmark::NotReadItLater))
+        if (!((m_inclusiveFilter.testFlag(Bookmark::ReadItLater)
              && item->data().isReadItLater() == true) ||
-                (m_inclusiveFilter.testFlag(Bookmark::NotReadLater)
+                (m_inclusiveFilter.testFlag(Bookmark::NotReadItLater)
                  && item->data().isReadItLater() == false)))
             return false;
 

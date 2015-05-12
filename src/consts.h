@@ -28,8 +28,8 @@ namespace Bookmark {
 namespace Bookmark {
     enum FilterOption {
         Any             = 0xFFFF,
-        ReadLater       = 0x0001,
-        NotReadLater    = 0x0100,
+        ReadItLater     = 0x0001,
+        NotReadItLater  = 0x0100,
         Favorite        = 0x0002,
         NotFavorite     = 0x0200,
         Trash           = 0x0004,

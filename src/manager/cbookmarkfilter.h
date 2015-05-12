@@ -32,6 +32,8 @@ public:
 
     inline const QSet<CTagItem *> tags() const;
     void setTags(const QSet<CTagItem *> &tags);
+    void setTag(CTagItem *tag);
+    void clearTags();
 
     inline const Bookmark::FilterOptions &inclusiveOption() const;
     void setInclusiveOption(const Bookmark::FilterOptions &options);

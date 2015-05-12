@@ -100,6 +100,15 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(navTagView_selectionModel_selectionChanged()));
 
+    // + ------------- + ------------------------------------ +
+    // | - All (N)     | Bookmark_1 filed_2 filed_3 filed_4   |
+    // | - ...         | Bookmark_2 filed_2 filed_3 filed_4   |
+    // | - Trash (N)   | Bookmark_3 filed_2 filed_3 filed_4   |
+    // + ------------- +                                      |
+    // | + Folder1 (N) |                                      |
+    // |   + Sub (N)   |                                      |
+    // | + FOlder2 (N) |                                      |
+    // + ------------- + ------------------------------------ +
     m_navSplitter = new QSplitter(Qt::Vertical, this);
     m_navSplitter->addWidget(m_navAnchorView);
     m_navSplitter->addWidget(m_navTagView);
@@ -117,6 +126,9 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     setLayout(hbox);
 
     // we should sync the selection between anchorView and tagView
+    // These flags are used to avoid the recursive call slots:
+    // * navAnchorView_selectionModel_selectionChanged()
+    // * navTagView_selectionModel_selectionChanged()
     m_isClearingNavAnchor = false;
     m_isClearingNavTag = false;
 }

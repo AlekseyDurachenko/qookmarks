@@ -52,10 +52,10 @@ protected:
                                 const QStringList &parentTag);
     virtual void navActAssignTag(const QList<QUrl> &bookmarks,
                                  const QStringList& tag);
+    virtual void navActClearTags(const QList<QUrl> &bookmarks);
     virtual void navActFavorite(const QList<QUrl> &bookmarks);
     virtual void navActReadItLater(const QList<QUrl> &bookmarks);
     virtual void navActTrash(const QList<QUrl> &bookmarks);
-    virtual void navActClearTags(const QList<QUrl> &bookmarks);
 private:
     void updateBookmarkFilter();
     void updateBookmarkAnchorFilter();

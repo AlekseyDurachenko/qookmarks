@@ -53,6 +53,7 @@
 #include "cnavanchoritemmodel.h"
 #include "ctagitemmodel.h"
 #include "ctagsortfilterproxymodel.h"
+#include <QPushButton>
 
 
 CCompositWidget::CCompositWidget(QWidget *parent) :
@@ -87,7 +88,11 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_navTagItemModel->setNavigationActions(this);
     m_navTagSortFilterProxyModel = new CTagSortFilterProxyModel(this);
     m_navTagSortFilterProxyModel->setSourceModel(m_navTagItemModel);
+    m_navTagSortFilterProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_navTagSortFilterProxyModel->setDynamicSortFilter(true);
     m_navTagView = new QTreeView(this);
+    m_navTagView->setSortingEnabled(true);
+    m_navTagView->sortByColumn(0, Qt::AscendingOrder);
     m_navTagView->setModel(m_navTagSortFilterProxyModel);
     m_navTagView->setHeaderHidden(true);
     m_navTagView->setRootIsDecorated(true);
@@ -164,27 +169,123 @@ void CCompositWidget::navTagView_selectionModel_selectionChanged()
 void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
+    CTagItem *parentItem = GTagMgr()->findByPath(parentTag);
+    if (!parentItem)
+        return;
+
+    foreach (const QStringList &tag, tags)
+    {
+        CTagItem *item = GTagMgr()->findByPath(tag);
+        if (!item
+                || item == parentItem
+                || item->parent() == parentItem
+                || item->aboveOf(parentItem))
+            continue;
+
+        item->moveTo(parentItem);
+    }
 }
 
 void CCompositWidget::navActAssignTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
-}
+    CTagItem *parentItem = GTagMgr()->findByPath(tag);
+    if (!parentItem || parentItem == GTagMgr()->rootItem())
+        return;
 
-void CCompositWidget::navActFavorite(const QList<QUrl> &bookmarks)
-{
-}
+    QMessageBox msgBox(QMessageBox::Question, tr("Action"),
+                       tr("What do you want with bookmarks?"),
+                       QMessageBox::NoButton, this);
+    QPushButton *moveButton = msgBox.addButton(tr("Move"), QMessageBox::ActionRole);
+    QPushButton *copyButton = msgBox.addButton(tr("Copy"), QMessageBox::ActionRole);
+    msgBox.addButton(QMessageBox::Cancel);
 
-void CCompositWidget::navActReadItLater(const QList<QUrl> &bookmarks)
-{
-}
+    if (msgBox.exec() == QMessageBox::Cancel)
+        return;
 
-void CCompositWidget::navActTrash(const QList<QUrl> &bookmarks)
-{
+    foreach (const QUrl &url, bookmarks)
+    {
+        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        if (!bookmarkItem)
+            continue;
+
+        if (msgBox.clickedButton() == moveButton)
+        {
+            foreach (CTagItem *item, bookmarkItem->tags())
+                if (parentItem != item)
+                    item->bookmarkRemove(bookmarkItem);
+
+            parentItem->bookmarkAdd(bookmarkItem);
+        }
+        else if (msgBox.clickedButton() == copyButton)
+        {
+            parentItem->bookmarkAdd(bookmarkItem);
+        }
+    }
 }
 
 void CCompositWidget::navActClearTags(const QList<QUrl> &bookmarks)
 {
+    if (QMessageBox::question(this, tr("Clear tags"), tr("Are you shure?"),
+            QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)
+    {
+        foreach (const QUrl &url, bookmarks)
+        {
+            CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+            if (!bookmarkItem)
+                continue;
+
+            foreach (CTagItem *tagItem, bookmarkItem->tags())
+                tagItem->bookmarkRemove(bookmarkItem);
+        }
+    }
+}
+
+void CCompositWidget::navActFavorite(const QList<QUrl> &bookmarks)
+{
+    foreach (const QUrl &url, bookmarks)
+    {
+        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        if (!bookmarkItem)
+            continue;
+
+        CBookmark data = bookmarkItem->data();
+        data.setFavorite(true);
+        bookmarkItem->setData(data);
+    }
+}
+
+void CCompositWidget::navActReadItLater(const QList<QUrl> &bookmarks)
+{
+    foreach (const QUrl &url, bookmarks)
+    {
+        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        if (!bookmarkItem)
+            continue;
+
+        CBookmark data = bookmarkItem->data();
+        data.setReadItLater(true);
+        bookmarkItem->setData(data);
+    }
+
+}
+
+void CCompositWidget::navActTrash(const QList<QUrl> &bookmarks)
+{
+    if (QMessageBox::question(this, tr("Move to trash"), tr("Are you shure?"),
+            QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)
+    {
+        foreach (const QUrl &url, bookmarks)
+        {
+            CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+            if (!bookmarkItem)
+                continue;
+
+            CBookmark data = bookmarkItem->data();
+            data.setTrash(true);
+            bookmarkItem->setData(data);
+        }
+    }
 }
 
 void CCompositWidget::updateBookmarkFilter()

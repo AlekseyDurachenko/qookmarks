@@ -166,7 +166,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_actionTagEdit, SIGNAL(triggered()),
             this, SLOT(actionTagEdit_triggered()));
 
-    m_actionTagRemove = new QAction(tr("Remove tag..."), this);
+    m_actionTagRemove = new QAction(tr("Remove tag(s)..."), this);
     connect(m_actionTagRemove, SIGNAL(triggered()),
             this, SLOT(actionTagRemove_triggered()));
 

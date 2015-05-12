@@ -51,6 +51,7 @@
 #include <QSettings>
 #include <QSortFilterProxyModel>
 #include <QActionGroup>
+#include <QProcess>
 #include "cnavanchoritemmodel.h"
 #include "ctagitemmodel.h"
 #include "ctagsortfilterproxymodel.h"
@@ -142,6 +143,41 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_isClearingNavTag = false;
 
     // create actions
+    m_actionBookmarkOpenUrl = new  QAction(tr("Open url"), this);
+    connect(m_actionBookmarkOpenUrl, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkOpenUrl_triggered()));
+
+    m_menuBookmarkBrowserOpenUrlExistsWindow = new QMenu(tr("Open url"), this);
+    QAction *existsWindowFirefox = new QAction(tr("Firefox"), this);
+    existsWindowFirefox->setData("firefox");
+    connect(existsWindowFirefox, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkOpenUrl_existsWindow_triggered()));
+    m_menuBookmarkBrowserOpenUrlExistsWindow->addAction(existsWindowFirefox);
+    QAction *existsWindowChromium = new QAction(tr("Chromium"), this);
+    existsWindowChromium->setData("chromium-browser");
+    connect(existsWindowChromium, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkOpenUrl_existsWindow_triggered()));
+    m_menuBookmarkBrowserOpenUrlExistsWindow->addAction(existsWindowChromium);
+
+    m_menuBookmarkBrowserOpenUrlNewWindow = new QMenu(tr("Open url in new window"), this);
+    QAction *newWindowFirefox = new QAction(tr("Firefox"), this);
+    newWindowFirefox->setData("firefox");
+    connect(newWindowFirefox, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkOpenUrl_newWindow_triggered()));
+    m_menuBookmarkBrowserOpenUrlNewWindow->addAction(newWindowFirefox);
+    QAction *newWindowChromium = new QAction(tr("Chromium"), this);
+    newWindowChromium->setData("chromium-browser");
+    connect(newWindowChromium, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkOpenUrl_newWindow_triggered()));
+    m_menuBookmarkBrowserOpenUrlNewWindow->addAction(newWindowChromium);
+
+    m_menuBookmarkBrowserOpenUrlExistsPrivateWindow = new QMenu(tr("Open url in private window"), this);
+    m_menuBookmarkBrowserOpenUrlNewPrivateWindow = new QMenu(tr("Open url in new private window"), this);
+
+    m_actionBookmarkSelectAll = new QAction(tr("Select all bookmarks"), this);
+    connect(m_actionBookmarkSelectAll, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkSelectAll_triggered()));
+
     m_actionBookmarkAdd = new QAction(tr("Add bookmark..."), this);
     connect(m_actionBookmarkAdd, SIGNAL(triggered()),
             this, SLOT(actionBookmarkAdd_triggered()));
@@ -153,10 +189,6 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_actionBookmarkSendToTrash = new QAction(tr("Send bookmark(s) to the trash..."), this);
     connect(m_actionBookmarkSendToTrash, SIGNAL(triggered()),
             this, SLOT(actionBookmarkSendToTrash_triggered()));
-
-    m_actionBookmarkSelectAll = new QAction(tr("Select all bookmarks"), this);
-    connect(m_actionBookmarkSelectAll, SIGNAL(triggered()),
-            this, SLOT(actionBookmarkSelectAll_triggered()));
 
     m_actionTagAdd = new QAction(tr("Add tag..."), this);
     connect(m_actionTagAdd, SIGNAL(triggered()),
@@ -227,6 +259,13 @@ void CCompositWidget::navTagView_selectionModel_selectionChanged()
 void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
 {
     QMenu menu(this);
+    menu.addAction(m_actionBookmarkOpenUrl);
+    menu.addSeparator();
+    menu.addAction(m_menuBookmarkBrowserOpenUrlExistsWindow->menuAction());
+    menu.addAction(m_menuBookmarkBrowserOpenUrlNewWindow->menuAction());
+    menu.addAction(m_menuBookmarkBrowserOpenUrlExistsPrivateWindow->menuAction());
+    menu.addAction(m_menuBookmarkBrowserOpenUrlNewPrivateWindow->menuAction());
+    menu.addSeparator();
     menu.addAction(m_actionBookmarkSelectAll);
     menu.addSeparator();
     menu.addAction(m_actionBookmarkAdd);
@@ -258,6 +297,46 @@ void CCompositWidget::navTagView_showContextMenu(const QPoint &pos)
     menu.exec(m_navTagView->viewport()->mapToGlobal(pos));
 }
 
+void CCompositWidget::actionBookmarkOpenUrl_triggered()
+{
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+        QDesktopServices::openUrl(bookmarkItem->data().url());
+}
+
+void CCompositWidget::actionBookmarkOpenUrl_existsWindow_triggered()
+{
+    QString browser = qobject_cast<QAction *>(sender())->data().toString();
+    QStringList urls;
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+        urls.push_back(bookmarkItem->data().url().toString());
+
+    QProcess::startDetached(browser, urls);
+}
+
+void CCompositWidget::actionBookmarkOpenUrl_newWindow_triggered()
+{
+    QString browser = qobject_cast<QAction *>(sender())->data().toString();
+    QStringList urls;
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+        urls.push_back(bookmarkItem->data().url().toString());
+
+    QProcess::startDetached(browser, urls);
+}
+
+void CCompositWidget::actionBookmarkOpenUrl_existsPrivateWindow_triggered()
+{
+
+}
+
+void CCompositWidget::actionBookmarkOpenUrl_newPrivateWindow_triggered()
+{
+
+}
+
+void CCompositWidget::actionBookmarkSelectAll_triggered()
+{
+}
+
 void CCompositWidget::actionBookmarkAdd_triggered()
 {
 
@@ -269,11 +348,6 @@ void CCompositWidget::actionBookmarkEdit_triggered()
 }
 
 void CCompositWidget::actionBookmarkSendToTrash_triggered()
-{
-
-}
-
-void CCompositWidget::actionBookmarkSelectAll_triggered()
 {
 
 }

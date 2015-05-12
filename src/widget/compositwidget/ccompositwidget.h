@@ -34,6 +34,7 @@ class CNavAnchorItemModel;
 class CNavTagItemModel;
 class CTagSortFilterProxyModel;
 class CNavTagView;
+class QMenu;
 
 
 class CCompositWidget : public QWidget, INavigationActions
@@ -52,10 +53,15 @@ private slots:
     void navAnchorView_showContextMenu(const QPoint &pos);
     void navTagView_showContextMenu(const QPoint &pos);
 
+    void actionBookmarkOpenUrl_triggered();
+    void actionBookmarkOpenUrl_existsWindow_triggered();
+    void actionBookmarkOpenUrl_newWindow_triggered();
+    void actionBookmarkOpenUrl_existsPrivateWindow_triggered();
+    void actionBookmarkOpenUrl_newPrivateWindow_triggered();
+    void actionBookmarkSelectAll_triggered();
     void actionBookmarkAdd_triggered();
     void actionBookmarkEdit_triggered();
     void actionBookmarkSendToTrash_triggered();
-    void actionBookmarkSelectAll_triggered();
     void actionTagAdd_triggered();
     void actionTagEdit_triggered();
     void actionTagRemove_triggered();
@@ -99,10 +105,15 @@ private:
     bool m_isClearingNavAnchor;
     bool m_isClearingNavTag;
     // set of actions
+    QAction *m_actionBookmarkOpenUrl;
+    QMenu   *m_menuBookmarkBrowserOpenUrlExistsWindow;
+    QMenu   *m_menuBookmarkBrowserOpenUrlNewWindow;
+    QMenu   *m_menuBookmarkBrowserOpenUrlExistsPrivateWindow;
+    QMenu   *m_menuBookmarkBrowserOpenUrlNewPrivateWindow;
+    QAction *m_actionBookmarkSelectAll;
     QAction *m_actionBookmarkAdd;
     QAction *m_actionBookmarkEdit;
     QAction *m_actionBookmarkSendToTrash;
-    QAction *m_actionBookmarkSelectAll;
     QAction *m_actionTagAdd;
     QAction *m_actionTagEdit;
     QAction *m_actionTagRemove;

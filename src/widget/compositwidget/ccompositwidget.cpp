@@ -131,10 +131,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     hbox->addWidget(m_splitter);
     setLayout(hbox);
 
-    // we should sync the selection between anchorView and tagView
-    // These flags are used to avoid the recursive call slots:
-    // * navAnchorView_selectionModel_selectionChanged()
-    // * navTagView_selectionModel_selectionChanged()
+    // default values
     m_isClearingNavAnchor = false;
     m_isClearingNavTag = false;
 }

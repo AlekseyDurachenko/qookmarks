@@ -77,7 +77,10 @@ private:
 
     QSplitter *m_navSplitter;
     QSplitter *m_splitter;
-
+    // we should sync the selection between anchorView and tagView
+    // These flags are used to avoid the recursive call slots:
+    // * navAnchorView_selectionModel_selectionChanged()
+    // * navTagView_selectionModel_selectionChanged()
     bool m_isClearingNavAnchor;
     bool m_isClearingNavTag;
 };

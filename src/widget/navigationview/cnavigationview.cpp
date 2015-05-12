@@ -40,7 +40,7 @@ CNavigationView::~CNavigationView()
 
 }
 
-void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags,
+void CNavigationView::navActMoveTags(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(parentTag);
@@ -58,7 +58,7 @@ void CNavigationView::tagsCopyOrMove(const QList<QStringList> &tags,
     }
 }
 
-void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
+void CNavigationView::navActAssignTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(tag);
@@ -94,7 +94,7 @@ void CNavigationView::bookmarksAssignTag(const QList<QUrl> &bookmarks,
     }
 }
 
-void CNavigationView::bookmarksMarkFavorite(const QList<QUrl> &bookmarks)
+void CNavigationView::navActFavorite(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
@@ -105,7 +105,7 @@ void CNavigationView::bookmarksMarkFavorite(const QList<QUrl> &bookmarks)
     }
 }
 
-void CNavigationView::bookmarksMarkReadLater(const QList<QUrl> &bookmarks)
+void CNavigationView::navActReadItLater(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
@@ -116,7 +116,7 @@ void CNavigationView::bookmarksMarkReadLater(const QList<QUrl> &bookmarks)
     }
 }
 
-void CNavigationView::bookmarksMarkTrash(const QList<QUrl> &bookmarks)
+void CNavigationView::navActTrash(const QList<QUrl> &bookmarks)
 {
     if (QMessageBox::question(this, tr("Move to trash"), tr("Are you shure?"),
             QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)
@@ -131,7 +131,7 @@ void CNavigationView::bookmarksMarkTrash(const QList<QUrl> &bookmarks)
     }
 }
 
-void CNavigationView::bookmarksClearTags(const QList<QUrl> &bookmarks)
+void CNavigationView::navActClearTags(const QList<QUrl> &bookmarks)
 {
     if (QMessageBox::question(this, tr("Clear tags"), tr("Are you shure?"),
             QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)

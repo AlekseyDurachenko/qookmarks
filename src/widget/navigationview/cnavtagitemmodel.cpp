@@ -134,7 +134,7 @@ bool CNavTagItemModel::dropMimeTagList(const QMimeData *data,
         const QStringList &parentTag)
 {
     if (m_navigationActions)
-        m_navigationActions->tagsCopyOrMove(fromMimeTagList(data), parentTag);
+        m_navigationActions->navActMoveTags(fromMimeTagList(data), parentTag);
 
     return true;
 }
@@ -143,7 +143,7 @@ bool CNavTagItemModel::dropMimeBookmarkList(const QMimeData *data,
         const QStringList &parentTag)
 {
     if (m_navigationActions)
-        m_navigationActions->bookmarksAssignTag(fromMimeBookmarkList(data), parentTag);
+        m_navigationActions->navActAssignTag(fromMimeBookmarkList(data), parentTag);
 
     return true;
 }

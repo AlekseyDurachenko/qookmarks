@@ -161,29 +161,29 @@ void CCompositWidget::navTagView_selectionModel_selectionChanged()
     updateBookmarkFilter();
 }
 
-void CCompositWidget::tagsCopyOrMove(const QList<QStringList> &tags,
+void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
 }
 
-void CCompositWidget::bookmarksAssignTag(const QList<QUrl> &bookmarks,
+void CCompositWidget::navActAssignTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
 }
 
-void CCompositWidget::bookmarksMarkFavorite(const QList<QUrl> &bookmarks)
+void CCompositWidget::navActFavorite(const QList<QUrl> &bookmarks)
 {
 }
 
-void CCompositWidget::bookmarksMarkReadLater(const QList<QUrl> &bookmarks)
+void CCompositWidget::navActReadItLater(const QList<QUrl> &bookmarks)
 {
 }
 
-void CCompositWidget::bookmarksMarkTrash(const QList<QUrl> &bookmarks)
+void CCompositWidget::navActTrash(const QList<QUrl> &bookmarks)
 {
 }
 
-void CCompositWidget::bookmarksClearTags(const QList<QUrl> &bookmarks)
+void CCompositWidget::navActClearTags(const QList<QUrl> &bookmarks)
 {
 }
 

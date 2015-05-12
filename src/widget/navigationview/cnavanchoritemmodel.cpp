@@ -116,15 +116,15 @@ bool CNavAnchorItemModel::dropMimeData(const QMimeData *data,
         switch (type)
         {
         case Untagged:
-            m_navigationActions->bookmarksClearTags(bookmarkList);
+            m_navigationActions->navActClearTags(bookmarkList);
         case Favorites:
-            m_navigationActions->bookmarksMarkFavorite(bookmarkList);
+            m_navigationActions->navActFavorite(bookmarkList);
             break;
         case ReadItLater:
-            m_navigationActions->bookmarksMarkReadLater(bookmarkList);
+            m_navigationActions->navActReadItLater(bookmarkList);
             break;
         case Trash:
-            m_navigationActions->bookmarksMarkTrash(bookmarkList);
+            m_navigationActions->navActTrash(bookmarkList);
             break;
         default:
             ;

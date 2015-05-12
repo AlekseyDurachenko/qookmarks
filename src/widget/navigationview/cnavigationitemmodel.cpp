@@ -199,13 +199,13 @@ bool CNavigationItemModel::dropMimeData(const QMimeData *data,
         switch (type)
         {
         case Favorites:
-            m_navigationActions->bookmarksMarkFavorite(bookmarkList);
+            m_navigationActions->navActFavorite(bookmarkList);
             break;
         case ReadLater:
-            m_navigationActions->bookmarksMarkReadLater(bookmarkList);
+            m_navigationActions->navActReadItLater(bookmarkList);
             break;
         case Trash:
-            m_navigationActions->bookmarksMarkTrash(bookmarkList);
+            m_navigationActions->navActTrash(bookmarkList);
             break;
         default:
             ;
@@ -633,7 +633,7 @@ bool CNavigationItemModel::dropMimeTagList(const QMimeData *data,
         const QStringList &parentTag)
 {
     if (m_navigationActions)
-        m_navigationActions->tagsCopyOrMove(fromMimeTagList(data), parentTag);
+        m_navigationActions->navActMoveTags(fromMimeTagList(data), parentTag);
 
     return true;
 }
@@ -642,7 +642,7 @@ bool CNavigationItemModel::dropMimeBookmarkList(const QMimeData *data,
         const QStringList &parentTag)
 {
     if (m_navigationActions)
-        m_navigationActions->bookmarksAssignTag(fromMimeBookmarkList(data), parentTag);
+        m_navigationActions->navActAssignTag(fromMimeBookmarkList(data), parentTag);
 
     return true;
 }

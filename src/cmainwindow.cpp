@@ -69,7 +69,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 }
 
 CMainWindow::~CMainWindow()
-{        
+{
     writeSettings_window();
     writeSettings_lastOpenedBookmarks();
 

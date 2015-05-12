@@ -69,6 +69,8 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_bookmarkView->setBookmarkModel(m_bookmarkItemModel);
     m_bookmarkView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_bookmarkView->setDragDropMode(QAbstractItemView::DragOnly);
+    connect(m_bookmarkView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(bookmarkView_showContextMenu(QPoint)));
 
     m_navAnchorItemModel = new CNavAnchorItemModel(this);
     m_navAnchorItemModel->setNavigationActions(this);
@@ -84,6 +86,8 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_navAnchorView->selectionModel(),
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(navAnchorView_selectionModel_selectionChanged()));
+    connect(m_navAnchorView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(navAnchorView_showContextMenu(QPoint)));
 
     m_navTagItemModel = new CNavTagItemModel(this);
     m_navTagItemModel->setNavigationActions(this);
@@ -105,6 +109,8 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_navTagView->selectionModel(),
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(navTagView_selectionModel_selectionChanged()));
+    connect(m_navTagView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(navTagView_showContextMenu(QPoint)));
 
     // + ------------- + ------------------------------------ +
     // | - All (N)     | Bookmark_1 filed_2 filed_3 filed_4   |
@@ -134,6 +140,60 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     // default values
     m_isClearingNavAnchor = false;
     m_isClearingNavTag = false;
+
+    // create actions
+    m_actionBookmarkAdd = new QAction(tr("Add bookmark..."), this);
+    connect(m_actionBookmarkAdd, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkAdd_triggered()));
+
+    m_actionBookmarkEdit = new QAction(tr("Edit bookmark..."), this);
+    connect(m_actionBookmarkEdit, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkEdit_triggered()));
+
+    m_actionBookmarkSendToTrash = new QAction(tr("Send bookmark(s) to the trash..."), this);
+    connect(m_actionBookmarkSendToTrash, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkSendToTrash_triggered()));
+
+    m_actionBookmarkSelectAll = new QAction(tr("Select all bookmarks"), this);
+    connect(m_actionBookmarkSelectAll, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkSelectAll_triggered()));
+
+    m_actionTagAdd = new QAction(tr("Add tag..."), this);
+    connect(m_actionTagAdd, SIGNAL(triggered()),
+            this, SLOT(actionTagAdd_triggered()));
+
+    m_actionTagEdit = new QAction(tr("Edit tag..."), this);
+    connect(m_actionTagEdit, SIGNAL(triggered()),
+            this, SLOT(actionTagEdit_triggered()));
+
+    m_actionTagRemove = new QAction(tr("Remove tag..."), this);
+    connect(m_actionTagRemove, SIGNAL(triggered()),
+            this, SLOT(actionTagRemove_triggered()));
+
+    m_actionEmptyTrash = new QAction(tr("Empty trash..."), this);
+    connect(m_actionEmptyTrash, SIGNAL(triggered()),
+            this, SLOT(actionEmptyTrash_triggered()));
+
+    // update actions on project changing
+    connect(GBookmarkMgr(), SIGNAL(inserted(int,int)),
+            this, SLOT(updateActionState()));
+    connect(GBookmarkMgr(), SIGNAL(removed(int,int)),
+            this, SLOT(updateActionState()));
+    connect(GBookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+            this, SLOT(updateActionState()));
+    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
+            this, SLOT(updateActionState()));
+    connect(GTagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
+            this, SLOT(updateActionState()));
+    connect(GTagMgr(), SIGNAL(removed(CTagItem*,int,int)),
+            this, SLOT(updateActionState()));
+    connect(GTagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
+            this, SLOT(updateActionState()));
+    connect(GTagMgr(), SIGNAL(dataChanged(CTagItem*)),
+            this, SLOT(updateActionState()));
+    // update actions on bookmark selection changed
+    connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(updateActionState()));
 }
 
 CCompositWidget::~CCompositWidget()
@@ -162,6 +222,105 @@ void CCompositWidget::navTagView_selectionModel_selectionChanged()
     m_isClearingNavTag = false;
 
     updateBookmarkFilter();
+}
+
+void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
+{
+    QMenu menu(this);
+    menu.addAction(m_actionBookmarkSelectAll);
+    menu.addSeparator();
+    menu.addAction(m_actionBookmarkAdd);
+    menu.addAction(m_actionBookmarkEdit);
+    menu.addAction(m_actionBookmarkSendToTrash);
+    menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
+}
+
+void CCompositWidget::navAnchorView_showContextMenu(const QPoint &pos)
+{
+    if (!m_navAnchorView->selectionModel()->selectedRows().isEmpty()
+            && m_navAnchorView->currentIndex().data(Qt::UserRole).toInt()
+                == CNavAnchorItemModel::Trash)
+    {
+        QMenu menu(this);
+        menu.addAction(m_actionEmptyTrash);
+        menu.exec(m_navAnchorView->viewport()->mapToGlobal(pos));
+    }
+}
+
+void CCompositWidget::navTagView_showContextMenu(const QPoint &pos)
+{
+    QMenu menu(this);
+    menu.addAction(m_actionTagAdd);
+    menu.addAction(m_actionTagEdit);
+    menu.addAction(m_actionTagRemove);
+    menu.addSeparator();
+    menu.addAction(m_actionBookmarkAdd);
+    menu.exec(m_navTagView->viewport()->mapToGlobal(pos));
+}
+
+void CCompositWidget::actionBookmarkAdd_triggered()
+{
+
+}
+
+void CCompositWidget::actionBookmarkEdit_triggered()
+{
+
+}
+
+void CCompositWidget::actionBookmarkSendToTrash_triggered()
+{
+
+}
+
+void CCompositWidget::actionBookmarkSelectAll_triggered()
+{
+
+}
+
+void CCompositWidget::actionTagAdd_triggered()
+{
+
+}
+
+void CCompositWidget::actionTagEdit_triggered()
+{
+
+}
+
+void CCompositWidget::actionTagRemove_triggered()
+{
+
+}
+
+void CCompositWidget::actionEmptyTrash_triggered()
+{
+
+}
+
+void CCompositWidget::updateActionState()
+{
+    int bookmarkCount = m_bookmarkFilterDataModel->count();
+    int selectedBookmarkCount = m_bookmarkView->selectionModel()->selectedRows().count();
+    int selectedTagCount = m_navTagView->selectionModel()->selectedRows().count();
+
+    m_actionBookmarkEdit->setEnabled(selectedBookmarkCount == 1);
+    m_actionBookmarkSendToTrash->setEnabled(selectedBookmarkCount);
+    m_actionBookmarkSelectAll->setEnabled(bookmarkCount);
+    m_actionTagAdd->setEnabled(selectedTagCount <= 1);
+    m_actionTagEdit->setEnabled(selectedTagCount == 1);
+    m_actionTagRemove->setEnabled(selectedTagCount);
+    m_actionEmptyTrash->setEnabled(GBookmarkMgr()->trashCount());
+
+    m_actionBookmarkSendToTrash->setEnabled(true);
+    foreach (QModelIndex index, m_bookmarkView->selectionModel()->selectedRows())
+    {
+        if (CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().isTrash())
+        {
+            m_actionBookmarkSendToTrash->setEnabled(false);
+            break;
+        }
+    }
 }
 
 void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,
@@ -225,7 +384,7 @@ void CCompositWidget::navActAddTag(const QList<QUrl> &bookmarks,
 void CCompositWidget::navActClearTags(const QList<QUrl> &bookmarks)
 {
     if (QMessageBox::question(this, tr("Question"),
-            tr("Are you sure you want to move the selected bookmarks into the trash?"),
+            tr("Are you sure you want to send the selected bookmarks into the trash?"),
             QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)
     {
         foreach (const QUrl &url, bookmarks)
@@ -294,6 +453,8 @@ void CCompositWidget::updateBookmarkFilter()
         updateBookmarkAnchorFilter();
     else if (!m_navTagView->selectionModel()->selectedRows().isEmpty())
         updateBookmarkTagFilter();
+
+    updateActionState();
 }
 
 void CCompositWidget::updateBookmarkAnchorFilter()
@@ -348,6 +509,11 @@ void CCompositWidget::updateBookmarkTagFilter()
 
 
 
+//    int selectedAnchorCount = m_navAnchorView->selectionModel()->selectedRows().count();
+//    CNavAnchorItemModel::AnchorType anchorType = CNavAnchorItemModel::All;
+//    if (selectedAnchorCount)
+//        anchorType = static_cast<CNavAnchorItemModel::AnchorType>
+//                (m_navAnchorView->currentIndex().data(Qt::UserRole).toInt());
 //static QString md5(const QString &str)
 //{
 //    QCryptographicHash hash(QCryptographicHash::Md5);

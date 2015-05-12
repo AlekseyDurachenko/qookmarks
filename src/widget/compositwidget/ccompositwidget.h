@@ -47,6 +47,21 @@ public:
 private slots:
     void navAnchorView_selectionModel_selectionChanged();
     void navTagView_selectionModel_selectionChanged();
+
+    void bookmarkView_showContextMenu(const QPoint &pos);
+    void navAnchorView_showContextMenu(const QPoint &pos);
+    void navTagView_showContextMenu(const QPoint &pos);
+
+    void actionBookmarkAdd_triggered();
+    void actionBookmarkEdit_triggered();
+    void actionBookmarkSendToTrash_triggered();
+    void actionBookmarkSelectAll_triggered();
+    void actionTagAdd_triggered();
+    void actionTagEdit_triggered();
+    void actionTagRemove_triggered();
+    void actionEmptyTrash_triggered();
+
+    void updateActionState();
 protected:
     virtual void navActMoveTags(const QList<QStringList> &tags,
                                 const QStringList &parentTag);
@@ -83,6 +98,15 @@ private:
     // * navTagView_selectionModel_selectionChanged()
     bool m_isClearingNavAnchor;
     bool m_isClearingNavTag;
+    // set of actions
+    QAction *m_actionBookmarkAdd;
+    QAction *m_actionBookmarkEdit;
+    QAction *m_actionBookmarkSendToTrash;
+    QAction *m_actionBookmarkSelectAll;
+    QAction *m_actionTagAdd;
+    QAction *m_actionTagEdit;
+    QAction *m_actionTagRemove;
+    QAction *m_actionEmptyTrash;
 };
 
 CBookmarkView *CCompositWidget::bookmarkView() const

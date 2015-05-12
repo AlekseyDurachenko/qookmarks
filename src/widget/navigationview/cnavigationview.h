@@ -29,7 +29,7 @@ public:
 protected:
     virtual void navActMoveTags(const QList<QStringList> &tags,
                                 const QStringList &parentTag);
-    virtual void navActAssignTag(const QList<QUrl> &bookmarks,
+    virtual void navActSetTag(const QList<QUrl> &bookmarks,
                                     const QStringList& tag);
     virtual void navActFavorite(const QList<QUrl> &bookmarks);
     virtual void navActReadItLater(const QList<QUrl> &bookmarks);

@@ -34,6 +34,7 @@ public:
     virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                               int row, int column, const QModelIndex &parent);
+    virtual Qt::DropActions supportedDropActions() const;
 private slots:
     void navigationActions_destroyed();
 private:
@@ -41,7 +42,8 @@ private:
     bool dropMimeTagList(const QMimeData *data,
                          const QStringList &parentTag);
     bool dropMimeBookmarkList(const QMimeData *data,
-                              const QStringList &parentTag);
+                              const QStringList &parentTag,
+                              Qt::DropAction action);
     QList<QStringList> fromMimeTagList(const QMimeData *data);
     QList<QUrl> fromMimeBookmarkList(const QMimeData *data);
 private:

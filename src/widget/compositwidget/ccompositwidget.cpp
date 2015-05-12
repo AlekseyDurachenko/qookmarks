@@ -47,6 +47,7 @@
 #include "cprj.h"
 #include "ciconmgr.h"
 #include "settings.h"
+#include "cnavtagview.h"
 #include <QSettings>
 #include <QSortFilterProxyModel>
 #include <QActionGroup>
@@ -90,7 +91,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_navTagSortFilterProxyModel->setSourceModel(m_navTagItemModel);
     m_navTagSortFilterProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     m_navTagSortFilterProxyModel->setDynamicSortFilter(true);
-    m_navTagView = new QTreeView(this);
+    m_navTagView = new CNavTagView(this);
     m_navTagView->setSortingEnabled(true);
     m_navTagView->sortByColumn(0, Qt::AscendingOrder);
     m_navTagView->setModel(m_navTagSortFilterProxyModel);
@@ -186,21 +187,11 @@ void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,
     }
 }
 
-void CCompositWidget::navActAssignTag(const QList<QUrl> &bookmarks,
+void CCompositWidget::navActSetTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(tag);
     if (!parentItem || parentItem == GTagMgr()->rootItem())
-        return;
-
-    QMessageBox msgBox(QMessageBox::Question, tr("Action"),
-                       tr("What do you want with bookmarks?"),
-                       QMessageBox::NoButton, this);
-    QPushButton *moveButton = msgBox.addButton(tr("Move"), QMessageBox::ActionRole);
-    QPushButton *copyButton = msgBox.addButton(tr("Copy"), QMessageBox::ActionRole);
-    msgBox.addButton(QMessageBox::Cancel);
-
-    if (msgBox.exec() == QMessageBox::Cancel)
         return;
 
     foreach (const QUrl &url, bookmarks)
@@ -209,18 +200,28 @@ void CCompositWidget::navActAssignTag(const QList<QUrl> &bookmarks,
         if (!bookmarkItem)
             continue;
 
-        if (msgBox.clickedButton() == moveButton)
-        {
-            foreach (CTagItem *item, bookmarkItem->tags())
-                if (parentItem != item)
-                    item->bookmarkRemove(bookmarkItem);
+        foreach (CTagItem *item, bookmarkItem->tags())
+            if (parentItem != item)
+                item->bookmarkRemove(bookmarkItem);
 
-            parentItem->bookmarkAdd(bookmarkItem);
-        }
-        else if (msgBox.clickedButton() == copyButton)
-        {
-            parentItem->bookmarkAdd(bookmarkItem);
-        }
+        parentItem->bookmarkAdd(bookmarkItem);
+    }
+}
+
+void CCompositWidget::navActAddTag(const QList<QUrl> &bookmarks,
+        const QStringList &tag)
+{
+    CTagItem *parentItem = GTagMgr()->findByPath(tag);
+    if (!parentItem || parentItem == GTagMgr()->rootItem())
+        return;
+
+    foreach (const QUrl &url, bookmarks)
+    {
+        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        if (!bookmarkItem)
+            continue;
+
+        parentItem->bookmarkAdd(bookmarkItem);
     }
 }
 

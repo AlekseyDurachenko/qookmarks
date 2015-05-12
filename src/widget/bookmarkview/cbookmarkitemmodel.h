@@ -24,8 +24,6 @@ class CBookmarkItemModel : public QAbstractItemModel
     Q_OBJECT
 public:
     explicit CBookmarkItemModel(QObject *parent = 0);
-    explicit CBookmarkItemModel(CAbstractBookmarkDataModel *dataModel,
-                                        QObject *parent = 0);
 
     inline CAbstractBookmarkDataModel *dataModel() const;
     void setDataModel(CAbstractBookmarkDataModel *dataModel);
@@ -40,6 +38,7 @@ public:
     virtual QModelIndex parent(const QModelIndex &index) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual Qt::DropActions	supportedDropActions() const;
 private slots:
     void dataModel_aboutToBeInserted(int first, int last);
     void dataModel_inserted(int first, int last);

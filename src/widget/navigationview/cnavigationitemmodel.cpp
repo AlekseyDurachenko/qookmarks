@@ -642,7 +642,7 @@ bool CNavigationItemModel::dropMimeBookmarkList(const QMimeData *data,
         const QStringList &parentTag)
 {
     if (m_navigationActions)
-        m_navigationActions->navActAssignTag(fromMimeBookmarkList(data), parentTag);
+        m_navigationActions->navActSetTag(fromMimeBookmarkList(data), parentTag);
 
     return true;
 }

@@ -70,7 +70,8 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/ctagitemmodel.h \
     $$PWD/src/widget/navigationview/cnavanchoritemmodel.h \
     $$PWD/src/manager/ctagsortfilterproxymodel.h \
-    $$PWD/src/widget/navigationview/cnavtagitemmodel.h
+    $$PWD/src/widget/navigationview/cnavtagitemmodel.h \
+    $$PWD/src/widget/navigationview/cnavtagview.h
 
 
 SOURCES        +=                                                       \
@@ -125,7 +126,8 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/ctagitemmodel.cpp \
     $$PWD/src/widget/navigationview/cnavanchoritemmodel.cpp \
     $$PWD/src/manager/ctagsortfilterproxymodel.cpp \
-    $$PWD/src/widget/navigationview/cnavtagitemmodel.cpp
+    $$PWD/src/widget/navigationview/cnavtagitemmodel.cpp \
+    $$PWD/src/widget/navigationview/cnavtagview.cpp
 
 
 FORMS          +=                                                       \

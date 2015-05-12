@@ -30,14 +30,6 @@ CBookmarkItemModel::CBookmarkItemModel(QObject *parent) :
     m_dataModel = 0;
 }
 
-CBookmarkItemModel::CBookmarkItemModel(
-        CAbstractBookmarkDataModel *dataModel, QObject *parent) :
-    QAbstractItemModel(parent)
-{
-    m_dataModel = 0;
-    setDataModel(dataModel);
-}
-
 void CBookmarkItemModel::setDataModel(CAbstractBookmarkDataModel *dataModel)
 {
     if (m_dataModel)
@@ -239,6 +231,11 @@ int CBookmarkItemModel::rowCount(const QModelIndex &parent) const
 int CBookmarkItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
     return 16;
+}
+
+Qt::DropActions CBookmarkItemModel::supportedDropActions() const
+{
+    return Qt::CopyAction|Qt::MoveAction;
 }
 
 void CBookmarkItemModel::dataModel_aboutToBeInserted(int first, int last)

@@ -17,11 +17,13 @@
 #include "cbookmarkitem.h"
 #include "inavigationactions.h"
 #include "singleton.h"
+#include <QDebug>
 
 
 CNavTagItemModel::CNavTagItemModel(QObject *parent) :
     CTagItemModel(parent)
 {
+    setSupportedDragActions(Qt::CopyAction|Qt::MoveAction);
     m_navigationActions = 0;
 
     connect(GTagMgr(), SIGNAL(bookmarksChanged(CTagItem*)),
@@ -101,7 +103,7 @@ QMimeData *CNavTagItemModel::mimeData(const QModelIndexList &indexes) const
 }
 
 bool CNavTagItemModel::dropMimeData(const QMimeData *data,
-        Qt::DropAction /*action*/, int /*row*/, int /*column*/,
+        Qt::DropAction action, int /*row*/, int /*column*/,
         const QModelIndex &parent)
 {
     CTagItem *parentItem = static_cast<CTagItem *>(parent.internalPointer());
@@ -109,9 +111,14 @@ bool CNavTagItemModel::dropMimeData(const QMimeData *data,
     if (data->hasFormat("qookmarks/tag-list"))
         return dropMimeTagList(data, path);
     else if (data->hasFormat("qookmarks/bookmark-list"))
-        return dropMimeBookmarkList(data, path);
+        return dropMimeBookmarkList(data, path, action);
 
     return false;
+}
+
+Qt::DropActions CNavTagItemModel::supportedDropActions() const
+{
+    return Qt::CopyAction|Qt::MoveAction;
 }
 
 void CNavTagItemModel::navigationActions_destroyed()
@@ -140,10 +147,12 @@ bool CNavTagItemModel::dropMimeTagList(const QMimeData *data,
 }
 
 bool CNavTagItemModel::dropMimeBookmarkList(const QMimeData *data,
-        const QStringList &parentTag)
+        const QStringList &parentTag, Qt::DropAction action)
 {
-    if (m_navigationActions)
-        m_navigationActions->navActAssignTag(fromMimeBookmarkList(data), parentTag);
+    if (m_navigationActions && action == Qt::MoveAction)
+        m_navigationActions->navActSetTag(fromMimeBookmarkList(data), parentTag);
+    else if (m_navigationActions && action == Qt::CopyAction)
+        m_navigationActions->navActAddTag(fromMimeBookmarkList(data), parentTag);
 
     return true;
 }

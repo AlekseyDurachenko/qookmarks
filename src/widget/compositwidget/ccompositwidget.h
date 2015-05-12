@@ -33,6 +33,7 @@ class CBookmarkItem;
 class CNavAnchorItemModel;
 class CNavTagItemModel;
 class CTagSortFilterProxyModel;
+class CNavTagView;
 
 
 class CCompositWidget : public QWidget, INavigationActions
@@ -50,8 +51,10 @@ private slots:
 protected:
     virtual void navActMoveTags(const QList<QStringList> &tags,
                                 const QStringList &parentTag);
-    virtual void navActAssignTag(const QList<QUrl> &bookmarks,
-                                 const QStringList& tag);
+    virtual void navActSetTag(const QList<QUrl> &bookmarks,
+                              const QStringList& tag);
+    virtual void navActAddTag(const QList<QUrl> &bookmarks,
+                              const QStringList &tag);
     virtual void navActClearTags(const QList<QUrl> &bookmarks);
     virtual void navActFavorite(const QList<QUrl> &bookmarks);
     virtual void navActReadItLater(const QList<QUrl> &bookmarks);
@@ -69,7 +72,7 @@ private:
     QTreeView *m_navAnchorView;
     CNavAnchorItemModel *m_navAnchorItemModel;
 
-    QTreeView *m_navTagView;
+    CNavTagView *m_navTagView;
     CNavTagItemModel *m_navTagItemModel;
     CTagSortFilterProxyModel *m_navTagSortFilterProxyModel;
 

@@ -15,11 +15,13 @@
 #include "cbookmarkview.h"
 #include <QHeaderView>
 #include <QSortFilterProxyModel>
+#include <QDragMoveEvent>
 #include "cbookmarkbooleanicondelegate.h"
 #include "cbookmarkratingdelegate.h"
 #include "cbookmarkheaderview.h"
 #include "cbookmarkitemmodel.h"
 #include "cbookmarkitem.h"
+#include <QDebug>
 
 
 CBookmarkView::CBookmarkView(QWidget *parent) :
@@ -102,3 +104,4 @@ void CBookmarkView::setModel(QAbstractItemModel *model)
 {
     QTreeView::setModel(model);
 }
+

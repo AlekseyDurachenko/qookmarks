@@ -58,7 +58,7 @@ void CNavigationView::navActMoveTags(const QList<QStringList> &tags,
     }
 }
 
-void CNavigationView::navActAssignTag(const QList<QUrl> &bookmarks,
+void CNavigationView::navActSetTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(tag);

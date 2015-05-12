@@ -24,7 +24,8 @@ class INavigationActions
 {
 public:
     virtual void navActMoveTags(const QList<QStringList> &tags, const QStringList &parentTag) = 0;
-    virtual void navActAssignTag(const QList<QUrl> &bookmarks, const QStringList& tag) = 0;
+    virtual void navActSetTag(const QList<QUrl> &bookmarks, const QStringList &tag) = 0;
+    virtual void navActAddTag(const QList<QUrl> &bookmarks, const QStringList &tag) = 0;
     virtual void navActClearTags(const QList<QUrl> &bookmarks) = 0;
     virtual void navActFavorite(const QList<QUrl> &bookmarks) = 0;
     virtual void navActReadItLater(const QList<QUrl> &bookmarks) = 0;

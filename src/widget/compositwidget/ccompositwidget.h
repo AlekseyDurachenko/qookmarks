@@ -44,7 +44,6 @@ public:
     virtual ~CCompositWidget();
 
     inline CBookmarkView *bookmarkView() const;
-
 private slots:
     void navAnchorView_selectionModel_selectionChanged();
     void navTagView_selectionModel_selectionChanged();

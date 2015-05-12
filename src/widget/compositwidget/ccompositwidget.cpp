@@ -227,7 +227,8 @@ void CCompositWidget::navActAddTag(const QList<QUrl> &bookmarks,
 
 void CCompositWidget::navActClearTags(const QList<QUrl> &bookmarks)
 {
-    if (QMessageBox::question(this, tr("Clear tags"), tr("Are you shure?"),
+    if (QMessageBox::question(this, tr("Question"),
+            tr("Are you sure you want to move the selected bookmarks into the trash?"),
             QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)
     {
         foreach (const QUrl &url, bookmarks)
@@ -273,7 +274,8 @@ void CCompositWidget::navActReadItLater(const QList<QUrl> &bookmarks)
 
 void CCompositWidget::navActTrash(const QList<QUrl> &bookmarks)
 {
-    if (QMessageBox::question(this, tr("Move to trash"), tr("Are you shure?"),
+    if (QMessageBox::question(this, tr("Question"),
+            tr("Are you sure you want to move to trash the selected bookmarks?"),
             QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)
     {
         foreach (const QUrl &url, bookmarks)

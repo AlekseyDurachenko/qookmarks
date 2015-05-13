@@ -56,10 +56,7 @@ private slots:
     void bookmarkView_doubleClicked(const QModelIndex &index);
 
     void actionBookmarkOpenUrl_triggered();
-    void actionBookmarkOpenUrl_existsWindow_triggered();
-    void actionBookmarkOpenUrl_newWindow_triggered();
-    void actionBookmarkOpenUrl_existsPrivateWindow_triggered();
-    void actionBookmarkOpenUrl_newPrivateWindow_triggered();
+    void actionBookmarkOpenUrlExt_triggered();
     void actionBookmarkSelectAll_triggered();
     void actionBookmarkAdd_triggered();
     void actionBookmarkEdit_triggered();
@@ -71,6 +68,7 @@ private slots:
     void actionEmptyTrash_triggered();
 
     void updateActionState();
+    void updateOpenUrlActionState();
 protected:
     virtual void navActMoveTags(const QList<QStringList> &tags,
                                 const QStringList &parentTag);
@@ -109,10 +107,8 @@ private:
     bool m_isClearingNavTag;
     // set of actions
     QAction *m_actionBookmarkOpenUrl;
-    QMenu   *m_menuBookmarkBrowserOpenUrlExistsWindow;
-    QMenu   *m_menuBookmarkBrowserOpenUrlNewWindow;
-    QMenu   *m_menuBookmarkBrowserOpenUrlExistsPrivateWindow;
-    QMenu   *m_menuBookmarkBrowserOpenUrlNewPrivateWindow;
+    QMenu   *m_menuBookmarkOpenUrl;
+    QList<QAction *> m_menuBookmarkOpenUrlActions;
     QAction *m_actionBookmarkSelectAll;
     QAction *m_actionBookmarkAdd;
     QAction *m_actionBookmarkEdit;

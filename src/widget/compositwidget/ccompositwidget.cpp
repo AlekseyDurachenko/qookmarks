@@ -57,6 +57,7 @@
 #include "ctagsortfilterproxymodel.h"
 #include <QPushButton>
 #include "browser.h"
+#include "browser.h"
 
 
 CCompositWidget::CCompositWidget(QWidget *parent) :
@@ -75,6 +76,8 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
             this, SLOT(bookmarkView_showContextMenu(QPoint)));
     connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
+    connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(updateOpenUrlActionState()));
 
     m_navAnchorItemModel = new CNavAnchorItemModel(this);
     m_navAnchorItemModel->setNavigationActions(this);
@@ -145,37 +148,65 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_isClearingNavAnchor = false;
     m_isClearingNavTag = false;
 
+
     // create actions
     m_actionBookmarkOpenUrl = new  QAction(tr("Open url"), this);
     connect(m_actionBookmarkOpenUrl, SIGNAL(triggered()),
             this, SLOT(actionBookmarkOpenUrl_triggered()));
 
-    m_menuBookmarkBrowserOpenUrlExistsWindow = new QMenu(tr("Open url"), this);
-    QAction *existsWindowFirefox = new QAction(tr("Firefox"), this);
-    existsWindowFirefox->setData("firefox");
-    connect(existsWindowFirefox, SIGNAL(triggered()),
-            this, SLOT(actionBookmarkOpenUrl_existsWindow_triggered()));
-    m_menuBookmarkBrowserOpenUrlExistsWindow->addAction(existsWindowFirefox);
-    QAction *existsWindowChromium = new QAction(tr("Chromium"), this);
-    existsWindowChromium->setData("chromium-browser");
-    connect(existsWindowChromium, SIGNAL(triggered()),
-            this, SLOT(actionBookmarkOpenUrl_existsWindow_triggered()));
-    m_menuBookmarkBrowserOpenUrlExistsWindow->addAction(existsWindowChromium);
 
-    m_menuBookmarkBrowserOpenUrlNewWindow = new QMenu(tr("Open url in new window"), this);
-    QAction *newWindowFirefox = new QAction(tr("Firefox"), this);
-    newWindowFirefox->setData("firefox");
-    connect(newWindowFirefox, SIGNAL(triggered()),
-            this, SLOT(actionBookmarkOpenUrl_newWindow_triggered()));
-    m_menuBookmarkBrowserOpenUrlNewWindow->addAction(newWindowFirefox);
-    QAction *newWindowChromium = new QAction(tr("Chromium"), this);
-    newWindowChromium->setData("chromium-browser");
-    connect(newWindowChromium, SIGNAL(triggered()),
-            this, SLOT(actionBookmarkOpenUrl_newWindow_triggered()));
-    m_menuBookmarkBrowserOpenUrlNewWindow->addAction(newWindowChromium);
+    // menu open url in
+    m_menuBookmarkOpenUrl = new QMenu(tr("Open url in"), this);
+    foreach (const QByteArray &browser, Browser::systemBrowsers())
+    {
+        QAction *action = new QAction(Browser::systemBrowserName(browser), this);
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(actionBookmarkOpenUrlExt_triggered()));
+        QVariantMap map;
+        map["browser"] = browser;
+        map["flags"] = Browser::NoFlags;
+        action->setData(map);
+        m_menuBookmarkOpenUrl->addAction(action);
+        m_menuBookmarkOpenUrlActions.append(action);
+    }
+    // open url's in new window
+    QMenu *openInNewWindowMenu = new QMenu(tr("New window"), this);
+    foreach (const QByteArray &browser, Browser::systemBrowsers())
+    {
+        if (Browser::systemBrowserOptions(browser) & Browser::SupportMultipleWindow)
+        {
+            QAction *action = new QAction(Browser::systemBrowserName(browser), this);
+            connect(action, SIGNAL(triggered()),
+                    this, SLOT(actionBookmarkOpenUrlExt_triggered()));
+            QVariantMap map;
+            map["browser"] = browser;
+            map["flags"] = Browser::Window;
+            action->setData(map);
+            openInNewWindowMenu->addAction(action);
+            m_menuBookmarkOpenUrlActions.append(action);
+        }
+    }
+    m_menuBookmarkOpenUrl->addMenu(openInNewWindowMenu);
+    // open url's in private window
+    QMenu *openInPrivateWindowMenu = new QMenu(tr("Private window"), this);
+    foreach (const QByteArray &browser, Browser::systemBrowsers())
+    {
+        if (Browser::systemBrowserOptions(browser)
+                & (Browser::SupportPrivateWindow|Browser::SupportMultipleWindow))
+        {
+            QAction *action = new QAction(Browser::systemBrowserName(browser), this);
+            connect(action, SIGNAL(triggered()),
+                    this, SLOT(actionBookmarkOpenUrlExt_triggered()));
+            QVariantMap map;
+            map["browser"] = browser;
+            map["flags"] = Browser::Private|Browser::Window;
+            action->setData(map);
+            openInPrivateWindowMenu->addAction(action);
+            m_menuBookmarkOpenUrlActions.append(action);
+        }
+    }
+    m_menuBookmarkOpenUrl->addMenu(openInPrivateWindowMenu);
 
-    m_menuBookmarkBrowserOpenUrlExistsPrivateWindow = new QMenu(tr("Open url in private window"), this);
-    m_menuBookmarkBrowserOpenUrlNewPrivateWindow = new QMenu(tr("Open url in new private window"), this);
 
     m_actionBookmarkSelectAll = new QAction(tr("Select all bookmarks"), this);
     connect(m_actionBookmarkSelectAll, SIGNAL(triggered()),
@@ -267,11 +298,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
 {
     QMenu menu(this);
     menu.addAction(m_actionBookmarkOpenUrl);
-    menu.addSeparator();
-    menu.addAction(m_menuBookmarkBrowserOpenUrlExistsWindow->menuAction());
-    menu.addAction(m_menuBookmarkBrowserOpenUrlNewWindow->menuAction());
-    menu.addAction(m_menuBookmarkBrowserOpenUrlExistsPrivateWindow->menuAction());
-    menu.addAction(m_menuBookmarkBrowserOpenUrlNewPrivateWindow->menuAction());
+    menu.addAction(m_menuBookmarkOpenUrl->menuAction());
     menu.addSeparator();
     menu.addAction(m_actionBookmarkSelectAll);
     menu.addSeparator();
@@ -315,34 +342,13 @@ void CCompositWidget::actionBookmarkOpenUrl_triggered()
     Browser::openUrl(m_bookmarkView->selectedBookmarks().first()->data().url());
 }
 
-void CCompositWidget::actionBookmarkOpenUrl_existsWindow_triggered()
+void CCompositWidget::actionBookmarkOpenUrlExt_triggered()
 {
-    QString browser = qobject_cast<QAction *>(sender())->data().toString();
-    QStringList urls;
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
-        urls.push_back(bookmarkItem->data().url().toString());
-
-    QProcess::startDetached(browser, urls);
-}
-
-void CCompositWidget::actionBookmarkOpenUrl_newWindow_triggered()
-{
-    QString browser = qobject_cast<QAction *>(sender())->data().toString();
-    QStringList urls;
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
-        urls.push_back(bookmarkItem->data().url().toString());
-
-    QProcess::startDetached(browser, urls);
-}
-
-void CCompositWidget::actionBookmarkOpenUrl_existsPrivateWindow_triggered()
-{
-
-}
-
-void CCompositWidget::actionBookmarkOpenUrl_newPrivateWindow_triggered()
-{
-
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (Browser::openUrl(action->data().toMap().value("browser").toByteArray(),
+                         m_bookmarkView->selectedUrls(),
+                         action->data().toMap().value("flags").toInt()) == false)
+        QMessageBox::warning(this, tr("Warning"), tr("Can't open the url(s)"));
 }
 
 void CCompositWidget::actionBookmarkSelectAll_triggered()
@@ -519,6 +525,7 @@ void CCompositWidget::updateActionState()
     }
 
     m_actionBookmarkOpenUrl->setEnabled(selectedBookmarkCount == 1);
+    m_menuBookmarkOpenUrl->setEnabled(selectedBookmarkCount);
 
     m_actionBookmarkEdit->setEnabled(selectedBookmarkCount == 1);
     m_actionBookmarkSelectAll->setEnabled(bookmarkCount);
@@ -530,6 +537,26 @@ void CCompositWidget::updateActionState()
     m_actionTagRemove->setEnabled(selectedTagCount);
 
     m_actionEmptyTrash->setEnabled(GBookmarkMgr()->trashCount());
+}
+
+void CCompositWidget::updateOpenUrlActionState()
+{
+    int selectedBookmarkCount = m_bookmarkView->selectionModel()->selectedRows().count();
+    foreach (QAction *action, m_menuBookmarkOpenUrlActions)
+    {
+        if (selectedBookmarkCount > 1)
+        {
+                if (Browser::systemBrowserOptions(action->data().toMap().value("browser").toByteArray())
+                        & Browser::SupportMultipleUrl)
+                    action->setEnabled(true);
+                else
+                    action->setEnabled(false);
+        }
+        else
+        {
+            action->setEnabled(true);
+        }
+    }
 }
 
 void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,

@@ -16,18 +16,23 @@
 #include "cmainwindow.h"
 #include "singleton.h"
 #include "cprj.h"
+#include "browser.h"
+#include <QDebug>
 
 
 int main(int argc, char *argv[])
-{    
+{
     QApplication a(argc, argv);
+
+    Browser::init();
+    qDebug() << Browser::systemBrowsers();
 
     // create singletons
     singleton<CNetworkMgr>();
     singleton<CPrj>();
 
     CMainWindow w;
-    w.show();    
+    w.show();
     int ret = a.exec();
 
     // destroy singletons

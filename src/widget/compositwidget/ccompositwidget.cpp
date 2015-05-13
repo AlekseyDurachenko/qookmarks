@@ -56,6 +56,7 @@
 #include "ctagitemmodel.h"
 #include "ctagsortfilterproxymodel.h"
 #include <QPushButton>
+#include "browser.h"
 
 
 CCompositWidget::CCompositWidget(QWidget *parent) :
@@ -304,8 +305,7 @@ void CCompositWidget::navTagView_showContextMenu(const QPoint &pos)
 
 void CCompositWidget::actionBookmarkOpenUrl_triggered()
 {
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
-        QDesktopServices::openUrl(bookmarkItem->data().url());
+    Browser::openUrl(m_bookmarkView->selectedBookmarks().first()->data().url());
 }
 
 void CCompositWidget::actionBookmarkOpenUrl_existsWindow_triggered()
@@ -498,13 +498,6 @@ void CCompositWidget::updateActionState()
     int selectedBookmarkCount = m_bookmarkView->selectionModel()->selectedRows().count();
     int selectedTagCount = m_navTagView->selectionModel()->selectedRows().count();
 
-    m_actionBookmarkEdit->setEnabled(selectedBookmarkCount == 1);
-    m_actionBookmarkSelectAll->setEnabled(bookmarkCount);
-    m_actionTagAdd->setEnabled(selectedTagCount <= 1);
-    m_actionTagEdit->setEnabled(selectedTagCount == 1);
-    m_actionTagRemove->setEnabled(selectedTagCount);
-    m_actionEmptyTrash->setEnabled(GBookmarkMgr()->trashCount());
-
     bool hasTrashBookmarks = false;
     bool hasNotTrashBookmarks = false;
     foreach (QModelIndex index, m_bookmarkView->selectionModel()->selectedRows())
@@ -518,8 +511,18 @@ void CCompositWidget::updateActionState()
             break;
     }
 
+    m_actionBookmarkOpenUrl->setEnabled(selectedBookmarkCount == 1);
+
+    m_actionBookmarkEdit->setEnabled(selectedBookmarkCount == 1);
+    m_actionBookmarkSelectAll->setEnabled(bookmarkCount);
     m_actionBookmarkSendToTrash->setEnabled(hasNotTrashBookmarks);
     m_actionBookmarkRestore->setEnabled(hasTrashBookmarks);
+
+    m_actionTagAdd->setEnabled(selectedTagCount <= 1);
+    m_actionTagEdit->setEnabled(selectedTagCount == 1);
+    m_actionTagRemove->setEnabled(selectedTagCount);
+
+    m_actionEmptyTrash->setEnabled(GBookmarkMgr()->trashCount());
 }
 
 void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,

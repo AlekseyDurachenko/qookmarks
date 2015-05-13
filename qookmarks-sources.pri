@@ -5,6 +5,7 @@ INCLUDEPATH    +=                                                       \
     $$PWD/src/project                                                   \
     $$PWD/src/network                                                   \
     $$PWD/src/manager                                                   \
+    $$PWD/src/browser                                                   \
     $$PWD/src/widget                                                    \
     $$PWD/src/widget/aboutdialog                                        \
     $$PWD/src/widget/bookmarkview                                       \
@@ -71,7 +72,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/navigationview/cnavanchoritemmodel.h \
     $$PWD/src/manager/ctagsortfilterproxymodel.h \
     $$PWD/src/widget/navigationview/cnavtagitemmodel.h \
-    $$PWD/src/widget/navigationview/cnavtagview.h
+    $$PWD/src/widget/navigationview/cnavtagview.h \
+    $$PWD/src/browser/browser.h
 
 
 SOURCES        +=                                                       \
@@ -127,7 +129,8 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/navigationview/cnavanchoritemmodel.cpp \
     $$PWD/src/manager/ctagsortfilterproxymodel.cpp \
     $$PWD/src/widget/navigationview/cnavtagitemmodel.cpp \
-    $$PWD/src/widget/navigationview/cnavtagview.cpp
+    $$PWD/src/widget/navigationview/cnavtagview.cpp \
+    $$PWD/src/browser/browser.cpp
 
 
 FORMS          +=                                                       \

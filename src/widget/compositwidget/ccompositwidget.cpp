@@ -340,6 +340,7 @@ void CCompositWidget::actionBookmarkOpenUrl_newPrivateWindow_triggered()
 
 void CCompositWidget::actionBookmarkSelectAll_triggered()
 {
+    m_bookmarkView->selectAll();
 }
 
 void CCompositWidget::actionBookmarkAdd_triggered()

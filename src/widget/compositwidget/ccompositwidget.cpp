@@ -345,12 +345,62 @@ void CCompositWidget::actionBookmarkSelectAll_triggered()
 
 void CCompositWidget::actionBookmarkAdd_triggered()
 {
+    CBookmarkEditDialog newBookmarkDialog(this);
+    newBookmarkDialog.setWindowTitle(tr("Create bookmark"));
 
+    if (newBookmarkDialog.exec() == QDialog::Accepted)
+    {
+        CBookmark data = newBookmarkDialog.toData();
+        if (GBookmarkMgr()->find(data.url()))
+        {
+            QMessageBox::warning(this, tr("Warning"),
+                    tr("The url \"%1\" is already exists")
+                            .arg(data.url().toString()));
+        }
+        else
+        {
+            CBookmark bookmark = newBookmarkDialog.toData();
+            QIcon favicon = newBookmarkDialog.toFavicon();
+            QSet<CTagItem *> checkedTags = newBookmarkDialog.toCheckedTags();
+
+            CBookmarkItem *bookmarkItem = GBookmarkMgr()->add(bookmark);
+            GIconMgr()->saveIcon(bookmark.url(), favicon);
+
+            foreach (CTagItem *tag, checkedTags)
+                tag->bookmarkAdd(bookmarkItem);
+        }
+    }
 }
 
 void CCompositWidget::actionBookmarkEdit_triggered()
 {
+    CBookmarkItem *bookmarkItem = m_bookmarkView->selectedBookmarks().first();
 
+    CBookmarkEditDialog editBookmarkDialog(this);
+    editBookmarkDialog.setWindowTitle(tr("Edit bookmark"));
+    editBookmarkDialog.setData(bookmarkItem->data());
+    editBookmarkDialog.setFavicon(GIconMgr()->icon(bookmarkItem->data().url()));
+    editBookmarkDialog.setCheckedTags(bookmarkItem->tags());
+    if (editBookmarkDialog.exec() == QDialog::Accepted)
+    {
+        CBookmark bookmark = editBookmarkDialog.toData();
+        QIcon favicon = editBookmarkDialog.toFavicon();
+        QSet<CTagItem *> checkedTags = editBookmarkDialog.toCheckedTags();
+        QSet<CTagItem *> prevTags = bookmarkItem->tags();
+
+        bookmarkItem->setData(bookmark);
+        if (!favicon.isNull())
+            GIconMgr()->saveIcon(bookmark.url(), favicon);
+
+        foreach (CTagItem *tagItem, checkedTags)
+        {
+            tagItem->bookmarkAdd(bookmarkItem);
+            prevTags.remove(tagItem);
+        }
+
+        foreach (CTagItem *tagItem, prevTags)
+            tagItem->bookmarkRemove(bookmarkItem);
+    }
 }
 
 void CCompositWidget::actionBookmarkSendToTrash_triggered()

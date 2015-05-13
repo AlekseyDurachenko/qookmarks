@@ -100,6 +100,15 @@ QList<CBookmarkItem *> CBookmarkView::selectedBookmarks() const
     return bookmarks;
 }
 
+QList<QUrl> CBookmarkView::selectedUrls() const
+{
+    QList<QUrl> urls;
+    foreach (const QModelIndex &index, selectionModel()->selectedRows())
+        urls << CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url();
+
+    return urls;
+}
+
 void CBookmarkView::setModel(QAbstractItemModel *model)
 {
     QTreeView::setModel(model);

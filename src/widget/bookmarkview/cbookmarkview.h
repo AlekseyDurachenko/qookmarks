@@ -31,6 +31,7 @@ public:
     void setBookmarkModel(CBookmarkItemModel *model);
 
     QList<CBookmarkItem *> selectedBookmarks() const;
+    QList<QUrl> selectedUrls() const;
 protected:
     virtual void setModel(QAbstractItemModel *model);
 private:

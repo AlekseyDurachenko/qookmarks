@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     Browser::init();
-    qDebug() << Browser::systemBrowsers();
+    qDebug() << Browser::browsers();
 
     // create singletons
     singleton<CNetworkMgr>();

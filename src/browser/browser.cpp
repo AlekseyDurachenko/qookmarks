@@ -14,18 +14,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "browser.h"
 #include <QDesktopServices>
-#include <QStringList>
 #include <QProcess>
-#include <QDebug>
 
 
 QList<QByteArray> Browser::m_systemBrowsers;
-QHash<QByteArray, QString> Browser::m_systemBrowserNames;
-QHash<QByteArray, int> Browser::m_systemBrowserOptions;
-QHash<QByteArray, QByteArray> Browser::m_systemBrowserExecutable;
-QHash<QByteArray, QByteArray> Browser::m_systemBrowserRegularArgs;
-QHash<QByteArray, QByteArray> Browser::m_systemBrowserWindowArgs;
-QHash<QByteArray, QByteArray> Browser::m_systemBrowserPrivateArgs;
+QHash<QByteArray, QByteArray> Browser::m_systemBrowserExec;
 
 
 static bool testBrowser(const QByteArray &command, QByteArray *exePath = 0)
@@ -48,14 +41,18 @@ static bool testBrowser(const QByteArray &command, QByteArray *exePath = 0)
 
 void Browser::init()
 {
-    registerSystemBrowser("chromium-browser", QObject::tr("Chromium"), SupportAll);
-    registerRegularArgs("chromium-browser", "");
-    registerWindowArgs("chromium-browser", "--new-window");
-    registerPrivateArgs("chromium-browser", "--incognito");
-    registerSystemBrowser("firefox", QObject::tr("Firefox"), SupportMultipleWindow|SupportPrivateWindow);
-    registerRegularArgs("firefox", "");
-    registerWindowArgs("firefox", "--new-window");
-    registerPrivateArgs("firefox", "--private-window");
+    QByteArray execPath;
+    if (testBrowser("chromium-browser", &execPath))
+    {
+        m_systemBrowsers.push_back("chromium-browser");
+        m_systemBrowserExec.insert("chromium-browser", execPath);
+    }
+
+    if (testBrowser("firefox", &execPath))
+    {
+        m_systemBrowsers.push_back("firefox");
+        m_systemBrowserExec.insert("firefox", execPath);
+    }
 }
 
 bool Browser::openUrl(const QUrl &url)
@@ -64,70 +61,132 @@ bool Browser::openUrl(const QUrl &url)
 }
 
 bool Browser::openUrl(const QByteArray &browser, const QList<QUrl> &urls,
-        int flags)
+        WindowType windowType, QString *reason)
 {
-    if (!m_systemBrowsers.contains(browser)
-            || (((m_systemBrowserOptions[browser] & SupportMultipleUrl) == false)
-                && urls.count() > 1)
-            || (((m_systemBrowserOptions[browser] & SupportMultipleWindow) == false)
-                && flags & Window)
-            || (((m_systemBrowserOptions[browser] & SupportPrivateWindow) == false)
-                && flags & Private))
-        return false;
+    try
+    {
+        if (urls.count() > 1
+                && !canOpenMultipleUrls(browser))
+            throw QObject::tr("%1 can open only one url")
+                .arg(browserName(browser));
 
-    QStringList args;
-    if (flags & Window)
-        args.push_back(m_systemBrowserWindowArgs[browser]);
-    if (flags & Private)
-        args.push_back(m_systemBrowserPrivateArgs[browser]);
-    foreach (const QUrl &url, urls)
-        args.push_back(url.toString());
+        if (windowType == CurrentWindow
+                && !canOpenCurrentWindow(browser))
+            throw QObject::tr("%1 cannot open url in current window")
+                .arg(browserName(browser));
 
-    return QProcess::startDetached(m_systemBrowserExecutable[browser], args);
+        if (windowType == NewWindow
+                && !canOpenNewWindow(browser))
+            throw QObject::tr("%1 cannot open url in new window")
+                .arg(browserName(browser));
+
+        if (windowType == NewPrivateWindow
+                && !canOpenNewPrivateWindow(browser))
+            throw QObject::tr("%1 cannot open url in new private window")
+                .arg(browserName(browser));
+
+        QString command;
+        QStringList args;
+        if (browser == "chromium-browser")
+        {
+            command = m_systemBrowserExec["chromium-browser"];
+            switch (windowType)
+            {
+            case CurrentWindow:
+                break;
+            case NewWindow:
+                args.push_back("--new-window");
+                break;
+            case NewPrivateWindow:
+                args.push_back("--new-window");
+                args.push_back("--incognito");
+                break;
+            }
+
+            foreach (const QUrl &url, urls)
+                args.push_back(url.toString());
+        }
+        else if (browser == "firefox")
+        {
+            command = m_systemBrowserExec["firefox"];
+            switch (windowType)
+            {
+            case CurrentWindow:
+                break;
+            case NewWindow:
+                args.push_back("--new-window");
+                break;
+            case NewPrivateWindow:
+                args.push_back("--private-window");
+                break;
+            }
+
+            foreach (const QUrl &url, urls)
+                args.push_back(url.toString());
+        }
+
+        return QProcess::startDetached(command, args);
+    }
+    catch (const QString &error)
+    {
+        if (reason)
+            *reason = error;
+    }
+
+    return false;
 }
 
-const QList<QByteArray> &Browser::systemBrowsers()
+const QList<QByteArray> &Browser::browsers()
 {
     return m_systemBrowsers;
 }
 
-const QString &Browser::systemBrowserName(const QByteArray &browser)
+QString Browser::browserName(const QByteArray &browser)
 {
-    return m_systemBrowserNames[browser];
+    if (browser == "chromium-browser")
+        return QObject::tr("Chromium");
+    if (browser == "firefox")
+        return QObject::tr("Firefox");
+
+    return QObject::tr("Unknow");
 }
 
-int Browser::systemBrowserOptions(const QByteArray &browser)
+bool Browser::canOpenMultipleUrls(const QByteArray &browser)
 {
-    return m_systemBrowserOptions[browser];
+    if (browser == "chromium-browser")
+        return true;
+    if (browser == "firefox")
+        return false;
+
+    return false;
 }
 
-void Browser::registerSystemBrowser(const QByteArray &browser,
-        const QString &name, int options)
+bool Browser::canOpenCurrentWindow(const QByteArray &browser)
 {
-    QByteArray path;
-    if (!testBrowser(browser, &path))
-        return;
+    if (browser == "chromium-browser")
+        return true;
+    if (browser == "firefox")
+        return true;
 
-    m_systemBrowsers.push_back(browser);
-    m_systemBrowserNames.insert(browser, name);
-    m_systemBrowserOptions.insert(browser, options);
-    m_systemBrowserExecutable.insert(browser, path);
+    return false;
 }
 
-void Browser::registerRegularArgs(const QByteArray &browser,
-                                        const QByteArray &args)
+bool Browser::canOpenNewWindow(const QByteArray &browser)
 {
-    m_systemBrowserRegularArgs[browser] = args;
+    if (browser == "chromium-browser")
+        return true;
+    if (browser == "firefox")
+        return true;
+
+    return false;
 }
 
-void Browser::registerWindowArgs(const QByteArray &browser,
-                                 const QByteArray &args)
+bool Browser::canOpenNewPrivateWindow(const QByteArray &browser)
 {
-    m_systemBrowserWindowArgs[browser] = args;
-}
+    if (browser == "chromium-browser")
+        return true;
+    if (browser == "firefox")
+        return true;
 
-void Browser::registerPrivateArgs(const QByteArray &browser,
-                                  const QByteArray &args)
-{
-    m_systemBrowserPrivateArgs[browser] = args;
+    return false;
 }

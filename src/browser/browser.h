@@ -21,47 +21,28 @@
 class Browser
 {
 public:
-    enum Options {
-        NoOptions               = 0x0000,
-        SupportMultipleUrl      = 0x0001,
-        SupportMultipleWindow   = 0x0002,
-        SupportPrivateWindow    = 0x0004,
-        SupportAll      = SupportMultipleUrl
-                        | SupportMultipleWindow
-                        | SupportPrivateWindow
+    enum WindowType {
+        CurrentWindow       = 0x0000,
+        NewWindow           = 0x0001,
+        NewPrivateWindow    = 0x0002
     };
 
-    enum Flags {
-        NoFlags = 0x0000,
-        Window  = 0x0001,
-        Private = 0x0002
-    };
+    static void init();    
 
-    static void init();
     static bool openUrl(const QUrl &url);
     static bool openUrl(const QByteArray &browser, const QList<QUrl> &urls,
-                        int flags = NoFlags);
-    static const QList<QByteArray> &systemBrowsers();
-    static const QString &systemBrowserName(const QByteArray &browser);
-    static int systemBrowserOptions(const QByteArray &browser);
-private:
-    static void registerSystemBrowser(const QByteArray &browser,
-                                      const QString &name,
-                                      int options = NoOptions);
-    static void registerRegularArgs(const QByteArray &browser,
-                                    const QByteArray &args);
-    static void registerWindowArgs(const QByteArray &browser,
-                                   const QByteArray &args);
-    static void registerPrivateArgs(const QByteArray &browser,
-                                    const QByteArray &args);
+                        WindowType windowType, QString *reason = 0);
+
+    static const QList<QByteArray> &browsers();
+
+    static QString browserName(const QByteArray &browser);
+    static bool canOpenMultipleUrls(const QByteArray &browser);
+    static bool canOpenCurrentWindow(const QByteArray &browser);
+    static bool canOpenNewWindow(const QByteArray &browser);
+    static bool canOpenNewPrivateWindow(const QByteArray &browser);
 private:
     static QList<QByteArray> m_systemBrowsers;
-    static QHash<QByteArray, QString> m_systemBrowserNames;
-    static QHash<QByteArray, int> m_systemBrowserOptions;
-    static QHash<QByteArray, QByteArray> m_systemBrowserExecutable;
-    static QHash<QByteArray, QByteArray> m_systemBrowserRegularArgs;
-    static QHash<QByteArray, QByteArray> m_systemBrowserWindowArgs;
-    static QHash<QByteArray, QByteArray> m_systemBrowserPrivateArgs;
+    static QHash<QByteArray, QByteArray> m_systemBrowserExec;
 };
 
 

@@ -260,7 +260,6 @@ void CCompositWidget::navTagView_showContextMenu(const QPoint &pos)
 
 void CCompositWidget::actionBookmarkAdd_triggered()
 {
-
 }
 
 void CCompositWidget::actionBookmarkEdit_triggered()
@@ -280,17 +279,49 @@ void CCompositWidget::actionBookmarkSelectAll_triggered()
 
 void CCompositWidget::actionTagAdd_triggered()
 {
+    CTagItem *item = GTagMgr()->rootItem();
+    const QModelIndexList &selectedIndexes = m_navTagView->selectionModel()->selectedRows();
+    if (!selectedIndexes.isEmpty())
+        item = CTagItem::variantToPtr(selectedIndexes.first().data(Qt::UserRole));
 
+    CTagEditDialog newTagDialog(CTagEditDialog::New, item, this);
+    if (newTagDialog.exec() == QDialog::Accepted)
+        item->add(newTagDialog.toData());
 }
 
 void CCompositWidget::actionTagEdit_triggered()
 {
+    CTagItem *item = CTagItem::variantToPtr(
+                m_navTagView->selectionModel()->selectedRows().first()
+                    .data(Qt::UserRole));
 
+    CTagEditDialog editTagDialog(CTagEditDialog::Edit, item->parent(), this);
+    editTagDialog.setData(item->data());
+    if (editTagDialog.exec() == QDialog::Accepted)
+        item->setData(editTagDialog.toData());
 }
 
 void CCompositWidget::actionTagRemove_triggered()
 {
+    if (QMessageBox::question(this, tr("Question"),
+            tr("Are you sure you want to remove the selected tags?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
 
+    // we can't just remove the all selected tags, because it is
+    // hierarchical structure, and item may be removed recursively
+    // before remove method will be called
+    QList<QStringList> tags;
+    foreach (const QModelIndex &index,
+             m_navTagView->selectionModel()->selectedRows())
+        tags.append(CTagItem::variantToPtr(index.data(Qt::UserRole))->path());
+
+    foreach (const QStringList &tag, tags)
+    {
+        CTagItem *tagItem = GTagMgr()->findByPath(tag);
+        if (tagItem)
+            tagItem->parent()->removeAt(tagItem->index());
+    }
 }
 
 void CCompositWidget::actionEmptyTrash_triggered()

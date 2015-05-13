@@ -349,7 +349,17 @@ void CCompositWidget::actionBookmarkEdit_triggered()
 
 void CCompositWidget::actionBookmarkSendToTrash_triggered()
 {
+    if (QMessageBox::question(this, tr("Question"),
+            tr("Are you sure you want to send to trash the selected bookmarks?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
 
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    {
+        CBookmark data = bookmarkItem->data();
+        data.setTrash(true);
+        bookmarkItem->setData(data);
+    }
 }
 
 void CCompositWidget::actionTagAdd_triggered()

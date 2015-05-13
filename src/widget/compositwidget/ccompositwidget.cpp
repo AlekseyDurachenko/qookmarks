@@ -52,6 +52,7 @@
 #include <QSortFilterProxyModel>
 #include <QActionGroup>
 #include <QProcess>
+#include <QStack>
 #include "cnavanchoritemmodel.h"
 #include "ctagitemmodel.h"
 #include "ctagsortfilterproxymodel.h"
@@ -154,61 +155,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_actionBookmarkOpenUrl, SIGNAL(triggered()),
             this, SLOT(actionBookmarkOpenUrl_triggered()));
 
-
-    // menu open url in
-    m_menuBookmarkOpenUrl = new QMenu(tr("Open url in"), this);
-    foreach (const QByteArray &browser, Browser::browsers())
-    {
-        if (Browser::canOpenCurrentWindow(browser))
-        {
-            QAction *action = new QAction(Browser::browserName(browser), this);
-            connect(action, SIGNAL(triggered()),
-                    this, SLOT(actionBookmarkOpenUrlExt_triggered()));
-            QVariantMap map;
-            map["browser"] = browser;
-            map["windowType"] = Browser::CurrentWindow;
-            action->setData(map);
-            m_menuBookmarkOpenUrl->addAction(action);
-            m_menuBookmarkOpenUrlActions.append(action);
-        }
-    }
-    // open url's in new window
-    QMenu *openInNewWindowMenu = new QMenu(tr("New window"), this);
-    foreach (const QByteArray &browser, Browser::browsers())
-    {
-        if (Browser::canOpenNewWindow(browser))
-        {
-            QAction *action = new QAction(Browser::browserName(browser), this);
-            connect(action, SIGNAL(triggered()),
-                    this, SLOT(actionBookmarkOpenUrlExt_triggered()));
-            QVariantMap map;
-            map["browser"] = browser;
-            map["windowType"] = Browser::NewWindow;
-            action->setData(map);
-            openInNewWindowMenu->addAction(action);
-            m_menuBookmarkOpenUrlActions.append(action);
-        }
-    }
-    m_menuBookmarkOpenUrl->addMenu(openInNewWindowMenu);
-    // open url's in private window
-    QMenu *openInPrivateWindowMenu = new QMenu(tr("Private window"), this);
-    foreach (const QByteArray &browser, Browser::browsers())
-    {
-        if (Browser::canOpenNewPrivateWindow(browser))
-        {
-            QAction *action = new QAction(Browser::browserName(browser), this);
-            connect(action, SIGNAL(triggered()),
-                    this, SLOT(actionBookmarkOpenUrlExt_triggered()));
-            QVariantMap map;
-            map["browser"] = browser;
-            map["windowType"] = Browser::NewPrivateWindow;
-            action->setData(map);
-            openInPrivateWindowMenu->addAction(action);
-            m_menuBookmarkOpenUrlActions.append(action);
-        }
-    }
-    m_menuBookmarkOpenUrl->addMenu(openInPrivateWindowMenu);
-
+    m_menuBookmarkOpenUrl = createOpenUrlMenu();
 
     m_actionBookmarkSelectAll = new QAction(tr("Select all bookmarks"), this);
     connect(m_actionBookmarkSelectAll, SIGNAL(triggered()),
@@ -544,18 +491,29 @@ void CCompositWidget::updateActionState()
 void CCompositWidget::updateOpenUrlActionState()
 {
     int selectedBookmarkCount = m_bookmarkView->selectionModel()->selectedRows().count();
-    foreach (QAction *action, m_menuBookmarkOpenUrlActions)
+
+    QStack<QMenu *> stack;
+    stack.push(m_menuBookmarkOpenUrl);
+
+    while (!stack.isEmpty())
     {
-        if (selectedBookmarkCount > 1)
+        QMenu *menu = stack.pop();
+        foreach (QAction *action, menu->actions())
         {
-                if (Browser::canOpenMultipleUrls(action->data().toMap().value("browser").toByteArray()))
-                    action->setEnabled(true);
-                else
+            if (action->menu())
+            {
+               stack.push(action->menu());
+            }
+            else
+            {
+                if (selectedBookmarkCount == 0)
                     action->setEnabled(false);
-        }
-        else
-        {
-            action->setEnabled(true);
+                else if (selectedBookmarkCount > 1
+                        && !Browser::canOpenMultipleUrls(action->data().toMap().value("browser").toByteArray()))
+                    action->setEnabled(false);
+                else
+                    action->setEnabled(true);
+            }
         }
     }
 }
@@ -742,6 +700,72 @@ void CCompositWidget::updateBookmarkTagFilter()
     m_bookmarkFilter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
     m_bookmarkFilter->setTags(selectedTags);
     m_bookmarkFilter->update();
+}
+
+QMenu *CCompositWidget::createOpenUrlMenu()
+{
+    QMenu *openUrlMenu = new QMenu(tr("Open url in"), this);
+
+    // open url's in current window
+    foreach (const QByteArray &browser, Browser::browsers())
+    {
+        if (!Browser::canOpenCurrentWindow(browser))
+            continue;
+
+        QVariantMap map;
+        map["browser"] = browser;
+        map["windowType"] = Browser::CurrentWindow;
+
+        QAction *action = new QAction(Browser::browserName(browser), this);
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(actionBookmarkOpenUrlExt_triggered()));
+        action->setData(map);
+
+        openUrlMenu->addAction(action);
+    }
+
+    QMenu *openUrlNewWindowMenu = new QMenu(tr("Open url in new window in"), this);
+    openUrlMenu->addMenu(openUrlNewWindowMenu);
+    QMenu *openUrlNewPrivateWindowMenu = new QMenu(tr("Open url in new private window in"), this);
+    openUrlMenu->addMenu(openUrlNewPrivateWindowMenu);
+
+    // open url's in new window
+    foreach (const QByteArray &browser, Browser::browsers())
+    {
+        if (!Browser::canOpenNewWindow(browser))
+            continue;
+
+        QVariantMap map;
+        map["browser"] = browser;
+        map["windowType"] = Browser::NewWindow;
+
+        QAction *action = new QAction(Browser::browserName(browser), this);
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(actionBookmarkOpenUrlExt_triggered()));
+        action->setData(map);
+
+        openUrlNewWindowMenu->addAction(action);
+    }
+
+    // open url's in new private window
+    foreach (const QByteArray &browser, Browser::browsers())
+    {
+        if (!Browser::canOpenNewPrivateWindow(browser))
+            continue;
+
+        QVariantMap map;
+        map["browser"] = browser;
+        map["windowType"] = Browser::NewPrivateWindow;
+
+        QAction *action = new QAction(Browser::browserName(browser), this);
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(actionBookmarkOpenUrlExt_triggered()));
+        action->setData(map);
+
+        openUrlNewPrivateWindowMenu->addAction(action);
+    }
+
+    return openUrlMenu;
 }
 
 

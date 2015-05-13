@@ -84,6 +84,7 @@ private:
     void updateBookmarkFilter();
     void updateBookmarkAnchorFilter();
     void updateBookmarkTagFilter();
+    QMenu *createOpenUrlMenu();
 private:
     CBookmarkView *m_bookmarkView;
     CBookmarkFilter *m_bookmarkFilter;
@@ -108,7 +109,6 @@ private:
     // set of actions
     QAction *m_actionBookmarkOpenUrl;
     QMenu   *m_menuBookmarkOpenUrl;
-    QList<QAction *> m_menuBookmarkOpenUrlActions;
     QAction *m_actionBookmarkSelectAll;
     QAction *m_actionBookmarkAdd;
     QAction *m_actionBookmarkEdit;

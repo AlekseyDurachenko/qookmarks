@@ -190,6 +190,10 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_actionBookmarkSendToTrash, SIGNAL(triggered()),
             this, SLOT(actionBookmarkSendToTrash_triggered()));
 
+    m_actionBookmarkRestore = new QAction(tr("Restore bookmark(s)..."), this);
+    connect(m_actionBookmarkRestore, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkRestore_triggered()));
+
     m_actionTagAdd = new QAction(tr("Add tag..."), this);
     connect(m_actionTagAdd, SIGNAL(triggered()),
             this, SLOT(actionTagAdd_triggered()));
@@ -271,6 +275,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.addAction(m_actionBookmarkAdd);
     menu.addAction(m_actionBookmarkEdit);
     menu.addAction(m_actionBookmarkSendToTrash);
+    menu.addAction(m_actionBookmarkRestore);
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
 }
 
@@ -362,6 +367,21 @@ void CCompositWidget::actionBookmarkSendToTrash_triggered()
     }
 }
 
+void CCompositWidget::actionBookmarkRestore_triggered()
+{
+    if (QMessageBox::question(this, tr("Question"),
+            tr("Are you sure you want to restore the selected bookmarks?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    {
+        CBookmark data = bookmarkItem->data();
+        data.setTrash(false);
+        bookmarkItem->setData(data);
+    }
+}
+
 void CCompositWidget::actionTagAdd_triggered()
 {
     CTagItem *item = GTagMgr()->rootItem();
@@ -428,22 +448,27 @@ void CCompositWidget::updateActionState()
     int selectedTagCount = m_navTagView->selectionModel()->selectedRows().count();
 
     m_actionBookmarkEdit->setEnabled(selectedBookmarkCount == 1);
-    m_actionBookmarkSendToTrash->setEnabled(selectedBookmarkCount);
     m_actionBookmarkSelectAll->setEnabled(bookmarkCount);
     m_actionTagAdd->setEnabled(selectedTagCount <= 1);
     m_actionTagEdit->setEnabled(selectedTagCount == 1);
     m_actionTagRemove->setEnabled(selectedTagCount);
     m_actionEmptyTrash->setEnabled(GBookmarkMgr()->trashCount());
 
-    m_actionBookmarkSendToTrash->setEnabled(true);
+    bool hasTrashBookmarks = false;
+    bool hasNotTrashBookmarks = false;
     foreach (QModelIndex index, m_bookmarkView->selectionModel()->selectedRows())
     {
         if (CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().isTrash())
-        {
-            m_actionBookmarkSendToTrash->setEnabled(false);
+            hasTrashBookmarks = true;
+        else
+            hasNotTrashBookmarks = true;
+
+        if (hasTrashBookmarks && hasNotTrashBookmarks)
             break;
-        }
     }
+
+    m_actionBookmarkSendToTrash->setEnabled(hasNotTrashBookmarks);
+    m_actionBookmarkRestore->setEnabled(hasTrashBookmarks);
 }
 
 void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,

@@ -62,6 +62,7 @@ private slots:
     void actionBookmarkAdd_triggered();
     void actionBookmarkEdit_triggered();
     void actionBookmarkSendToTrash_triggered();
+    void actionBookmarkRestore_triggered();
     void actionTagAdd_triggered();
     void actionTagEdit_triggered();
     void actionTagRemove_triggered();
@@ -114,6 +115,7 @@ private:
     QAction *m_actionBookmarkAdd;
     QAction *m_actionBookmarkEdit;
     QAction *m_actionBookmarkSendToTrash;
+    QAction *m_actionBookmarkRestore;
     QAction *m_actionTagAdd;
     QAction *m_actionTagEdit;
     QAction *m_actionTagRemove;

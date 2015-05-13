@@ -401,7 +401,14 @@ void CCompositWidget::actionTagRemove_triggered()
 
 void CCompositWidget::actionEmptyTrash_triggered()
 {
+    if (QMessageBox::question(this, tr("Question"),
+            tr("Are you sure you want to empty the trash?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
 
+    for (int i = GBookmarkMgr()->count()-1; i >= 0; --i)
+        if (GBookmarkMgr()->at(i)->data().isTrash())
+            GBookmarkMgr()->removeAt(i);
 }
 
 void CCompositWidget::updateActionState()

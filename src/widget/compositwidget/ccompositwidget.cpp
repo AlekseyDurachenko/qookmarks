@@ -73,6 +73,8 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_bookmarkView->setDragDropMode(QAbstractItemView::DragOnly);
     connect(m_bookmarkView, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(bookmarkView_showContextMenu(QPoint)));
+    connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
 
     m_navAnchorItemModel = new CNavAnchorItemModel(this);
     m_navAnchorItemModel->setNavigationActions(this);
@@ -301,6 +303,11 @@ void CCompositWidget::navTagView_showContextMenu(const QPoint &pos)
     menu.addSeparator();
     menu.addAction(m_actionBookmarkAdd);
     menu.exec(m_navTagView->viewport()->mapToGlobal(pos));
+}
+
+void CCompositWidget::bookmarkView_doubleClicked(const QModelIndex &index)
+{
+    Browser::openUrl(CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url());
 }
 
 void CCompositWidget::actionBookmarkOpenUrl_triggered()

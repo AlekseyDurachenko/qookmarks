@@ -53,6 +53,8 @@ private slots:
     void navAnchorView_showContextMenu(const QPoint &pos);
     void navTagView_showContextMenu(const QPoint &pos);
 
+    void bookmarkView_doubleClicked(const QModelIndex &index);
+
     void actionBookmarkOpenUrl_triggered();
     void actionBookmarkOpenUrl_existsWindow_triggered();
     void actionBookmarkOpenUrl_newWindow_triggered();

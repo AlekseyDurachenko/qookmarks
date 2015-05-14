@@ -55,6 +55,21 @@ void Browser::init()
     }
 }
 
+const QList<QByteArray> &Browser::browsers()
+{
+    return m_systemBrowsers;
+}
+
+QString Browser::browserName(const QByteArray &browser)
+{
+    if (browser == "chromium-browser")
+        return QObject::tr("Chromium");
+    if (browser == "firefox")
+        return QObject::tr("Firefox");
+
+    return QObject::tr("Unknow");
+}
+
 bool Browser::openUrl(const QUrl &url)
 {
     return QDesktopServices::openUrl(url);
@@ -134,21 +149,6 @@ bool Browser::openUrl(const QByteArray &browser, const QList<QUrl> &urls,
     }
 
     return false;
-}
-
-const QList<QByteArray> &Browser::browsers()
-{
-    return m_systemBrowsers;
-}
-
-QString Browser::browserName(const QByteArray &browser)
-{
-    if (browser == "chromium-browser")
-        return QObject::tr("Chromium");
-    if (browser == "firefox")
-        return QObject::tr("Firefox");
-
-    return QObject::tr("Unknow");
 }
 
 bool Browser::canOpenMultipleUrls(const QByteArray &browser)

@@ -39,6 +39,8 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
     m_sortFilterProxyModel = new QSortFilterProxyModel(this);
     m_sortFilterProxyModel->setDynamicSortFilter(true);
     m_sortFilterProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    m_sortFilterProxyModel->setFilterKeyColumn(-1);
     setModel(m_sortFilterProxyModel);
 
     // header view
@@ -107,6 +109,11 @@ QList<QUrl> CBookmarkView::selectedUrls() const
         urls << CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url();
 
     return urls;
+}
+
+void CBookmarkView::setFilterFixedString(const QString &filter)
+{
+    m_sortFilterProxyModel->setFilterFixedString(filter);
 }
 
 void CBookmarkView::setModel(QAbstractItemModel *model)

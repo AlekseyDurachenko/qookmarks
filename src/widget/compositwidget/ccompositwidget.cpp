@@ -53,6 +53,7 @@
 #include <QActionGroup>
 #include <QProcess>
 #include <QStack>
+#include <QLineEdit>
 #include "cnavanchoritemmodel.h"
 #include "ctagitemmodel.h"
 #include "ctagsortfilterproxymodel.h"
@@ -108,6 +109,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_navTagSortFilterProxyModel = new CTagSortFilterProxyModel(this);
     m_navTagSortFilterProxyModel->setSourceModel(m_navTagItemModel);
     m_navTagSortFilterProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_navTagSortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_navTagSortFilterProxyModel->setDynamicSortFilter(true);
     m_navTagView = new CNavTagView(this);
     m_navTagView->setSortingEnabled(true);
@@ -126,6 +128,36 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_navTagView, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(navTagView_showContextMenu(QPoint)));
 
+    // tar searcher
+    m_tagSearchLineEdit = new QLineEdit(this);
+    m_tagSearchLineEdit->setPlaceholderText(tr("type search text here"));
+#if QT_VERSION >= 0x050200
+    m_tagSearchLineEdit->setClearButtonEnabled(true);
+#endif
+    connect(m_tagSearchLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(tagSearchLineEdit_textChanged(QString)));
+    QWidget *tagWidget = new QWidget(this);
+    QVBoxLayout *tagLayout = new QVBoxLayout;
+    tagWidget->setLayout(tagLayout);
+    tagLayout->addWidget(m_navTagView);
+    tagLayout->addWidget(m_tagSearchLineEdit);
+    tagLayout->setMargin(0);
+
+    // bookmark searcher
+    m_bookmarkSearchLineEdit = new QLineEdit(this);
+    m_bookmarkSearchLineEdit->setPlaceholderText(tr("type search text here"));
+#if QT_VERSION >= 0x050200
+    m_bookmarkSearchLineEdit->setClearButtonEnabled(true);
+#endif
+    connect(m_bookmarkSearchLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(bookmarkSearchLineEdit_textChanged(QString)));
+    QWidget *bookmarkWidget = new QWidget(this);
+    QVBoxLayout *bookmarkLayout = new QVBoxLayout;
+    bookmarkWidget->setLayout(bookmarkLayout);
+    bookmarkLayout->addWidget(m_bookmarkSearchLineEdit);
+    bookmarkLayout->addWidget(m_bookmarkView);
+    bookmarkLayout->setMargin(0);
+
     // + ------------- + ------------------------------------ +
     // | - All (N)     | Bookmark_1 filed_2 filed_3 filed_4   |
     // | - ...         | Bookmark_2 filed_2 filed_3 filed_4   |
@@ -137,13 +169,13 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     // + ------------- + ------------------------------------ +
     m_navSplitter = new QSplitter(Qt::Vertical, this);
     m_navSplitter->addWidget(m_navAnchorView);
-    m_navSplitter->addWidget(m_navTagView);
+    m_navSplitter->addWidget(tagWidget);
     m_navSplitter->setStretchFactor(0, 0);
     m_navSplitter->setStretchFactor(1, 1);
 
     m_splitter = new QSplitter(Qt::Horizontal, this);
     m_splitter->addWidget(m_navSplitter);
-    m_splitter->addWidget(m_bookmarkView);
+    m_splitter->addWidget(bookmarkWidget);
     m_splitter->setStretchFactor(0, 0);
     m_splitter->setStretchFactor(1, 1);
 
@@ -340,6 +372,17 @@ void CCompositWidget::bookmarkView_header_showContextMenu(const QPoint &pos)
 void CCompositWidget::bookmarkView_doubleClicked(const QModelIndex &index)
 {
     Browser::openUrl(CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url());
+}
+
+void CCompositWidget::tagSearchLineEdit_textChanged(const QString &text)
+{
+    m_navTagSortFilterProxyModel->setFilterFixedString(text);
+    m_navTagView->expandAll();
+}
+
+void CCompositWidget::bookmarkSearchLineEdit_textChanged(const QString &text)
+{
+    m_bookmarkView->setFilterFixedString(text);
 }
 
 void CCompositWidget::actionBookmarkOpenUrl_triggered()

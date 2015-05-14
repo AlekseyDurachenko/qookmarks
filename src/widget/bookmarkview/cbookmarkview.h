@@ -32,6 +32,8 @@ public:
 
     QList<CBookmarkItem *> selectedBookmarks() const;
     QList<QUrl> selectedUrls() const;
+public slots:
+    void setFilterFixedString(const QString &filter);
 protected:
     virtual void setModel(QAbstractItemModel *model);
 private:

@@ -35,6 +35,7 @@ class CNavTagItemModel;
 class CTagSortFilterProxyModel;
 class CNavTagView;
 class QMenu;
+class QLineEdit;
 
 
 class CCompositWidget : public QWidget, INavigationActions
@@ -55,6 +56,9 @@ private slots:
     void bookmarkView_header_showContextMenu(const QPoint &pos);
 
     void bookmarkView_doubleClicked(const QModelIndex &index);
+
+    void tagSearchLineEdit_textChanged(const QString &text);
+    void bookmarkSearchLineEdit_textChanged(const QString &text);
 
     void actionBookmarkOpenUrl_triggered();
     void actionBookmarkOpenUrlExt_triggered();
@@ -113,6 +117,8 @@ private:
     // widget design
     QSplitter *m_navSplitter;
     QSplitter *m_splitter;
+    QLineEdit *m_tagSearchLineEdit;
+    QLineEdit *m_bookmarkSearchLineEdit;
     // we should sync the selection between anchorView and tagView
     // These flags are used to avoid the recursive call slots:
     // * navAnchorView_selectionModel_selectionChanged()

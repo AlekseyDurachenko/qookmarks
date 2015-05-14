@@ -96,6 +96,9 @@ private slots:
     void updateActionState();
     void updateOpenUrlActionState();
     void updateQuickEditActions();
+
+    void project_opened();
+    void project_closed();
 protected:
     virtual void navActMoveTags(const QList<QStringList> &tags,
                                 const QStringList &parentTag);

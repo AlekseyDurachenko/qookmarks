@@ -260,9 +260,15 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(updateActionState()));
 
+    // update on project open state changed
+    connect(GPrj(), SIGNAL(opened()), this, SLOT(project_opened()));
+    connect(GPrj(), SIGNAL(closed()), this, SLOT(project_closed()));
+
     updateActionState();
     updateOpenUrlActionState();
     updateQuickEditActions();
+
+    project_closed();
 
     readSettings();
 }
@@ -600,6 +606,23 @@ void CCompositWidget::actionEmptyTrash_triggered()
 
 void CCompositWidget::updateActionState()
 {
+    if (!GPrj()->isOpen())
+    {
+        m_actionBookmarkOpenUrl->setEnabled(false);
+        m_menuBookmarkOpenUrl->setEnabled(false);
+        m_actionBookmarkSelectAll->setEnabled(false);
+        m_actionBookmarkAdd->setEnabled(false);
+        m_actionBookmarkEdit->setEnabled(false);
+        m_actionBookmarkSendToTrash->setEnabled(false);
+        m_actionBookmarkRestore->setEnabled(false);
+        m_actionBookmarkRemove->setEnabled(false);
+        m_actionTagAdd->setEnabled(false);
+        m_actionTagEdit->setEnabled(false);
+        m_actionTagRemove->setEnabled(false);
+        m_actionEmptyTrash->setEnabled(false);
+        return;
+    }
+
     int bookmarkCount = m_bookmarkFilterDataModel->count();
     int selectedBookmarkCount = m_bookmarkView->selectionModel()->selectedRows().count();
     int selectedTagCount = m_navTagView->selectionModel()->selectedRows().count();
@@ -718,6 +741,38 @@ void CCompositWidget::updateQuickEditActions()
         foreach (QAction *action, m_menuRating->actions())
             if (action->data().toInt() == *rating.begin())
                 action->setChecked(true);
+}
+
+void CCompositWidget::project_opened()
+{
+    m_bookmarkView->setEnabled(true);
+    m_navTagView->setEnabled(true);
+    m_navAnchorView->setEnabled(true);
+    m_bookmarkSearchLineEdit->setEnabled(true);
+    m_tagSearchLineEdit->setEnabled(true);
+
+    updateActionState();
+    updateOpenUrlActionState();
+
+    m_menuFavorite->setEnabled(GPrj()->isOpen());
+    m_menuReadItLater->setEnabled(GPrj()->isOpen());
+    m_menuRating->setEnabled(GPrj()->isOpen());
+}
+
+void CCompositWidget::project_closed()
+{
+    m_bookmarkView->setEnabled(false);
+    m_navTagView->setEnabled(false);
+    m_navAnchorView->setEnabled(false);
+    m_bookmarkSearchLineEdit->setEnabled(false);
+    m_tagSearchLineEdit->setEnabled(false);
+
+    updateActionState();
+    updateOpenUrlActionState();
+
+    m_menuFavorite->setEnabled(GPrj()->isOpen());
+    m_menuReadItLater->setEnabled(GPrj()->isOpen());
+    m_menuRating->setEnabled(GPrj()->isOpen());
 }
 
 void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,

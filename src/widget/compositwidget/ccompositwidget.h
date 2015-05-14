@@ -94,6 +94,9 @@ private:
     QMenu *createReadItLaterMenu();
     QMenu *createRatingMenu();
 private:
+    void readSettings();
+    void writeSettings();
+private:
     CBookmarkView *m_bookmarkView;
     CBookmarkFilter *m_bookmarkFilter;
     CBookmarkFilterDataModel *m_bookmarkFilterDataModel;

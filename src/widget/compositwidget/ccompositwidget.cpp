@@ -227,10 +227,13 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     updateActionState();
     updateOpenUrlActionState();
     updateQuickEditActions();
+
+    readSettings();
 }
 
 CCompositWidget::~CCompositWidget()
 {
+    writeSettings();
 }
 
 void CCompositWidget::navAnchorView_selectionModel_selectionChanged()
@@ -975,7 +978,25 @@ QMenu *CCompositWidget::createRatingMenu()
     return menu;
 }
 
+void CCompositWidget::readSettings()
+{
+    G_SETTINGS_INIT();
+    m_navSplitter->restoreState(
+                settings.value("CCompositWidget/m_navSplitter/state",
+                               m_navSplitter->saveState()).toByteArray());
+    m_splitter->restoreState(
+                settings.value("CCompositWidget/m_splitter/state",
+                               m_splitter->saveState()).toByteArray());
+}
 
+void CCompositWidget::writeSettings()
+{
+    G_SETTINGS_INIT();
+    settings.setValue("CCompositWidget/m_navSplitter/state",
+                      m_navSplitter->saveState());
+    settings.setValue("CCompositWidget/m_splitter/state",
+                      m_splitter->saveState());
+}
 
 //    int selectedAnchorCount = m_navAnchorView->selectionModel()->selectedRows().count();
 //    CNavAnchorItemModel::AnchorType anchorType = CNavAnchorItemModel::All;

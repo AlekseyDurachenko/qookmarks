@@ -506,13 +506,11 @@ void CCompositWidget::updateOpenUrlActionState()
             }
             else
             {
-                if (selectedBookmarkCount == 0)
-                    action->setEnabled(false);
-                else if (selectedBookmarkCount > 1
-                        && !Browser::canOpenMultipleUrls(action->data().toMap().value("browser").toByteArray()))
-                    action->setEnabled(false);
-                else
-                    action->setEnabled(true);
+                action->setEnabled(Browser::canOpenUrl(
+                        action->data().toMap().value("browser").toByteArray(),
+                        static_cast<Browser::WindowType>(
+                            action->data().toMap().value("windowType").toInt()),
+                        selectedBookmarkCount));
             }
         }
     }
@@ -709,7 +707,7 @@ QMenu *CCompositWidget::createOpenUrlMenu()
     // open url's in current window
     foreach (const QByteArray &browser, Browser::browsers())
     {
-        if (!Browser::canOpenCurrentWindow(browser))
+        if (!Browser::hasWindowType(browser, Browser::CurrentWindow))
             continue;
 
         QVariantMap map;
@@ -732,7 +730,7 @@ QMenu *CCompositWidget::createOpenUrlMenu()
     // open url's in new window
     foreach (const QByteArray &browser, Browser::browsers())
     {
-        if (!Browser::canOpenNewWindow(browser))
+        if (!Browser::hasWindowType(browser, Browser::NewWindow))
             continue;
 
         QVariantMap map;
@@ -750,7 +748,7 @@ QMenu *CCompositWidget::createOpenUrlMenu()
     // open url's in new private window
     foreach (const QByteArray &browser, Browser::browsers())
     {
-        if (!Browser::canOpenNewPrivateWindow(browser))
+        if (!Browser::hasWindowType(browser, Browser::NewPrivateWindow))
             continue;
 
         QVariantMap map;

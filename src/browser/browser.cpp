@@ -78,69 +78,86 @@ bool Browser::openUrl(const QUrl &url)
 bool Browser::openUrl(const QByteArray &browser, WindowType windowType,
         const QList<QUrl> &urls, QString *reason)
 {
+    if (!canOpenUrl(browser, windowType, urls.count(), reason))
+        return false;
+
+    QString command;
+    QStringList args;
+    if (browser == "chromium-browser")
+    {
+        command = m_systemBrowserExec["chromium-browser"];
+        switch (windowType)
+        {
+        case CurrentWindow:
+            break;
+        case NewWindow:
+            args.push_back("--new-window");
+            break;
+        case NewPrivateWindow:
+            args.push_back("--new-window");
+            args.push_back("--incognito");
+            break;
+        }
+
+        foreach (const QUrl &url, urls)
+            args.push_back(url.toString());
+    }
+    else if (browser == "firefox")
+    {
+        command = m_systemBrowserExec["firefox"];
+        switch (windowType)
+        {
+        case CurrentWindow:
+            break;
+        case NewWindow:
+            args.push_back("--new-window");
+            break;
+        case NewPrivateWindow:
+            args.push_back("--private-window");
+            break;
+        }
+
+        foreach (const QUrl &url, urls)
+            args.push_back(url.toString());
+    }
+
+    return QProcess::startDetached(command, args);
+}
+
+bool Browser::canOpenUrl(const QByteArray &browser,
+        Browser::WindowType windowType, int urlCount, QString *reason)
+{
     try
     {
-        if (urls.count() > 1
-                && !canOpenMultipleUrls(browser))
-            throw QObject::tr("%1 can open only one url")
-                .arg(browserName(browser));
+        if (urlCount < 1)
+            throw QObject::tr("Url list is empty");
 
-        if (windowType == CurrentWindow
-                && !canOpenCurrentWindow(browser))
-            throw QObject::tr("%1 cannot open url in current window")
-                .arg(browserName(browser));
-
-        if (windowType == NewWindow
-                && !canOpenNewWindow(browser))
-            throw QObject::tr("%1 cannot open url in new window")
-                .arg(browserName(browser));
-
-        if (windowType == NewPrivateWindow
-                && !canOpenNewPrivateWindow(browser))
-            throw QObject::tr("%1 cannot open url in new private window")
-                .arg(browserName(browser));
-
-        QString command;
-        QStringList args;
         if (browser == "chromium-browser")
         {
-            command = m_systemBrowserExec["chromium-browser"];
             switch (windowType)
             {
             case CurrentWindow:
                 break;
             case NewWindow:
-                args.push_back("--new-window");
                 break;
             case NewPrivateWindow:
-                args.push_back("--new-window");
-                args.push_back("--incognito");
                 break;
             }
-
-            foreach (const QUrl &url, urls)
-                args.push_back(url.toString());
         }
-        else if (browser == "firefox")
+
+        if (browser == "firefox")
         {
-            command = m_systemBrowserExec["firefox"];
             switch (windowType)
             {
             case CurrentWindow:
-                break;
             case NewWindow:
-                args.push_back("--new-window");
-                break;
             case NewPrivateWindow:
-                args.push_back("--private-window");
-                break;
+                if (urlCount > 1)
+                    throw QObject::tr("Firefox can't open more than one url");
             }
-
-            foreach (const QUrl &url, urls)
-                args.push_back(url.toString());
         }
 
-        return QProcess::startDetached(command, args);
+        return true;
     }
     catch (const QString &error)
     {
@@ -151,42 +168,30 @@ bool Browser::openUrl(const QByteArray &browser, WindowType windowType,
     return false;
 }
 
-bool Browser::canOpenMultipleUrls(const QByteArray &browser)
+bool Browser::hasWindowType(const QByteArray &browser,
+        Browser::WindowType windowType)
 {
     if (browser == "chromium-browser")
-        return true;
+    {
+        switch (windowType)
+        {
+        case CurrentWindow:
+        case NewWindow:
+        case NewPrivateWindow:
+            return true;
+        }
+    }
+
     if (browser == "firefox")
-        return false;
-
-    return false;
-}
-
-bool Browser::canOpenCurrentWindow(const QByteArray &browser)
-{
-    if (browser == "chromium-browser")
-        return true;
-    if (browser == "firefox")
-        return true;
-
-    return false;
-}
-
-bool Browser::canOpenNewWindow(const QByteArray &browser)
-{
-    if (browser == "chromium-browser")
-        return true;
-    if (browser == "firefox")
-        return true;
-
-    return false;
-}
-
-bool Browser::canOpenNewPrivateWindow(const QByteArray &browser)
-{
-    if (browser == "chromium-browser")
-        return true;
-    if (browser == "firefox")
-        return true;
+    {
+        switch (windowType)
+        {
+        case CurrentWindow:
+        case NewWindow:
+        case NewPrivateWindow:
+            return true;
+        }
+    }
 
     return false;
 }

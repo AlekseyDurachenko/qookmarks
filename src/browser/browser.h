@@ -35,11 +35,9 @@ public:
     static bool openUrl(const QUrl &url);
     static bool openUrl(const QByteArray &browser, WindowType windowType,
                         const QList<QUrl> &urls, QString *reason = 0);
-
-    static bool canOpenMultipleUrls(const QByteArray &browser);
-    static bool canOpenCurrentWindow(const QByteArray &browser);
-    static bool canOpenNewWindow(const QByteArray &browser);
-    static bool canOpenNewPrivateWindow(const QByteArray &browser);
+    static bool canOpenUrl(const QByteArray &browser, WindowType windowType,
+                           int urlCount, QString *reason = 0);
+    static bool hasWindowType(const QByteArray &browser, WindowType windowType);
 private:
     static QList<QByteArray> m_systemBrowsers;
     static QHash<QByteArray, QByteArray> m_systemBrowserExec;

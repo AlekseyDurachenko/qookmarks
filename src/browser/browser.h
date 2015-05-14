@@ -16,6 +16,7 @@
 #define BROWSER_H
 
 #include <QUrl>
+#include <QHash>
 
 
 class Browser

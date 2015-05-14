@@ -89,11 +89,12 @@ private:
     void updateBookmarkFilter();
     void updateBookmarkAnchorFilter();
     void updateBookmarkTagFilter();
+
     QMenu *createOpenUrlMenu();
     QMenu *createFavoriteMenu();
     QMenu *createReadItLaterMenu();
     QMenu *createRatingMenu();
-private:
+
     void readSettings();
     void writeSettings();
 private:
@@ -108,7 +109,7 @@ private:
     CNavTagView *m_navTagView;
     CNavTagItemModel *m_navTagItemModel;
     CTagSortFilterProxyModel *m_navTagSortFilterProxyModel;
-
+    // widget design
     QSplitter *m_navSplitter;
     QSplitter *m_splitter;
     // we should sync the selection between anchorView and tagView

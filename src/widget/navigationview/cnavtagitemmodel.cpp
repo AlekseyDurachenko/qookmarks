@@ -23,7 +23,9 @@
 CNavTagItemModel::CNavTagItemModel(QObject *parent) :
     CTagItemModel(parent)
 {
+#if QT_VERSION < 0x050000
     setSupportedDragActions(Qt::CopyAction|Qt::MoveAction);
+#endif
     m_navigationActions = 0;
 
     connect(GTagMgr(), SIGNAL(bookmarksChanged(CTagItem*)),
@@ -116,10 +118,12 @@ bool CNavTagItemModel::dropMimeData(const QMimeData *data,
     return false;
 }
 
+#if QT_VERSION >= 0x050000
 Qt::DropActions CNavTagItemModel::supportedDropActions() const
 {
     return Qt::CopyAction|Qt::MoveAction;
 }
+#endif
 
 void CNavTagItemModel::navigationActions_destroyed()
 {

@@ -308,7 +308,7 @@ void CCompositWidget::bookmarkView_header_showContextMenu(const QPoint &pos)
     for (int i = 0; i < m_bookmarkView->header()->count(); ++i)
     {
         QString label = m_bookmarkItemModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
-        // HACK: in the bookmark model this item texts are empty
+        // HACK: in the bookmark model this labels are empty
         if (i == 5)
             label = tr("Favorite");
         else if (i == 6)

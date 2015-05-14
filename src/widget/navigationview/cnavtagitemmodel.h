@@ -34,7 +34,9 @@ public:
     virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                               int row, int column, const QModelIndex &parent);
+#if QT_VERSION >= 0x050000
     virtual Qt::DropActions supportedDropActions() const;
+#endif
 private slots:
     void navigationActions_destroyed();
 private:

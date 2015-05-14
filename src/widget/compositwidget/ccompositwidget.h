@@ -58,6 +58,9 @@ private slots:
     void actionBookmarkOpenUrl_triggered();
     void actionBookmarkOpenUrlExt_triggered();
     void actionBookmarkSelectAll_triggered();
+    void actionFavorite_triggered();
+    void actionReadItLater_triggered();
+    void actionRating_triggered();
     void actionBookmarkAdd_triggered();
     void actionBookmarkEdit_triggered();
     void actionBookmarkSendToTrash_triggered();
@@ -69,6 +72,7 @@ private slots:
 
     void updateActionState();
     void updateOpenUrlActionState();
+    void updateQuickEditActions();
 protected:
     virtual void navActMoveTags(const QList<QStringList> &tags,
                                 const QStringList &parentTag);
@@ -85,6 +89,9 @@ private:
     void updateBookmarkAnchorFilter();
     void updateBookmarkTagFilter();
     QMenu *createOpenUrlMenu();
+    QMenu *createFavoriteMenu();
+    QMenu *createReadItLaterMenu();
+    QMenu *createRatingMenu();
 private:
     CBookmarkView *m_bookmarkView;
     CBookmarkFilter *m_bookmarkFilter;
@@ -110,6 +117,9 @@ private:
     QAction *m_actionBookmarkOpenUrl;
     QMenu   *m_menuBookmarkOpenUrl;
     QAction *m_actionBookmarkSelectAll;
+    QMenu   *m_menuFavorite;
+    QMenu   *m_menuReadItLater;
+    QMenu   *m_menuRating;
     QAction *m_actionBookmarkAdd;
     QAction *m_actionBookmarkEdit;
     QAction *m_actionBookmarkSendToTrash;

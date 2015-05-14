@@ -79,6 +79,8 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(updateOpenUrlActionState()));
+    connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(updateQuickEditActions()));
 
     m_navAnchorItemModel = new CNavAnchorItemModel(this);
     m_navAnchorItemModel->setNavigationActions(this);
@@ -161,6 +163,10 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_actionBookmarkSelectAll, SIGNAL(triggered()),
             this, SLOT(actionBookmarkSelectAll_triggered()));
 
+    m_menuFavorite = createFavoriteMenu();
+    m_menuReadItLater = createReadItLaterMenu();
+    m_menuRating = createRatingMenu();
+
     m_actionBookmarkAdd = new QAction(tr("Add bookmark..."), this);
     connect(m_actionBookmarkAdd, SIGNAL(triggered()),
             this, SLOT(actionBookmarkAdd_triggered()));
@@ -213,6 +219,10 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     // update actions on bookmark selection changed
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(updateActionState()));
+
+    updateActionState();
+    updateOpenUrlActionState();
+    updateQuickEditActions();
 }
 
 CCompositWidget::~CCompositWidget()
@@ -250,6 +260,10 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.addAction(m_menuBookmarkOpenUrl->menuAction());
     menu.addSeparator();
     menu.addAction(m_actionBookmarkSelectAll);
+    menu.addSeparator();
+    menu.addAction(m_menuFavorite->menuAction());
+    menu.addAction(m_menuReadItLater->menuAction());
+    menu.addAction(m_menuRating->menuAction());
     menu.addSeparator();
     menu.addAction(m_actionBookmarkAdd);
     menu.addAction(m_actionBookmarkEdit);
@@ -303,6 +317,39 @@ void CCompositWidget::actionBookmarkOpenUrlExt_triggered()
 void CCompositWidget::actionBookmarkSelectAll_triggered()
 {
     m_bookmarkView->selectAll();
+}
+
+void CCompositWidget::actionFavorite_triggered()
+{
+    bool favorite = qobject_cast<QAction *>(sender())->data().toBool();
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    {
+        CBookmark data = bookmarkItem->data();
+        data.setFavorite(favorite);
+        bookmarkItem->setData(data);
+    }
+}
+
+void CCompositWidget::actionReadItLater_triggered()
+{
+    bool readItLater = qobject_cast<QAction *>(sender())->data().toBool();
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    {
+        CBookmark data = bookmarkItem->data();
+        data.setReadItLater(readItLater);
+        bookmarkItem->setData(data);
+    }
+}
+
+void CCompositWidget::actionRating_triggered()
+{
+    int rating = qobject_cast<QAction *>(sender())->data().toInt();
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    {
+        CBookmark data = bookmarkItem->data();
+        data.setRating(rating);
+        bookmarkItem->setData(data);
+    }
 }
 
 void CCompositWidget::actionBookmarkAdd_triggered()
@@ -514,6 +561,65 @@ void CCompositWidget::updateOpenUrlActionState()
             }
         }
     }
+}
+
+void CCompositWidget::updateQuickEditActions()
+{
+    bool hasFavorite = false;
+    bool hasNotFavorite = false;
+    bool hasReadItLater = false;
+    bool hasNotReadItLater = false;
+    QSet<int> rating;
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    {
+        if (bookmarkItem->data().isFavorite())
+            hasFavorite = true;
+        else
+            hasNotFavorite = true;
+
+        if (bookmarkItem->data().isReadItLater())
+            hasReadItLater = true;
+        else
+            hasNotReadItLater = true;
+
+        rating.insert(bookmarkItem->data().rating());
+
+        if (hasFavorite && hasNotFavorite
+                && hasReadItLater && hasNotReadItLater
+                && rating.count() > 1)
+            break;
+    }
+
+    // update favorite yes/no actions
+    if (hasFavorite && hasNotFavorite)
+        foreach (QAction *action, m_menuFavorite->actions())
+            action->setChecked(false);
+    else
+        foreach (QAction *action, m_menuFavorite->actions())
+            if (action->data().toBool() == true && hasFavorite)
+                action->setChecked(true);
+            else if (action->data().toBool() == false && hasNotFavorite)
+                action->setChecked(true);
+
+    // update read it later yes/no actions
+    if (hasReadItLater && hasNotReadItLater)
+        foreach (QAction *action, m_menuReadItLater->actions())
+            action->setChecked(false);
+    else
+        foreach (QAction *action, m_menuReadItLater->actions())
+            if (action->data().toBool() == true && hasReadItLater)
+                action->setChecked(true);
+            else if (action->data().toBool() == false && hasNotReadItLater)
+                action->setChecked(true);
+
+    // update rating actions
+    if (rating.count() != 1)
+        foreach (QAction *action, m_menuRating->actions())
+            action->setChecked(false);
+    else
+        foreach (QAction *action, m_menuRating->actions())
+            if (action->data().toInt() == *rating.begin())
+                action->setChecked(true);
 }
 
 void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,
@@ -764,6 +870,76 @@ QMenu *CCompositWidget::createOpenUrlMenu()
     }
 
     return openUrlMenu;
+}
+
+QMenu *CCompositWidget::createFavoriteMenu()
+{
+    QActionGroup *group = new QActionGroup(this);
+    QMenu *menu = new QMenu(tr("Favorite"), this);
+    menu->setIcon(QIcon(":/icons/anchor-favorite.png"));
+
+    QAction *actionYes = new QAction(tr("Yes"), this);
+    connect(actionYes, SIGNAL(triggered()),
+            this, SLOT(actionFavorite_triggered()));
+    actionYes->setCheckable(true);
+    actionYes->setData(true);
+    group->addAction(actionYes);
+    menu->addAction(actionYes);
+
+    QAction *actionNo = new QAction(tr("No"), this);
+    connect(actionNo, SIGNAL(triggered()),
+            this, SLOT(actionFavorite_triggered()));
+    actionNo->setCheckable(true);
+    actionNo->setData(false);
+    group->addAction(actionNo);
+    menu->addAction(actionNo);
+
+    return menu;
+}
+
+QMenu *CCompositWidget::createReadItLaterMenu()
+{
+    QActionGroup *group = new QActionGroup(this);
+    QMenu *menu = new QMenu(tr("Read it later"), this);
+    menu->setIcon(QIcon(":/icons/anchor-readitlater.png"));
+
+    QAction *actionYes = new QAction(tr("Yes"), this);
+    connect(actionYes, SIGNAL(triggered()),
+            this, SLOT(actionReadItLater_triggered()));
+    actionYes->setCheckable(true);
+    actionYes->setData(true);
+    group->addAction(actionYes);
+    menu->addAction(actionYes);
+
+    QAction *actionNo = new QAction(tr("No"), this);
+    connect(actionNo, SIGNAL(triggered()),
+            this, SLOT(actionReadItLater_triggered()));
+    actionNo->setCheckable(true);
+    actionNo->setData(false);
+    group->addAction(actionNo);
+    menu->addAction(actionNo);
+
+    return menu;
+}
+
+QMenu *CCompositWidget::createRatingMenu()
+{
+    QActionGroup *group = new QActionGroup(this);
+    QMenu *menu = new QMenu(tr("Rating"), this);
+    menu->setIcon(QIcon(":/icons/anchor-rated.png"));
+
+    for (int i = Bookmark::MinRating; i <= Bookmark::MaxRating; ++i)
+    {
+        QAction *action = new QAction(QString::number(i), this);
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(actionRating_triggered()));
+        action->setCheckable(true);
+        action->setData(i);
+        group->addAction(action);
+        menu->addAction(action);
+    }
+
+    return menu;
 }
 
 

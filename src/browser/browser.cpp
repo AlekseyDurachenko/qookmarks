@@ -21,7 +21,7 @@ QList<QByteArray> Browser::m_systemBrowsers;
 QHash<QByteArray, QByteArray> Browser::m_systemBrowserExec;
 
 
-static bool testBrowser(const QByteArray &command, QByteArray *exePath = 0)
+static bool findBrowser(const QByteArray &command, QByteArray *exePath = 0)
 {
     QProcess process;
     process.start("which", (QStringList() << command), QIODevice::ReadOnly);
@@ -42,13 +42,13 @@ static bool testBrowser(const QByteArray &command, QByteArray *exePath = 0)
 void Browser::init()
 {
     QByteArray execPath;
-    if (testBrowser("chromium-browser", &execPath))
+    if (findBrowser("chromium-browser", &execPath))
     {
         m_systemBrowsers.push_back("chromium-browser");
         m_systemBrowserExec.insert("chromium-browser", execPath);
     }
 
-    if (testBrowser("firefox", &execPath))
+    if (findBrowser("firefox", &execPath))
     {
         m_systemBrowsers.push_back("firefox");
         m_systemBrowserExec.insert("firefox", execPath);

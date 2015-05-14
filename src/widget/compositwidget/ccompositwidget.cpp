@@ -509,9 +509,9 @@ void CCompositWidget::updateActionState()
 
     bool hasTrashBookmarks = false;
     bool hasNotTrashBookmarks = false;
-    foreach (QModelIndex index, m_bookmarkView->selectionModel()->selectedRows())
+    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
     {
-        if (CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().isTrash())
+        if (bookmarkItem->data().isTrash())
             hasTrashBookmarks = true;
         else
             hasNotTrashBookmarks = true;

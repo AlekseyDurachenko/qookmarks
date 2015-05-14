@@ -702,7 +702,7 @@ void CCompositWidget::updateBookmarkTagFilter()
 
 QMenu *CCompositWidget::createOpenUrlMenu()
 {
-    QMenu *openUrlMenu = new QMenu(tr("Open url in"), this);
+    QMenu *openUrlMenu = new QMenu(tr("Open url(s) in"), this);
 
     // open url's in current window
     foreach (const QByteArray &browser, Browser::browsers())
@@ -722,9 +722,9 @@ QMenu *CCompositWidget::createOpenUrlMenu()
         openUrlMenu->addAction(action);
     }
 
-    QMenu *openUrlNewWindowMenu = new QMenu(tr("Open url in new window in"), this);
+    QMenu *openUrlNewWindowMenu = new QMenu(tr("Open url(s) in new window in"), this);
     openUrlMenu->addMenu(openUrlNewWindowMenu);
-    QMenu *openUrlNewPrivateWindowMenu = new QMenu(tr("Open url in new private window in"), this);
+    QMenu *openUrlNewPrivateWindowMenu = new QMenu(tr("Open url(s) in new private window in"), this);
     openUrlMenu->addMenu(openUrlNewPrivateWindowMenu);
 
     // open url's in new window

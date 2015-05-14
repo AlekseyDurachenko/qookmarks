@@ -81,11 +81,10 @@ bool Browser::openUrl(const QByteArray &browser, WindowType windowType,
     if (!canOpenUrl(browser, windowType, urls.count(), reason))
         return false;
 
-    QString command;
-    QStringList args;
     if (browser == "chromium-browser")
     {
-        command = m_systemBrowserExec["chromium-browser"];
+        QString command = m_systemBrowserExec["chromium-browser"];
+        QStringList args;
         switch (windowType)
         {
         case CurrentWindow:
@@ -101,27 +100,46 @@ bool Browser::openUrl(const QByteArray &browser, WindowType windowType,
 
         foreach (const QUrl &url, urls)
             args.push_back(url.toString());
+
+        return QProcess::startDetached(command, args);
     }
     else if (browser == "firefox")
     {
-        command = m_systemBrowserExec["firefox"];
+        QString command = m_systemBrowserExec["firefox"];
+        QStringList args;
         switch (windowType)
         {
         case CurrentWindow:
+            foreach (const QUrl &url, urls)
+            {
+                args.push_back("-new-tab");
+                args.push_back(url.toString());
+            }
             break;
         case NewWindow:
-            args.push_back("--new-window");
+            if (urls.count() == 1)
+            {
+                args.push_back("--new-window");
+            }
+            foreach (const QUrl &url, urls)
+            {
+                args.push_back(url.toString());
+            }
             break;
         case NewPrivateWindow:
-            args.push_back("--private-window");
+            foreach (const QUrl &url, urls)
+            {
+                args.clear();
+                args.push_back("--private-window");
+                args.push_back(url.toString());
+            }
             break;
         }
 
-        foreach (const QUrl &url, urls)
-            args.push_back(url.toString());
+        return QProcess::startDetached(command, args);
     }
 
-    return QProcess::startDetached(command, args);
+    return false;
 }
 
 bool Browser::canOpenUrl(const QByteArray &browser,
@@ -137,11 +155,9 @@ bool Browser::canOpenUrl(const QByteArray &browser,
             switch (windowType)
             {
             case CurrentWindow:
-                break;
             case NewWindow:
-                break;
             case NewPrivateWindow:
-                break;
+                return true;
             }
         }
 
@@ -151,13 +167,13 @@ bool Browser::canOpenUrl(const QByteArray &browser,
             {
             case CurrentWindow:
             case NewWindow:
+                return true;
             case NewPrivateWindow:
                 if (urlCount > 1)
                     throw QObject::tr("Firefox can't open more than one url");
+                return true;
             }
         }
-
-        return true;
     }
     catch (const QString &error)
     {

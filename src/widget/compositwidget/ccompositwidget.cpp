@@ -441,6 +441,7 @@ void CCompositWidget::actionBookmarkAdd_triggered()
 {
     CBookmarkEditDialog newBookmarkDialog(this);
     newBookmarkDialog.setWindowTitle(tr("Create bookmark"));
+    newBookmarkDialog.setCheckedTags(m_bookmarkFilter->tags());
 
     if (newBookmarkDialog.exec() == QDialog::Accepted)
     {

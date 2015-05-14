@@ -19,6 +19,7 @@
 #include <QNetworkAccessManager>
 #include <QModelIndex>
 #include <QSplitter>
+#include <QMenu>
 #include "inavigationactions.h"
 class QSortFilterProxyModel;
 class CNavigationItemModel;
@@ -46,6 +47,22 @@ public:
     virtual ~CCompositWidget();
 
     inline CBookmarkView *bookmarkView() const;
+
+    inline QAction *actionBookmarkOpenUrl() const;
+    inline QAction *actionMenuBookmarkOpenUrl() const;
+    inline QAction *actionBookmarkSelectAll() const;
+    inline QAction *actionMenuFavorite() const;
+    inline QAction *actionMenuReadItLater() const;
+    inline QAction *actionMenuRating() const;
+    inline QAction *actionBookmarkAdd() const;
+    inline QAction *actionBookmarkEdit() const;
+    inline QAction *actionBookmarkSendToTrash() const;
+    inline QAction *actionBookmarkRestore() const;
+    inline QAction *actionBookmarkRemove() const;
+    inline QAction *actionTagAdd() const;
+    inline QAction *actionTagEdit() const;
+    inline QAction *actionTagRemove() const;
+    inline QAction *actionEmptyTrash() const;
 private slots:
     void navAnchorView_selectionModel_selectionChanged();
     void navTagView_selectionModel_selectionChanged();
@@ -146,6 +163,81 @@ private:
 CBookmarkView *CCompositWidget::bookmarkView() const
 {
     return m_bookmarkView;
+}
+
+QAction *CCompositWidget::actionBookmarkOpenUrl() const
+{
+    return m_actionBookmarkOpenUrl;
+}
+
+QAction *CCompositWidget::actionMenuBookmarkOpenUrl() const
+{
+    return m_menuBookmarkOpenUrl->menuAction();
+}
+
+QAction *CCompositWidget::actionBookmarkSelectAll() const
+{
+    return m_actionBookmarkSelectAll;
+}
+
+QAction *CCompositWidget::actionMenuFavorite() const
+{
+    return m_menuFavorite->menuAction();
+}
+
+QAction *CCompositWidget::actionMenuReadItLater() const
+{
+    return m_menuReadItLater->menuAction();
+}
+
+QAction *CCompositWidget::actionMenuRating() const
+{
+    return m_menuRating->menuAction();
+}
+
+QAction *CCompositWidget::actionBookmarkAdd() const
+{
+    return m_actionBookmarkAdd;
+}
+
+QAction *CCompositWidget::actionBookmarkEdit() const
+{
+    return m_actionBookmarkEdit;
+}
+
+QAction *CCompositWidget::actionBookmarkSendToTrash() const
+{
+    return m_actionBookmarkSendToTrash;
+}
+
+QAction *CCompositWidget::actionBookmarkRestore() const
+{
+    return m_actionBookmarkRestore;
+}
+
+QAction *CCompositWidget::actionBookmarkRemove() const
+{
+    return m_actionBookmarkRemove;
+}
+
+QAction *CCompositWidget::actionTagAdd() const
+{
+    return m_actionTagAdd;
+}
+
+QAction *CCompositWidget::actionTagEdit() const
+{
+    return m_actionTagEdit;
+}
+
+QAction *CCompositWidget::actionTagRemove() const
+{
+    return m_actionTagRemove;
+}
+
+QAction *CCompositWidget::actionEmptyTrash() const
+{
+    return m_actionEmptyTrash;
 }
 
 //class CCompositWidget : public QWidget

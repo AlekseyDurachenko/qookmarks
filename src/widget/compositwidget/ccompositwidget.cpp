@@ -82,6 +82,10 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(updateQuickEditActions()));
 
+    m_bookmarkView->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_bookmarkView->header(), SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(bookmarkView_header_showContextMenu(QPoint)));
+
     m_navAnchorItemModel = new CNavAnchorItemModel(this);
     m_navAnchorItemModel->setNavigationActions(this);
     m_navAnchorView = new QTreeView(this);
@@ -293,6 +297,35 @@ void CCompositWidget::navTagView_showContextMenu(const QPoint &pos)
     menu.addSeparator();
     menu.addAction(m_actionBookmarkAdd);
     menu.exec(m_navTagView->viewport()->mapToGlobal(pos));
+}
+
+void CCompositWidget::bookmarkView_header_showContextMenu(const QPoint &pos)
+{
+    QMenu menu(this);
+    for (int i = 0; i < m_bookmarkView->header()->count(); ++i)
+    {
+        QString label = m_bookmarkItemModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
+        // HACK: in the bookmark model this item texts are empty
+        if (i == 5)
+            label = tr("Favorite");
+        else if (i == 6)
+            label = tr("Read it later");
+        else if (i == 7)
+            label = tr("Trash");
+
+        QAction *action = new QAction(label, &menu);
+        action->setData(i);
+        action->setCheckable(true);
+        action->setChecked(!m_bookmarkView->header()->isSectionHidden(i));
+        menu.addAction(action);
+    }
+
+    QAction *action = menu.exec(m_bookmarkView->header()->viewport()->mapToGlobal(pos));
+    if (action)
+    {
+        int index = action->data().toInt();
+        m_bookmarkView->header()->setSectionHidden(index, !m_bookmarkView->header()->isSectionHidden(index));
+    }
 }
 
 void CCompositWidget::bookmarkView_doubleClicked(const QModelIndex &index)

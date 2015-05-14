@@ -187,6 +187,10 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     connect(m_actionBookmarkRestore, SIGNAL(triggered()),
             this, SLOT(actionBookmarkRestore_triggered()));
 
+    m_actionBookmarkRemove = new QAction(tr("Remove bookmark(s) permanently..."), this);
+    connect(m_actionBookmarkRemove, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkRemove_triggered()));
+
     m_actionTagAdd = new QAction(tr("Add tag..."), this);
     connect(m_actionTagAdd, SIGNAL(triggered()),
             this, SLOT(actionTagAdd_triggered()));
@@ -274,8 +278,10 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.addSeparator();
     menu.addAction(m_actionBookmarkAdd);
     menu.addAction(m_actionBookmarkEdit);
+    menu.addSeparator();
     menu.addAction(m_actionBookmarkSendToTrash);
     menu.addAction(m_actionBookmarkRestore);
+    menu.addAction(m_actionBookmarkRemove);
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
 }
 
@@ -478,6 +484,17 @@ void CCompositWidget::actionBookmarkRestore_triggered()
     }
 }
 
+void CCompositWidget::actionBookmarkRemove_triggered()
+{
+    if (QMessageBox::question(this, tr("Question"),
+            tr("Are you sure you want to remove the selected bookmarks?"),
+            QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
+        return;
+
+    foreach (const QUrl &url, m_bookmarkView->selectedUrls())
+        GBookmarkMgr()->removeAt(GBookmarkMgr()->find(url)->index());
+}
+
 void CCompositWidget::actionTagAdd_triggered()
 {
     CTagItem *item = GTagMgr()->rootItem();
@@ -563,6 +580,7 @@ void CCompositWidget::updateActionState()
     m_actionBookmarkSelectAll->setEnabled(bookmarkCount);
     m_actionBookmarkSendToTrash->setEnabled(hasNotTrashBookmarks);
     m_actionBookmarkRestore->setEnabled(hasTrashBookmarks);
+    m_actionBookmarkRemove->setEnabled(selectedBookmarkCount);
 
     m_actionTagAdd->setEnabled(selectedTagCount <= 1);
     m_actionTagEdit->setEnabled(selectedTagCount == 1);

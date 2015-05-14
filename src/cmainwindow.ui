@@ -45,7 +45,19 @@
     <addaction name="action_about"/>
     <addaction name="action_aboutQt"/>
    </widget>
+   <widget class="QMenu" name="menu_tags">
+    <property name="title">
+     <string>&amp;Tags</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_bookmarks">
+    <property name="title">
+     <string>&amp;Bookmarks</string>
+    </property>
+   </widget>
    <addaction name="menu_file"/>
+   <addaction name="menu_tags"/>
+   <addaction name="menu_bookmarks"/>
    <addaction name="menu_About"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">

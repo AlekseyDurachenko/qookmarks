@@ -58,10 +58,29 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_quit);
 
+    // Menu: Tags
+    ui->menu_tags->addAction(m_mainWidget->actionTagAdd());
+    ui->menu_tags->addAction(m_mainWidget->actionTagEdit());
+    ui->menu_tags->addAction(m_mainWidget->actionTagRemove());
+
     // Menu: Bookmark
-    //ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkAdd());
-    //ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkEdit());
-    //ui->menu_bookmark->addAction(m_mainWidget->actionBookmarkRemove());
+    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkOpenUrl());
+    ui->menu_bookmarks->addAction(m_mainWidget->actionMenuBookmarkOpenUrl());
+    ui->menu_bookmarks->addSeparator();
+    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkSelectAll());
+    ui->menu_bookmarks->addSeparator();
+    ui->menu_bookmarks->addAction(m_mainWidget->actionMenuFavorite());
+    ui->menu_bookmarks->addAction(m_mainWidget->actionMenuReadItLater());
+    ui->menu_bookmarks->addAction(m_mainWidget->actionMenuRating());
+    ui->menu_bookmarks->addSeparator();
+    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkAdd());
+    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkEdit());
+    ui->menu_bookmarks->addSeparator();
+    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkSendToTrash());
+    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkRestore());
+    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkRemove());
+    ui->menu_bookmarks->addSeparator();
+    ui->menu_bookmarks->addAction(m_mainWidget->actionEmptyTrash());
 
     project_closed();
     readSettings_window();
@@ -78,19 +97,21 @@ CMainWindow::~CMainWindow()
 
 void CMainWindow::project_opened()
 {
-    m_mainWidget->setEnabled(true);
+    //m_mainWidget->setEnabled(true);
     ui->action_import->setEnabled(true);
     ui->action_export->setEnabled(true);
-    //ui->menu_bookmark->setEnabled(true);
+    ui->menu_tags->setEnabled(true);
+    ui->menu_bookmarks->setEnabled(true);
     setWindowTitle(tr("%1 - %2").arg(appName(), GPrj()->path()));
 }
 
 void CMainWindow::project_closed()
 {
-    m_mainWidget->setEnabled(false);
+    //m_mainWidget->setEnabled(false);
     ui->action_import->setEnabled(false);
     ui->action_export->setEnabled(false);
-    //ui->menu_bookmark->setEnabled(false);
+    ui->menu_tags->setEnabled(false);
+    ui->menu_bookmarks->setEnabled(false);
     setWindowTitle(tr("%1").arg(appName()));
 }
 

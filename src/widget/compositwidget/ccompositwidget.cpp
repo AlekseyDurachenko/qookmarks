@@ -987,6 +987,9 @@ void CCompositWidget::readSettings()
     m_splitter->restoreState(
                 settings.value("CCompositWidget/m_splitter/state",
                                m_splitter->saveState()).toByteArray());
+    m_bookmarkView->header()->restoreState(
+                settings.value("CCompositWidget/m_bookmarkView_header/state",
+                               m_bookmarkView->header()->saveState()).toByteArray());
 }
 
 void CCompositWidget::writeSettings()
@@ -996,6 +999,8 @@ void CCompositWidget::writeSettings()
                       m_navSplitter->saveState());
     settings.setValue("CCompositWidget/m_splitter/state",
                       m_splitter->saveState());
+    settings.setValue("CCompositWidget/m_bookmarkView_header/state",
+                      m_bookmarkView->header()->saveState());
 }
 
 //    int selectedAnchorCount = m_navAnchorView->selectionModel()->selectedRows().count();

@@ -295,8 +295,8 @@ void CCompositWidget::actionBookmarkOpenUrlExt_triggered()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (Browser::openUrl(action->data().toMap().value("browser").toByteArray(),
-                         m_bookmarkView->selectedUrls(),
-                         static_cast<Browser::WindowType>(action->data().toMap().value("windowType").toInt())) == false)
+                         static_cast<Browser::WindowType>(action->data().toMap().value("windowType").toInt()),
+                         m_bookmarkView->selectedUrls()) == false)
         QMessageBox::warning(this, tr("Warning"), tr("Can't open the url(s)"));
 }
 

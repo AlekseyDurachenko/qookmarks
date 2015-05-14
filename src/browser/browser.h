@@ -33,8 +33,8 @@ public:
     static QString browserName(const QByteArray &browser);
 
     static bool openUrl(const QUrl &url);
-    static bool openUrl(const QByteArray &browser, const QList<QUrl> &urls,
-                        WindowType windowType, QString *reason = 0);
+    static bool openUrl(const QByteArray &browser, WindowType windowType,
+                        const QList<QUrl> &urls, QString *reason = 0);
 
     static bool canOpenMultipleUrls(const QByteArray &browser);
     static bool canOpenCurrentWindow(const QByteArray &browser);

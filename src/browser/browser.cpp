@@ -75,8 +75,8 @@ bool Browser::openUrl(const QUrl &url)
     return QDesktopServices::openUrl(url);
 }
 
-bool Browser::openUrl(const QByteArray &browser, const QList<QUrl> &urls,
-        WindowType windowType, QString *reason)
+bool Browser::openUrl(const QByteArray &browser, WindowType windowType,
+        const QList<QUrl> &urls, QString *reason)
 {
     try
     {

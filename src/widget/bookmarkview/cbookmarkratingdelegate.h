@@ -31,8 +31,8 @@ public:
                            const QModelIndex &index) const;
 private:
     QIcon m_starIcon;
-    QIcon m_halfStarIcon;
-    QIcon m_noStarIcon;
+    QIcon m_halfIcon;
+    QIcon m_disabledIcon;
 };
 
 

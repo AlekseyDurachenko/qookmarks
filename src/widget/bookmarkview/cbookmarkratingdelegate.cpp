@@ -17,15 +17,16 @@
 #include <QTreeView>
 #include <QHeaderView>
 #include "cbookmarkitem.h"
+#include "icontheme.h"
 #include "consts.h"
 
 
 CBookmarkRatingDelegate::CBookmarkRatingDelegate(QObject *parent) :
     QItemDelegate(parent)
 {
-    m_starIcon = QIcon(":/icons/bookmark-star.png");
-    m_halfStarIcon = QIcon(":/icons/bookmark-star-half.png");
-    m_noStarIcon = QIcon(":/icons/bookmark-star-none.png");
+    m_starIcon = IconTheme::icon("rating-bookmark-star");
+    m_halfIcon = IconTheme::icon("rating-bookmark-star-half-disabled");
+    m_disabledIcon = IconTheme::icon("rating-bookmark-star-disabled");
 }
 
 void CBookmarkRatingDelegate::paint(QPainter *painter,
@@ -45,13 +46,13 @@ void CBookmarkRatingDelegate::paint(QPainter *painter,
 
     if (rating % 2 != 0)
     {
-        painter->drawPixmap(left, top, m_halfStarIcon.pixmap(QSize(size, size)));
+        painter->drawPixmap(left, top, m_halfIcon.pixmap(QSize(size, size)));
         i += 2;
         left += size;
     }
 
     for (; i <= Bookmark::MaxRating; i +=2, left += size)
-        painter->drawPixmap(left, top, m_noStarIcon.pixmap(QSize(size, size)));
+        painter->drawPixmap(left, top, m_disabledIcon.pixmap(QSize(size, size)));
 }
 
 QSize CBookmarkRatingDelegate::sizeHint(const QStyleOptionViewItem &option,

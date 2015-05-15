@@ -12,35 +12,22 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "cmainwindow.h"
-#include "singleton.h"
-#include "cprj.h"
-#include "browser.h"
-#include "icontheme.h"
-#include <QDebug>
+#ifndef ICONTHEME_H
+#define ICONTHEME_H
+
+#include <QHash>
+#include <QIcon>
 
 
-int main(int argc, char *argv[])
+class IconTheme
 {
-    QApplication a(argc, argv);
+public:
+    static void init();
+    static const QIcon icon(const QByteArray &name,
+                            const QIcon &defaultIcon = QIcon());
+private:
+    static QHash<QByteArray, QIcon> m_icons;
+};
 
-    IconTheme::init();
-    Browser::init();
 
-    qDebug() << Browser::browsers();
-
-    // create singletons
-    singleton<CNetworkMgr>();
-    singleton<CPrj>();
-
-    CMainWindow w;
-    w.show();
-    int ret = a.exec();
-
-    // destroy singletons
-    //delete singleton<CPrj>();
-    //delete singleton<CNetworkMgr>();
-
-    return ret;
-}
+#endif // ICONTHEME_H

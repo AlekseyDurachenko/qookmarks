@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctagitemmodel.h"
+#include "icontheme.h"
 #include "singleton.h"
 
 
@@ -47,7 +48,7 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DecorationRole)
         if (index.column() == 0)
-            return QIcon(":/icons/tag-icon-default.png");
+            return IconTheme::icon("tag-icon-default");
 
     if (role == Qt::UserRole)
         return CTagItem::variantFromPtr(item);

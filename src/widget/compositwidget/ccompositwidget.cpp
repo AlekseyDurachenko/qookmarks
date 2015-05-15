@@ -59,6 +59,7 @@
 #include <QPushButton>
 #include "browser.h"
 #include "browser.h"
+#include "icontheme.h"
 
 
 CCompositWidget::CCompositWidget(QWidget *parent) :
@@ -1028,7 +1029,7 @@ QMenu *CCompositWidget::createFavoriteMenu()
 {
     QActionGroup *group = new QActionGroup(this);
     QMenu *menu = new QMenu(tr("Favorite"), this);
-    menu->setIcon(QIcon(":/icons/anchor-favorite.png"));
+    menu->setIcon(IconTheme::icon("anchor-bookmark-favorite"));
 
     QAction *actionYes = new QAction(tr("Yes"), this);
     connect(actionYes, SIGNAL(triggered()),
@@ -1053,7 +1054,7 @@ QMenu *CCompositWidget::createReadItLaterMenu()
 {
     QActionGroup *group = new QActionGroup(this);
     QMenu *menu = new QMenu(tr("Read it later"), this);
-    menu->setIcon(QIcon(":/icons/anchor-readitlater.png"));
+    menu->setIcon(IconTheme::icon("anchor-bookmark-readitlater"));
 
     QAction *actionYes = new QAction(tr("Yes"), this);
     connect(actionYes, SIGNAL(triggered()),
@@ -1078,7 +1079,7 @@ QMenu *CCompositWidget::createRatingMenu()
 {
     QActionGroup *group = new QActionGroup(this);
     QMenu *menu = new QMenu(tr("Rating"), this);
-    menu->setIcon(QIcon(":/icons/anchor-rated.png"));
+    menu->setIcon(IconTheme::icon("anchor-bookmark-rated"));
 
     for (int i = Bookmark::MinRating; i <= Bookmark::MaxRating; ++i)
     {

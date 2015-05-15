@@ -18,6 +18,7 @@
 #include "cbookmarkitem.h"
 #include "inavigationactions.h"
 #include "singleton.h"
+#include "icontheme.h"
 
 
 CNavAnchorItemModel::CNavAnchorItemModel(QObject *parent) :
@@ -220,17 +221,20 @@ QIcon CNavAnchorItemModel::anchorIcon(CNavAnchorItemModel::AnchorType type) cons
     switch (type)
     {
     case All:
-        return QIcon(":/icons/anchor-all.png");
+        return IconTheme::icon("anchor-bookmark-all");
     case Untagged:
-        return QIcon(":/icons/anchor-untagged.png");
+        return IconTheme::icon("anchor-bookmark-untagged");
     case Favorites:
-        return QIcon(":/icons/anchor-favorite.png");
+        return IconTheme::icon("anchor-bookmark-favorite");
     case ReadItLater:
-        return QIcon(":/icons/anchor-readitlater.png");
+        return IconTheme::icon("anchor-bookmark-readitlater");
     case Rated:
-        return QIcon(":/icons/anchor-rated.png");
+        return IconTheme::icon("anchor-bookmark-rated");
     case Trash:
-        return QIcon(":/icons/anchor-trash.png");
+        if (GBookmarkMgr()->trashCount())
+            return IconTheme::icon("anchor-bookmark-trash-full");
+        else
+            return IconTheme::icon("anchor-bookmark-trash");
     }
 
     return QIcon();

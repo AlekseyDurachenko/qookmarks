@@ -21,6 +21,7 @@
 #include "cbookmarkheaderview.h"
 #include "cbookmarkitemmodel.h"
 #include "cbookmarkitem.h"
+#include "icontheme.h"
 #include <QDebug>
 
 
@@ -58,20 +59,20 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
 
     // favorite
     CBookmarkBooleanIconDelegate *favoriteItemDelegate = new CBookmarkBooleanIconDelegate(this);
-    favoriteItemDelegate->setIconOn(QIcon(":/icons/anchor-favorite.png"));
-    favoriteItemDelegate->setIconOff(QIcon(":/icons/anchor-non-favorite.png"));
+    favoriteItemDelegate->setIconOn(IconTheme::icon("anchor-bookmark-favorite"));
+    favoriteItemDelegate->setIconOff(IconTheme::icon("anchor-bookmark-favorite-disabled"));
     setItemDelegateForColumn(5, favoriteItemDelegate);
 
     // read it later
     CBookmarkBooleanIconDelegate *readItLaterItemDelegate = new CBookmarkBooleanIconDelegate(this);
-    readItLaterItemDelegate->setIconOn(QIcon(":/icons/anchor-readitlater.png"));
-    readItLaterItemDelegate->setIconOff(QIcon(":/icons/anchor-non-readitlater.png"));
+    readItLaterItemDelegate->setIconOn(IconTheme::icon("anchor-bookmark-readitlater"));
+    readItLaterItemDelegate->setIconOff(IconTheme::icon("anchor-bookmark-readitlater-disabled"));
     setItemDelegateForColumn(6, readItLaterItemDelegate);
 
     // trash
     CBookmarkBooleanIconDelegate *trashItemDelegate = new CBookmarkBooleanIconDelegate(this);
-    trashItemDelegate->setIconOn(QIcon(":/icons/anchor-trash.png"));
-    trashItemDelegate->setIconOff(QIcon(":/icons/anchor-non-trash.png"));
+    trashItemDelegate->setIconOn(IconTheme::icon("anchor-bookmark-trash"));
+    trashItemDelegate->setIconOff(IconTheme::icon("anchor-bookmark-trash-disabled"));
     setItemDelegateForColumn(7, trashItemDelegate);
 }
 

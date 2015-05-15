@@ -91,10 +91,6 @@
            <property name="text">
             <string>favorite</string>
            </property>
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/bookmark-favorites.png</normaloff>:/icons/bookmark-favorites.png</iconset>
-           </property>
           </widget>
          </item>
          <item row="2" column="2">
@@ -102,20 +98,12 @@
            <property name="toolTip">
             <string>Get a page information</string>
            </property>
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/download-webpage-info.png</normaloff>:/icons/download-webpage-info.png</iconset>
-           </property>
           </widget>
          </item>
          <item row="7" column="1">
           <widget class="QCheckBox" name="checkBox_readItLater">
            <property name="text">
             <string>read it later</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/bookmark-readlater.png</normaloff>:/icons/bookmark-readlater.png</iconset>
            </property>
           </widget>
          </item>
@@ -130,10 +118,6 @@
           <widget class="QCheckBox" name="checkBox_trash">
            <property name="text">
             <string>trash</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/bookmark-trash.png</normaloff>:/icons/bookmark-trash.png</iconset>
            </property>
           </widget>
          </item>
@@ -155,12 +139,7 @@
           </widget>
          </item>
          <item row="9" column="2">
-          <widget class="QToolButton" name="toolButton_httpCheck">
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/check-url.png</normaloff>:/icons/check-url.png</iconset>
-           </property>
-          </widget>
+          <widget class="QToolButton" name="toolButton_httpCheck"/>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_description">
@@ -348,10 +327,6 @@
            <property name="text">
             <string>Load from file...</string>
            </property>
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/action-open.png</normaloff>:/icons/action-open.png</iconset>
-           </property>
            <property name="toolButtonStyle">
             <enum>Qt::ToolButtonTextBesideIcon</enum>
            </property>
@@ -362,10 +337,6 @@
            <property name="text">
             <string>Save to file...</string>
            </property>
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/action-save.png</normaloff>:/icons/action-save.png</iconset>
-           </property>
            <property name="toolButtonStyle">
             <enum>Qt::ToolButtonTextBesideIcon</enum>
            </property>
@@ -375,10 +346,6 @@
           <widget class="QToolButton" name="toolButton_clear">
            <property name="text">
             <string>Clear...</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/action-erase.png</normaloff>:/icons/action-erase.png</iconset>
            </property>
            <property name="toolButtonStyle">
             <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -402,10 +369,6 @@
           <widget class="QToolButton" name="toolButton_textWrap">
            <property name="text">
             <string>Text wrap</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../../../qrc/icons.qrc">
-             <normaloff>:/icons/action-text-wrap.png</normaloff>:/icons/action-text-wrap.png</iconset>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -434,10 +397,6 @@
       <widget class="QCheckBox" name="checkBox_addToDownloadQueue">
        <property name="text">
         <string>add this page to the download queue</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../../../qrc/about.qrc">
-         <normaloff>:/icons/action-download.png</normaloff>:/icons/action-download.png</iconset>
        </property>
       </widget>
      </item>
@@ -499,10 +458,7 @@
   <tabstop>checkBox_addToDownloadQueue</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
- <resources>
-  <include location="../../../qrc/about.qrc"/>
-  <include location="../../../qrc/icons.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

@@ -1,39 +1,31 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/check-url.png</file>
-        <file>icons/download-webpage-info.png</file>
         <file>icons/action-about-qt.png</file>
-        <file>icons/action-exit.png</file>
-        <file>icons/qookmarks.png</file>
-        <file>icons/action-configure.png</file>
-        <file>icons/bookmark-favorites.png</file>
-        <file>icons/bookmark-rated.png</file>
-        <file>icons/bookmark-readlater.png</file>
-        <file>icons/bookmark-bookmarks.png</file>
-        <file>icons/bookmark-tag.png</file>
-        <file>icons/bookmark-trash.png</file>
-        <file>icons/bookmark-untagged.png</file>
-        <file>icons/bookmark-item.png</file>
-        <file>icons/browser-firefox.png</file>
-        <file>icons/browser-chromium.png</file>
-        <file>icons/action-erase.png</file>
-        <file>icons/action-open.png</file>
-        <file>icons/action-save.png</file>
-        <file>icons/action-text-wrap.png</file>
-        <file>icons/bookmark-noflag.png</file>
-        <file>icons/bookmark-star-none.png</file>
-        <file>icons/bookmark-star.png</file>
-        <file>icons/bookmark-star-half.png</file>
         <file>icons/action-download.png</file>
-        <file>icons/anchor-all.png</file>
-        <file>icons/anchor-favorite.png</file>
-        <file>icons/anchor-rated.png</file>
-        <file>icons/anchor-readitlater.png</file>
-        <file>icons/anchor-trash.png</file>
-        <file>icons/anchor-untagged.png</file>
+        <file>icons/action-note-erase.png</file>
+        <file>icons/action-exit.png</file>
+        <file>icons/action-note-open.png</file>
+        <file>icons/action-note-save-as.png</file>
+        <file>icons/action-note-text-wrap.png</file>
+        <file>icons/anchor-bookmark-all.png</file>
+        <file>icons/anchor-bookmark-favorite-disabled.png</file>
+        <file>icons/anchor-bookmark-favorite.png</file>
+        <file>icons/anchor-bookmark-rated.png</file>
+        <file>icons/anchor-bookmark-readitlater-disabled.png</file>
+        <file>icons/anchor-bookmark-readitlater.png</file>
+        <file>icons/anchor-bookmark-trash-disabled.png</file>
+        <file>icons/anchor-bookmark-trash-full.png</file>
+        <file>icons/anchor-bookmark-trash.png</file>
+        <file>icons/anchor-bookmark-untagged.png</file>
+        <file>icons/browser-chromium.png</file>
+        <file>icons/browser-firefox.png</file>
+        <file>icons/action-check-url.png</file>
+        <file>icons/action-download-url-metadata.png</file>
+        <file>icons/favicon-default.png</file>
+        <file>icons/qookmarks.png</file>
+        <file>icons/rating-bookmark-star-disabled.png</file>
+        <file>icons/rating-bookmark-star-half-disabled.png</file>
+        <file>icons/rating-bookmark-star.png</file>
         <file>icons/tag-icon-default.png</file>
-        <file>icons/anchor-non-favorite.png</file>
-        <file>icons/anchor-non-readitlater.png</file>
-        <file>icons/anchor-non-trash.png</file>
     </qresource>
 </RCC>

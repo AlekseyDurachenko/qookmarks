@@ -26,6 +26,7 @@
 #include "cdownloadwebpageinforeply.h"
 #include "ciconmgr.h"
 #include "settings.h"
+#include "icontheme.h"
 #include <QDebug>
 
 
@@ -33,6 +34,18 @@ CBookmarkEditDialog::CBookmarkEditDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::CBookmarkEditDialog)
 {
     ui->setupUi(this);
+
+    // set icons
+    ui->checkBox_favorite->setIcon(IconTheme::icon("anchor-bookmark-favorite"));
+    ui->checkBox_readItLater->setIcon(IconTheme::icon("anchor-bookmark-readitlater"));
+    ui->checkBox_trash->setIcon(IconTheme::icon("anchor-bookmark-trash"));
+    ui->checkBox_addToDownloadQueue->setIcon(IconTheme::icon("action-download"));
+    ui->toolButton_pageinfo->setIcon(IconTheme::icon("action-download-url-metadata"));
+    ui->toolButton_httpCheck->setIcon(IconTheme::icon("action-check-url"));
+    ui->toolButton_loadFromFile->setIcon(IconTheme::icon("action-note-open"));
+    ui->toolButton_saveToFile->setIcon(IconTheme::icon("action-note-save-as"));
+    ui->toolButton_clear->setIcon(IconTheme::icon("action-note-erase"));
+    ui->toolButton_textWrap->setIcon(IconTheme::icon("action-note-text-wrap"));
 
     // configure the checked tag treeview
     m_checkedTagItemModel = new CCheckedTagItemModel(this);

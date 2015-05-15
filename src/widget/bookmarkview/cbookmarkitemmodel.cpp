@@ -22,6 +22,7 @@
 #include <QIcon>
 #include <QMimeData>
 #include <QDebug>
+#include "icontheme.h"
 
 
 CBookmarkItemModel::CBookmarkItemModel(QObject *parent) :
@@ -105,7 +106,8 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DecorationRole)
         if (index.column() == 0)
-            return GIconMgr()->icon(bookmark->data().url(), QIcon(":/icons/bookmark-item.png"));
+            return GIconMgr()->icon(bookmark->data().url(),
+                                    IconTheme::icon("favicon-default"));
 
     if (role == Qt::UserRole)
         return CBookmarkItem::variantFromPtr(m_dataModel->at(index.row()));
@@ -154,11 +156,11 @@ QVariant CBookmarkItemModel::headerData(int section,
         switch (section)
         {
         case 5:
-            return QIcon(":/icons/bookmark-favorites.png");
+            return IconTheme::icon("anchor-bookmark-favorite");
         case 6:
-            return QIcon(":/icons/bookmark-readlater.png");
+            return IconTheme::icon("anchor-bookmark-readitlater");
         case 7:
-            return QIcon(":/icons/bookmark-trash.png");
+            return IconTheme::icon("anchor-bookmark-trash");
         default:
             return QVariant();
         }

@@ -6,6 +6,7 @@ INCLUDEPATH    +=                                                       \
     $$PWD/src/network                                                   \
     $$PWD/src/manager                                                   \
     $$PWD/src/browser                                                   \
+    $$PWD/src/icontheme                                                \
     $$PWD/src/widget                                                    \
     $$PWD/src/widget/aboutdialog                                        \
     $$PWD/src/widget/bookmarkview                                       \
@@ -27,7 +28,6 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/ctag.h                                            \
     $$PWD/src/manager/ctagitem.h                                        \
     $$PWD/src/manager/ctagmgr.h                                         \
-    $$PWD/src/widget/navigationview/cnavigationitemmodel.h              \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
     $$PWD/src/widget/navigationview/inavigationactions.h \
@@ -73,7 +73,8 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/ctagsortfilterproxymodel.h \
     $$PWD/src/widget/navigationview/cnavtagitemmodel.h \
     $$PWD/src/widget/navigationview/cnavtagview.h \
-    $$PWD/src/browser/browser.h
+    $$PWD/src/browser/browser.h \
+    $$PWD/src/icontheme/icontheme.h
 
 
 SOURCES        +=                                                       \
@@ -88,7 +89,6 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/ctag.cpp                                          \
     $$PWD/src/manager/ctagitem.cpp                                      \
     $$PWD/src/manager/ctagmgr.cpp                                       \
-    $$PWD/src/widget/navigationview/cnavigationitemmodel.cpp            \
     $$PWD/src/version.cpp                                               \
     $$PWD/src/widget/compositwidget/ccompositwidget.cpp \
     $$PWD/src/widget/navigationview/cnavigationview.cpp \
@@ -130,7 +130,8 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/ctagsortfilterproxymodel.cpp \
     $$PWD/src/widget/navigationview/cnavtagitemmodel.cpp \
     $$PWD/src/widget/navigationview/cnavtagview.cpp \
-    $$PWD/src/browser/browser.cpp
+    $$PWD/src/browser/browser.cpp \
+    $$PWD/src/icontheme/icontheme.cpp
 
 
 FORMS          +=                                                       \

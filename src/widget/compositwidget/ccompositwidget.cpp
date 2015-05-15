@@ -23,7 +23,6 @@
 #include <QDesktopServices>
 #include "cnavigationview.h"
 #include "cbookmarkview.h"
-#include "cnavigationitemmodel.h"
 #include "cnavtagitemmodel.h"
 #include "cbookmarkfilter.h"
 #include "cbookmarkitemmodel.h"

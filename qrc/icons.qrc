@@ -27,5 +27,6 @@
         <file>icons/rating-bookmark-star-half-disabled.png</file>
         <file>icons/rating-bookmark-star.png</file>
         <file>icons/tag-icon-default.png</file>
+        <file>icons/browser-default.png</file>
     </qresource>
 </RCC>

@@ -44,6 +44,9 @@ void IconTheme::init()
     m_icons.insert("action-download",               QIcon(":/icons/action-download.png"));
     m_icons.insert("action-download-url-metadata",  QIcon(":/icons/action-download-url-metadata.png"));
     m_icons.insert("action-exit",                   QIcon(":/icons/action-exit.png"));
+    m_icons.insert("browser-default",               QIcon(":/icons/browser-default.png"));
+    m_icons.insert("browser-chromium",              QIcon(":/icons/browser-chromium.png"));
+    m_icons.insert("browser-firefox",               QIcon(":/icons/browser-firefox.png"));
 }
 
 const QIcon IconTheme::icon(const QByteArray &name, const QIcon &defaultIcon)

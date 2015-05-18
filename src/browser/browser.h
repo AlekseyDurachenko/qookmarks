@@ -17,6 +17,7 @@
 
 #include <QUrl>
 #include <QHash>
+#include <QIcon>
 
 
 class Browser
@@ -32,6 +33,7 @@ public:
 
     static const QList<QByteArray> &browsers();
     static QString browserName(const QByteArray &browser);
+    static QIcon browserIcon(const QByteArray &browser);
 
     static bool openUrl(const QUrl &url);
     static bool openUrl(const QByteArray &browser, WindowType windowType,

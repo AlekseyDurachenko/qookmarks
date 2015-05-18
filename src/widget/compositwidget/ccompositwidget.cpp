@@ -190,6 +190,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
 
     // create actions
     m_actionBookmarkOpenUrl = new  QAction(tr("Open url"), this);
+    m_actionBookmarkOpenUrl->setIcon(IconTheme::icon("browser-default"));
     connect(m_actionBookmarkOpenUrl, SIGNAL(triggered()),
             this, SLOT(actionBookmarkOpenUrl_triggered()));
 
@@ -974,9 +975,10 @@ QMenu *CCompositWidget::createOpenUrlMenu()
         map["windowType"] = Browser::CurrentWindow;
 
         QAction *action = new QAction(Browser::browserName(browser), this);
+        action->setIcon(Browser::browserIcon(browser));
+        action->setData(map);
         connect(action, SIGNAL(triggered()),
                 this, SLOT(actionBookmarkOpenUrlExt_triggered()));
-        action->setData(map);
 
         openUrlMenu->addAction(action);
     }
@@ -997,9 +999,10 @@ QMenu *CCompositWidget::createOpenUrlMenu()
         map["windowType"] = Browser::NewWindow;
 
         QAction *action = new QAction(Browser::browserName(browser), this);
+        action->setIcon(Browser::browserIcon(browser));
+        action->setData(map);
         connect(action, SIGNAL(triggered()),
                 this, SLOT(actionBookmarkOpenUrlExt_triggered()));
-        action->setData(map);
 
         openUrlNewWindowMenu->addAction(action);
     }
@@ -1015,9 +1018,10 @@ QMenu *CCompositWidget::createOpenUrlMenu()
         map["windowType"] = Browser::NewPrivateWindow;
 
         QAction *action = new QAction(Browser::browserName(browser), this);
+        action->setIcon(Browser::browserIcon(browser));
+        action->setData(map);
         connect(action, SIGNAL(triggered()),
                 this, SLOT(actionBookmarkOpenUrlExt_triggered()));
-        action->setData(map);
 
         openUrlNewPrivateWindowMenu->addAction(action);
     }

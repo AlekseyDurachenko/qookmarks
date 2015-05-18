@@ -15,6 +15,7 @@
 #include "browser.h"
 #include <QDesktopServices>
 #include <QProcess>
+#include "icontheme.h"
 
 
 QList<QByteArray> Browser::m_systemBrowsers;
@@ -68,6 +69,16 @@ QString Browser::browserName(const QByteArray &browser)
         return QObject::tr("Firefox");
 
     return QObject::tr("Unknow");
+}
+
+QIcon Browser::browserIcon(const QByteArray &browser)
+{
+    if (browser == "chromium-browser")
+        return IconTheme::icon("browser-chromium");
+    if (browser == "firefox")
+        return IconTheme::icon("browser-firefox");
+
+    return IconTheme::icon("browser-default");
 }
 
 bool Browser::openUrl(const QUrl &url)

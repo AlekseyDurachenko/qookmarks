@@ -55,6 +55,10 @@ void IconTheme::init()
     m_icons.insert("action-tag-add",                QIcon(":/icons/action-tag-add.png"));
     m_icons.insert("action-tag-edit",               QIcon(":/icons/action-tag-edit.png"));
     m_icons.insert("action-tag-remove",             QIcon(":/icons/action-tag-remove.png"));
+    m_icons.insert("action-collection-create",         QIcon(":/icons/action-collection-create.png"));
+    m_icons.insert("action-collection-save",           QIcon(":/icons/action-collection-save.png"));
+    m_icons.insert("action-collection-open",           QIcon(":/icons/action-collection-open.png"));
+    m_icons.insert("action-collection-close",          QIcon(":/icons/action-collection-close.png"));
     m_icons.insert("browser-default",               QIcon(":/icons/browser-default.png"));
     m_icons.insert("browser-chromium",              QIcon(":/icons/browser-chromium.png"));
     m_icons.insert("browser-firefox",               QIcon(":/icons/browser-firefox.png"));

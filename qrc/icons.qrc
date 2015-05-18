@@ -39,5 +39,9 @@
         <file>icons/action-tag-remove.png</file>
         <file>icons/action-bookmark-restore.png</file>
         <file>icons/action-bookmark-select-all.png</file>
+        <file>icons/action-collection-close.png</file>
+        <file>icons/action-collection-create.png</file>
+        <file>icons/action-collection-open.png</file>
+        <file>icons/action-collection-save.png</file>
     </qresource>
 </RCC>

@@ -23,14 +23,19 @@
 #include "cbookmarkitem.h"
 #include "cprjxml.h"
 #include "bookmarkimportchromium.h"
+#include "icontheme.h"
 
 
 CPrj::CPrj(QObject *parent) : QObject(parent)
 {
     m_actionCreate = new QAction(tr("New Bookmark Collection..."), this);
+    m_actionCreate->setIcon(IconTheme::icon("action-collection-create"));
     m_actionOpen = new QAction(tr("Open Bookmark Collection..."), this);
+    m_actionOpen->setIcon(IconTheme::icon("action-collection-open"));
     m_actionSave = new QAction(tr("Save Bookmark Collection"), this);
+    m_actionSave->setIcon(IconTheme::icon("action-collection-save"));
     m_actionClose = new QAction(tr("Close Bookmark Collection..."), this);
+    m_actionClose->setIcon(IconTheme::icon("action-collection-close"));
 
     m_manager = new CManager(this);
     m_iconMgr = new CIconMgr();

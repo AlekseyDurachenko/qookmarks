@@ -30,5 +30,14 @@
         <file>icons/browser-default.png</file>
         <file>icons/action-about.png</file>
         <file>icons/action-empty-trash.png</file>
+        <file>icons/action-bookmark-add.png</file>
+        <file>icons/action-tag-add.png</file>
+        <file>icons/action-bookmark-edit.png</file>
+        <file>icons/action-bookmark-remove.png</file>
+        <file>icons/action-bookmark-send-to-trash.png</file>
+        <file>icons/action-tag-edit.png</file>
+        <file>icons/action-tag-remove.png</file>
+        <file>icons/action-bookmark-restore.png</file>
+        <file>icons/action-bookmark-select-all.png</file>
     </qresource>
 </RCC>

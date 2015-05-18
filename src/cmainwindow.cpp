@@ -83,6 +83,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_bookmarks->addSeparator();
     ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkSendToTrash());
     ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkRestore());
+    ui->menu_bookmarks->addSeparator();
     ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkRemove());
     ui->menu_bookmarks->addSeparator();
     ui->menu_bookmarks->addAction(m_mainWidget->actionEmptyTrash());

@@ -46,6 +46,15 @@ void IconTheme::init()
     m_icons.insert("action-download-url-metadata",  QIcon(":/icons/action-download-url-metadata.png"));
     m_icons.insert("action-quit",                   QIcon(":/icons/action-quit.png"));
     m_icons.insert("action-empty-trash",            QIcon(":/icons/action-empty-trash.png"));
+    m_icons.insert("action-bookmark-select-all",    QIcon(":/icons/action-bookmark-select-all.png"));
+    m_icons.insert("action-bookmark-add",           QIcon(":/icons/action-bookmark-add.png"));
+    m_icons.insert("action-bookmark-edit",          QIcon(":/icons/action-bookmark-edit.png"));
+    m_icons.insert("action-bookmark-send-to-trash", QIcon(":/icons/action-bookmark-send-to-trash.png"));
+    m_icons.insert("action-bookmark-restore",       QIcon(":/icons/action-bookmark-restore.png"));
+    m_icons.insert("action-bookmark-remove",        QIcon(":/icons/action-bookmark-remove.png"));
+    m_icons.insert("action-tag-add",                QIcon(":/icons/action-tag-add.png"));
+    m_icons.insert("action-tag-edit",               QIcon(":/icons/action-tag-edit.png"));
+    m_icons.insert("action-tag-remove",             QIcon(":/icons/action-tag-remove.png"));
     m_icons.insert("browser-default",               QIcon(":/icons/browser-default.png"));
     m_icons.insert("browser-chromium",              QIcon(":/icons/browser-chromium.png"));
     m_icons.insert("browser-firefox",               QIcon(":/icons/browser-firefox.png"));

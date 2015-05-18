@@ -197,6 +197,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_menuBookmarkOpenUrl = createOpenUrlMenu();
 
     m_actionBookmarkSelectAll = new QAction(tr("Select all bookmarks"), this);
+    m_actionBookmarkSelectAll->setIcon(IconTheme::icon("action-bookmark-select-all"));
     connect(m_actionBookmarkSelectAll, SIGNAL(triggered()),
             this, SLOT(actionBookmarkSelectAll_triggered()));
 
@@ -205,34 +206,42 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
     m_menuRating = createRatingMenu();
 
     m_actionBookmarkAdd = new QAction(tr("Add bookmark..."), this);
+    m_actionBookmarkAdd->setIcon(IconTheme::icon("action-bookmark-add"));
     connect(m_actionBookmarkAdd, SIGNAL(triggered()),
             this, SLOT(actionBookmarkAdd_triggered()));
 
     m_actionBookmarkEdit = new QAction(tr("Edit bookmark..."), this);
+    m_actionBookmarkEdit->setIcon(IconTheme::icon("action-bookmark-edit"));
     connect(m_actionBookmarkEdit, SIGNAL(triggered()),
             this, SLOT(actionBookmarkEdit_triggered()));
 
     m_actionBookmarkSendToTrash = new QAction(tr("Send bookmark(s) to the trash..."), this);
+    m_actionBookmarkSendToTrash->setIcon(IconTheme::icon("action-bookmark-send-to-trash"));
     connect(m_actionBookmarkSendToTrash, SIGNAL(triggered()),
             this, SLOT(actionBookmarkSendToTrash_triggered()));
 
     m_actionBookmarkRestore = new QAction(tr("Restore bookmark(s)..."), this);
+    m_actionBookmarkRestore->setIcon(IconTheme::icon("action-bookmark-restore"));
     connect(m_actionBookmarkRestore, SIGNAL(triggered()),
             this, SLOT(actionBookmarkRestore_triggered()));
 
     m_actionBookmarkRemove = new QAction(tr("Remove bookmark(s) permanently..."), this);
+    m_actionBookmarkRemove->setIcon(IconTheme::icon("action-bookmark-remove"));
     connect(m_actionBookmarkRemove, SIGNAL(triggered()),
             this, SLOT(actionBookmarkRemove_triggered()));
 
     m_actionTagAdd = new QAction(tr("Add tag..."), this);
+    m_actionTagAdd->setIcon(IconTheme::icon("action-tag-add"));
     connect(m_actionTagAdd, SIGNAL(triggered()),
             this, SLOT(actionTagAdd_triggered()));
 
     m_actionTagEdit = new QAction(tr("Edit tag..."), this);
+    m_actionTagEdit->setIcon(IconTheme::icon("action-tag-edit"));
     connect(m_actionTagEdit, SIGNAL(triggered()),
             this, SLOT(actionTagEdit_triggered()));
 
     m_actionTagRemove = new QAction(tr("Remove tag(s)..."), this);
+    m_actionTagRemove->setIcon(IconTheme::icon("action-tag-remove"));
     connect(m_actionTagRemove, SIGNAL(triggered()),
             this, SLOT(actionTagRemove_triggered()));
 
@@ -321,6 +330,7 @@ void CCompositWidget::bookmarkView_showContextMenu(const QPoint &pos)
     menu.addSeparator();
     menu.addAction(m_actionBookmarkSendToTrash);
     menu.addAction(m_actionBookmarkRestore);
+    menu.addSeparator();
     menu.addAction(m_actionBookmarkRemove);
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
 }

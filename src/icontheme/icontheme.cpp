@@ -39,11 +39,13 @@ void IconTheme::init()
     m_icons.insert("action-note-open",      QIcon(":/icons/action-note-open.png"));
     m_icons.insert("action-note-save-as",   QIcon(":/icons/action-note-save-as.png"));
     m_icons.insert("action-note-text-wrap", QIcon(":/icons/action-note-text-wrap.png"));
+    m_icons.insert("action-about",                  QIcon(":/icons/action-about.png"));
     m_icons.insert("action-about-qt",               QIcon(":/icons/action-about-qt.png"));
     m_icons.insert("action-check-url",              QIcon(":/icons/action-check-url.png"));
     m_icons.insert("action-download",               QIcon(":/icons/action-download.png"));
     m_icons.insert("action-download-url-metadata",  QIcon(":/icons/action-download-url-metadata.png"));
     m_icons.insert("action-exit",                   QIcon(":/icons/action-exit.png"));
+    m_icons.insert("action-empty-trash",            QIcon(":/icons/action-empty-trash.png"));
     m_icons.insert("browser-default",               QIcon(":/icons/browser-default.png"));
     m_icons.insert("browser-chromium",              QIcon(":/icons/browser-chromium.png"));
     m_icons.insert("browser-firefox",               QIcon(":/icons/browser-firefox.png"));

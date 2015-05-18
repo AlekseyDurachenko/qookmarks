@@ -28,5 +28,7 @@
         <file>icons/rating-bookmark-star.png</file>
         <file>icons/tag-icon-default.png</file>
         <file>icons/browser-default.png</file>
+        <file>icons/action-about.png</file>
+        <file>icons/action-empty-trash.png</file>
     </qresource>
 </RCC>

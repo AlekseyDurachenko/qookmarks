@@ -237,6 +237,7 @@ CCompositWidget::CCompositWidget(QWidget *parent) :
             this, SLOT(actionTagRemove_triggered()));
 
     m_actionEmptyTrash = new QAction(tr("Empty trash..."), this);
+    m_actionEmptyTrash->setIcon(IconTheme::icon("action-empty-trash"));
     connect(m_actionEmptyTrash, SIGNAL(triggered()),
             this, SLOT(actionEmptyTrash_triggered()));
 

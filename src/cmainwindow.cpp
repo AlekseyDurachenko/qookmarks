@@ -23,6 +23,7 @@
 #include "bookmarkimportchromium.h"
 #include "singleton.h"
 #include "settings.h"
+#include "icontheme.h"
 
 
 CMainWindow::CMainWindow(QWidget *parent) :
@@ -30,6 +31,9 @@ CMainWindow::CMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("%1").arg(appName()));
+
+    ui->action_about->setIcon(IconTheme::icon("action-about"));
+    ui->action_aboutQt->setIcon(IconTheme::icon("action-about-qt"));
 
     m_mainWidget = new CCompositWidget(this);
     setCentralWidget(m_mainWidget);

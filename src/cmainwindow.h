@@ -56,6 +56,10 @@ private:
 private:
     Ui::CMainWindow *ui;
     CCompositWidget *m_mainWidget;
+    QToolBar *m_fileToolBar;
+    QToolBar *m_tagToolBar;
+    QToolBar *m_bookmarkToolBar;
+    QToolBar *m_aboutToolBar;
 };
 
 

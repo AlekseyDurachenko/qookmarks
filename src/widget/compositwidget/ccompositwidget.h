@@ -50,6 +50,7 @@ public:
 
     inline QAction *actionBookmarkOpenUrl() const;
     inline QAction *actionMenuBookmarkOpenUrl() const;
+    inline QMenu *menuBookmarkOpenUrl() const;
     inline QAction *actionBookmarkSelectAll() const;
     inline QAction *actionMenuFavorite() const;
     inline QAction *actionMenuReadItLater() const;
@@ -176,6 +177,11 @@ QAction *CCompositWidget::actionBookmarkOpenUrl() const
 QAction *CCompositWidget::actionMenuBookmarkOpenUrl() const
 {
     return m_menuBookmarkOpenUrl->menuAction();
+}
+
+QMenu *CCompositWidget::menuBookmarkOpenUrl() const
+{
+    return m_menuBookmarkOpenUrl;
 }
 
 QAction *CCompositWidget::actionBookmarkSelectAll() const

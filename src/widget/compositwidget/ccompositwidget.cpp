@@ -613,7 +613,6 @@ void CCompositWidget::updateActionState()
         m_actionBookmarkOpenUrl->setEnabled(false);
         m_menuBookmarkOpenUrl->setEnabled(false);
         m_actionBookmarkSelectAll->setEnabled(false);
-        m_actionBookmarkAdd->setEnabled(false);
         m_actionBookmarkEdit->setEnabled(false);
         m_actionBookmarkSendToTrash->setEnabled(false);
         m_actionBookmarkRestore->setEnabled(false);
@@ -756,9 +755,10 @@ void CCompositWidget::project_opened()
     updateActionState();
     updateOpenUrlActionState();
 
-    m_menuFavorite->setEnabled(GPrj()->isOpen());
-    m_menuReadItLater->setEnabled(GPrj()->isOpen());
-    m_menuRating->setEnabled(GPrj()->isOpen());
+    m_menuFavorite->setEnabled(true);
+    m_menuReadItLater->setEnabled(true);
+    m_menuRating->setEnabled(true);
+    m_actionBookmarkAdd->setEnabled(true);
 }
 
 void CCompositWidget::project_closed()
@@ -772,9 +772,11 @@ void CCompositWidget::project_closed()
     updateActionState();
     updateOpenUrlActionState();
 
-    m_menuFavorite->setEnabled(GPrj()->isOpen());
-    m_menuReadItLater->setEnabled(GPrj()->isOpen());
-    m_menuRating->setEnabled(GPrj()->isOpen());
+    m_menuFavorite->setEnabled(false);
+    m_menuReadItLater->setEnabled(false);
+    m_menuRating->setEnabled(false);
+    m_actionBookmarkAdd->setEnabled(false);
+
 }
 
 void CCompositWidget::navActMoveTags(const QList<QStringList> &tags,

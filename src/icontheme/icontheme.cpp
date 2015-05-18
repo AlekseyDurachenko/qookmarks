@@ -44,7 +44,7 @@ void IconTheme::init()
     m_icons.insert("action-check-url",              QIcon(":/icons/action-check-url.png"));
     m_icons.insert("action-download",               QIcon(":/icons/action-download.png"));
     m_icons.insert("action-download-url-metadata",  QIcon(":/icons/action-download-url-metadata.png"));
-    m_icons.insert("action-exit",                   QIcon(":/icons/action-exit.png"));
+    m_icons.insert("action-quit",                   QIcon(":/icons/action-quit.png"));
     m_icons.insert("action-empty-trash",            QIcon(":/icons/action-empty-trash.png"));
     m_icons.insert("browser-default",               QIcon(":/icons/browser-default.png"));
     m_icons.insert("browser-chromium",              QIcon(":/icons/browser-chromium.png"));

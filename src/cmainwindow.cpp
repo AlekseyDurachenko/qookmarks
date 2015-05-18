@@ -34,6 +34,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
     ui->action_about->setIcon(IconTheme::icon("action-about"));
     ui->action_aboutQt->setIcon(IconTheme::icon("action-about-qt"));
+    ui->action_quit->setIcon(IconTheme::icon("action-quit"));
 
     m_mainWidget = new CCompositWidget(this);
     setCentralWidget(m_mainWidget);

@@ -27,6 +27,11 @@ static void addUrl(CManager *mgr, CTagItem *parent, const QVariantMap &map)
     CBookmark data;
     data.setTitle(map.value("name").toString());
     data.setUrl(map.value("url").toString());
+    data.setCreatedDateTime(QDateTime::fromTime_t(map.value("date_added").toLongLong()/1000000-11644473600));
+    if (map.contains("date_modified"))
+        data.setEditedDateTime(QDateTime::fromTime_t(map.value("date_modified").toLongLong()/1000000-11644473600));
+    else
+        data.setEditedDateTime(QDateTime::fromTime_t(map.value("date_added").toLongLong()/1000000-11644473600));
 
     CBookmarkItem *bookmark = mgr->bookmarkMgr()->find(data.url());
     if (!bookmark)

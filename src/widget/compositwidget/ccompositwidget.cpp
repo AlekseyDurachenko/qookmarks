@@ -697,6 +697,13 @@ void CCompositWidget::updateOpenUrlActionState()
 
 void CCompositWidget::updateQuickEditActions()
 {
+    int selectedCount = m_bookmarkView->selectionModel()->selectedRows().count();
+    m_menuFavorite->setEnabled(selectedCount);
+    m_menuReadItLater->setEnabled(selectedCount);
+    m_menuRating->setEnabled(selectedCount);
+    if (selectedCount == 0)
+        return;
+
     bool hasFavorite = false;
     bool hasNotFavorite = false;
     bool hasReadItLater = false;
@@ -764,10 +771,8 @@ void CCompositWidget::project_opened()
 
     updateActionState();
     updateOpenUrlActionState();
+    updateQuickEditActions();
 
-    m_menuFavorite->setEnabled(true);
-    m_menuReadItLater->setEnabled(true);
-    m_menuRating->setEnabled(true);
     m_actionBookmarkAdd->setEnabled(true);
 }
 
@@ -781,10 +786,8 @@ void CCompositWidget::project_closed()
 
     updateActionState();
     updateOpenUrlActionState();
+    updateQuickEditActions();
 
-    m_menuFavorite->setEnabled(false);
-    m_menuReadItLater->setEnabled(false);
-    m_menuRating->setEnabled(false);
     m_actionBookmarkAdd->setEnabled(false);
 
 }

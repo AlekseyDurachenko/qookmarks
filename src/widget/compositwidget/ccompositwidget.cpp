@@ -53,6 +53,8 @@
 #include <QProcess>
 #include <QStack>
 #include <QLineEdit>
+#include <QClipboard>
+#include <QApplication>
 #include "cnavanchoritemmodel.h"
 #include "ctagitemmodel.h"
 #include "ctagsortfilterproxymodel.h"
@@ -460,6 +462,12 @@ void CCompositWidget::actionBookmarkAdd_triggered()
     CBookmarkEditDialog newBookmarkDialog(this);
     newBookmarkDialog.setWindowTitle(tr("Create bookmark"));
     newBookmarkDialog.setCheckedTags(m_bookmarkFilter->tags());
+    if (QUrl(QApplication::clipboard()->text()).isValid())
+    {
+        CBookmark data;
+        data.setUrl(QUrl(QApplication::clipboard()->text()));
+        newBookmarkDialog.setData(data);
+    }
 
     if (newBookmarkDialog.exec() == QDialog::Accepted)
     {

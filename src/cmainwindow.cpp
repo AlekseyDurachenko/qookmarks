@@ -54,6 +54,10 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_aboutToolBar->setObjectName("m_aboutToolBar");
     addToolBar(m_aboutToolBar);
 
+    ui->menu_toolbars->addAction(m_fileToolBar->toggleViewAction());
+    ui->menu_toolbars->addAction(m_tagToolBar->toggleViewAction());
+    ui->menu_toolbars->addAction(m_bookmarkToolBar->toggleViewAction());
+    ui->menu_toolbars->addAction(m_aboutToolBar->toggleViewAction());
 
     m_mainWidget = new CCompositWidget(this);
     setCentralWidget(m_mainWidget);

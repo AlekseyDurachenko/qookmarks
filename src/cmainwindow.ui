@@ -55,9 +55,21 @@
      <string>&amp;Bookmarks</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menu_view">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <widget class="QMenu" name="menu_toolbars">
+     <property name="title">
+      <string>&amp;Toolbars</string>
+     </property>
+    </widget>
+    <addaction name="menu_toolbars"/>
+   </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_tags"/>
    <addaction name="menu_bookmarks"/>
+   <addaction name="menu_view"/>
    <addaction name="menu_About"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

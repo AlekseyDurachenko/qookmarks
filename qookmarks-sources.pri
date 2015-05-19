@@ -2,11 +2,12 @@ INCLUDEPATH    +=                                                       \
     $$PWD/src                                                           \
     $$PWD/src/common                                                    \
     $$PWD/src/bookmarkimport                                            \
+    $$PWD/src/bookmarkimportwizard                                      \
     $$PWD/src/project                                                   \
     $$PWD/src/network                                                   \
     $$PWD/src/manager                                                   \
     $$PWD/src/browser                                                   \
-    $$PWD/src/icontheme                                                \
+    $$PWD/src/icontheme                                                 \
     $$PWD/src/widget                                                    \
     $$PWD/src/widget/aboutdialog                                        \
     $$PWD/src/widget/bookmarkview                                       \
@@ -74,7 +75,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/navigationview/cnavtagitemmodel.h \
     $$PWD/src/widget/navigationview/cnavtagview.h \
     $$PWD/src/browser/browser.h \
-    $$PWD/src/icontheme/icontheme.h
+    $$PWD/src/icontheme/icontheme.h \
+    $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.h
 
 
 SOURCES        +=                                                       \
@@ -131,7 +133,8 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/navigationview/cnavtagitemmodel.cpp \
     $$PWD/src/widget/navigationview/cnavtagview.cpp \
     $$PWD/src/browser/browser.cpp \
-    $$PWD/src/icontheme/icontheme.cpp
+    $$PWD/src/icontheme/icontheme.cpp \
+    $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.cpp
 
 
 FORMS          +=                                                       \

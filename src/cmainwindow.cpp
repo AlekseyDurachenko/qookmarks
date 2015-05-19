@@ -26,6 +26,7 @@
 #include "singleton.h"
 #include "settings.h"
 #include "icontheme.h"
+#include "cbookmarkimportwizard.h"
 
 
 CMainWindow::CMainWindow(QWidget *parent) :
@@ -82,6 +83,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_file->addAction(GPrj()->actionClose());
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_import);
+    ui->menu_file->addAction(ui->action_importChromium);
     //ui->menu_file->addAction(ui->action_export);
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_quit);
@@ -170,7 +172,6 @@ CMainWindow::~CMainWindow()
 
 void CMainWindow::project_opened()
 {
-    //m_mainWidget->setEnabled(true);
     ui->action_import->setEnabled(true);
     ui->action_export->setEnabled(true);
     ui->menu_tags->setEnabled(true);
@@ -180,7 +181,6 @@ void CMainWindow::project_opened()
 
 void CMainWindow::project_closed()
 {
-    //m_mainWidget->setEnabled(false);
     ui->action_import->setEnabled(false);
     ui->action_export->setEnabled(false);
     ui->menu_tags->setEnabled(false);
@@ -333,6 +333,12 @@ void CMainWindow::on_action_quit_triggered()
 }
 
 void CMainWindow::on_action_import_triggered()
+{
+    CBookmarkImportWizard importWizard;
+    importWizard.exec();
+}
+
+void CMainWindow::on_action_importChromium_triggered()
 {
     QString reason, path = QDir::homePath() + "/.config/chromium/Default/Bookmarks";
     if (!bookmarkImportChromium(GPrj()->manager(), path, &reason))

@@ -21,6 +21,7 @@
 #include <QLineEdit>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QSettings>
 #include <QSplitter>
 #include <QStack>
@@ -1086,11 +1087,11 @@ void CMainWindow::fillToolbarBookmark()
     openUrlButton->setDefaultAction(m_actionBookmarkOpenUrl);
     m_bookmarkToolBar->addWidget(openUrlButton);
     QToolButton *openUrlExtButton = new QToolButton(this);
-    openUrlExtButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    openUrlExtButton->setPopupMode(QToolButton::MenuButtonPopup);
+    openUrlExtButton->setPopupMode(QToolButton::InstantPopup);
     openUrlExtButton->setMenu(m_menuBookmarkOpenUrl);
-    openUrlExtButton->setText(m_menuBookmarkOpenUrl->menuAction()->text());
-    openUrlExtButton->setIcon(m_actionBookmarkOpenUrl->icon());
+    openUrlExtButton->setArrowType(Qt::DownArrow);
+    openUrlExtButton->setStyleSheet("QToolButton::menu-indicator { image: none; }");
+    openUrlExtButton->setFocusPolicy(Qt::NoFocus);
     m_bookmarkToolBar->addWidget(openUrlExtButton);
     m_bookmarkToolBar->addSeparator();
     m_bookmarkToolBar->addAction(m_actionBookmarkSelectAll);

@@ -80,7 +80,10 @@
   </action>
   <action name="action_import">
    <property name="text">
-    <string>&amp;Import wizard...</string>
+    <string>&amp;Import bookmark collection...</string>
+   </property>
+   <property name="toolTip">
+    <string>Import bookmark collection</string>
    </property>
   </action>
   <action name="action_export">
@@ -96,11 +99,6 @@
   <action name="action_aboutQt">
    <property name="text">
     <string>About &amp;Qt...</string>
-   </property>
-  </action>
-  <action name="action_importChromium">
-   <property name="text">
-    <string>Import chromium bookmarks...</string>
    </property>
   </action>
  </widget>

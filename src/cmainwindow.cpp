@@ -38,6 +38,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->action_about->setIcon(IconTheme::icon("action-about"));
     ui->action_aboutQt->setIcon(IconTheme::icon("action-about-qt"));
     ui->action_quit->setIcon(IconTheme::icon("action-quit"));
+    ui->action_import->setIcon(IconTheme::icon("action-collection-import"));
 
     m_fileToolBar = new QToolBar(tr("File"), this);
     m_fileToolBar->setObjectName("m_fileToolBar");
@@ -83,7 +84,6 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_file->addAction(GPrj()->actionClose());
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_import);
-    ui->menu_file->addAction(ui->action_importChromium);
     //ui->menu_file->addAction(ui->action_export);
     ui->menu_file->addSeparator();
     ui->menu_file->addAction(ui->action_quit);
@@ -92,6 +92,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_fileToolBar->addAction(GPrj()->actionOpen());
     m_fileToolBar->addAction(GPrj()->actionSave());
     m_fileToolBar->addAction(GPrj()->actionClose());
+    m_fileToolBar->addSeparator();
+    m_fileToolBar->addAction(ui->action_import);
     m_fileToolBar->addSeparator();
     m_fileToolBar->addAction(ui->action_quit);
 
@@ -336,13 +338,6 @@ void CMainWindow::on_action_import_triggered()
 {
     CBookmarkImportWizard importWizard;
     importWizard.exec();
-}
-
-void CMainWindow::on_action_importChromium_triggered()
-{
-    QString reason, path = QDir::homePath() + "/.config/chromium/Default/Bookmarks";
-    if (!bookmarkImportChromium(GPrj()->manager(), path, &reason))
-        QMessageBox::warning(this, "Warning", reason);
 }
 
 void CMainWindow::readSettings_window()

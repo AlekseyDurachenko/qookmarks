@@ -59,6 +59,8 @@ void IconTheme::init()
     m_icons.insert("action-collection-save",           QIcon(":/icons/action-collection-save.png"));
     m_icons.insert("action-collection-open",           QIcon(":/icons/action-collection-open.png"));
     m_icons.insert("action-collection-close",          QIcon(":/icons/action-collection-close.png"));
+    m_icons.insert("action-collection-import",         QIcon(":/icons/action-collection-import.png"));
+    m_icons.insert("action-collection-export",         QIcon(":/icons/action-collection-export.png"));
     m_icons.insert("browser-default",               QIcon(":/icons/browser-default.png"));
     m_icons.insert("browser-chromium",              QIcon(":/icons/browser-chromium.png"));
     m_icons.insert("browser-firefox",               QIcon(":/icons/browser-firefox.png"));

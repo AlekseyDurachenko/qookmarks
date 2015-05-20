@@ -40,7 +40,6 @@ private slots:
 
     void on_action_quit_triggered();
     void on_action_import_triggered();
-    void on_action_importChromium_triggered();
     void on_action_about_triggered();
     void on_action_aboutQt_triggered();
 protected:

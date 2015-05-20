@@ -17,37 +17,35 @@
 
 #include <QWizard>
 class QRadioButton;
+class QListWidget;
+class QToolButton;
+class QLineEdit;
 
 
 class CBookmarkImportWizard : public QWizard
 {
     Q_OBJECT
+    friend class CBookmarkImportSelectModeWizardPage;
+    friend class CBookmarkImportSystemBrowserWizardPage;
+    friend class CBookmarkImportFileWizardPage;
 private:
-    enum CollectionLocationType
+    enum PageType
     {
-        CollectionLocationNone = 0,
-        CollectionLocationSystemBrowser,
-        CollectionLocationFile
-    };
-public:
-    enum WizardPageType
-    {
-        WizardPageSelect,
-        WizardPageSelectSystemBrowser,
-        WizardPageSelectFile
+        Page_SelectMode,
+        Page_SystemBrowser,
+        Page_File
     };
 public:
     explicit CBookmarkImportWizard(QWidget *parent = 0);
-    virtual ~CBookmarkImportWizard();
 };
 
 
 
-class CBookmarkImportSelectWizardPage : public QWizardPage
+class CBookmarkImportSelectModeWizardPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    CBookmarkImportSelectWizardPage(QWidget *parent = 0);
+    CBookmarkImportSelectModeWizardPage(QWidget *parent = 0);
     virtual int nextId() const;
 private:
     QRadioButton *m_systemBrowserRadioButton;
@@ -56,24 +54,36 @@ private:
 
 
 
-class CBookmarkImportSelectSystemBrowserWizardPage : public QWizardPage
+class CBookmarkImportSystemBrowserWizardPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    CBookmarkImportSelectSystemBrowserWizardPage(QWidget *parent = 0);
+    CBookmarkImportSystemBrowserWizardPage(QWidget *parent = 0);
     virtual int nextId() const;
+    virtual bool isComplete() const;
+    virtual bool validatePage();
 private:
+    QString chromiumBookmarkCollection() const;
+private:
+    QListWidget *m_browserList;
 };
 
 
 
-class CBookmarkImportSelectFileWizardPage : public QWizardPage
+class CBookmarkImportFileWizardPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    CBookmarkImportSelectFileWizardPage(QWidget *parent = 0);
+    CBookmarkImportFileWizardPage(QWidget *parent = 0);
     virtual int nextId() const;
+    virtual bool isComplete() const;
+    virtual bool validatePage();
+private slots:
+    void selectFileName_toggled();
 private:
+    QListWidget *m_browserList;
+    QToolButton *m_selectFileNameButton;
+    QLineEdit *m_fileNameLineEdit;
 };
 
 

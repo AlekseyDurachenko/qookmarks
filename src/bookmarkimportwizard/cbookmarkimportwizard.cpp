@@ -17,29 +17,35 @@
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include <QListWidget>
+#include <QDir>
+#include <QMessageBox>
+#include <QLineEdit>
+#include <QToolButton>
+#include <QSettings>
+#include <QFileDialog>
+#include "icontheme.h"
+#include "singleton.h"
+#include "settings.h"
+#include "bookmarkimportchromium.h"
 #include <QDebug>
 
 
 CBookmarkImportWizard::CBookmarkImportWizard(QWidget *parent) :
     QWizard(parent)
 {
-    setPage(WizardPageSelect, new CBookmarkImportSelectWizardPage);
-    setPage(WizardPageSelectSystemBrowser, new CBookmarkImportSelectSystemBrowserWizardPage);
-    setPage(WizardPageSelectFile, new CBookmarkImportSelectFileWizardPage);
+    setPage(Page_SelectMode, new CBookmarkImportSelectModeWizardPage);
+    setPage(Page_SystemBrowser, new CBookmarkImportSystemBrowserWizardPage);
+    setPage(Page_File, new CBookmarkImportFileWizardPage);
 
-    setStartId(WizardPageSelect);
+    setStartId(Page_SelectMode);
     setWindowTitle(tr("Import bookmark collection"));
-
-    restart();
-}
-
-CBookmarkImportWizard::~CBookmarkImportWizard()
-{
 }
 
 
 
-CBookmarkImportSelectWizardPage::CBookmarkImportSelectWizardPage(QWidget *parent)
+CBookmarkImportSelectModeWizardPage::CBookmarkImportSelectModeWizardPage(
+        QWidget *parent) : QWizardPage(parent)
 {
     setTitle(tr("Select the bookmark collection location"));
 
@@ -57,32 +63,154 @@ CBookmarkImportSelectWizardPage::CBookmarkImportSelectWizardPage(QWidget *parent
     setLayout(layout);
 }
 
-int CBookmarkImportSelectWizardPage::nextId() const
+int CBookmarkImportSelectModeWizardPage::nextId() const
 {
     if (m_systemBrowserRadioButton->isChecked())
-        return CBookmarkImportWizard::WizardPageSelectSystemBrowser;
+        return CBookmarkImportWizard::Page_SystemBrowser;
     else
-        return CBookmarkImportWizard::WizardPageSelectFile;
+        return CBookmarkImportWizard::Page_File;
 }
 
 
 
-CBookmarkImportSelectSystemBrowserWizardPage::CBookmarkImportSelectSystemBrowserWizardPage(QWidget *parent)
+CBookmarkImportSystemBrowserWizardPage::CBookmarkImportSystemBrowserWizardPage(
+        QWidget *parent) : QWizardPage(parent)
 {
+    setTitle("Import bookmark collection from the system browser");
+
+    m_browserList = new QListWidget(this);
+    connect(m_browserList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SIGNAL(completeChanged()));
+
+    // try to detect chromium bookmarks
+    if (!chromiumBookmarkCollection().isEmpty())
+    {
+        QListWidgetItem *item = new QListWidgetItem(m_browserList);
+        item->setIcon(IconTheme::icon("browser-chromium"));
+        item->setText(tr("Chromium"));
+        item->setData(Qt::UserRole, "chromium");
+        m_browserList->addItem(item);
+    }
+
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(m_browserList);
+    setLayout(layout);
 }
 
-int CBookmarkImportSelectSystemBrowserWizardPage::nextId() const
+int CBookmarkImportSystemBrowserWizardPage::nextId() const
 {
     return -1;
 }
 
-
-
-CBookmarkImportSelectFileWizardPage::CBookmarkImportSelectFileWizardPage(QWidget *parent)
+bool CBookmarkImportSystemBrowserWizardPage::isComplete() const
 {
+    if (m_browserList->currentItem())
+        return true;
+    else
+        return false;
 }
 
-int CBookmarkImportSelectFileWizardPage::nextId() const
+bool CBookmarkImportSystemBrowserWizardPage::validatePage()
+{
+    if (m_browserList->currentItem()->data(Qt::UserRole) == "chromium")
+    {
+        QString reason, path = chromiumBookmarkCollection();
+        if (!bookmarkImportChromium(GPrj()->manager(), path, &reason))
+        {
+            QMessageBox::warning(this, "Warning", reason);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+QString CBookmarkImportSystemBrowserWizardPage::chromiumBookmarkCollection() const
+{
+#ifdef Q_OS_UNIX
+    return QDir::homePath() + "/.config/chromium/Default/Bookmarks";
+#endif
+
+    return QString();
+}
+
+
+
+CBookmarkImportFileWizardPage::CBookmarkImportFileWizardPage(QWidget *parent) :
+    QWizardPage(parent)
+{
+    setTitle("Import bookmark collection from the file");
+
+    m_browserList = new QListWidget(this);
+    connect(m_browserList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SIGNAL(completeChanged()));
+
+    m_fileNameLineEdit = new QLineEdit(this);
+    connect(m_fileNameLineEdit, SIGNAL(textChanged(QString)),
+            this, SIGNAL(completeChanged()));
+
+    m_selectFileNameButton = new QToolButton(this);
+    m_selectFileNameButton->setText("...");
+    connect(m_selectFileNameButton, SIGNAL(clicked(bool)),
+            this, SLOT(selectFileName_toggled()));
+
+    // chromium
+    QListWidgetItem *chromiumItem = new QListWidgetItem(m_browserList);
+    chromiumItem->setIcon(IconTheme::icon("browser-chromium"));
+    chromiumItem->setText(tr("Chromium"));
+    chromiumItem->setData(Qt::UserRole, "chromium");
+    m_browserList->addItem(chromiumItem);
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(m_browserList);
+    QHBoxLayout *fileLayout = new QHBoxLayout;
+    fileLayout->addWidget(m_fileNameLineEdit);
+    fileLayout->addWidget(m_selectFileNameButton);
+    layout->addLayout(fileLayout);
+    setLayout(layout);
+}
+
+int CBookmarkImportFileWizardPage::nextId() const
 {
     return -1;
+}
+
+bool CBookmarkImportFileWizardPage::isComplete() const
+{
+    if (m_browserList->currentItem()
+            && !m_fileNameLineEdit->text().isEmpty())
+        return true;
+    else
+        return false;
+}
+
+bool CBookmarkImportFileWizardPage::validatePage()
+{
+    if (m_browserList->currentItem()->data(Qt::UserRole) == "chromium")
+    {
+        QString reason, path = m_fileNameLineEdit->text();
+        if (!bookmarkImportChromium(GPrj()->manager(), path, &reason))
+        {
+            QMessageBox::warning(this, "Warning", reason);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void CBookmarkImportFileWizardPage::selectFileName_toggled()
+{
+    G_SETTINGS_INIT();
+
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open notes"),
+                settings.value("lastBookmarkCollectionDirectory", "").toString(),
+                tr("All (* *.*)"));
+
+    if (fileName.isEmpty())
+        return;
+
+    m_fileNameLineEdit->setText(fileName);
+    settings.setValue("lastBookmarkCollectionDirectory", QFileInfo(fileName).absolutePath());
 }

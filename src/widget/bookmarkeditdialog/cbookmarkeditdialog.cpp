@@ -338,6 +338,8 @@ void CBookmarkEditDialog::on_toolButton_loadFromFile_clicked()
     {
         QMessageBox::critical(this, tr("Critical"), error);
     }
+
+    settings.setValue("lastNotesDirectory", QFileInfo(fileName).absolutePath());
 }
 
 void CBookmarkEditDialog::on_toolButton_saveToFile_clicked()

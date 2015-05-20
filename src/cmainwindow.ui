@@ -42,8 +42,6 @@
     <property name="title">
      <string>&amp;About</string>
     </property>
-    <addaction name="action_about"/>
-    <addaction name="action_aboutQt"/>
    </widget>
    <widget class="QMenu" name="menu_tags">
     <property name="title">
@@ -73,34 +71,6 @@
    <addaction name="menu_About"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_quit">
-   <property name="text">
-    <string>&amp;Quit...</string>
-   </property>
-  </action>
-  <action name="action_import">
-   <property name="text">
-    <string>&amp;Import bookmark collection...</string>
-   </property>
-   <property name="toolTip">
-    <string>Import bookmark collection</string>
-   </property>
-  </action>
-  <action name="action_export">
-   <property name="text">
-    <string>&amp;Export...</string>
-   </property>
-  </action>
-  <action name="action_about">
-   <property name="text">
-    <string>&amp;About...</string>
-   </property>
-  </action>
-  <action name="action_aboutQt">
-   <property name="text">
-    <string>About &amp;Qt...</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

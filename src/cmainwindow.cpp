@@ -35,10 +35,36 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(tr("%1").arg(appName()));
 
-    ui->action_about->setIcon(IconTheme::icon("action-about"));
-    ui->action_aboutQt->setIcon(IconTheme::icon("action-about-qt"));
-    ui->action_quit->setIcon(IconTheme::icon("action-quit"));
-    ui->action_import->setIcon(IconTheme::icon("action-collection-import"));
+    m_actionBookmarkCollectionImport = new QAction(this);
+    m_actionBookmarkCollectionImport->setText("Bookmark collection import...");
+    m_actionBookmarkCollectionImport->setIcon(IconTheme::icon("action-collection-import"));
+    connect(m_actionBookmarkCollectionImport, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkCollectionImport_triggered()));
+
+    m_actionBookmarkCollectionExport = new QAction(this);
+    m_actionBookmarkCollectionExport->setText("Bookmark collection export...");
+    m_actionBookmarkCollectionExport->setIcon(IconTheme::icon("action-collection-export"));
+    connect(m_actionBookmarkCollectionExport, SIGNAL(triggered()),
+            this, SLOT(actionBookmarkCollectionExport_triggered()));
+
+    m_actionQuit = new QAction(this);
+    m_actionQuit->setText("Quit...");
+    m_actionQuit->setIcon(IconTheme::icon("action-quit"));
+    connect(m_actionQuit, SIGNAL(triggered()),
+            this, SLOT(actionQuit_triggered()));
+
+    m_actionAbout = new QAction(this);
+    m_actionAbout->setText("About...");
+    m_actionAbout->setIcon(IconTheme::icon("action-about"));
+    connect(m_actionAbout, SIGNAL(triggered()),
+            this, SLOT(actionAbout_triggered()));
+
+    m_actionAboutQt = new QAction(this);
+    m_actionAboutQt->setText("About Qt...");
+    m_actionAboutQt->setIcon(IconTheme::icon("action-about-qt"));
+    connect(m_actionAboutQt, SIGNAL(triggered()),
+            this, SLOT(actionAboutQt_triggered()));
+
 
     m_fileToolBar = new QToolBar(tr("File"), this);
     m_fileToolBar->setObjectName("m_fileToolBar");
@@ -83,19 +109,20 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->menu_file->addAction(GPrj()->actionSave());
     ui->menu_file->addAction(GPrj()->actionClose());
     ui->menu_file->addSeparator();
-    ui->menu_file->addAction(ui->action_import);
+    ui->menu_file->addAction(m_actionBookmarkCollectionImport);
     //ui->menu_file->addAction(ui->action_export);
     ui->menu_file->addSeparator();
-    ui->menu_file->addAction(ui->action_quit);
+    ui->menu_file->addAction(m_actionQuit);
+
 
     m_fileToolBar->addAction(GPrj()->actionCreate());
     m_fileToolBar->addAction(GPrj()->actionOpen());
     m_fileToolBar->addAction(GPrj()->actionSave());
     m_fileToolBar->addAction(GPrj()->actionClose());
     m_fileToolBar->addSeparator();
-    m_fileToolBar->addAction(ui->action_import);
+    m_fileToolBar->addAction(m_actionBookmarkCollectionImport);
     m_fileToolBar->addSeparator();
-    m_fileToolBar->addAction(ui->action_quit);
+    m_fileToolBar->addAction(m_actionQuit);
 
     // Menu && Toolbar: Tags
     ui->menu_tags->addAction(m_mainWidget->actionTagAdd());
@@ -156,8 +183,11 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_bookmarkToolBar->addAction(m_mainWidget->actionEmptyTrash());
 
     // Menu && Toolbar: About
-    m_aboutToolBar->addAction(ui->action_about);
-    m_aboutToolBar->addAction(ui->action_aboutQt);
+    ui->menu_About->addAction(m_actionAbout);
+    ui->menu_About->addAction(m_actionAboutQt);
+
+    m_aboutToolBar->addAction(m_actionAbout);
+    m_aboutToolBar->addAction(m_actionAboutQt);
 
     project_closed();
     readSettings_window();
@@ -174,8 +204,8 @@ CMainWindow::~CMainWindow()
 
 void CMainWindow::project_opened()
 {
-    ui->action_import->setEnabled(true);
-    ui->action_export->setEnabled(true);
+    m_actionBookmarkCollectionImport->setEnabled(true);
+    m_actionBookmarkCollectionExport->setEnabled(true);
     ui->menu_tags->setEnabled(true);
     ui->menu_bookmarks->setEnabled(true);
     setWindowTitle(tr("%1 - %2").arg(appName(), GPrj()->path()));
@@ -183,8 +213,8 @@ void CMainWindow::project_opened()
 
 void CMainWindow::project_closed()
 {
-    ui->action_import->setEnabled(false);
-    ui->action_export->setEnabled(false);
+    m_actionBookmarkCollectionImport->setEnabled(false);
+    m_actionBookmarkCollectionExport->setEnabled(false);
     ui->menu_tags->setEnabled(false);
     ui->menu_bookmarks->setEnabled(false);
     setWindowTitle(tr("%1").arg(appName()));
@@ -329,15 +359,20 @@ void CMainWindow::actionClose_triggered()
     GPrj()->close();
 }
 
-void CMainWindow::on_action_quit_triggered()
+void CMainWindow::actionQuit_triggered()
 {
     close();
 }
 
-void CMainWindow::on_action_import_triggered()
+void CMainWindow::actionBookmarkCollectionImport_triggered()
 {
     CBookmarkImportWizard importWizard;
     importWizard.exec();
+}
+
+void CMainWindow::actionBookmarkCollectionExport_triggered()
+{
+    ;
 }
 
 void CMainWindow::readSettings_window()
@@ -383,13 +418,13 @@ void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
     settings.setValue("lastBookmarksDirectory", path);
 }
 
-void CMainWindow::on_action_about_triggered()
+void CMainWindow::actionAbout_triggered()
 {
     CAboutDialog aboutDialog(this);
     aboutDialog.exec();
 }
 
-void CMainWindow::on_action_aboutQt_triggered()
+void CMainWindow::actionAboutQt_triggered()
 {
     qApp->aboutQt();
 }

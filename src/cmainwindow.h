@@ -38,10 +38,11 @@ private slots:
     void actionSave_triggered();
     void actionClose_triggered();
 
-    void on_action_quit_triggered();
-    void on_action_import_triggered();
-    void on_action_about_triggered();
-    void on_action_aboutQt_triggered();
+    void actionQuit_triggered();
+    void actionBookmarkCollectionImport_triggered();
+    void actionBookmarkCollectionExport_triggered();
+    void actionAbout_triggered();
+    void actionAboutQt_triggered();
 protected:
     void closeEvent(QCloseEvent *event);
 private:
@@ -60,6 +61,12 @@ private:
     QToolBar *m_tagToolBar;
     QToolBar *m_bookmarkToolBar;
     QToolBar *m_aboutToolBar;
+
+    QAction *m_actionQuit;
+    QAction *m_actionBookmarkCollectionImport;
+    QAction *m_actionBookmarkCollectionExport;
+    QAction *m_actionAbout;
+    QAction *m_actionAboutQt;
 };
 
 

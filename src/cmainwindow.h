@@ -140,7 +140,8 @@ private:
 
     void configureNetwork();
     void configureProject();
-    void configureActionUpdater();
+    void configureActionUpdater();   
+    void resetClearingFlags();
 
     void openLastOpenedProject();
 

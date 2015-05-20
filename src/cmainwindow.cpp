@@ -79,14 +79,11 @@ CMainWindow::CMainWindow(QWidget *parent) :
     configureNetwork();
     configureProject();
     configureActionUpdater();
+    resetClearingFlags();
 
     readSettings();
     project_closed();
     openLastOpenedProject();
-
-    // default values
-    m_isClearingNavAnchor = false;
-    m_isClearingNavTag = false;
 }
 
 CMainWindow::~CMainWindow()
@@ -1512,6 +1509,12 @@ void CMainWindow::configureActionUpdater()
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(updateActionState()));
 
+}
+
+void CMainWindow::resetClearingFlags()
+{
+    m_isClearingNavAnchor = false;
+    m_isClearingNavTag = false;
 }
 
 void CMainWindow::openLastOpenedProject()

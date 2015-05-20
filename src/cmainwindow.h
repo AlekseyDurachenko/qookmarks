@@ -30,29 +30,35 @@ private slots:
     void project_opened();
     void project_closed();
 
+    // slots: file menu action
     void actionCreate_triggered();
     void actionOpen_triggered();
     void actionSave_triggered();
     void actionClose_triggered();
-
-    void actionQuit_triggered();
     void actionBookmarkCollectionImport_triggered();
     void actionBookmarkCollectionExport_triggered();
+    void actionQuit_triggered();
+
+    // slots: about menu action
     void actionAbout_triggered();
     void actionAboutQt_triggered();
 protected:
     void closeEvent(QCloseEvent *event);
 private:
+    void openLastOpenedProject();
+private:
     void readSettings_window();
     void writeSettings_window();
 
-    void readSettings_lastOpenedBookmarks();
+    QString readSettings_lastOpenedBookmarks() const;
     void writeSettings_lastOpenedBookmarks();
 
-    QString readSettings_lastBookmarkDirectory();
+    QString readSettings_lastBookmarkDirectory() const;
     void writeSettings_lastBookmarkDirectory(const QString &path);
 private:
     CCompositWidget *m_mainWidget;
+
+    // window menubar
     QMenuBar *m_windowMenuBar;
     QMenu *m_fileMenu;
     QMenu *m_tagMenu;
@@ -60,16 +66,22 @@ private:
     QMenu *m_viewMenu;
     QMenu *m_toolbarMenu;
     QMenu *m_aboutMenu;
+
+    // window status bar
     QStatusBar *m_windowStatusBar;
 
+    // window toolbars
     QToolBar *m_fileToolBar;
     QToolBar *m_tagToolBar;
     QToolBar *m_bookmarkToolBar;
     QToolBar *m_aboutToolBar;
 
-    QAction *m_actionQuit;
+    // menu: file actions
     QAction *m_actionBookmarkCollectionImport;
     QAction *m_actionBookmarkCollectionExport;
+    QAction *m_actionQuit;
+
+    // menu: about actions
     QAction *m_actionAbout;
     QAction *m_actionAboutQt;
 };

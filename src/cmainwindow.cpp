@@ -213,7 +213,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
     project_closed();
     readSettings_window();
-    readSettings_lastOpenedBookmarks();
+    openLastOpenedProject();
 }
 
 CMainWindow::~CMainWindow()
@@ -379,11 +379,6 @@ void CMainWindow::actionClose_triggered()
     GPrj()->close();
 }
 
-void CMainWindow::actionQuit_triggered()
-{
-    close();
-}
-
 void CMainWindow::actionBookmarkCollectionImport_triggered()
 {
     CBookmarkImportWizard importWizard;
@@ -395,47 +390,9 @@ void CMainWindow::actionBookmarkCollectionExport_triggered()
     ;
 }
 
-void CMainWindow::readSettings_window()
+void CMainWindow::actionQuit_triggered()
 {
-    G_SETTINGS_INIT();
-    restoreState(settings.value(
-                     "CMainWindow/state", saveState()).toByteArray());
-    restoreGeometry(settings.value(
-                        "CMainWindow/geometry",saveGeometry()).toByteArray());
-}
-
-void CMainWindow::writeSettings_window()
-{
-    G_SETTINGS_INIT();
-    settings.setValue("CMainWindow/state", saveState());
-    settings.setValue("CMainWindow/geometry", saveGeometry());
-}
-
-void CMainWindow::readSettings_lastOpenedBookmarks()
-{
-    G_SETTINGS_INIT();
-    QString reason, path = settings.value("lastBookmarks", "").toString();
-    if (!path.isEmpty())
-        if (!GPrj()->open(path, &reason))
-            QMessageBox::warning(this, tr("Warning"), reason);
-}
-
-void CMainWindow::writeSettings_lastOpenedBookmarks()
-{
-    G_SETTINGS_INIT();
-    settings.setValue("lastBookmarks", GPrj()->path());
-}
-
-QString CMainWindow::readSettings_lastBookmarkDirectory()
-{
-    G_SETTINGS_INIT();
-    return settings.value("lastBookmarksDirectory", "").toString();
-}
-
-void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
-{
-    G_SETTINGS_INIT();
-    settings.setValue("lastBookmarksDirectory", path);
+    close();
 }
 
 void CMainWindow::actionAbout_triggered()
@@ -467,4 +424,52 @@ void CMainWindow::closeEvent(QCloseEvent *event)
     }
 
     QMainWindow::closeEvent(event);
+}
+
+void CMainWindow::openLastOpenedProject()
+{
+    QString reason, path = readSettings_lastOpenedBookmarks();;
+    if (!path.isEmpty())
+        if (!GPrj()->open(path, &reason))
+            QMessageBox::warning(this, tr("Warning"), reason);
+}
+
+void CMainWindow::readSettings_window()
+{
+    G_SETTINGS_INIT();
+    restoreState(settings.value(
+                     "CMainWindow/state", saveState()).toByteArray());
+    restoreGeometry(settings.value(
+                        "CMainWindow/geometry",saveGeometry()).toByteArray());
+}
+
+void CMainWindow::writeSettings_window()
+{
+    G_SETTINGS_INIT();
+    settings.setValue("CMainWindow/state", saveState());
+    settings.setValue("CMainWindow/geometry", saveGeometry());
+}
+
+QString CMainWindow::readSettings_lastOpenedBookmarks() const
+{
+    G_SETTINGS_INIT();
+    return settings.value("lastBookmarks", "").toString();
+}
+
+void CMainWindow::writeSettings_lastOpenedBookmarks()
+{
+    G_SETTINGS_INIT();
+    settings.setValue("lastBookmarks", GPrj()->path());
+}
+
+QString CMainWindow::readSettings_lastBookmarkDirectory() const
+{
+    G_SETTINGS_INIT();
+    return settings.value("lastBookmarksDirectory", "").toString();
+}
+
+void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
+{
+    G_SETTINGS_INIT();
+    settings.setValue("lastBookmarksDirectory", path);
 }

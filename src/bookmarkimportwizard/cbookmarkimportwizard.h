@@ -29,7 +29,7 @@ class CBookmarkImportWizard : public QWizard
     friend class CBookmarkImportSystemBrowserWizardPage;
     friend class CBookmarkImportFileWizardPage;
 private:
-    enum PageType
+    enum
     {
         Page_SelectMode,
         Page_SystemBrowser,

@@ -13,13 +13,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cmainwindow.h"
-#include "ui_cmainwindow.h"
+#include <QApplication>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSettings>
 #include <QCloseEvent>
 #include <QToolBar>
 #include <QToolButton>
+#include <QStatusBar>
+#include <QMenuBar>
 #include "caboutdialog.h"
 #include "cbookmarkview.h"
 #include "bookmarkimportchromium.h"
@@ -30,10 +32,29 @@
 
 
 CMainWindow::CMainWindow(QWidget *parent) :
-    QMainWindow(parent), ui(new Ui::CMainWindow)
+    QMainWindow(parent)
 {
-    ui->setupUi(this);
     setWindowTitle(tr("%1").arg(appName()));
+
+    m_windowStatusBar = new QStatusBar(this);
+    setStatusBar(m_windowStatusBar);
+
+    m_fileMenu = new QMenu(tr("&File"), this);
+    m_tagMenu = new QMenu(tr("&Tag"), this);
+    m_bookmarkMenu = new QMenu(tr("&Bookmark"), this);
+    m_viewMenu = new QMenu(tr("&View"), this);
+    m_toolbarMenu = new QMenu(tr("&Toolbars"), this);
+    m_aboutMenu = new QMenu(tr("&About"), this);
+
+    m_windowMenuBar = new QMenuBar(this);
+    m_windowMenuBar->addMenu(m_fileMenu);
+    m_windowMenuBar->addMenu(m_tagMenu);
+    m_windowMenuBar->addMenu(m_bookmarkMenu);
+    m_windowMenuBar->addMenu(m_viewMenu);
+    m_viewMenu->addMenu(m_toolbarMenu);
+    m_windowMenuBar->addMenu(m_aboutMenu);
+    setMenuBar(m_windowMenuBar);
+
 
     m_actionBookmarkCollectionImport = new QAction(this);
     m_actionBookmarkCollectionImport->setText("Bookmark collection import...");
@@ -82,10 +103,10 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_aboutToolBar->setObjectName("m_aboutToolBar");
     addToolBar(m_aboutToolBar);
 
-    ui->menu_toolbars->addAction(m_fileToolBar->toggleViewAction());
-    ui->menu_toolbars->addAction(m_tagToolBar->toggleViewAction());
-    ui->menu_toolbars->addAction(m_bookmarkToolBar->toggleViewAction());
-    ui->menu_toolbars->addAction(m_aboutToolBar->toggleViewAction());
+    m_toolbarMenu->addAction(m_fileToolBar->toggleViewAction());
+    m_toolbarMenu->addAction(m_tagToolBar->toggleViewAction());
+    m_toolbarMenu->addAction(m_bookmarkToolBar->toggleViewAction());
+    m_toolbarMenu->addAction(m_aboutToolBar->toggleViewAction());
 
     m_mainWidget = new CCompositWidget(this);
     setCentralWidget(m_mainWidget);
@@ -104,15 +125,15 @@ CMainWindow::CMainWindow(QWidget *parent) :
     connect(GPrj(), SIGNAL(closed()), this, SLOT(project_closed()));
 
     // Menu && Toolbar: File
-    ui->menu_file->addAction(GPrj()->actionCreate());
-    ui->menu_file->addAction(GPrj()->actionOpen());
-    ui->menu_file->addAction(GPrj()->actionSave());
-    ui->menu_file->addAction(GPrj()->actionClose());
-    ui->menu_file->addSeparator();
-    ui->menu_file->addAction(m_actionBookmarkCollectionImport);
-    //ui->menu_file->addAction(ui->action_export);
-    ui->menu_file->addSeparator();
-    ui->menu_file->addAction(m_actionQuit);
+    m_fileMenu->addAction(GPrj()->actionCreate());
+    m_fileMenu->addAction(GPrj()->actionOpen());
+    m_fileMenu->addAction(GPrj()->actionSave());
+    m_fileMenu->addAction(GPrj()->actionClose());
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_actionBookmarkCollectionImport);
+    m_fileMenu->addAction(m_actionBookmarkCollectionExport);
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_actionQuit);
 
 
     m_fileToolBar->addAction(GPrj()->actionCreate());
@@ -121,13 +142,14 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_fileToolBar->addAction(GPrj()->actionClose());
     m_fileToolBar->addSeparator();
     m_fileToolBar->addAction(m_actionBookmarkCollectionImport);
+    m_fileToolBar->addAction(m_actionBookmarkCollectionExport);
     m_fileToolBar->addSeparator();
     m_fileToolBar->addAction(m_actionQuit);
 
     // Menu && Toolbar: Tags
-    ui->menu_tags->addAction(m_mainWidget->actionTagAdd());
-    ui->menu_tags->addAction(m_mainWidget->actionTagEdit());
-    ui->menu_tags->addAction(m_mainWidget->actionTagRemove());
+    m_tagMenu->addAction(m_mainWidget->actionTagAdd());
+    m_tagMenu->addAction(m_mainWidget->actionTagEdit());
+    m_tagMenu->addAction(m_mainWidget->actionTagRemove());
 
     m_tagToolBar->addAction(m_mainWidget->actionTagAdd());
     m_tagToolBar->addAction(m_mainWidget->actionTagEdit());
@@ -135,24 +157,24 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
 
     // Menu && Toolbar: Bookmark
-    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkOpenUrl());
-    ui->menu_bookmarks->addAction(m_mainWidget->actionMenuBookmarkOpenUrl());
-    ui->menu_bookmarks->addSeparator();
-    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkSelectAll());
-    ui->menu_bookmarks->addSeparator();
-    ui->menu_bookmarks->addAction(m_mainWidget->actionMenuFavorite());
-    ui->menu_bookmarks->addAction(m_mainWidget->actionMenuReadItLater());
-    ui->menu_bookmarks->addAction(m_mainWidget->actionMenuRating());
-    ui->menu_bookmarks->addSeparator();
-    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkAdd());
-    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkEdit());
-    ui->menu_bookmarks->addSeparator();
-    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkSendToTrash());
-    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkRestore());
-    ui->menu_bookmarks->addSeparator();
-    ui->menu_bookmarks->addAction(m_mainWidget->actionBookmarkRemove());
-    ui->menu_bookmarks->addSeparator();
-    ui->menu_bookmarks->addAction(m_mainWidget->actionEmptyTrash());
+    m_bookmarkMenu->addAction(m_mainWidget->actionBookmarkOpenUrl());
+    m_bookmarkMenu->addAction(m_mainWidget->actionMenuBookmarkOpenUrl());
+    m_bookmarkMenu->addSeparator();
+    m_bookmarkMenu->addAction(m_mainWidget->actionBookmarkSelectAll());
+    m_bookmarkMenu->addSeparator();
+    m_bookmarkMenu->addAction(m_mainWidget->actionMenuFavorite());
+    m_bookmarkMenu->addAction(m_mainWidget->actionMenuReadItLater());
+    m_bookmarkMenu->addAction(m_mainWidget->actionMenuRating());
+    m_bookmarkMenu->addSeparator();
+    m_bookmarkMenu->addAction(m_mainWidget->actionBookmarkAdd());
+    m_bookmarkMenu->addAction(m_mainWidget->actionBookmarkEdit());
+    m_bookmarkMenu->addSeparator();
+    m_bookmarkMenu->addAction(m_mainWidget->actionBookmarkSendToTrash());
+    m_bookmarkMenu->addAction(m_mainWidget->actionBookmarkRestore());
+    m_bookmarkMenu->addSeparator();
+    m_bookmarkMenu->addAction(m_mainWidget->actionBookmarkRemove());
+    m_bookmarkMenu->addSeparator();
+    m_bookmarkMenu->addAction(m_mainWidget->actionEmptyTrash());
 
     QToolButton *openUrlButton = new QToolButton(this);
     openUrlButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -183,8 +205,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_bookmarkToolBar->addAction(m_mainWidget->actionEmptyTrash());
 
     // Menu && Toolbar: About
-    ui->menu_About->addAction(m_actionAbout);
-    ui->menu_About->addAction(m_actionAboutQt);
+    m_aboutMenu->addAction(m_actionAbout);
+    m_aboutMenu->addAction(m_actionAboutQt);
 
     m_aboutToolBar->addAction(m_actionAbout);
     m_aboutToolBar->addAction(m_actionAboutQt);
@@ -198,16 +220,14 @@ CMainWindow::~CMainWindow()
 {
     writeSettings_window();
     writeSettings_lastOpenedBookmarks();
-
-    delete ui;
 }
 
 void CMainWindow::project_opened()
 {
     m_actionBookmarkCollectionImport->setEnabled(true);
     m_actionBookmarkCollectionExport->setEnabled(true);
-    ui->menu_tags->setEnabled(true);
-    ui->menu_bookmarks->setEnabled(true);
+    m_tagMenu->setEnabled(true);
+    m_bookmarkMenu->setEnabled(true);
     setWindowTitle(tr("%1 - %2").arg(appName(), GPrj()->path()));
 }
 
@@ -215,8 +235,8 @@ void CMainWindow::project_closed()
 {
     m_actionBookmarkCollectionImport->setEnabled(false);
     m_actionBookmarkCollectionExport->setEnabled(false);
-    ui->menu_tags->setEnabled(false);
-    ui->menu_bookmarks->setEnabled(false);
+    m_tagMenu->setEnabled(false);
+    m_bookmarkMenu->setEnabled(false);
     setWindowTitle(tr("%1").arg(appName()));
 }
 

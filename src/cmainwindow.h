@@ -19,11 +19,8 @@
 #include "ccompositwidget.h"
 
 
-namespace Ui {
-class CMainWindow;
-}
 
-class CMainWindow : public QMainWindow //, public INavigationActions
+class CMainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
@@ -55,8 +52,16 @@ private:
     QString readSettings_lastBookmarkDirectory();
     void writeSettings_lastBookmarkDirectory(const QString &path);
 private:
-    Ui::CMainWindow *ui;
     CCompositWidget *m_mainWidget;
+    QMenuBar *m_windowMenuBar;
+    QMenu *m_fileMenu;
+    QMenu *m_tagMenu;
+    QMenu *m_bookmarkMenu;
+    QMenu *m_viewMenu;
+    QMenu *m_toolbarMenu;
+    QMenu *m_aboutMenu;
+    QStatusBar *m_windowStatusBar;
+
     QToolBar *m_fileToolBar;
     QToolBar *m_tagToolBar;
     QToolBar *m_bookmarkToolBar;

@@ -45,6 +45,7 @@ private slots:
 protected:
     void closeEvent(QCloseEvent *event);
 private:
+    void updateWindowTitle();
     void openLastOpenedProject();
 private:
     void readSettings_window();

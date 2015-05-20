@@ -228,7 +228,7 @@ void CMainWindow::project_opened()
     m_actionBookmarkCollectionExport->setEnabled(true);
     m_tagMenu->setEnabled(true);
     m_bookmarkMenu->setEnabled(true);
-    setWindowTitle(tr("%1 - %2").arg(appName(), GPrj()->path()));
+    updateWindowTitle();
 }
 
 void CMainWindow::project_closed()
@@ -237,7 +237,7 @@ void CMainWindow::project_closed()
     m_actionBookmarkCollectionExport->setEnabled(false);
     m_tagMenu->setEnabled(false);
     m_bookmarkMenu->setEnabled(false);
-    setWindowTitle(tr("%1").arg(appName()));
+    updateWindowTitle();
 }
 
 void CMainWindow::actionCreate_triggered()
@@ -424,6 +424,14 @@ void CMainWindow::closeEvent(QCloseEvent *event)
     }
 
     QMainWindow::closeEvent(event);
+}
+
+void CMainWindow::updateWindowTitle()
+{
+    if (GPrj()->isOpen())
+        setWindowTitle(tr("%1 - %2").arg(appName(), GPrj()->path()));
+    else
+        setWindowTitle(tr("%1").arg(appName()));
 }
 
 void CMainWindow::openLastOpenedProject()

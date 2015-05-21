@@ -21,6 +21,7 @@
 #include <QLineEdit>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QSettings>
 #include <QSplitter>
 #include <QStack>
@@ -79,14 +80,12 @@ CMainWindow::CMainWindow(QWidget *parent) :
     configureNetwork();
     configureProject();
     configureActionUpdater();
+    resetClearingFlags();
 
     readSettings();
-    project_closed();
-    openLastOpenedProject();
+    updateAll();
 
-    // default values
-    m_isClearingNavAnchor = false;
-    m_isClearingNavTag = false;
+    openLastOpenedProject();
 }
 
 CMainWindow::~CMainWindow()
@@ -95,50 +94,33 @@ CMainWindow::~CMainWindow()
     writeSettings_lastOpenedBookmarks();
 }
 
-void CMainWindow::project_opened()
+void CMainWindow::updateAll()
 {
-    m_actionBookmarkCollectionImport->setEnabled(true);
-    m_actionBookmarkCollectionExport->setEnabled(true);
-    m_tagMenu->setEnabled(true);
-    m_bookmarkMenu->setEnabled(true);
     updateWindowTitle();
-
-    m_bookmarkView->setEnabled(true);
-    m_navTagView->setEnabled(true);
-    m_navAnchorView->setEnabled(true);
-    m_bookmarkSearchLineEdit->setEnabled(true);
-    m_tagSearchLineEdit->setEnabled(true);
-
+    updateWidgetState();
     updateActionState();
     updateOpenUrlActionState();
     updateQuickEditActions();
-
-    m_actionBookmarkAdd->setEnabled(true);
 }
 
-void CMainWindow::project_closed()
+void CMainWindow::updateWidgetState()
 {
-    m_actionBookmarkCollectionImport->setEnabled(false);
-    m_actionBookmarkCollectionExport->setEnabled(false);
-    m_tagMenu->setEnabled(false);
-    m_bookmarkMenu->setEnabled(false);
-    updateWindowTitle();
-
-    m_bookmarkView->setEnabled(false);
-    m_navTagView->setEnabled(false);
-    m_navAnchorView->setEnabled(false);
-    m_bookmarkSearchLineEdit->setEnabled(false);
-    m_tagSearchLineEdit->setEnabled(false);
-
-    updateActionState();
-    updateOpenUrlActionState();
-    updateQuickEditActions();
-
-    m_actionBookmarkAdd->setEnabled(false);
+    m_bookmarkView->setEnabled(GPrj()->isOpen());
+    m_navTagView->setEnabled(GPrj()->isOpen());
+    m_navAnchorView->setEnabled(GPrj()->isOpen());
+    m_bookmarkSearchLineEdit->setEnabled(GPrj()->isOpen());
+    m_tagSearchLineEdit->setEnabled(GPrj()->isOpen());
 }
 
 void CMainWindow::updateActionState()
 {
+    m_tagMenu->setEnabled(GPrj()->isOpen());
+    m_bookmarkMenu->setEnabled(GPrj()->isOpen());
+
+    m_actionBookmarkCollectionImport->setEnabled(GPrj()->isOpen());
+    m_actionBookmarkCollectionExport->setEnabled(GPrj()->isOpen());
+    m_actionBookmarkAdd->setEnabled(GPrj()->isOpen());
+
     if (!GPrj()->isOpen())
     {
         m_actionBookmarkOpenUrl->setEnabled(false);
@@ -148,10 +130,13 @@ void CMainWindow::updateActionState()
         m_actionBookmarkSendToTrash->setEnabled(false);
         m_actionBookmarkRestore->setEnabled(false);
         m_actionBookmarkRemove->setEnabled(false);
+
+        m_actionEmptyTrash->setEnabled(false);
+
         m_actionTagAdd->setEnabled(false);
         m_actionTagEdit->setEnabled(false);
         m_actionTagRemove->setEnabled(false);
-        m_actionEmptyTrash->setEnabled(false);
+
         return;
     }
 
@@ -175,17 +160,17 @@ void CMainWindow::updateActionState()
     m_actionBookmarkOpenUrl->setEnabled(selectedBookmarkCount == 1);
     m_menuBookmarkOpenUrl->setEnabled(selectedBookmarkCount);
 
-    m_actionBookmarkEdit->setEnabled(selectedBookmarkCount == 1);
     m_actionBookmarkSelectAll->setEnabled(bookmarkCount);
+    m_actionBookmarkEdit->setEnabled(selectedBookmarkCount == 1);
     m_actionBookmarkSendToTrash->setEnabled(hasNotTrashBookmarks);
     m_actionBookmarkRestore->setEnabled(hasTrashBookmarks);
     m_actionBookmarkRemove->setEnabled(selectedBookmarkCount);
 
+    m_actionEmptyTrash->setEnabled(GBookmarkMgr()->trashCount());
+
     m_actionTagAdd->setEnabled(selectedTagCount <= 1);
     m_actionTagEdit->setEnabled(selectedTagCount == 1);
     m_actionTagRemove->setEnabled(selectedTagCount);
-
-    m_actionEmptyTrash->setEnabled(GBookmarkMgr()->trashCount());
 }
 
 void CMainWindow::updateOpenUrlActionState()
@@ -1102,11 +1087,11 @@ void CMainWindow::fillToolbarBookmark()
     openUrlButton->setDefaultAction(m_actionBookmarkOpenUrl);
     m_bookmarkToolBar->addWidget(openUrlButton);
     QToolButton *openUrlExtButton = new QToolButton(this);
-    openUrlExtButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    openUrlExtButton->setPopupMode(QToolButton::MenuButtonPopup);
+    openUrlExtButton->setPopupMode(QToolButton::InstantPopup);
     openUrlExtButton->setMenu(m_menuBookmarkOpenUrl);
-    openUrlExtButton->setText(m_menuBookmarkOpenUrl->menuAction()->text());
-    openUrlExtButton->setIcon(m_actionBookmarkOpenUrl->icon());
+    openUrlExtButton->setArrowType(Qt::DownArrow);
+    openUrlExtButton->setStyleSheet("QToolButton::menu-indicator { image: none; }");
+    openUrlExtButton->setFocusPolicy(Qt::NoFocus);
     m_bookmarkToolBar->addWidget(openUrlExtButton);
     m_bookmarkToolBar->addSeparator();
     m_bookmarkToolBar->addAction(m_actionBookmarkSelectAll);
@@ -1348,10 +1333,6 @@ void CMainWindow::createBookmarkView()
             this, SLOT(bookmarkView_showContextMenu(QPoint)));
     connect(m_bookmarkView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(bookmarkView_doubleClicked(QModelIndex)));
-    connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(updateOpenUrlActionState()));
-    connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(updateQuickEditActions()));
 
     m_bookmarkView->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_bookmarkView->header(), SIGNAL(customContextMenuRequested(QPoint)),
@@ -1484,8 +1465,8 @@ void CMainWindow::configureProject()
             this, SLOT(actionSave_triggered()));
     connect(GPrj()->actionClose(), SIGNAL(triggered()),
             this, SLOT(actionClose_triggered()));
-    connect(GPrj(), SIGNAL(opened()), this, SLOT(project_opened()));
-    connect(GPrj(), SIGNAL(closed()), this, SLOT(project_closed()));
+    connect(GPrj(), SIGNAL(opened()), this, SLOT(updateAll()));
+    connect(GPrj(), SIGNAL(closed()), this, SLOT(updateAll()));
 }
 
 void CMainWindow::configureActionUpdater()
@@ -1511,7 +1492,16 @@ void CMainWindow::configureActionUpdater()
     // or if selection of bookmark view is changed
     connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(updateActionState()));
+    connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(updateOpenUrlActionState()));
+    connect(m_bookmarkView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(updateQuickEditActions()));
+}
 
+void CMainWindow::resetClearingFlags()
+{
+    m_isClearingNavAnchor = false;
+    m_isClearingNavTag = false;
 }
 
 void CMainWindow::openLastOpenedProject()
@@ -1530,6 +1520,8 @@ void CMainWindow::updateBookmarkFilter()
         updateBookmarkTagFilter();
 
     updateActionState();
+    updateOpenUrlActionState();
+    updateQuickEditActions();
 }
 
 void CMainWindow::updateBookmarkAnchorFilter()

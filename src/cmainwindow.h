@@ -40,9 +40,8 @@ public:
     explicit CMainWindow(QWidget *parent = 0);
     virtual ~CMainWindow();
 private slots:
-    void project_opened();
-    void project_closed();
-
+    void updateAll();
+    void updateWidgetState();
     void updateActionState();
     void updateOpenUrlActionState();
     void updateQuickEditActions();
@@ -140,7 +139,8 @@ private:
 
     void configureNetwork();
     void configureProject();
-    void configureActionUpdater();
+    void configureActionUpdater();   
+    void resetClearingFlags();
 
     void openLastOpenedProject();
 

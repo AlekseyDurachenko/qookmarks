@@ -61,37 +61,37 @@ private slots:
     void tagSearchLineEdit_textChanged(const QString &text);
 
     // slots: file menu action
-    void actionCreate_triggered();
-    void actionOpen_triggered();
-    void actionSave_triggered();
-    void actionClose_triggered();
-    void actionBookmarkCollectionImport_triggered();
-    void actionBookmarkCollectionExport_triggered();
-    void actionQuit_triggered();
+    void createAction_triggered();
+    void openAction_triggered();
+    void saveAction_triggered();
+    void closeAction_triggered();
+    void bookmarkCollectionImportAction_triggered();
+    void bookmarkCollectionExportAction_triggered();
+    void quitAction_triggered();
 
     // slots: bookmark menu action
-    void actionBookmarkOpenUrl_triggered();
-    void actionBookmarkOpenUrlExt_triggered();
-    void actionBookmarkSelectAll_triggered();
-    void actionFavorite_triggered();
-    void actionReadItLater_triggered();
-    void actionRating_triggered();
-    void actionBookmarkAdd_triggered();
-    void actionBookmarkEdit_triggered();
-    void actionBookmarkSendToTrash_triggered();
-    void actionBookmarkRestore_triggered();
-    void actionBookmarkRemove_triggered();
+    void bookmarkOpenUrlAction_triggered();
+    void bookmarkOpenUrlExtAction_triggered();
+    void bookmarkSelectAllAction_triggered();
+    void favoriteAction_triggered();
+    void readItLaterAction_triggered();
+    void ratingAction_triggered();
+    void bookmarkAddAction_triggered();
+    void bookmarkEditAction_triggered();
+    void bookmarkSendToTrashAction_triggered();
+    void bookmarkRestoreAction_triggered();
+    void bookmarkRemoveAction_triggered();
 
-    void actionEmptyTrash_triggered();
+    void emptyTrashAction_triggered();
 
     // slots: tag menu action
-    void actionTagAdd_triggered();
-    void actionTagEdit_triggered();
-    void actionTagRemove_triggered();
+    void tagAddAction_triggered();
+    void tagEditAction_triggered();
+    void tagRemoveAction_triggered();
 
     // slots: about menu action
-    void actionAbout_triggered();
-    void actionAboutQt_triggered();
+    void aboutAction_triggered();
+    void aboutQtAction_triggered();
 protected:
     void closeEvent(QCloseEvent *event);
 protected:
@@ -113,16 +113,16 @@ private:
     void createBookmarkActions();
     void createAboutActions();
 
-    void fillToolbarFile();
-    void fillToolbarTag();
-    void fillToolbarBookmark();
-    void fillToolbarAbout();
+    void fillFileToolbar();
+    void fillTagToolbar();
+    void fillBookmarkToolbar();
+    void fillAboutToolbar();
 
-    void fillMenuFile();
-    void fillMenuTag();
-    void fillMenuBookmark();
-    void fillMenuToolbars();
-    void fillMenuAbout();
+    void fillFileMenu();
+    void fillTagMenu();
+    void fillBookmarkMenu();
+    void fillToolbarsMenu();
+    void fillAboutMenu();
     QMenu *createOpenUrlMenu();
     QMenu *createFavoriteMenu();
     QMenu *createReadItLaterMenu();
@@ -158,33 +158,33 @@ private:
     void writeSettings_lastBookmarkDirectory(const QString &path);
 private:
     // menu: file actions
-    QAction *m_actionBookmarkCollectionImport;
-    QAction *m_actionBookmarkCollectionExport;
-    QAction *m_actionQuit;
+    QAction *m_bookmarkCollectionImportAction;
+    QAction *m_bookmarkCollectionExportAction;
+    QAction *m_quitAction;
 
     // menu: tag actions
-    QAction *m_actionTagAdd;
-    QAction *m_actionTagEdit;
-    QAction *m_actionTagRemove;
+    QAction *m_tagAddAction;
+    QAction *m_tagEditAction;
+    QAction *m_tagRemoveAction;
 
     // menu: bookmark actions
-    QAction *m_actionBookmarkOpenUrl;
-    QMenu   *m_menuBookmarkOpenUrl;
-    QAction *m_actionBookmarkSelectAll;
-    QMenu   *m_menuFavorite;
-    QMenu   *m_menuReadItLater;
-    QMenu   *m_menuRating;
-    QAction *m_actionBookmarkAdd;
-    QAction *m_actionBookmarkEdit;
-    QAction *m_actionBookmarkSendToTrash;
-    QAction *m_actionBookmarkRestore;
-    QAction *m_actionBookmarkRemove;
+    QAction *m_bookmarkOpenUrlAction;
+    QMenu   *m_bookmarkOpenUrlMenu;
+    QAction *m_bookmarkSelectAllAction;
+    QMenu   *m_favoriteMenu;
+    QMenu   *m_readItLaterMenu;
+    QMenu   *m_ratingMenu;
+    QAction *m_bookmarkAddAction;
+    QAction *m_bookmarkEditAction;
+    QAction *m_bookmarkSendToTrashAction;
+    QAction *m_bookmarkRestoreAction;
+    QAction *m_bookmarkRemoveAction;
 
-    QAction *m_actionEmptyTrash;
+    QAction *m_emptyTrashAction;
 
     // menu: about actions
-    QAction *m_actionAbout;
-    QAction *m_actionAboutQt;
+    QAction *m_aboutAction;
+    QAction *m_aboutQtAction;
 
     // window toolbars
     QToolBar *m_fileToolBar;

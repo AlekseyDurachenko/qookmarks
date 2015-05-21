@@ -36,7 +36,6 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkview.h \
     $$PWD/src/project/cprj.h \
     $$PWD/src/project/cprjxml.h \
-    $$PWD/src/cmainwindow.h \
     $$PWD/src/settings.h \
     $$PWD/src/network/cwebfiledownloader.h \
     $$PWD/src/network/cwebpagedownloader.h \
@@ -75,7 +74,8 @@ HEADERS        +=                                                       \
     $$PWD/src/widget/navigationview/cnavtagview.h \
     $$PWD/src/browser/browser.h \
     $$PWD/src/icontheme/icontheme.h \
-    $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.h
+    $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.h \
+    $$PWD/src/mainwindow.h
 
 
 SOURCES        +=                                                       \
@@ -95,7 +95,6 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/bookmarkview/cbookmarkview.cpp \
     $$PWD/src/project/cprj.cpp \
     $$PWD/src/project/cprjxml.cpp \
-    $$PWD/src/cmainwindow.cpp \
     $$PWD/src/network/cwebfiledownloader.cpp \
     $$PWD/src/network/cwebpagedownloader.cpp \
     $$PWD/src/network/cwebpagescreenshot.cpp \
@@ -132,7 +131,8 @@ SOURCES        +=                                                       \
     $$PWD/src/widget/navigationview/cnavtagview.cpp \
     $$PWD/src/browser/browser.cpp \
     $$PWD/src/icontheme/icontheme.cpp \
-    $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.cpp
+    $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.cpp \
+    $$PWD/src/mainwindow.cpp
 
 
 FORMS          +=                                                       \

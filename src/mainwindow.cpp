@@ -12,7 +12,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmainwindow.h"
+#include "mainwindow.h"
 #include <QApplication>
 #include <QClipboard>
 #include <QCloseEvent>
@@ -47,7 +47,7 @@
 #include "settings.h"
 
 
-CMainWindow::CMainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     createFileActions();
@@ -88,13 +88,13 @@ CMainWindow::CMainWindow(QWidget *parent) :
     openLastOpenedProject();
 }
 
-CMainWindow::~CMainWindow()
+MainWindow::~MainWindow()
 {
     writeSettings();
     writeSettings_lastOpenedBookmarks();
 }
 
-void CMainWindow::updateAll()
+void MainWindow::updateAll()
 {
     updateWindowTitle();
     updateWidgetState();
@@ -103,7 +103,7 @@ void CMainWindow::updateAll()
     updateQuickEditActions();
 }
 
-void CMainWindow::updateWidgetState()
+void MainWindow::updateWidgetState()
 {
     m_bookmarkView->setEnabled(GPrj()->isOpen());
     m_navTagView->setEnabled(GPrj()->isOpen());
@@ -112,7 +112,7 @@ void CMainWindow::updateWidgetState()
     m_tagSearchLineEdit->setEnabled(GPrj()->isOpen());
 }
 
-void CMainWindow::updateActionState()
+void MainWindow::updateActionState()
 {
     m_tagMenu->setEnabled(GPrj()->isOpen());
     m_bookmarkMenu->setEnabled(GPrj()->isOpen());
@@ -173,7 +173,7 @@ void CMainWindow::updateActionState()
     m_actionTagRemove->setEnabled(selectedTagCount);
 }
 
-void CMainWindow::updateOpenUrlActionState()
+void MainWindow::updateOpenUrlActionState()
 {
     int selectedBookmarkCount = m_bookmarkView->selectionModel()->selectedRows().count();
 
@@ -201,7 +201,7 @@ void CMainWindow::updateOpenUrlActionState()
     }
 }
 
-void CMainWindow::updateQuickEditActions()
+void MainWindow::updateQuickEditActions()
 {
     int selectedCount = m_bookmarkView->selectionModel()->selectedRows().count();
     m_menuFavorite->setEnabled(selectedCount);
@@ -267,7 +267,7 @@ void CMainWindow::updateQuickEditActions()
                 action->setChecked(true);
 }
 
-void CMainWindow::updateWindowTitle()
+void MainWindow::updateWindowTitle()
 {
     if (GPrj()->isOpen())
         setWindowTitle(tr("%1 - %2").arg(appName(), GPrj()->path()));
@@ -275,7 +275,7 @@ void CMainWindow::updateWindowTitle()
         setWindowTitle(tr("%1").arg(appName()));
 }
 
-void CMainWindow::bookmarkView_showContextMenu(const QPoint &pos)
+void MainWindow::bookmarkView_showContextMenu(const QPoint &pos)
 {
     QMenu menu(this);
     menu.addAction(m_actionBookmarkOpenUrl);
@@ -297,7 +297,7 @@ void CMainWindow::bookmarkView_showContextMenu(const QPoint &pos)
     menu.exec(m_bookmarkView->viewport()->mapToGlobal(pos));
 }
 
-void CMainWindow::bookmarkView_header_showContextMenu(const QPoint &pos)
+void MainWindow::bookmarkView_header_showContextMenu(const QPoint &pos)
 {
     QMenu menu(this);
     for (int i = 0; i < m_bookmarkView->header()->count(); ++i)
@@ -326,12 +326,12 @@ void CMainWindow::bookmarkView_header_showContextMenu(const QPoint &pos)
     }
 }
 
-void CMainWindow::bookmarkView_doubleClicked(const QModelIndex &index)
+void MainWindow::bookmarkView_doubleClicked(const QModelIndex &index)
 {
     Browser::openUrl(CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url());
 }
 
-void CMainWindow::navAnchorView_showContextMenu(const QPoint &pos)
+void MainWindow::navAnchorView_showContextMenu(const QPoint &pos)
 {
     if (!m_navAnchorView->selectionModel()->selectedRows().isEmpty()
             && m_navAnchorView->currentIndex().data(Qt::UserRole).toInt()
@@ -343,7 +343,7 @@ void CMainWindow::navAnchorView_showContextMenu(const QPoint &pos)
     }
 }
 
-void CMainWindow::navAnchorView_selectionModel_selectionChanged()
+void MainWindow::navAnchorView_selectionModel_selectionChanged()
 {
     if (m_isClearingNavTag)
         return;
@@ -355,7 +355,7 @@ void CMainWindow::navAnchorView_selectionModel_selectionChanged()
     updateBookmarkFilter();
 }
 
-void CMainWindow::navTagView_showContextMenu(const QPoint &pos)
+void MainWindow::navTagView_showContextMenu(const QPoint &pos)
 {
     QMenu menu(this);
     menu.addAction(m_actionTagAdd);
@@ -366,7 +366,7 @@ void CMainWindow::navTagView_showContextMenu(const QPoint &pos)
     menu.exec(m_navTagView->viewport()->mapToGlobal(pos));
 }
 
-void CMainWindow::navTagView_selectionModel_selectionChanged()
+void MainWindow::navTagView_selectionModel_selectionChanged()
 {
     if (m_isClearingNavAnchor)
         return;
@@ -378,18 +378,18 @@ void CMainWindow::navTagView_selectionModel_selectionChanged()
     updateBookmarkFilter();
 }
 
-void CMainWindow::bookmarkSearchLineEdit_textChanged(const QString &text)
+void MainWindow::bookmarkSearchLineEdit_textChanged(const QString &text)
 {
     m_bookmarkView->setFilterFixedString(text);
 }
 
-void CMainWindow::tagSearchLineEdit_textChanged(const QString &text)
+void MainWindow::tagSearchLineEdit_textChanged(const QString &text)
 {
     m_navTagSortFilterProxyModel->setFilterFixedString(text);
     m_navTagView->expandAll();
 }
 
-void CMainWindow::actionCreate_triggered()
+void MainWindow::actionCreate_triggered()
 {
     if (GPrj()->isOpen())
     {
@@ -449,7 +449,7 @@ void CMainWindow::actionCreate_triggered()
     writeSettings_lastBookmarkDirectory(dirName);
 }
 
-void CMainWindow::actionOpen_triggered()
+void MainWindow::actionOpen_triggered()
 {
     if (GPrj()->isOpen())
     {
@@ -498,14 +498,14 @@ void CMainWindow::actionOpen_triggered()
     writeSettings_lastBookmarkDirectory(dirName);
 }
 
-void CMainWindow::actionSave_triggered()
+void MainWindow::actionSave_triggered()
 {
     QString reason;
     if (!GPrj()->save(&reason))
         QMessageBox::critical(this, tr("Critical"), reason);
 }
 
-void CMainWindow::actionClose_triggered()
+void MainWindow::actionClose_triggered()
 {
     if (GPrj()->hasChanges())
     {
@@ -528,28 +528,28 @@ void CMainWindow::actionClose_triggered()
     GPrj()->close();
 }
 
-void CMainWindow::actionBookmarkCollectionImport_triggered()
+void MainWindow::actionBookmarkCollectionImport_triggered()
 {
     CBookmarkImportWizard importWizard;
     importWizard.exec();
 }
 
-void CMainWindow::actionBookmarkCollectionExport_triggered()
+void MainWindow::actionBookmarkCollectionExport_triggered()
 {
     ;
 }
 
-void CMainWindow::actionQuit_triggered()
+void MainWindow::actionQuit_triggered()
 {
     close();
 }
 
-void CMainWindow::actionBookmarkOpenUrl_triggered()
+void MainWindow::actionBookmarkOpenUrl_triggered()
 {
     Browser::openUrl(m_bookmarkView->selectedBookmarks().first()->data().url());
 }
 
-void CMainWindow::actionBookmarkOpenUrlExt_triggered()
+void MainWindow::actionBookmarkOpenUrlExt_triggered()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (Browser::openUrl(action->data().toMap().value("browser").toByteArray(),
@@ -558,12 +558,12 @@ void CMainWindow::actionBookmarkOpenUrlExt_triggered()
         QMessageBox::warning(this, tr("Warning"), tr("Can't open the url(s)"));
 }
 
-void CMainWindow::actionBookmarkSelectAll_triggered()
+void MainWindow::actionBookmarkSelectAll_triggered()
 {
     m_bookmarkView->selectAll();
 }
 
-void CMainWindow::actionFavorite_triggered()
+void MainWindow::actionFavorite_triggered()
 {
     bool favorite = qobject_cast<QAction *>(sender())->data().toBool();
     foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
@@ -574,7 +574,7 @@ void CMainWindow::actionFavorite_triggered()
     }
 }
 
-void CMainWindow::actionReadItLater_triggered()
+void MainWindow::actionReadItLater_triggered()
 {
     bool readItLater = qobject_cast<QAction *>(sender())->data().toBool();
     foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
@@ -585,7 +585,7 @@ void CMainWindow::actionReadItLater_triggered()
     }
 }
 
-void CMainWindow::actionRating_triggered()
+void MainWindow::actionRating_triggered()
 {
     int rating = qobject_cast<QAction *>(sender())->data().toInt();
     foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
@@ -596,7 +596,7 @@ void CMainWindow::actionRating_triggered()
     }
 }
 
-void CMainWindow::actionBookmarkAdd_triggered()
+void MainWindow::actionBookmarkAdd_triggered()
 {
     CBookmarkEditDialog newBookmarkDialog(this);
     newBookmarkDialog.setWindowTitle(tr("Create bookmark"));
@@ -632,7 +632,7 @@ void CMainWindow::actionBookmarkAdd_triggered()
     }
 }
 
-void CMainWindow::actionBookmarkEdit_triggered()
+void MainWindow::actionBookmarkEdit_triggered()
 {
     CBookmarkItem *bookmarkItem = m_bookmarkView->selectedBookmarks().first();
 
@@ -663,7 +663,7 @@ void CMainWindow::actionBookmarkEdit_triggered()
     }
 }
 
-void CMainWindow::actionBookmarkSendToTrash_triggered()
+void MainWindow::actionBookmarkSendToTrash_triggered()
 {
     if (QMessageBox::question(this, tr("Question"),
             tr("Are you sure you want to send to trash the selected bookmarks?"),
@@ -678,7 +678,7 @@ void CMainWindow::actionBookmarkSendToTrash_triggered()
     }
 }
 
-void CMainWindow::actionBookmarkRestore_triggered()
+void MainWindow::actionBookmarkRestore_triggered()
 {
     if (QMessageBox::question(this, tr("Question"),
             tr("Are you sure you want to restore the selected bookmarks?"),
@@ -693,7 +693,7 @@ void CMainWindow::actionBookmarkRestore_triggered()
     }
 }
 
-void CMainWindow::actionBookmarkRemove_triggered()
+void MainWindow::actionBookmarkRemove_triggered()
 {
     if (QMessageBox::question(this, tr("Question"),
             tr("Are you sure you want to remove the selected bookmarks?"),
@@ -704,7 +704,7 @@ void CMainWindow::actionBookmarkRemove_triggered()
         GBookmarkMgr()->removeAt(GBookmarkMgr()->find(url)->index());
 }
 
-void CMainWindow::actionEmptyTrash_triggered()
+void MainWindow::actionEmptyTrash_triggered()
 {
     if (QMessageBox::question(this, tr("Question"),
             tr("Are you sure you want to empty the trash?"),
@@ -716,7 +716,7 @@ void CMainWindow::actionEmptyTrash_triggered()
             GBookmarkMgr()->removeAt(i);
 }
 
-void CMainWindow::actionTagAdd_triggered()
+void MainWindow::actionTagAdd_triggered()
 {
     CTagItem *item = GTagMgr()->rootItem();
     const QModelIndexList &selectedIndexes = m_navTagView->selectionModel()->selectedRows();
@@ -728,7 +728,7 @@ void CMainWindow::actionTagAdd_triggered()
         item->add(newTagDialog.toData());
 }
 
-void CMainWindow::actionTagEdit_triggered()
+void MainWindow::actionTagEdit_triggered()
 {
     CTagItem *item = CTagItem::variantToPtr(
                 m_navTagView->selectionModel()->selectedRows().first()
@@ -740,7 +740,7 @@ void CMainWindow::actionTagEdit_triggered()
         item->setData(editTagDialog.toData());
 }
 
-void CMainWindow::actionTagRemove_triggered()
+void MainWindow::actionTagRemove_triggered()
 {
     if (QMessageBox::question(this, tr("Question"),
             tr("Are you sure you want to remove the selected tags?"),
@@ -763,18 +763,18 @@ void CMainWindow::actionTagRemove_triggered()
     }
 }
 
-void CMainWindow::actionAbout_triggered()
+void MainWindow::actionAbout_triggered()
 {
     CAboutDialog aboutDialog(this);
     aboutDialog.exec();
 }
 
-void CMainWindow::actionAboutQt_triggered()
+void MainWindow::actionAboutQt_triggered()
 {
     qApp->aboutQt();
 }
 
-void CMainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (GPrj()->hasChanges())
     {
@@ -794,7 +794,7 @@ void CMainWindow::closeEvent(QCloseEvent *event)
     QMainWindow::closeEvent(event);
 }
 
-void CMainWindow::navActMoveTags(const QList<QStringList> &tags,
+void MainWindow::navActMoveTags(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(parentTag);
@@ -814,7 +814,7 @@ void CMainWindow::navActMoveTags(const QList<QStringList> &tags,
     }
 }
 
-void CMainWindow::navActSetTag(const QList<QUrl> &bookmarks,
+void MainWindow::navActSetTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(tag);
@@ -835,7 +835,7 @@ void CMainWindow::navActSetTag(const QList<QUrl> &bookmarks,
     }
 }
 
-void CMainWindow::navActAddTag(const QList<QUrl> &bookmarks,
+void MainWindow::navActAddTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(tag);
@@ -852,7 +852,7 @@ void CMainWindow::navActAddTag(const QList<QUrl> &bookmarks,
     }
 }
 
-void CMainWindow::navActClearTags(const QList<QUrl> &bookmarks)
+void MainWindow::navActClearTags(const QList<QUrl> &bookmarks)
 {
     if (QMessageBox::question(this, tr("Question"),
             tr("Are you sure you want to send the selected bookmarks into the trash?"),
@@ -870,7 +870,7 @@ void CMainWindow::navActClearTags(const QList<QUrl> &bookmarks)
     }
 }
 
-void CMainWindow::navActFavorite(const QList<QUrl> &bookmarks)
+void MainWindow::navActFavorite(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
@@ -884,7 +884,7 @@ void CMainWindow::navActFavorite(const QList<QUrl> &bookmarks)
     }
 }
 
-void CMainWindow::navActReadItLater(const QList<QUrl> &bookmarks)
+void MainWindow::navActReadItLater(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
@@ -899,7 +899,7 @@ void CMainWindow::navActReadItLater(const QList<QUrl> &bookmarks)
 
 }
 
-void CMainWindow::navActTrash(const QList<QUrl> &bookmarks)
+void MainWindow::navActTrash(const QList<QUrl> &bookmarks)
 {
     if (QMessageBox::question(this, tr("Question"),
             tr("Are you sure you want to move to trash the selected bookmarks?"),
@@ -918,7 +918,7 @@ void CMainWindow::navActTrash(const QList<QUrl> &bookmarks)
     }
 }
 
-void CMainWindow::createMenuBar()
+void MainWindow::createMenuBar()
 {
     m_fileMenu = new QMenu(tr("&File"), this);
     m_tagMenu = new QMenu(tr("&Tag"), this);
@@ -937,7 +937,7 @@ void CMainWindow::createMenuBar()
     setMenuBar(m_windowMenuBar);
 }
 
-void CMainWindow::createToolbars()
+void MainWindow::createToolbars()
 {
     m_fileToolBar = new QToolBar(tr("File"), this);
     m_fileToolBar->setObjectName("m_fileToolBar");
@@ -956,7 +956,7 @@ void CMainWindow::createToolbars()
     addToolBar(m_aboutToolBar);
 }
 
-void CMainWindow::createFileActions()
+void MainWindow::createFileActions()
 {
     m_actionBookmarkCollectionImport = new QAction(this);
     m_actionBookmarkCollectionImport->setText("Bookmark collection import...");
@@ -977,7 +977,7 @@ void CMainWindow::createFileActions()
             this, SLOT(actionQuit_triggered()));
 }
 
-void CMainWindow::createTagActions()
+void MainWindow::createTagActions()
 {
     m_actionTagAdd = new QAction(tr("Add tag..."), this);
     m_actionTagAdd->setIcon(IconTheme::icon("action-tag-add"));
@@ -995,7 +995,7 @@ void CMainWindow::createTagActions()
             this, SLOT(actionTagRemove_triggered()));
 }
 
-void CMainWindow::createBookmarkActions()
+void MainWindow::createBookmarkActions()
 {
     m_actionBookmarkOpenUrl = new  QAction(tr("Open url"), this);
     m_actionBookmarkOpenUrl->setIcon(IconTheme::icon("browser-default"));
@@ -1045,7 +1045,7 @@ void CMainWindow::createBookmarkActions()
             this, SLOT(actionEmptyTrash_triggered()));
 }
 
-void CMainWindow::createAboutActions()
+void MainWindow::createAboutActions()
 {
     m_actionAbout = new QAction(this);
     m_actionAbout->setText("About...");
@@ -1060,7 +1060,7 @@ void CMainWindow::createAboutActions()
             this, SLOT(actionAboutQt_triggered()));
 }
 
-void CMainWindow::fillToolbarFile()
+void MainWindow::fillToolbarFile()
 {
     m_fileToolBar->addAction(GPrj()->actionCreate());
     m_fileToolBar->addAction(GPrj()->actionOpen());
@@ -1073,14 +1073,14 @@ void CMainWindow::fillToolbarFile()
     m_fileToolBar->addAction(m_actionQuit);
 }
 
-void CMainWindow::fillToolbarTag()
+void MainWindow::fillToolbarTag()
 {
     m_tagToolBar->addAction(m_actionTagAdd);
     m_tagToolBar->addAction(m_actionTagEdit);
     m_tagToolBar->addAction(m_actionTagRemove);
 }
 
-void CMainWindow::fillToolbarBookmark()
+void MainWindow::fillToolbarBookmark()
 {
     QToolButton *openUrlButton = new QToolButton(this);
     openUrlButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -1111,13 +1111,13 @@ void CMainWindow::fillToolbarBookmark()
     m_bookmarkToolBar->addAction(m_actionEmptyTrash);
 }
 
-void CMainWindow::fillToolbarAbout()
+void MainWindow::fillToolbarAbout()
 {
     m_aboutToolBar->addAction(m_actionAbout);
     m_aboutToolBar->addAction(m_actionAboutQt);
 }
 
-void CMainWindow::fillMenuFile()
+void MainWindow::fillMenuFile()
 {
     m_fileMenu->addAction(GPrj()->actionCreate());
     m_fileMenu->addAction(GPrj()->actionOpen());
@@ -1130,14 +1130,14 @@ void CMainWindow::fillMenuFile()
     m_fileMenu->addAction(m_actionQuit);
 }
 
-void CMainWindow::fillMenuTag()
+void MainWindow::fillMenuTag()
 {
     m_tagMenu->addAction(m_actionTagAdd);
     m_tagMenu->addAction(m_actionTagEdit);
     m_tagMenu->addAction(m_actionTagRemove);
 }
 
-void CMainWindow::fillMenuBookmark()
+void MainWindow::fillMenuBookmark()
 {
     m_bookmarkMenu->addAction(m_actionBookmarkOpenUrl);
     m_bookmarkMenu->addAction(m_menuBookmarkOpenUrl->menuAction());
@@ -1159,7 +1159,7 @@ void CMainWindow::fillMenuBookmark()
     m_bookmarkMenu->addAction(m_actionEmptyTrash);
 }
 
-void CMainWindow::fillMenuToolbars()
+void MainWindow::fillMenuToolbars()
 {
     m_toolbarMenu->addAction(m_fileToolBar->toggleViewAction());
     m_toolbarMenu->addAction(m_tagToolBar->toggleViewAction());
@@ -1167,13 +1167,13 @@ void CMainWindow::fillMenuToolbars()
     m_toolbarMenu->addAction(m_aboutToolBar->toggleViewAction());
 }
 
-void CMainWindow::fillMenuAbout()
+void MainWindow::fillMenuAbout()
 {
     m_aboutMenu->addAction(m_actionAbout);
     m_aboutMenu->addAction(m_actionAboutQt);
 }
 
-QMenu *CMainWindow::createOpenUrlMenu()
+QMenu *MainWindow::createOpenUrlMenu()
 {
     QMenu *openUrlMenu = new QMenu(tr("Open url(s) in"), this);
 
@@ -1242,7 +1242,7 @@ QMenu *CMainWindow::createOpenUrlMenu()
     return openUrlMenu;
 }
 
-QMenu *CMainWindow::createFavoriteMenu()
+QMenu *MainWindow::createFavoriteMenu()
 {
     QActionGroup *group = new QActionGroup(this);
     QMenu *menu = new QMenu(tr("Favorite"), this);
@@ -1267,7 +1267,7 @@ QMenu *CMainWindow::createFavoriteMenu()
     return menu;
 }
 
-QMenu *CMainWindow::createReadItLaterMenu()
+QMenu *MainWindow::createReadItLaterMenu()
 {
     QActionGroup *group = new QActionGroup(this);
     QMenu *menu = new QMenu(tr("Read it later"), this);
@@ -1292,7 +1292,7 @@ QMenu *CMainWindow::createReadItLaterMenu()
     return menu;
 }
 
-QMenu *CMainWindow::createRatingMenu()
+QMenu *MainWindow::createRatingMenu()
 {
     QActionGroup *group = new QActionGroup(this);
     QMenu *menu = new QMenu(tr("Rating"), this);
@@ -1312,13 +1312,13 @@ QMenu *CMainWindow::createRatingMenu()
     return menu;
 }
 
-void CMainWindow::createStatusBar()
+void MainWindow::createStatusBar()
 {
     m_windowStatusBar = new QStatusBar(this);
     setStatusBar(m_windowStatusBar);
 }
 
-void CMainWindow::createBookmarkView()
+void MainWindow::createBookmarkView()
 {
     m_bookmarkFilter= new CBookmarkFilter(this);
     m_bookmarkFilterDataModel = new CBookmarkFilterDataModel(this);
@@ -1339,7 +1339,7 @@ void CMainWindow::createBookmarkView()
             this, SLOT(bookmarkView_header_showContextMenu(QPoint)));
 }
 
-void CMainWindow::createAnchorView()
+void MainWindow::createAnchorView()
 {
     m_navAnchorItemModel = new CNavAnchorItemModel(this);
     m_navAnchorItemModel->setNavigationActions(this);
@@ -1359,7 +1359,7 @@ void CMainWindow::createAnchorView()
             this, SLOT(navAnchorView_showContextMenu(QPoint)));
 }
 
-void CMainWindow::createTagView()
+void MainWindow::createTagView()
 {
     m_navTagItemModel = new CNavTagItemModel(this);
     m_navTagItemModel->setNavigationActions(this);
@@ -1386,7 +1386,7 @@ void CMainWindow::createTagView()
             this, SLOT(navTagView_showContextMenu(QPoint)));
 }
 
-void CMainWindow::createBookmarkSearch()
+void MainWindow::createBookmarkSearch()
 {
     m_bookmarkSearchLineEdit = new QLineEdit(this);
     m_bookmarkSearchLineEdit->setPlaceholderText(tr("type search text here"));
@@ -1397,7 +1397,7 @@ void CMainWindow::createBookmarkSearch()
             this, SLOT(bookmarkSearchLineEdit_textChanged(QString)));
 }
 
-void CMainWindow::createTagSearch()
+void MainWindow::createTagSearch()
 {
     m_tagSearchLineEdit = new QLineEdit(this);
     m_tagSearchLineEdit->setPlaceholderText(tr("type search text here"));
@@ -1408,7 +1408,7 @@ void CMainWindow::createTagSearch()
             this, SLOT(tagSearchLineEdit_textChanged(QString)));
 }
 
-void CMainWindow::composeCentralWidget()
+void MainWindow::composeCentralWidget()
 {
     // + -- Anchor --- + ---------- Bookmarks --------------- +
     // |               | ___________search_line______________ |
@@ -1450,12 +1450,12 @@ void CMainWindow::composeCentralWidget()
     setCentralWidget(m_splitter);
 }
 
-void CMainWindow::configureNetwork()
+void MainWindow::configureNetwork()
 {
     GNetworkMgr()->setNetwork(new QNetworkAccessManager(this));
 }
 
-void CMainWindow::configureProject()
+void MainWindow::configureProject()
 {
     connect(GPrj()->actionCreate(), SIGNAL(triggered()),
             this, SLOT(actionCreate_triggered()));
@@ -1469,7 +1469,7 @@ void CMainWindow::configureProject()
     connect(GPrj(), SIGNAL(closed()), this, SLOT(updateAll()));
 }
 
-void CMainWindow::configureActionUpdater()
+void MainWindow::configureActionUpdater()
 {
     // if someting of bookmark manager changed we should update the actions
     connect(GBookmarkMgr(), SIGNAL(inserted(int,int)),
@@ -1498,13 +1498,13 @@ void CMainWindow::configureActionUpdater()
             this, SLOT(updateQuickEditActions()));
 }
 
-void CMainWindow::resetClearingFlags()
+void MainWindow::resetClearingFlags()
 {
     m_isClearingNavAnchor = false;
     m_isClearingNavTag = false;
 }
 
-void CMainWindow::openLastOpenedProject()
+void MainWindow::openLastOpenedProject()
 {
     QString reason, path = readSettings_lastOpenedBookmarks();;
     if (!path.isEmpty())
@@ -1512,7 +1512,7 @@ void CMainWindow::openLastOpenedProject()
             QMessageBox::warning(this, tr("Warning"), reason);
 }
 
-void CMainWindow::updateBookmarkFilter()
+void MainWindow::updateBookmarkFilter()
 {
     if (!m_navAnchorView->selectionModel()->selectedRows().isEmpty())
         updateBookmarkAnchorFilter();
@@ -1524,7 +1524,7 @@ void CMainWindow::updateBookmarkFilter()
     updateQuickEditActions();
 }
 
-void CMainWindow::updateBookmarkAnchorFilter()
+void MainWindow::updateBookmarkAnchorFilter()
 {
     // default filter options (equal to CNavAnchorItemModel::All)
     m_bookmarkFilter->setInclusiveOption(~Bookmark::FilterOptions(Bookmark::Trash));
@@ -1561,7 +1561,7 @@ void CMainWindow::updateBookmarkAnchorFilter()
     m_bookmarkFilter->update();
 }
 
-void CMainWindow::updateBookmarkTagFilter()
+void MainWindow::updateBookmarkTagFilter()
 {
     QSet<CTagItem *> selectedTags;
     foreach (const QModelIndex &index,
@@ -1574,58 +1574,58 @@ void CMainWindow::updateBookmarkTagFilter()
     m_bookmarkFilter->update();
 }
 
-void CMainWindow::readSettings()
+void MainWindow::readSettings()
 {
     G_SETTINGS_INIT();
-    restoreState(settings.value("CMainWindow/state",
+    restoreState(settings.value("MainWindow/state",
                                 saveState()).toByteArray());
-    restoreGeometry(settings.value("CMainWindow/geometry",
+    restoreGeometry(settings.value("MainWindow/geometry",
                                    saveGeometry()).toByteArray());
 
     m_navSplitter->restoreState(
-                settings.value("CMainWindow/m_navSplitter/state",
+                settings.value("MainWindow/m_navSplitter/state",
                                m_navSplitter->saveState()).toByteArray());
     m_splitter->restoreState(
-                settings.value("CMainWindow/m_splitter/state",
+                settings.value("MainWindow/m_splitter/state",
                                m_splitter->saveState()).toByteArray());
     m_bookmarkView->header()->restoreState(
-                settings.value("CMainWindow/m_bookmarkView_header/state",
+                settings.value("MainWindow/m_bookmarkView_header/state",
                                m_bookmarkView->header()->saveState()).toByteArray());
 }
 
-void CMainWindow::writeSettings()
+void MainWindow::writeSettings()
 {
     G_SETTINGS_INIT();
-    settings.setValue("CMainWindow/state", saveState());
-    settings.setValue("CMainWindow/geometry", saveGeometry());
+    settings.setValue("MainWindow/state", saveState());
+    settings.setValue("MainWindow/geometry", saveGeometry());
 
-    settings.setValue("CMainWindow/m_navSplitter/state",
+    settings.setValue("MainWindow/m_navSplitter/state",
                       m_navSplitter->saveState());
-    settings.setValue("CMainWindow/m_splitter/state",
+    settings.setValue("MainWindow/m_splitter/state",
                       m_splitter->saveState());
-    settings.setValue("CMainWindow/m_bookmarkView_header/state",
+    settings.setValue("MainWindow/m_bookmarkView_header/state",
                       m_bookmarkView->header()->saveState());
 }
 
-QString CMainWindow::readSettings_lastOpenedBookmarks() const
+QString MainWindow::readSettings_lastOpenedBookmarks() const
 {
     G_SETTINGS_INIT();
     return settings.value("lastBookmarks", "").toString();
 }
 
-void CMainWindow::writeSettings_lastOpenedBookmarks()
+void MainWindow::writeSettings_lastOpenedBookmarks()
 {
     G_SETTINGS_INIT();
     settings.setValue("lastBookmarks", GPrj()->path());
 }
 
-QString CMainWindow::readSettings_lastBookmarkDirectory() const
+QString MainWindow::readSettings_lastBookmarkDirectory() const
 {
     G_SETTINGS_INIT();
     return settings.value("lastBookmarksDirectory", "").toString();
 }
 
-void CMainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
+void MainWindow::writeSettings_lastBookmarkDirectory(const QString &path)
 {
     G_SETTINGS_INIT();
     settings.setValue("lastBookmarksDirectory", path);

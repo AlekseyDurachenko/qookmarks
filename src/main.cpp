@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QApplication>
-#include "cmainwindow.h"
+#include "mainwindow.h"
 #include "singleton.h"
 #include "cprj.h"
 #include "browser.h"
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     singleton<CNetworkMgr>();
     singleton<CPrj>();
 
-    CMainWindow w;
+    MainWindow w;
     w.show();
     int ret = a.exec();
 

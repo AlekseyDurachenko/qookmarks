@@ -12,8 +12,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CMAINWINDOW_H
-#define CMAINWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QModelIndex>
@@ -33,12 +33,12 @@ class QLineEdit;
 class QSplitter;
 
 
-class CMainWindow : public QMainWindow, INavigationActions
+class MainWindow : public QMainWindow, INavigationActions
 {
     Q_OBJECT
 public:
-    explicit CMainWindow(QWidget *parent = 0);
-    virtual ~CMainWindow();
+    explicit MainWindow(QWidget *parent = 0);
+    virtual ~MainWindow();
 private slots:
     void updateAll();
     void updateWidgetState();
@@ -139,7 +139,7 @@ private:
 
     void configureNetwork();
     void configureProject();
-    void configureActionUpdater();   
+    void configureActionUpdater();
     void resetClearingFlags();
 
     void openLastOpenedProject();
@@ -236,4 +236,4 @@ private:
 };
 
 
-#endif // CMAINWINDOW_H
+#endif // MAINWINDOW_H

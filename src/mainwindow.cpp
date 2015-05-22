@@ -28,7 +28,7 @@
 #include <QStatusBar>
 #include <QToolBar>
 #include <QToolButton>
-#include "caboutdialog.h"
+#include "aboutdialog.h"
 #include "cbookmarkeditdialog.h"
 #include "cbookmarkfilterdatamodel.h"
 #include "cbookmarkfilter.h"
@@ -765,7 +765,7 @@ void MainWindow::tagRemoveAction_triggered()
 
 void MainWindow::aboutAction_triggered()
 {
-    CAboutDialog aboutDialog(this);
+    AboutDialog aboutDialog(this);
     aboutDialog.exec();
 }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CAboutDialog</class>
- <widget class="QDialog" name="CAboutDialog">
+ <class>AboutDialog</class>
+ <widget class="QDialog" name="AboutDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,7 +17,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="icon_label">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -45,7 +45,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_programmTitle">
+      <widget class="QLabel" name="programmTitle_label">
        <property name="font">
         <font>
          <pointsize>22</pointsize>
@@ -75,23 +75,23 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab_about">
+     <widget class="QWidget" name="about_tab">
       <attribute name="title">
        <string>About</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit_about"/>
+        <widget class="QPlainTextEdit" name="about_plainTextEdit"/>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_authors">
+     <widget class="QWidget" name="authors_tab">
       <attribute name="title">
        <string>Authors</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit_authors">
+        <widget class="QPlainTextEdit" name="authors_plainTextEdit">
          <property name="lineWrapMode">
           <enum>QPlainTextEdit::NoWrap</enum>
          </property>
@@ -102,23 +102,23 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_changelog">
+     <widget class="QWidget" name="changelog_tab">
       <attribute name="title">
        <string>Change log</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit_changelog"/>
+        <widget class="QPlainTextEdit" name="changelog_plainTextEdit"/>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_license">
+     <widget class="QWidget" name="license_tab">
       <attribute name="title">
        <string>License</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit_license">
+        <widget class="QPlainTextEdit" name="license_plainTextEdit">
          <property name="lineWrapMode">
           <enum>QPlainTextEdit::NoWrap</enum>
          </property>
@@ -129,13 +129,13 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_libraries">
+     <widget class="QWidget" name="libraries_tab">
       <attribute name="title">
        <string>Libraries</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit_libraries">
+        <widget class="QPlainTextEdit" name="libraries_plainTextEdit">
          <property name="lineWrapMode">
           <enum>QPlainTextEdit::NoWrap</enum>
          </property>
@@ -162,10 +162,10 @@
  </widget>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>plainTextEdit_about</tabstop>
-  <tabstop>plainTextEdit_authors</tabstop>
-  <tabstop>plainTextEdit_license</tabstop>
-  <tabstop>plainTextEdit_libraries</tabstop>
+  <tabstop>about_plainTextEdit</tabstop>
+  <tabstop>authors_plainTextEdit</tabstop>
+  <tabstop>license_plainTextEdit</tabstop>
+  <tabstop>libraries_plainTextEdit</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
@@ -175,7 +175,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>CAboutDialog</receiver>
+   <receiver>AboutDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -191,7 +191,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>CAboutDialog</receiver>
+   <receiver>AboutDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -12,38 +12,39 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "caboutdialog.h"
-#include "ui_caboutdialog.h"
+#include "aboutdialog.h"
+#include "ui_aboutdialog.h"
 #include "settings.h"
 #include <QFile>
 
 
-CAboutDialog::CAboutDialog(QWidget *parent) :
-        QDialog(parent), ui(new Ui::CAboutDialog)
+AboutDialog::AboutDialog(QWidget *parent) :
+        QDialog(parent), ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
     setWindowTitle(tr("About %1 - %2").arg(appName(), appVersion()));
 
-    ui->label_programmTitle->setText(tr("About %1 - %2").arg(appName(), appVersion()));
+    ui->programmTitle_label->setText(
+                tr("About %1 - %2").arg(appName(), appVersion()));
 
-    ui->plainTextEdit_about->setPlainText
-            (fromResource(":/about/ABOUT"));
-    ui->plainTextEdit_authors->setPlainText
-            (fromResource(":/about/AUTHORS"));
-    ui->plainTextEdit_changelog->setPlainText
-            (fromResource(":/about/CHANGELOG"));
-    ui->plainTextEdit_license->setPlainText
-            (fromResource(":/about/LICENSE"));
-    ui->plainTextEdit_libraries->setPlainText
-            (fromResource(":/about/LIBRARIES"));
+    ui->about_plainTextEdit->setPlainText(
+                fromResource(":/about/ABOUT"));
+    ui->authors_plainTextEdit->setPlainText(
+                fromResource(":/about/AUTHORS"));
+    ui->changelog_plainTextEdit->setPlainText(
+                fromResource(":/about/CHANGELOG"));
+    ui->license_plainTextEdit->setPlainText(
+                fromResource(":/about/LICENSE"));
+    ui->libraries_plainTextEdit->setPlainText(
+                fromResource(":/about/LIBRARIES"));
 }
 
-CAboutDialog::~CAboutDialog()
+AboutDialog::~AboutDialog()
 {
     delete ui;
 }
 
-QString CAboutDialog::fromResource(const QString &resourceName)
+QString AboutDialog::fromResource(const QString &resourceName)
 {
     QFile text(resourceName);
     text.open(QIODevice::ReadOnly);

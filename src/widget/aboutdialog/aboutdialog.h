@@ -12,27 +12,27 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CABOUTDIALOG_H
-#define CABOUTDIALOG_H
+#ifndef ABOUTDIALOG_H
+#define ABOUTDIALOG_H
 
 #include <QDialog>
 
 
 namespace Ui {
-class CAboutDialog;
+class AboutDialog;
 }
 
-class CAboutDialog : public QDialog
+class AboutDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CAboutDialog(QWidget *parent = 0);
-    virtual ~CAboutDialog();
+    explicit AboutDialog(QWidget *parent = 0);
+    virtual ~AboutDialog();
 private:
     QString fromResource(const QString& resourceName);
 private:
-    Ui::CAboutDialog *ui;
+    Ui::AboutDialog *ui;
 };
 
 
-#endif // CABOUTDIALOG_H
+#endif // ABOUTDIALOG_H

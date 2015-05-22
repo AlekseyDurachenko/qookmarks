@@ -55,7 +55,6 @@ HEADERS        +=                                                       \
     $$PWD/src/network/ciconmgr.h \
     $$PWD/src/common/hash_functions.h \
     $$PWD/src/common/singleton.h \
-    $$PWD/src/widget/aboutdialog/caboutdialog.h \
     $$PWD/src/network/cnetworkmgr.h \
     $$PWD/src/network/cdownloadfaviconrequest.h \
     $$PWD/src/network/cdownloadfaviconreply.h \
@@ -75,7 +74,8 @@ HEADERS        +=                                                       \
     $$PWD/src/browser/browser.h \
     $$PWD/src/icontheme/icontheme.h \
     $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.h \
-    $$PWD/src/mainwindow.h
+    $$PWD/src/mainwindow.h \
+    $$PWD/src/widget/aboutdialog/aboutdialog.h
 
 
 SOURCES        +=                                                       \
@@ -112,7 +112,6 @@ SOURCES        +=                                                       \
     $$PWD/src/network/ccheckurlreply.cpp \
     $$PWD/src/network/ciconmgr.cpp \
     $$PWD/src/common/hash_functions.cpp \
-    $$PWD/src/widget/aboutdialog/caboutdialog.cpp \
     $$PWD/src/network/cnetworkmgr.cpp \
     $$PWD/src/network/cdownloadfaviconrequest.cpp \
     $$PWD/src/network/cdownloadfaviconreply.cpp \
@@ -132,13 +131,14 @@ SOURCES        +=                                                       \
     $$PWD/src/browser/browser.cpp \
     $$PWD/src/icontheme/icontheme.cpp \
     $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.cpp \
-    $$PWD/src/mainwindow.cpp
+    $$PWD/src/mainwindow.cpp \
+    $$PWD/src/widget/aboutdialog/aboutdialog.cpp
 
 
 FORMS          +=                                                       \
     $$PWD/src/widget/tageditdialog/ctageditdialog.ui \
     $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.ui \
-    $$PWD/src/widget/aboutdialog/caboutdialog.ui
+    $$PWD/src/widget/aboutdialog/aboutdialog.ui
 
 
 RESOURCES      +=                                                       \

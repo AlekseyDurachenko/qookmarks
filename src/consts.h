@@ -12,38 +12,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CONSTS
-#define CONSTS
+#ifndef CONSTS_H
+#define CONSTS_H
 
 #include <QtGlobal>
+
 
 namespace Bookmark
 {
     const char DateTimeFormat[] = "yyyy-MM-dd HH:mm:ss";
-}
 
-namespace Bookmark
-{
     const int MinRating = 0;
     const int MaxRating = 10;
 }
 
-namespace Bookmark
-{
-    enum FilterOption
-    {
-        Any             = 0xFFFF,
-        ReadItLater     = 0x0001,
-        NotReadItLater  = 0x0100,
-        Favorite        = 0x0002,
-        NotFavorite     = 0x0200,
-        Trash           = 0x0004,
-        NotTrash        = 0x0400
-    };
-    Q_DECLARE_FLAGS(FilterOptions, FilterOption)
-}
-Q_DECLARE_OPERATORS_FOR_FLAGS(Bookmark::FilterOptions)
 
-
-#endif // CONSTS
+#endif // CONSTS_H
 

@@ -27,6 +27,18 @@ class CBookmarkFilter : public CAbstractBookmarkFilter
 {
     Q_OBJECT
 public:
+    enum FilterOption
+    {
+        Any             = 0xFFFF,
+        ReadItLater     = 0x0001,
+        NotReadItLater  = 0x0100,
+        Favorite        = 0x0002,
+        NotFavorite     = 0x0200,
+        Trash           = 0x0004,
+        NotTrash        = 0x0400
+    };
+    Q_DECLARE_FLAGS(FilterOptions, FilterOption)
+
     CBookmarkFilter(QObject *parent = 0);
     virtual ~CBookmarkFilter();
 
@@ -35,8 +47,8 @@ public:
     void setTag(CTagItem *tag);
     void clearTags();
 
-    inline const Bookmark::FilterOptions &inclusiveOption() const;
-    void setInclusiveOption(const Bookmark::FilterOptions &options);
+    inline const FilterOptions &inclusiveOption() const;
+    void setInclusiveOption(const CBookmarkFilter::FilterOptions &options);
 
     inline int minRating() const;
     inline int maxRating() const;
@@ -47,17 +59,19 @@ private slots:
     void tagMgr_aboutToBeRemoved(CTagItem *parent, int first, int last);
 private:
     QSet<CTagItem *> m_tags;
-    Bookmark::FilterOptions m_inclusiveFilter;
+    FilterOptions m_inclusiveFilter;
     int m_minRating;
     int m_maxRating;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(CBookmarkFilter::FilterOptions)
+
 
 const QSet<CTagItem *> CBookmarkFilter::tags() const
 {
     return m_tags;
 }
 
-const Bookmark::FilterOptions &CBookmarkFilter::inclusiveOption() const
+const CBookmarkFilter::FilterOptions &CBookmarkFilter::inclusiveOption() const
 {
     return m_inclusiveFilter;
 }

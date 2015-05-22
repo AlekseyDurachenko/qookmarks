@@ -1527,7 +1527,7 @@ void MainWindow::updateBookmarkFilter()
 void MainWindow::updateBookmarkAnchorFilter()
 {
     // default filter options (equal to CNavAnchorItemModel::All)
-    m_bookmarkFilter->setInclusiveOption(~Bookmark::FilterOptions(Bookmark::Trash));
+    m_bookmarkFilter->setInclusiveOption(~CBookmarkFilter::FilterOptions(CBookmarkFilter::Trash));
     m_bookmarkFilter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
     m_bookmarkFilter->clearTags();
 
@@ -1540,13 +1540,13 @@ void MainWindow::updateBookmarkAnchorFilter()
         break;
     case CNavAnchorItemModel::Favorites:
         m_bookmarkFilter->setInclusiveOption(
-                    Bookmark::FilterOptions(
-                        Bookmark::Favorite|Bookmark::NotTrash));
+                    CBookmarkFilter::FilterOptions(
+                        CBookmarkFilter::Favorite|CBookmarkFilter::NotTrash));
         break;
     case CNavAnchorItemModel::ReadItLater:
         m_bookmarkFilter->setInclusiveOption(
-                    Bookmark::FilterOptions(
-                        Bookmark::ReadItLater|Bookmark::NotTrash));
+                    CBookmarkFilter::FilterOptions(
+                        CBookmarkFilter::ReadItLater|CBookmarkFilter::NotTrash));
         break;
     case CNavAnchorItemModel::Rated:
         m_bookmarkFilter->setRatingRange(
@@ -1554,7 +1554,7 @@ void MainWindow::updateBookmarkAnchorFilter()
         break;
     case CNavAnchorItemModel::Trash:
         m_bookmarkFilter->setInclusiveOption(
-                    Bookmark::FilterOptions(Bookmark::Trash));
+                    CBookmarkFilter::FilterOptions(CBookmarkFilter::Trash));
         break;
     }
 
@@ -1568,7 +1568,7 @@ void MainWindow::updateBookmarkTagFilter()
              m_navTagView->selectionModel()->selectedRows())
         selectedTags.insert(CTagItem::variantToPtr(index.data(Qt::UserRole)));
 
-    m_bookmarkFilter->setInclusiveOption(~Bookmark::FilterOptions(Bookmark::Trash));
+    m_bookmarkFilter->setInclusiveOption(~CBookmarkFilter::FilterOptions(CBookmarkFilter::Trash));
     m_bookmarkFilter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
     m_bookmarkFilter->setTags(selectedTags);
     m_bookmarkFilter->update();

@@ -26,7 +26,7 @@
 CBookmarkFilter::CBookmarkFilter(QObject *parent) :
     CAbstractBookmarkFilter(parent)
 {
-    m_inclusiveFilter = ~Bookmark::FilterOptions(Bookmark::Trash);
+    m_inclusiveFilter = ~CBookmarkFilter::FilterOptions(CBookmarkFilter::Trash);
     m_minRating = Bookmark::MinRating;
     m_maxRating = Bookmark::MaxRating;
 
@@ -54,7 +54,7 @@ void CBookmarkFilter::clearTags()
     m_tags.clear();
 }
 
-void CBookmarkFilter::setInclusiveOption(const Bookmark::FilterOptions &options)
+void CBookmarkFilter::setInclusiveOption(const CBookmarkFilter::FilterOptions &options)
 {
     m_inclusiveFilter = options;
 }
@@ -85,27 +85,27 @@ bool CBookmarkFilter::validate(const CBookmarkItem *item) const
             || item->data().rating() > m_maxRating)
         return false;
 
-    if (m_inclusiveFilter.testFlag(Bookmark::Favorite)
-            || m_inclusiveFilter.testFlag(Bookmark::NotFavorite))
-        if (!((m_inclusiveFilter.testFlag(Bookmark::Favorite)
+    if (m_inclusiveFilter.testFlag(CBookmarkFilter::Favorite)
+            || m_inclusiveFilter.testFlag(CBookmarkFilter::NotFavorite))
+        if (!((m_inclusiveFilter.testFlag(CBookmarkFilter::Favorite)
              && item->data().isFavorite() == true) ||
-                (m_inclusiveFilter.testFlag(Bookmark::NotFavorite)
+                (m_inclusiveFilter.testFlag(CBookmarkFilter::NotFavorite)
                  && item->data().isFavorite() == false)))
             return false;
 
-    if (m_inclusiveFilter.testFlag(Bookmark::ReadItLater)
-            || m_inclusiveFilter.testFlag(Bookmark::NotReadItLater))
-        if (!((m_inclusiveFilter.testFlag(Bookmark::ReadItLater)
+    if (m_inclusiveFilter.testFlag(CBookmarkFilter::ReadItLater)
+            || m_inclusiveFilter.testFlag(CBookmarkFilter::NotReadItLater))
+        if (!((m_inclusiveFilter.testFlag(CBookmarkFilter::ReadItLater)
              && item->data().isReadItLater() == true) ||
-                (m_inclusiveFilter.testFlag(Bookmark::NotReadItLater)
+                (m_inclusiveFilter.testFlag(CBookmarkFilter::NotReadItLater)
                  && item->data().isReadItLater() == false)))
             return false;
 
-    if (m_inclusiveFilter.testFlag(Bookmark::Trash)
-            || m_inclusiveFilter.testFlag(Bookmark::NotTrash))
-        if (!((m_inclusiveFilter.testFlag(Bookmark::Trash)
+    if (m_inclusiveFilter.testFlag(CBookmarkFilter::Trash)
+            || m_inclusiveFilter.testFlag(CBookmarkFilter::NotTrash))
+        if (!((m_inclusiveFilter.testFlag(CBookmarkFilter::Trash)
              && item->data().isTrash() == true) ||
-                (m_inclusiveFilter.testFlag(Bookmark::NotTrash)
+                (m_inclusiveFilter.testFlag(CBookmarkFilter::NotTrash)
                  && item->data().isTrash() == false)))
             return false;
 

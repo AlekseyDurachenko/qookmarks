@@ -12,30 +12,51 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ctag.h"
+#ifndef TAG_H
+#define TAG_H
+
+#include <QSharedDataPointer>
+#include <QString>
 
 
-CTag::CTag() : data(new CTagData)
+class TagData : public QSharedData
 {
+public:
+    QString name;
+};
+
+
+class Tag
+{
+public:
+    Tag();
+    Tag(const Tag &);
+    Tag &operator=(const Tag &);
+    ~Tag();
+
+    inline const QString &name() const;
+    void setName(const QString &name);
+
+    inline bool operator ==(const Tag &other);
+    inline bool operator !=(const Tag &other);
+private:
+    QSharedDataPointer<TagData> data;
+};
+
+const QString &Tag::name() const
+{
+    return data->name;
 }
 
-CTag::CTag(const CTag &rhs) : data(rhs.data)
+bool Tag::operator ==(const Tag &other)
 {
-
+    return (data->name == other.data->name);
 }
 
-CTag &CTag::operator=(const CTag &rhs)
+bool Tag::operator !=(const Tag &other)
 {
-    if (this != &rhs)
-        data.operator=(rhs.data);
-    return *this;
+    return (data->name != other.data->name);
 }
 
-CTag::~CTag()
-{
-}
 
-void CTag::setName(const QString &name)
-{
-    data->name = name;
-}
+#endif // TAG_H

@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "navanchoritemmodel.h"
-#include "cbookmarkitem.h"
-#include "ctagitem.h"
+#include "bookmarkitem.h"
+#include "tagitem.h"
 #include "icontheme.h"
 #include "actinterface.h"
 #include "singleton.h"
@@ -30,9 +30,9 @@ NavAnchorItemModel::NavAnchorItemModel(QObject *parent) :
             this, SLOT(updateAnchorItems()));
     connect(GBookmarkMgr(), SIGNAL(removed(int,int)),
             this, SLOT(updateAnchorItems()));
-    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
+    connect(GBookmarkMgr(), SIGNAL(dataChanged(BookmarkItem*)),
             this, SLOT(updateAnchorItems()));
-    connect(GBookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+    connect(GBookmarkMgr(), SIGNAL(tagsChanged(BookmarkItem*)),
             this, SLOT(updateAnchorItems()));
 
     initAnchorItems();
@@ -108,7 +108,7 @@ bool NavAnchorItemModel::dropMimeData(const QMimeData *data,
         else if (data->hasFormat("qookmarks/tag-list"))
         {
             foreach (const QStringList &path, fromMimeTagList(data))
-                foreach (CBookmarkItem *bookmarkItem,
+                foreach (BookmarkItem *bookmarkItem,
                          GTagMgr()->findByPath(path)->bookmarks())
                     bookmarkList.push_back(bookmarkItem->data().url());
         }

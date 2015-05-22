@@ -14,12 +14,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bookmarkeditdialog.h"
 #include "ui_bookmarkeditdialog.h"
-#include "ccheckedtagitemmodel.h"
+#include "checkedtagitemmodel.h"
 #include "ccheckurlreply.h"
 #include "cdownloadfaviconreply.h"
 #include "cdownloadwebpageinforeply.h"
 #include "ciconmgr.h"
-#include "ctagsortfilterproxymodel.h"
+#include "tagsortfilterproxymodel.h"
 #include "icontheme.h"
 #include "settings.h"
 #include <QFileDialog>
@@ -48,8 +48,8 @@ BookmarkEditDialog::BookmarkEditDialog(QWidget *parent) :
     ui->textWrap_toolButton->setIcon(IconTheme::icon("action-note-text-wrap"));
 
     // configure the checked tag treeview
-    m_checkedTagItemModel = new CCheckedTagItemModel(this);
-    m_tagSortFilterProxyModel = new CTagSortFilterProxyModel(this);
+    m_checkedTagItemModel = new CheckedTagItemModel(this);
+    m_tagSortFilterProxyModel = new TagSortFilterProxyModel(this);
     m_tagSortFilterProxyModel->setSourceModel(m_checkedTagItemModel);
     m_tagSortFilterProxyModel->setDynamicSortFilter(true);
     m_tagSortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -99,9 +99,9 @@ BookmarkEditDialog::~BookmarkEditDialog()
     delete ui;
 }
 
-CBookmark BookmarkEditDialog::toData() const
+Bookmark BookmarkEditDialog::toData() const
 {
-    CBookmark data;
+    Bookmark data;
     data.setUrl(ui->url_lineEdit->text());
     data.setTitle(ui->title_lineEdit->text());
     data.setDescription(ui->description_lineEdit->text());
@@ -122,7 +122,7 @@ CBookmark BookmarkEditDialog::toData() const
     return data;
 }
 
-void BookmarkEditDialog::setData(const CBookmark &data)
+void BookmarkEditDialog::setData(const Bookmark &data)
 {
     ui->url_lineEdit->setText(data.url().toString());
     ui->title_lineEdit->setText(data.title());
@@ -144,7 +144,7 @@ void BookmarkEditDialog::setData(const CBookmark &data)
     m_data = data;
 }
 
-void BookmarkEditDialog::setCheckedTags(const QSet<CTagItem *> &checkedTags)
+void BookmarkEditDialog::setCheckedTags(const QSet<TagItem *> &checkedTags)
 {
     m_checkedTagItemModel->setCheckedTags(checkedTags);
     ui->checkedTags_treeView->expandAll();
@@ -170,7 +170,7 @@ void BookmarkEditDialog::setAddToDownloadQueue(bool state)
     ui->addToDownloadQueue_checkBox->setChecked(state);
 }
 
-const QSet<CTagItem *> BookmarkEditDialog::toCheckedTags() const
+const QSet<TagItem *> BookmarkEditDialog::toCheckedTags() const
 {
     return m_checkedTagItemModel->checkedTags();
 }

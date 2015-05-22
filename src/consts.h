@@ -17,14 +17,11 @@
 
 #include <QtGlobal>
 
+const char BookmarkDateTimeFormat[] = "yyyy-MM-dd HH:mm:ss";
 
-namespace Bookmark
-{
-    const char DateTimeFormat[] = "yyyy-MM-dd HH:mm:ss";
+const int BookmarkMinRating = 0;
+const int BookmarkMaxRating = 10;
 
-    const int MinRating = 0;
-    const int MaxRating = 10;
-}
 
 
 #endif // CONSTS_H

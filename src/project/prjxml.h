@@ -15,34 +15,34 @@
 #ifndef PRJXML_H
 #define PRJXML_H
 
-#include "cbookmark.h"
-#include "ctag.h"
+#include "bookmark.h"
+#include "tag.h"
 #include <QDomDocument>
 #include <QDomElement>
 class QString;
 class QIODevice;
-class CManager;
-class CBookmarkMgr;
-class CBookmarkItem;
-class CTagItem;
+class Manager;
+class BookmarkMgr;
+class BookmarkItem;
+class TagItem;
 
 
 class PrjXml
 {
 public:
     static bool saveEmptyXml(QIODevice *output, QString *reason = 0);
-    static bool saveXml(CManager *manager, QIODevice *output, QString *reason = 0);
-    static bool loadXml(CManager *manager, QIODevice *input, QString *reason = 0);
+    static bool saveXml(Manager *manager, QIODevice *output, QString *reason = 0);
+    static bool loadXml(Manager *manager, QIODevice *input, QString *reason = 0);
 private:
-    static QDomElement createBookmarkMgrElem(QDomDocument doc, CBookmarkMgr *mgr);
-    static QDomElement createBookmarkItemElem(QDomDocument doc, CBookmarkItem *item);
-    static QDomElement createBookmarkTagElem(QDomDocument doc, CTagItem *item);
-    static QDomElement createTagItemElem(QDomDocument doc, CTagItem *mgr);
-    static void parsePrjNode(CManager *manager, QDomNode node);
-    static void parseTagNode(CTagItem *parentTag, QDomNode node);
-    static void parseBookmarkNode(CManager *manager, QDomNode node);
-    static CTag createTagData(QDomElement elem);
-    static CBookmark createBookmarkData(QDomElement elem);
+    static QDomElement createBookmarkMgrElem(QDomDocument doc, BookmarkMgr *mgr);
+    static QDomElement createBookmarkItemElem(QDomDocument doc, BookmarkItem *item);
+    static QDomElement createBookmarkTagElem(QDomDocument doc, TagItem *item);
+    static QDomElement createTagItemElem(QDomDocument doc, TagItem *mgr);
+    static void parsePrjNode(Manager *manager, QDomNode node);
+    static void parseTagNode(TagItem *parentTag, QDomNode node);
+    static void parseBookmarkNode(Manager *manager, QDomNode node);
+    static Tag createTagData(QDomElement elem);
+    static Bookmark createBookmarkData(QDomElement elem);
     static QStringList createBookmarkTagPath(QDomNode node);
 };
 

@@ -12,17 +12,17 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cmanager.h"
-#include "cbookmarkmgr.h"
-#include "ctagmgr.h"
+#include "manager.h"
+#include "bookmarkmgr.h"
+#include "tagmgr.h"
 
 
-CManager::CManager(QObject *parent) : QObject(parent)
+Manager::Manager(QObject *parent) : QObject(parent)
 {
-    m_bookmarkMgr = new CBookmarkMgr(this);
-    m_tagMgr = new CTagMgr(this);
+    m_bookmarkMgr = new BookmarkMgr(this);
+    m_tagMgr = new TagMgr(this);
 }
 
-CManager::~CManager()
+Manager::~Manager()
 {
 }

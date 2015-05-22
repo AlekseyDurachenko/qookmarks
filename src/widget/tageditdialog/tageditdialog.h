@@ -15,9 +15,9 @@
 #ifndef TAGEDITDIALOG_H
 #define TAGEDITDIALOG_H
 
-#include "ctag.h"
+#include "tag.h"
 #include <QDialog>
-class CTagItem;
+class TagItem;
 
 
 namespace Ui {
@@ -34,20 +34,20 @@ public:
         Edit    = 1
     };
 public:
-    explicit TagEditDialog(Mode mode, CTagItem *tagParent, QWidget *parent = 0);
+    explicit TagEditDialog(Mode mode, TagItem *tagParent, QWidget *parent = 0);
     virtual ~TagEditDialog();
 
     inline Mode mode() const;
-    inline CTagItem *tagParent() const;
+    inline TagItem *tagParent() const;
 
-    CTag toData() const;
-    void setData(const CTag &data);
+    Tag toData() const;
+    void setData(const Tag &data);
 private slots:
     void slot_name_lineEdit_textChanged(const QString &text);
 private:
     Ui::TagEditDialog *ui;
-    CTag m_data;
-    CTagItem *m_tagParent;
+    Tag m_data;
+    TagItem *m_tagParent;
     Mode m_mode;
 };
 
@@ -56,7 +56,7 @@ TagEditDialog::Mode TagEditDialog::mode() const
     return m_mode;
 }
 
-CTagItem *TagEditDialog::tagParent() const
+TagItem *TagEditDialog::tagParent() const
 {
     return m_tagParent;
 }

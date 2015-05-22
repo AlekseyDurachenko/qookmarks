@@ -12,25 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cabstractbookmarkfilter.h"
+#ifndef TAGSORTFILTERPROXYMODEL_H
+#define TAGSORTFILTERPROXYMODEL_H
+
+#include <QSortFilterProxyModel>
 
 
-CAbstractBookmarkFilter::CAbstractBookmarkFilter(QObject *parent) :
-    QObject(parent)
+class TagSortFilterProxyModel : public QSortFilterProxyModel
 {
-}
+public:
+    explicit TagSortFilterProxyModel(QObject *parent = 0);
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+};
 
-CAbstractBookmarkFilter::~CAbstractBookmarkFilter()
-{
-}
 
-/*!
- * \brief CAbstractBookmarkFilter::update
- *
- * you should call this method after your filter is changed
- */
-void CAbstractBookmarkFilter::update()
-{
-    emit changed();
-}
-
+#endif // TAGSORTFILTERPROXYMODEL_H

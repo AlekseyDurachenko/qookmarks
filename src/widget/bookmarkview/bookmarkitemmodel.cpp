@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bookmarkitemmodel.h"
-#include "cabstractbookmarkdatamodel.h"
-#include "cbookmarkitem.h"
+#include "abstractbookmarkdatamodel.h"
+#include "bookmarkitem.h"
 #include "ciconmgr.h"
 #include "consts.h"
 #include "prj.h"
@@ -31,7 +31,7 @@ BookmarkItemModel::BookmarkItemModel(QObject *parent) :
     m_dataModel = 0;
 }
 
-void BookmarkItemModel::setDataModel(CAbstractBookmarkDataModel *dataModel)
+void BookmarkItemModel::setDataModel(AbstractBookmarkDataModel *dataModel)
 {
     if (m_dataModel)
         disconnect(m_dataModel, 0, this, 0);
@@ -64,7 +64,7 @@ QVariant BookmarkItemModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || !m_dataModel)
         return QVariant();
 
-    CBookmarkItem *bookmark = m_dataModel->at(index.row());
+    BookmarkItem *bookmark = m_dataModel->at(index.row());
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
     {
         switch (index.column())
@@ -90,13 +90,13 @@ QVariant BookmarkItemModel::data(const QModelIndex &index, int role) const
         case 9:
             return QString(bookmark->data().httpReasonPhrase()).replace("\n", " ").replace("\r", " ");
         case 10:
-            return bookmark->data().httpCheckDateTime().toString(Bookmark::DateTimeFormat);
+            return bookmark->data().httpCheckDateTime().toString(BookmarkDateTimeFormat);
         case 11:
-            return bookmark->data().createdDateTime().toString(Bookmark::DateTimeFormat);
+            return bookmark->data().createdDateTime().toString(BookmarkDateTimeFormat);
         case 12:
-            return bookmark->data().editedDateTime().toString(Bookmark::DateTimeFormat);
+            return bookmark->data().editedDateTime().toString(BookmarkDateTimeFormat);
         case 13:
-            return bookmark->data().lastVisitedDateTime().toString(Bookmark::DateTimeFormat);
+            return bookmark->data().lastVisitedDateTime().toString(BookmarkDateTimeFormat);
         case 14:
             return bookmark->data().visitCount();
         case 15:
@@ -110,7 +110,7 @@ QVariant BookmarkItemModel::data(const QModelIndex &index, int role) const
                                     IconTheme::icon("favicon-default"));
 
     if (role == Qt::UserRole)
-        return CBookmarkItem::variantFromPtr(m_dataModel->at(index.row()));
+        return BookmarkItem::variantFromPtr(m_dataModel->at(index.row()));
 
     return QVariant();
 }
@@ -132,7 +132,7 @@ QMimeData *BookmarkItemModel::mimeData(const QModelIndexList &indexes) const
     QList<QUrl> bookmarkUrls;
     foreach (QModelIndex index, indexes)
         if (index.isValid() && index.column() == 0)
-            bookmarkUrls << CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url();
+            bookmarkUrls << BookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url();
 
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);

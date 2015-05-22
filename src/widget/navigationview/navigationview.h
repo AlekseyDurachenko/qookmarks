@@ -17,7 +17,7 @@
 
 #include "actinterface.h"
 #include <QTreeView>
-class CManager;
+class Manager;
 
 
 class NavigationView : public QTreeView, public ActInterface

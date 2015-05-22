@@ -16,7 +16,7 @@
 #define BOOKMARKITEMMODEL_H
 
 #include <QAbstractItemModel>
-class CAbstractBookmarkDataModel;
+class AbstractBookmarkDataModel;
 
 
 class BookmarkItemModel : public QAbstractItemModel
@@ -25,8 +25,8 @@ class BookmarkItemModel : public QAbstractItemModel
 public:
     explicit BookmarkItemModel(QObject *parent = 0);
 
-    inline CAbstractBookmarkDataModel *dataModel() const;
-    void setDataModel(CAbstractBookmarkDataModel *dataModel);
+    inline AbstractBookmarkDataModel *dataModel() const;
+    void setDataModel(AbstractBookmarkDataModel *dataModel);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -48,10 +48,10 @@ private slots:
     void dataModel_reseted();
     void dataModel_destroyed();
 private:
-    CAbstractBookmarkDataModel *m_dataModel;
+    AbstractBookmarkDataModel *m_dataModel;
 };
 
-CAbstractBookmarkDataModel *BookmarkItemModel::dataModel() const
+AbstractBookmarkDataModel *BookmarkItemModel::dataModel() const
 {
     return m_dataModel;
 }

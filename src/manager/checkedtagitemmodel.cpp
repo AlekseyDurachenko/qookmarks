@@ -12,40 +12,40 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ccheckedtagitemmodel.h"
+#include "checkedtagitemmodel.h"
 
 
-CCheckedTagItemModel::CCheckedTagItemModel(QObject *parent) :
-    CTagItemModel(parent)
+CheckedTagItemModel::CheckedTagItemModel(QObject *parent) :
+    TagItemModel(parent)
 {
 }
 
-void CCheckedTagItemModel::setCheckedTags(const QSet<CTagItem *> &checkedTags)
+void CheckedTagItemModel::setCheckedTags(const QSet<TagItem *> &checkedTags)
 {
     m_checkedTags = checkedTags;
     beginResetModel();
     endResetModel();
 }
 
-QVariant CCheckedTagItemModel::data(const QModelIndex &index, int role) const
+QVariant CheckedTagItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
 
-    CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
+    TagItem *item = static_cast<TagItem *>(index.internalPointer());
     if (role == Qt::CheckStateRole && index.column() == 0)
         return m_checkedTags.contains(item) ? Qt::Checked : Qt::Unchecked;
 
-    return CTagItemModel::data(index, role);
+    return TagItemModel::data(index, role);
 }
 
-bool CCheckedTagItemModel::setData(const QModelIndex &index,
+bool CheckedTagItemModel::setData(const QModelIndex &index,
         const QVariant &/*value*/, int role)
 {
     if (role != Qt::CheckStateRole || index.column() != 0)
         return false;
 
-    CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
+    TagItem *item = static_cast<TagItem *>(index.internalPointer());
     if (m_checkedTags.contains(item))
         m_checkedTags.remove(item);
     else
@@ -54,12 +54,12 @@ bool CCheckedTagItemModel::setData(const QModelIndex &index,
     return true;
 }
 
-Qt::ItemFlags CCheckedTagItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags CheckedTagItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
 
-   Qt::ItemFlags flags = CTagItemModel::flags(index);
+   Qt::ItemFlags flags = TagItemModel::flags(index);
 
    if (index.column() == 0)
        flags |= Qt::ItemIsUserCheckable;
@@ -67,15 +67,15 @@ Qt::ItemFlags CCheckedTagItemModel::flags(const QModelIndex &index) const
    return flags;
 }
 
-void CCheckedTagItemModel::tagMgr_aboutToBeRemoved(CTagItem *parent,
+void CheckedTagItemModel::tagMgr_aboutToBeRemoved(TagItem *parent,
         int first, int last)
 {
-    QSet<CTagItem *> tags;
+    QSet<TagItem *> tags;
     for (int index = first; index <= last; ++index)
         tags += parent->at(index)->recursiveChildren();
 
-    foreach (CTagItem *item, tags)
+    foreach (TagItem *item, tags)
         m_checkedTags.remove(item);
 
-    CTagItemModel::tagMgr_aboutToBeRemoved(parent, first, last);
+    TagItemModel::tagMgr_aboutToBeRemoved(parent, first, last);
 }

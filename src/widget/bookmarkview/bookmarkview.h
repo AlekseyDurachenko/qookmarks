@@ -18,7 +18,7 @@
 #include <QTreeView>
 class QSortFilterProxyModel;
 class BookmarkItemModel;
-class CBookmarkItem;
+class BookmarkItem;
 
 
 class BookmarkView : public QTreeView
@@ -30,7 +30,7 @@ public:
     inline BookmarkItemModel *bookmarkModel() const;
     void setBookmarkModel(BookmarkItemModel *model);
 
-    QList<CBookmarkItem *> selectedBookmarks() const;
+    QList<BookmarkItem *> selectedBookmarks() const;
     QList<QUrl> selectedUrls() const;
 public slots:
     void setFilterFixedString(const QString &filter);

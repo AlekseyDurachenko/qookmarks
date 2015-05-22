@@ -12,35 +12,35 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CCHECKEDTAGITEMMODEL_H
-#define CCHECKEDTAGITEMMODEL_H
+#ifndef CHECKEDTAGITEMMODEL_H
+#define CHECKEDTAGITEMMODEL_H
 
-#include "ctagitemmodel.h"
+#include "tagitemmodel.h"
 
 
-class CCheckedTagItemModel : public CTagItemModel
+class CheckedTagItemModel : public TagItemModel
 {
     Q_OBJECT
 public:
-    explicit CCheckedTagItemModel(QObject *parent = 0);
+    explicit CheckedTagItemModel(QObject *parent = 0);
 
-    inline const QSet<CTagItem *> &checkedTags() const;
-    void setCheckedTags(const QSet<CTagItem *> &checkedTags);
+    inline const QSet<TagItem *> &checkedTags() const;
+    void setCheckedTags(const QSet<TagItem *> &checkedTags);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual bool setData(const QModelIndex &index,
                          const QVariant &value, int role);
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 protected slots:
-    virtual void tagMgr_aboutToBeRemoved(CTagItem *parent, int first, int last);
+    virtual void tagMgr_aboutToBeRemoved(TagItem *parent, int first, int last);
 private:
-    QSet<CTagItem *> m_checkedTags;
+    QSet<TagItem *> m_checkedTags;
 };
 
-const QSet<CTagItem *> &CCheckedTagItemModel::checkedTags() const
+const QSet<TagItem *> &CheckedTagItemModel::checkedTags() const
 {
     return m_checkedTags;
 }
 
 
-#endif // CCHECKEDTAGITEMMODEL_H
+#endif // CHECKEDTAGITEMMODEL_H

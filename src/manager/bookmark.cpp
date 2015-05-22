@@ -12,10 +12,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmark.h"
+#include "bookmark.h"
 
 
-CBookmark::CBookmark() : data(new CBookmarkData)
+Bookmark::Bookmark() : data(new BookmarkData)
 {
     data->title = QObject::tr("untitled");
     data->isFavorite = false;
@@ -26,107 +26,107 @@ CBookmark::CBookmark() : data(new CBookmarkData)
     data->httpStatusCode = 0;
 }
 
-CBookmark::CBookmark(const CBookmark &rhs) : data(rhs.data)
+Bookmark::Bookmark(const Bookmark &rhs) : data(rhs.data)
 {
 }
 
-CBookmark &CBookmark::operator=(const CBookmark &rhs)
+Bookmark &Bookmark::operator=(const Bookmark &rhs)
 {
     if (this != &rhs)
         data.operator=(rhs.data);
     return *this;
 }
 
-CBookmark::~CBookmark()
+Bookmark::~Bookmark()
 {
 }
 
-void CBookmark::setTitle(const QString &title)
+void Bookmark::setTitle(const QString &title)
 {
     data->title = title;
 }
 
-void CBookmark::setUrl(const QUrl &url)
+void Bookmark::setUrl(const QUrl &url)
 {
     data->url = url;
 }
 
-void CBookmark::setDescription(const QString &description)
+void Bookmark::setDescription(const QString &description)
 {
     data->description = description;
 }
 
-void CBookmark::setNotes(const QString &notes)
+void Bookmark::setNotes(const QString &notes)
 {
     data->notes = notes;
 }
 
-void CBookmark::setKeywords(const QString &keywords)
+void Bookmark::setKeywords(const QString &keywords)
 {
     data->keywords = keywords;
 }
 
-void CBookmark::setReadItLater(bool state)
+void Bookmark::setReadItLater(bool state)
 {
     data->isReadItLater = state;
 }
 
-void CBookmark::setFavorite(bool state)
+void Bookmark::setFavorite(bool state)
 {
     data->isFavorite = state;
 }
 
-void CBookmark::setTrash(bool state)
+void Bookmark::setTrash(bool state)
 {
     data->isTrash = state;
 }
 
-void CBookmark::setRating(int rating)
+void Bookmark::setRating(int rating)
 {
     data->rating = rating;
 }
 
-void CBookmark::setTextColor(const QColor &textColor)
+void Bookmark::setTextColor(const QColor &textColor)
 {
     data->textColor = textColor;
 }
 
-void CBookmark::setBackgroundColor(const QColor &backgroundColor)
+void Bookmark::setBackgroundColor(const QColor &backgroundColor)
 {
     data->backgroundColor = backgroundColor;
 }
 
-void CBookmark::setCreatedDateTime(const QDateTime &createdDateTime)
+void Bookmark::setCreatedDateTime(const QDateTime &createdDateTime)
 {
     data->createdDateTime = createdDateTime;
 }
 
-void CBookmark::setEditedDateTime(const QDateTime &lastEditedDateTime)
+void Bookmark::setEditedDateTime(const QDateTime &lastEditedDateTime)
 {
     data->editedDateTime = lastEditedDateTime;
 }
 
-void CBookmark::setLastVisitedDateTime(const QDateTime &lastVisitedDateTime)
+void Bookmark::setLastVisitedDateTime(const QDateTime &lastVisitedDateTime)
 {
     data->lastVisitedDateTime = lastVisitedDateTime;
 }
 
-void CBookmark::setVisitCount(int visitCount)
+void Bookmark::setVisitCount(int visitCount)
 {
     data->visitCount = visitCount;
 }
 
-void CBookmark::setHttpStatusCode(int httpResponseCode)
+void Bookmark::setHttpStatusCode(int httpResponseCode)
 {
     data->httpStatusCode = httpResponseCode;
 }
 
-void CBookmark::setHttpReasonPhrase(const QString &httpReasonPhrase)
+void Bookmark::setHttpReasonPhrase(const QString &httpReasonPhrase)
 {
     data->httpReasonPhrase = httpReasonPhrase;
 }
 
-void CBookmark::setHttpCheckDateTime(const QDateTime &httpCheckDateTime)
+void Bookmark::setHttpCheckDateTime(const QDateTime &httpCheckDateTime)
 {
     data->checkDateTime = httpCheckDateTime;
 }

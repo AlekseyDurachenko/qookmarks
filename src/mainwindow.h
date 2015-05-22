@@ -22,13 +22,13 @@ class QSortFilterProxyModel;
 class QTreeView;
 class BookmarkView;
 class BookmarkItemModel;
-class CBookmarkFilterDataModel;
-class CBookmarkFilter;
-class CBookmarkItem;
+class BookmarkFilterDataModel;
+class BookmarkFilter;
+class BookmarkItem;
 class NavAnchorItemModel;
 class NavTagView;
 class NavTagItemModel;
-class CTagSortFilterProxyModel;
+class TagSortFilterProxyModel;
 class QLineEdit;
 class QSplitter;
 
@@ -206,8 +206,8 @@ private:
 
     // bookmark view
     BookmarkView *m_bookmarkView;
-    CBookmarkFilter *m_bookmarkFilter;
-    CBookmarkFilterDataModel *m_bookmarkFilterDataModel;
+    BookmarkFilter *m_bookmarkFilter;
+    BookmarkFilterDataModel *m_bookmarkFilterDataModel;
     BookmarkItemModel *m_bookmarkItemModel;
 
     // anchor view
@@ -217,7 +217,7 @@ private:
     // tag view
     NavTagView *m_navTagView;
     NavTagItemModel *m_navTagItemModel;
-    CTagSortFilterProxyModel *m_navTagSortFilterProxyModel;
+    TagSortFilterProxyModel *m_navTagSortFilterProxyModel;
 
     // search
     QLineEdit *m_tagSearchLineEdit;

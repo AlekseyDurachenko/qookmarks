@@ -12,59 +12,59 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKITEM_H
-#define CBOOKMARKITEM_H
+#ifndef BOOKMARKITEM_H
+#define BOOKMARKITEM_H
 
 #include <QSet>
-#include "cbookmark.h"
-class CTagItem;
-class CBookmarkMgr;
+#include "bookmark.h"
+class TagItem;
+class BookmarkMgr;
 
 
-class CBookmarkItem
+class BookmarkItem
 {
-    friend class CBookmarkMgr;
-    friend class CTagItem;
+    friend class BookmarkMgr;
+    friend class TagItem;
 private:
-    CBookmarkItem(const CBookmark &data, CBookmarkMgr *bookmarkMgr);
-    ~CBookmarkItem();
+    BookmarkItem(const Bookmark &data, BookmarkMgr *bookmarkMgr);
+    ~BookmarkItem();
 public:
-    inline CBookmarkMgr *bookmarkMgr() const;
+    inline BookmarkMgr *bookmarkMgr() const;
     int index() const;
 
-    inline const CBookmark &data() const;
-    bool setData(const CBookmark &data);
+    inline const Bookmark &data() const;
+    bool setData(const Bookmark &data);
 
-    inline const QSet<CTagItem *> &tags() const;
+    inline const QSet<TagItem *> &tags() const;
 public:
-    static QVariant variantFromPtr(CBookmarkItem *item);
-    static CBookmarkItem *variantToPtr(const QVariant &data);
+    static QVariant variantFromPtr(BookmarkItem *item);
+    static BookmarkItem *variantToPtr(const QVariant &data);
 private:
     void notifyTagAboutDestroyed();
 private:
-    void callbackTagAdd(CTagItem *tag);
-    void callbackTagRemove(CTagItem *tag);
+    void callbackTagAdd(TagItem *tag);
+    void callbackTagRemove(TagItem *tag);
 private:
-    CBookmark m_data;
-    CBookmarkMgr *m_bookmarkMgr;
-    QSet<CTagItem *> m_tags;
+    Bookmark m_data;
+    BookmarkMgr *m_bookmarkMgr;
+    QSet<TagItem *> m_tags;
 };
 
 
-CBookmarkMgr *CBookmarkItem::bookmarkMgr() const
+BookmarkMgr *BookmarkItem::bookmarkMgr() const
 {
     return m_bookmarkMgr;
 }
 
-const CBookmark &CBookmarkItem::data() const
+const Bookmark &BookmarkItem::data() const
 {
     return m_data;
 }
 
-const QSet<CTagItem *> &CBookmarkItem::tags() const
+const QSet<TagItem *> &BookmarkItem::tags() const
 {
     return m_tags;
 }
 
 
-#endif // CBOOKMARKITEM_H
+#endif // BOOKMARKITEM_H

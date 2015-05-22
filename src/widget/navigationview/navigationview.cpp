@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "navigationview.h"
-#include "cbookmarkitem.h"
-#include "cbookmarkmgr.h"
-#include "cmanager.h"
+#include "bookmarkitem.h"
+#include "bookmarkmgr.h"
+#include "manager.h"
 #include "prj.h"
-#include "ctagitem.h"
-#include "ctagmgr.h"
+#include "tagitem.h"
+#include "tagmgr.h"
 #include "singleton.h"
 #include <QMessageBox>
 #include <QPushButton>
@@ -43,13 +43,13 @@ NavigationView::~NavigationView()
 void NavigationView::actMoveTags(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
-    CTagItem *parentItem = GTagMgr()->findByPath(parentTag);
+    TagItem *parentItem = GTagMgr()->findByPath(parentTag);
     if (!parentItem)
         return;
 
     foreach (const QStringList &tag, tags)
     {
-        CTagItem *item = GTagMgr()->findByPath(tag);
+        TagItem *item = GTagMgr()->findByPath(tag);
         if (!item || item == parentItem || item->aboveOf(parentItem))
             continue;
 
@@ -61,7 +61,7 @@ void NavigationView::actMoveTags(const QList<QStringList> &tags,
 void NavigationView::actSetTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
-    CTagItem *parentItem = GTagMgr()->findByPath(tag);
+    TagItem *parentItem = GTagMgr()->findByPath(tag);
     if (!parentItem || parentItem == GTagMgr()->rootItem())
         return;
 
@@ -75,13 +75,13 @@ void NavigationView::actSetTag(const QList<QUrl> &bookmarks,
 
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        BookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
         if (!bookmarkItem)
             continue;
 
         if (msgBox.clickedButton() == moveButton)
         {
-            foreach (CTagItem *item, bookmarkItem->tags())
+            foreach (TagItem *item, bookmarkItem->tags())
                 if (parentItem != item)
                     item->bookmarkRemove(bookmarkItem);
 
@@ -98,8 +98,8 @@ void NavigationView::actFavorite(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *item = GBookmarkMgr()->find(url);
-        CBookmark data = item->data();
+        BookmarkItem *item = GBookmarkMgr()->find(url);
+        Bookmark data = item->data();
         data.setFavorite(true);
         item->setData(data);
     }
@@ -109,8 +109,8 @@ void NavigationView::actReadItLater(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *item = GBookmarkMgr()->find(url);
-        CBookmark data = item->data();
+        BookmarkItem *item = GBookmarkMgr()->find(url);
+        Bookmark data = item->data();
         data.setReadItLater(true);
         item->setData(data);
     }
@@ -123,8 +123,8 @@ void NavigationView::actTrash(const QList<QUrl> &bookmarks)
     {
         foreach (const QUrl &url, bookmarks)
         {
-            CBookmarkItem *item = GBookmarkMgr()->find(url);
-            CBookmark data = item->data();
+            BookmarkItem *item = GBookmarkMgr()->find(url);
+            Bookmark data = item->data();
             data.setTrash(true);
             item->setData(data);
         }
@@ -138,8 +138,8 @@ void NavigationView::actClearTags(const QList<QUrl> &bookmarks)
     {
         foreach (const QUrl &url, bookmarks)
         {
-            CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
-            foreach (CTagItem *tagItem, bookmarkItem->tags())
+            BookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+            foreach (TagItem *tagItem, bookmarkItem->tags())
                 tagItem->bookmarkRemove(bookmarkItem);
         }
     }

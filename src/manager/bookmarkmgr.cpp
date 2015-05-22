@@ -12,29 +12,29 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkmgr.h"
-#include "cbookmarkitem.h"
-#include "cmanager.h"
+#include "bookmarkmgr.h"
+#include "bookmarkitem.h"
+#include "manager.h"
 #include "consts.h"
 
 
-CBookmarkMgr::CBookmarkMgr(CManager *mgr) : QObject(mgr)
+BookmarkMgr::BookmarkMgr(Manager *mgr) : QObject(mgr)
 {
     m_mgr = mgr;
     counterReset();
 }
 
-CBookmarkMgr::~CBookmarkMgr()
+BookmarkMgr::~BookmarkMgr()
 {
     removeAll();
 }
 
-int CBookmarkMgr::indexOf(CBookmarkItem *item) const
+int BookmarkMgr::indexOf(BookmarkItem *item) const
 {
     return m_bookmarkItems.indexOf(item);
 }
 
-int CBookmarkMgr::indexOf(const QUrl &url) const
+int BookmarkMgr::indexOf(const QUrl &url) const
 {
     for (int i = 0; i < m_bookmarkItems.count(); ++i)
         if (m_bookmarkItems.at(i)->data().url() == url)
@@ -42,7 +42,7 @@ int CBookmarkMgr::indexOf(const QUrl &url) const
     return -1;
 }
 
-CBookmarkItem *CBookmarkMgr::find(const QUrl &url) const
+BookmarkItem *BookmarkMgr::find(const QUrl &url) const
 {
     int index = indexOf(url);
     if (index == -1)
@@ -50,12 +50,12 @@ CBookmarkItem *CBookmarkMgr::find(const QUrl &url) const
     return m_bookmarkItems.at(index);
 }
 
-CBookmarkItem *CBookmarkMgr::add(const CBookmark &data)
+BookmarkItem *BookmarkMgr::add(const Bookmark &data)
 {
     if (find(data.url()))
         return 0;
 
-    CBookmarkItem *item = new CBookmarkItem(data, this);
+    BookmarkItem *item = new BookmarkItem(data, this);
     int index = m_bookmarkItems.count();
 
     emit aboutToBeInserted(index, index);
@@ -66,16 +66,16 @@ CBookmarkItem *CBookmarkMgr::add(const CBookmark &data)
     return item;
 }
 
-CBookmarkItem *CBookmarkMgr::replace(const CBookmark &data)
+BookmarkItem *BookmarkMgr::replace(const Bookmark &data)
 {
-    CBookmarkItem *item = find(data.url());
+    BookmarkItem *item = find(data.url());
     if (item)
     {
         item->setData(data);
     }
     else
     {
-        item = new CBookmarkItem(data, this);
+        item = new BookmarkItem(data, this);
         int index = m_bookmarkItems.count();
 
         emit aboutToBeInserted(index, index);
@@ -86,7 +86,7 @@ CBookmarkItem *CBookmarkMgr::replace(const CBookmark &data)
     return item;
 }
 
-void CBookmarkMgr::removeAt(int index)
+void BookmarkMgr::removeAt(int index)
 {
     emit aboutToBeRemoved(index, index);
     counterItemRemove(m_bookmarkItems.at(index));
@@ -94,7 +94,7 @@ void CBookmarkMgr::removeAt(int index)
     emit removed(index, index);
 }
 
-void CBookmarkMgr::removeAll()
+void BookmarkMgr::removeAll()
 {
     if (m_bookmarkItems.isEmpty())
         return;
@@ -108,31 +108,31 @@ void CBookmarkMgr::removeAll()
     emit removed(0, last);
 }
 
-void CBookmarkMgr::callbackAboutToBeDataChanged(CBookmarkItem *item)
+void BookmarkMgr::callbackAboutToBeDataChanged(BookmarkItem *item)
 {
     counterAboutToBeDataChanged(item);
     emit aboutToBeDataChanged(item);
 }
 
-void CBookmarkMgr::callbackDataChanged(CBookmarkItem *item)
+void BookmarkMgr::callbackDataChanged(BookmarkItem *item)
 {
     counterDataChanged(item);
     emit dataChanged(item);
 }
 
-void CBookmarkMgr::callbackAboutToBeTagsChanged(CBookmarkItem *item)
+void BookmarkMgr::callbackAboutToBeTagsChanged(BookmarkItem *item)
 {
     counterAboutToBeTagsChanged(item);
     emit aboutToBeTagsChanged(item);
 }
 
-void CBookmarkMgr::callbackTagsChanged(CBookmarkItem *item)
+void BookmarkMgr::callbackTagsChanged(BookmarkItem *item)
 {
     counterTagsChanged(item);
     emit tagsChanged(item);
 }
 
-void CBookmarkMgr::counterAboutToBeTagsChanged(CBookmarkItem *item)
+void BookmarkMgr::counterAboutToBeTagsChanged(BookmarkItem *item)
 {
     if (item->tags().isEmpty())
         m_counterUntagged -= 1;
@@ -141,7 +141,7 @@ void CBookmarkMgr::counterAboutToBeTagsChanged(CBookmarkItem *item)
         m_counterTrashUntagged -= 1;
 }
 
-void CBookmarkMgr::counterTagsChanged(CBookmarkItem *item)
+void BookmarkMgr::counterTagsChanged(BookmarkItem *item)
 {
     if (item->tags().isEmpty())
         m_counterUntagged += 1;
@@ -150,7 +150,7 @@ void CBookmarkMgr::counterTagsChanged(CBookmarkItem *item)
         m_counterTrashUntagged += 1;
 }
 
-void CBookmarkMgr::counterAboutToBeDataChanged(CBookmarkItem *item)
+void BookmarkMgr::counterAboutToBeDataChanged(BookmarkItem *item)
 {
     if (item->data().isFavorite())
         m_counterFavorite -= 1;
@@ -158,7 +158,7 @@ void CBookmarkMgr::counterAboutToBeDataChanged(CBookmarkItem *item)
     if (item->data().isReadItLater())
         m_counterReadItLater -= 1;
 
-    if (item->data().rating() > Bookmark::MinRating)
+    if (item->data().rating() > BookmarkMinRating)
         m_counterRated -= 1;
 
     if (item->data().isTrash())
@@ -169,14 +169,14 @@ void CBookmarkMgr::counterAboutToBeDataChanged(CBookmarkItem *item)
         if (item->data().isReadItLater())
             m_counterTrashReadItLater -= 1;
 
-        if (item->data().rating() > Bookmark::MinRating)
+        if (item->data().rating() > BookmarkMinRating)
             m_counterTrashRated -= 1;
 
         m_counterTrash -= 1;
     }
 }
 
-void CBookmarkMgr::counterDataChanged(CBookmarkItem *item)
+void BookmarkMgr::counterDataChanged(BookmarkItem *item)
 {
     if (item->data().isFavorite())
         m_counterFavorite += 1;
@@ -184,7 +184,7 @@ void CBookmarkMgr::counterDataChanged(CBookmarkItem *item)
     if (item->data().isReadItLater())
         m_counterReadItLater += 1;
 
-    if (item->data().rating() > Bookmark::MinRating)
+    if (item->data().rating() > BookmarkMinRating)
         m_counterRated += 1;
 
     if (item->data().isTrash())
@@ -195,26 +195,26 @@ void CBookmarkMgr::counterDataChanged(CBookmarkItem *item)
         if (item->data().isReadItLater())
             m_counterTrashReadItLater += 1;
 
-        if (item->data().rating() > Bookmark::MinRating)
+        if (item->data().rating() > BookmarkMinRating)
             m_counterTrashRated += 1;
 
         m_counterTrash += 1;
     }
 }
 
-void CBookmarkMgr::counterItemRemove(CBookmarkItem *item)
+void BookmarkMgr::counterItemRemove(BookmarkItem *item)
 {
     counterAboutToBeTagsChanged(item);
     counterAboutToBeDataChanged(item);
 }
 
-void CBookmarkMgr::counterItemInsert(CBookmarkItem *item)
+void BookmarkMgr::counterItemInsert(BookmarkItem *item)
 {
     counterTagsChanged(item);
     counterDataChanged(item);
 }
 
-void CBookmarkMgr::counterReset()
+void BookmarkMgr::counterReset()
 {
     m_counterFavorite       = 0;
     m_counterReadItLater    = 0;

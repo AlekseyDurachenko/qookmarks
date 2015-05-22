@@ -12,8 +12,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARK_H
-#define CBOOKMARK_H
+#ifndef BOOKMARK_H
+#define BOOKMARK_H
 
 #include <QSharedDataPointer>
 #include <QUrl>
@@ -21,7 +21,7 @@
 #include <QDateTime>
 
 
-class CBookmarkData : public QSharedData
+class BookmarkData : public QSharedData
 {
 public:
     // base
@@ -50,13 +50,13 @@ public:
 };
 
 
-class CBookmark
+class Bookmark
 {
 public:
-    CBookmark();
-    CBookmark(const CBookmark &);
-    CBookmark &operator=(const CBookmark &);
-    ~CBookmark();
+    Bookmark();
+    Bookmark(const Bookmark &);
+    Bookmark &operator=(const Bookmark &);
+    ~Bookmark();
 
     inline const QString &title() const;
     void setTitle(const QString &title);
@@ -112,103 +112,103 @@ public:
     inline const QDateTime &httpCheckDateTime() const;
     void setHttpCheckDateTime(const QDateTime &httpCheckDateTime);
 
-    inline bool operator ==(const CBookmark &other);
-    inline bool operator !=(const CBookmark &other);
+    inline bool operator ==(const Bookmark &other);
+    inline bool operator !=(const Bookmark &other);
 private:
-    QSharedDataPointer<CBookmarkData> data;
+    QSharedDataPointer<BookmarkData> data;
 };
 
-const QUrl &CBookmark::url() const
+const QUrl &Bookmark::url() const
 {
     return data->url;
 }
 
-const QString &CBookmark::title() const
+const QString &Bookmark::title() const
 {
     return data->title;
 }
 
-const QString &CBookmark::description() const
+const QString &Bookmark::description() const
 {
     return data->description;
 }
 
-const QString &CBookmark::notes() const
+const QString &Bookmark::notes() const
 {
     return data->notes;
 }
 
-const QString &CBookmark::keywords() const
+const QString &Bookmark::keywords() const
 {
     return data->keywords;
 }
 
-bool CBookmark::isReadItLater() const
+bool Bookmark::isReadItLater() const
 {
     return data->isReadItLater;
 }
 
-bool CBookmark::isFavorite() const
+bool Bookmark::isFavorite() const
 {
     return data->isFavorite;
 }
 
-bool CBookmark::isTrash() const
+bool Bookmark::isTrash() const
 {
     return data->isTrash;
 }
 
-int CBookmark::rating() const
+int Bookmark::rating() const
 {
     return data->rating;
 }
 
-const QColor &CBookmark::textColor() const
+const QColor &Bookmark::textColor() const
 {
     return data->textColor;
 }
 
-const QColor &CBookmark::backgroundColor() const
+const QColor &Bookmark::backgroundColor() const
 {
     return data->backgroundColor;
 }
 
-const QDateTime &CBookmark::createdDateTime() const
+const QDateTime &Bookmark::createdDateTime() const
 {
     return data->createdDateTime;
 }
 
-const QDateTime &CBookmark::editedDateTime() const
+const QDateTime &Bookmark::editedDateTime() const
 {
     return data->editedDateTime;
 }
 
-const QDateTime &CBookmark::lastVisitedDateTime() const
+const QDateTime &Bookmark::lastVisitedDateTime() const
 {
     return data->lastVisitedDateTime;
 }
 
-int CBookmark::visitCount() const
+int Bookmark::visitCount() const
 {
     return data->visitCount;
 }
 
-int CBookmark::httpStatusCode() const
+int Bookmark::httpStatusCode() const
 {
     return data->httpStatusCode;
 }
 
-const QString &CBookmark::httpReasonPhrase() const
+const QString &Bookmark::httpReasonPhrase() const
 {
     return data->httpReasonPhrase;
 }
 
-const QDateTime &CBookmark::httpCheckDateTime() const
+const QDateTime &Bookmark::httpCheckDateTime() const
 {
     return data->checkDateTime;
 }
 
-bool CBookmark::operator ==(const CBookmark &other)
+bool Bookmark::operator ==(const Bookmark &other)
 {
     return (data->title == other.data->title
             && data->url == other.data->url
@@ -230,7 +230,7 @@ bool CBookmark::operator ==(const CBookmark &other)
             && data->checkDateTime == other.data->checkDateTime);
 }
 
-bool CBookmark::operator !=(const CBookmark &other)
+bool Bookmark::operator !=(const Bookmark &other)
 {
     return (data->title != other.data->title
             || data->url != other.data->url
@@ -253,4 +253,4 @@ bool CBookmark::operator !=(const CBookmark &other)
 }
 
 
-#endif // CBOOKMARK_H
+#endif // BOOKMARK_H

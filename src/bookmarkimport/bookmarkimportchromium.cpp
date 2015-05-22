@@ -13,18 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bookmarkimportchromium.h"
-#include "cbookmarkitem.h"
-#include "cbookmarkmgr.h"
-#include "cmanager.h"
-#include "ctagitem.h"
-#include "ctagmgr.h"
+#include "bookmarkitem.h"
+#include "bookmarkmgr.h"
+#include "manager.h"
+#include "tagitem.h"
+#include "tagmgr.h"
 #include <json.h>
 #include <QFile>
 
 
-static void addUrl(CManager *mgr, CTagItem *parent, const QVariantMap &map)
+static void addUrl(Manager *mgr, TagItem *parent, const QVariantMap &map)
 {
-    CBookmark data;
+    Bookmark data;
     data.setTitle(map.value("name").toString());
     data.setUrl(map.value("url").toString());
     data.setCreatedDateTime(QDateTime::fromTime_t(map.value("date_added").toLongLong()/1000000-11644473600));
@@ -33,7 +33,7 @@ static void addUrl(CManager *mgr, CTagItem *parent, const QVariantMap &map)
     else
         data.setEditedDateTime(QDateTime::fromTime_t(map.value("date_added").toLongLong()/1000000-11644473600));
 
-    CBookmarkItem *bookmark = mgr->bookmarkMgr()->find(data.url());
+    BookmarkItem *bookmark = mgr->bookmarkMgr()->find(data.url());
     if (!bookmark)
         bookmark = mgr->bookmarkMgr()->add(data);
 
@@ -42,19 +42,19 @@ static void addUrl(CManager *mgr, CTagItem *parent, const QVariantMap &map)
 }
 
 
-static CTagItem *findOrAddTag(CTagItem *parent, const QVariantMap &map)
+static TagItem *findOrAddTag(TagItem *parent, const QVariantMap &map)
 {
-    CTagItem *item = parent->find(map.value("name").toString());
+    TagItem *item = parent->find(map.value("name").toString());
     if (item)
         return item;
 
-    CTag data;
+    Tag data;
     data.setName(map.value("name").toString());
     return parent->add(data);
 }
 
 
-static void parseFolder(CManager *mgr, CTagItem *parent, const QVariantMap &map)
+static void parseFolder(Manager *mgr, TagItem *parent, const QVariantMap &map)
 {
     foreach (QVariant val, map.value("children").toList())
     {
@@ -69,7 +69,7 @@ static void parseFolder(CManager *mgr, CTagItem *parent, const QVariantMap &map)
 }
 
 
-bool bookmarkImportChromium(CManager *mgr, const QString &fileName,
+bool bookmarkImportChromium(Manager *mgr, const QString &fileName,
         QString *reason)
 {
     try

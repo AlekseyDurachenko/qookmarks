@@ -17,7 +17,7 @@
 #include "bookmarkheaderview.h"
 #include "bookmarkitemmodel.h"
 #include "bookmarkratingdelegate.h"
-#include "cbookmarkitem.h"
+#include "bookmarkitem.h"
 #include "icontheme.h"
 #include <QDragMoveEvent>
 #include <QHeaderView>
@@ -94,11 +94,11 @@ void BookmarkView::setBookmarkModel(BookmarkItemModel *model)
 #endif
 }
 
-QList<CBookmarkItem *> BookmarkView::selectedBookmarks() const
+QList<BookmarkItem *> BookmarkView::selectedBookmarks() const
 {
-    QList<CBookmarkItem *> bookmarks;
+    QList<BookmarkItem *> bookmarks;
     foreach (const QModelIndex &index, selectionModel()->selectedRows())
-        bookmarks << CBookmarkItem::variantToPtr(index.data(Qt::UserRole));
+        bookmarks << BookmarkItem::variantToPtr(index.data(Qt::UserRole));
 
     return bookmarks;
 }
@@ -107,7 +107,7 @@ QList<QUrl> BookmarkView::selectedUrls() const
 {
     QList<QUrl> urls;
     foreach (const QModelIndex &index, selectionModel()->selectedRows())
-        urls << CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url();
+        urls << BookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url();
 
     return urls;
 }

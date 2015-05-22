@@ -14,12 +14,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tageditdialog.h"
 #include "ui_tageditdialog.h"
-#include "ctagitem.h"
-#include "ctagmgr.h"
+#include "tagitem.h"
+#include "tagmgr.h"
 #include <QPushButton>
 
 
-TagEditDialog::TagEditDialog(Mode mode, CTagItem *tagParent,
+TagEditDialog::TagEditDialog(Mode mode, TagItem *tagParent,
         QWidget *parent) : QDialog(parent), ui(new Ui::TagEditDialog)
 {
     ui->setupUi(this);
@@ -47,14 +47,14 @@ TagEditDialog::~TagEditDialog()
     delete ui;
 }
 
-CTag TagEditDialog::toData() const
+Tag TagEditDialog::toData() const
 {
-    CTag data;
+    Tag data;
     data.setName(ui->name_lineEdit->text());
     return data;
 }
 
-void TagEditDialog::setData(const CTag &data)
+void TagEditDialog::setData(const Tag &data)
 {
     m_data = data;
     ui->name_lineEdit->setText(m_data.name());

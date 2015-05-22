@@ -14,13 +14,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "prj.h"
 #include "bookmarkimportchromium.h"
-#include "cbookmarkitem.h"
-#include "cbookmarkmgr.h"
+#include "bookmarkitem.h"
+#include "bookmarkmgr.h"
 #include "ciconmgr.h"
-#include "cmanager.h"
+#include "manager.h"
 #include "prjxml.h"
-#include "ctagitem.h"
-#include "ctagmgr.h"
+#include "tagitem.h"
+#include "tagmgr.h"
 #include "icontheme.h"
 #include <QDir>
 #include <QFileInfo>
@@ -37,23 +37,23 @@ Prj::Prj(QObject *parent) : QObject(parent)
     m_closeAction = new QAction(tr("Close Bookmark Collection..."), this);
     m_closeAction->setIcon(IconTheme::icon("action-collection-close"));
 
-    m_manager = new CManager(this);
+    m_manager = new Manager(this);
     m_iconMgr = new CIconMgr();
-    connect(m_manager->tagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
+    connect(m_manager->tagMgr(), SIGNAL(inserted(TagItem*,int,int)),
             this, SLOT(somethingChanged()));
-    connect(m_manager->tagMgr(), SIGNAL(removed(CTagItem*,int,int)),
+    connect(m_manager->tagMgr(), SIGNAL(removed(TagItem*,int,int)),
             this, SLOT(somethingChanged()));
-    connect(m_manager->tagMgr(), SIGNAL(dataChanged(CTagItem*)),
+    connect(m_manager->tagMgr(), SIGNAL(dataChanged(TagItem*)),
             this, SLOT(somethingChanged()));
-    connect(m_manager->tagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
+    connect(m_manager->tagMgr(), SIGNAL(moved(TagItem*,int,int,TagItem*,int)),
             this, SLOT(somethingChanged()));
     connect(m_manager->bookmarkMgr(), SIGNAL(inserted(int,int)),
             this, SLOT(somethingChanged()));
     connect(m_manager->bookmarkMgr(), SIGNAL(removed(int,int)),
             this, SLOT(somethingChanged()));
-    connect(m_manager->bookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
+    connect(m_manager->bookmarkMgr(), SIGNAL(dataChanged(BookmarkItem*)),
             this, SLOT(somethingChanged()));
-    connect(m_manager->bookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+    connect(m_manager->bookmarkMgr(), SIGNAL(tagsChanged(BookmarkItem*)),
             this, SLOT(somethingChanged()));
 
     m_path = QString();
@@ -121,7 +121,7 @@ bool Prj::open(const QString &path, QString *reason)
         m_hasChanges = false;
 
         QList<QUrl> urls;
-        foreach (CBookmarkItem *item, m_manager->bookmarkMgr()->bookmarks())
+        foreach (BookmarkItem *item, m_manager->bookmarkMgr()->bookmarks())
             urls.push_back(item->data().url());
         m_iconMgr->setIconsPath(iconPath());
         m_iconMgr->loadIcons(urls);

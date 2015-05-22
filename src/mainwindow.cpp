@@ -30,8 +30,8 @@
 #include <QToolButton>
 #include "aboutdialog.h"
 #include "bookmarkeditdialog.h"
-#include "cbookmarkfilterdatamodel.h"
-#include "cbookmarkfilter.h"
+#include "bookmarkfilterdatamodel.h"
+#include "bookmarkfilter.h"
 #include "bookmarkheaderview.h"
 #include "bookmarkimportwizard.h"
 #include "bookmarkitemmodel.h"
@@ -41,7 +41,7 @@
 #include "navtagitemmodel.h"
 #include "navtagview.h"
 #include "tageditdialog.h"
-#include "ctagsortfilterproxymodel.h"
+#include "tagsortfilterproxymodel.h"
 #include "browser.h"
 #include "icontheme.h"
 #include "settings.h"
@@ -146,7 +146,7 @@ void MainWindow::updateActionState()
 
     bool hasTrashBookmarks = false;
     bool hasNotTrashBookmarks = false;
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    foreach (BookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
     {
         if (bookmarkItem->data().isTrash())
             hasTrashBookmarks = true;
@@ -215,7 +215,7 @@ void MainWindow::updateQuickEditActions()
     bool hasReadItLater = false;
     bool hasNotReadItLater = false;
     QSet<int> rating;
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    foreach (BookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
     {
         if (bookmarkItem->data().isFavorite())
             hasFavorite = true;
@@ -328,7 +328,7 @@ void MainWindow::bookmarkView_header_showContextMenu(const QPoint &pos)
 
 void MainWindow::bookmarkView_doubleClicked(const QModelIndex &index)
 {
-    Browser::openUrl(CBookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url());
+    Browser::openUrl(BookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url());
 }
 
 void MainWindow::navAnchorView_showContextMenu(const QPoint &pos)
@@ -566,9 +566,9 @@ void MainWindow::bookmarkSelectAllAction_triggered()
 void MainWindow::favoriteAction_triggered()
 {
     bool favorite = qobject_cast<QAction *>(sender())->data().toBool();
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    foreach (BookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
     {
-        CBookmark data = bookmarkItem->data();
+        Bookmark data = bookmarkItem->data();
         data.setFavorite(favorite);
         bookmarkItem->setData(data);
     }
@@ -577,9 +577,9 @@ void MainWindow::favoriteAction_triggered()
 void MainWindow::readItLaterAction_triggered()
 {
     bool readItLater = qobject_cast<QAction *>(sender())->data().toBool();
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    foreach (BookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
     {
-        CBookmark data = bookmarkItem->data();
+        Bookmark data = bookmarkItem->data();
         data.setReadItLater(readItLater);
         bookmarkItem->setData(data);
     }
@@ -588,9 +588,9 @@ void MainWindow::readItLaterAction_triggered()
 void MainWindow::ratingAction_triggered()
 {
     int rating = qobject_cast<QAction *>(sender())->data().toInt();
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    foreach (BookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
     {
-        CBookmark data = bookmarkItem->data();
+        Bookmark data = bookmarkItem->data();
         data.setRating(rating);
         bookmarkItem->setData(data);
     }
@@ -603,14 +603,14 @@ void MainWindow::bookmarkAddAction_triggered()
     newBookmarkDialog.setCheckedTags(m_bookmarkFilter->tags());
     if (QUrl(QApplication::clipboard()->text()).isValid())
     {
-        CBookmark data;
+        Bookmark data;
         data.setUrl(QUrl(QApplication::clipboard()->text()));
         newBookmarkDialog.setData(data);
     }
 
     if (newBookmarkDialog.exec() == QDialog::Accepted)
     {
-        CBookmark data = newBookmarkDialog.toData();
+        Bookmark data = newBookmarkDialog.toData();
         if (GBookmarkMgr()->find(data.url()))
         {
             QMessageBox::warning(this, tr("Warning"),
@@ -619,14 +619,14 @@ void MainWindow::bookmarkAddAction_triggered()
         }
         else
         {
-            CBookmark bookmark = newBookmarkDialog.toData();
+            Bookmark bookmark = newBookmarkDialog.toData();
             QIcon favicon = newBookmarkDialog.toFavicon();
-            QSet<CTagItem *> checkedTags = newBookmarkDialog.toCheckedTags();
+            QSet<TagItem *> checkedTags = newBookmarkDialog.toCheckedTags();
 
-            CBookmarkItem *bookmarkItem = GBookmarkMgr()->add(bookmark);
+            BookmarkItem *bookmarkItem = GBookmarkMgr()->add(bookmark);
             GIconMgr()->saveIcon(bookmark.url(), favicon);
 
-            foreach (CTagItem *tag, checkedTags)
+            foreach (TagItem *tag, checkedTags)
                 tag->bookmarkAdd(bookmarkItem);
         }
     }
@@ -634,7 +634,7 @@ void MainWindow::bookmarkAddAction_triggered()
 
 void MainWindow::bookmarkEditAction_triggered()
 {
-    CBookmarkItem *bookmarkItem = m_bookmarkView->selectedBookmarks().first();
+    BookmarkItem *bookmarkItem = m_bookmarkView->selectedBookmarks().first();
 
     BookmarkEditDialog editBookmarkDialog(this);
     editBookmarkDialog.setWindowTitle(tr("Edit bookmark"));
@@ -643,22 +643,22 @@ void MainWindow::bookmarkEditAction_triggered()
     editBookmarkDialog.setCheckedTags(bookmarkItem->tags());
     if (editBookmarkDialog.exec() == QDialog::Accepted)
     {
-        CBookmark bookmark = editBookmarkDialog.toData();
+        Bookmark bookmark = editBookmarkDialog.toData();
         QIcon favicon = editBookmarkDialog.toFavicon();
-        QSet<CTagItem *> checkedTags = editBookmarkDialog.toCheckedTags();
-        QSet<CTagItem *> prevTags = bookmarkItem->tags();
+        QSet<TagItem *> checkedTags = editBookmarkDialog.toCheckedTags();
+        QSet<TagItem *> prevTags = bookmarkItem->tags();
 
         bookmarkItem->setData(bookmark);
         if (!favicon.isNull())
             GIconMgr()->saveIcon(bookmark.url(), favicon);
 
-        foreach (CTagItem *tagItem, checkedTags)
+        foreach (TagItem *tagItem, checkedTags)
         {
             tagItem->bookmarkAdd(bookmarkItem);
             prevTags.remove(tagItem);
         }
 
-        foreach (CTagItem *tagItem, prevTags)
+        foreach (TagItem *tagItem, prevTags)
             tagItem->bookmarkRemove(bookmarkItem);
     }
 }
@@ -670,9 +670,9 @@ void MainWindow::bookmarkSendToTrashAction_triggered()
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
         return;
 
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    foreach (BookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
     {
-        CBookmark data = bookmarkItem->data();
+        Bookmark data = bookmarkItem->data();
         data.setTrash(true);
         bookmarkItem->setData(data);
     }
@@ -685,9 +685,9 @@ void MainWindow::bookmarkRestoreAction_triggered()
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
         return;
 
-    foreach (CBookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
+    foreach (BookmarkItem *bookmarkItem, m_bookmarkView->selectedBookmarks())
     {
-        CBookmark data = bookmarkItem->data();
+        Bookmark data = bookmarkItem->data();
         data.setTrash(false);
         bookmarkItem->setData(data);
     }
@@ -718,10 +718,10 @@ void MainWindow::emptyTrashAction_triggered()
 
 void MainWindow::tagAddAction_triggered()
 {
-    CTagItem *item = GTagMgr()->rootItem();
+    TagItem *item = GTagMgr()->rootItem();
     const QModelIndexList &selectedIndexes = m_navTagView->selectionModel()->selectedRows();
     if (!selectedIndexes.isEmpty())
-        item = CTagItem::variantToPtr(selectedIndexes.first().data(Qt::UserRole));
+        item = TagItem::variantToPtr(selectedIndexes.first().data(Qt::UserRole));
 
     TagEditDialog newTagDialog(TagEditDialog::New, item, this);
     if (newTagDialog.exec() == QDialog::Accepted)
@@ -730,7 +730,7 @@ void MainWindow::tagAddAction_triggered()
 
 void MainWindow::tagEditAction_triggered()
 {
-    CTagItem *item = CTagItem::variantToPtr(
+    TagItem *item = TagItem::variantToPtr(
                 m_navTagView->selectionModel()->selectedRows().first()
                     .data(Qt::UserRole));
 
@@ -753,11 +753,11 @@ void MainWindow::tagRemoveAction_triggered()
     QList<QStringList> tags;
     foreach (const QModelIndex &index,
              m_navTagView->selectionModel()->selectedRows())
-        tags.append(CTagItem::variantToPtr(index.data(Qt::UserRole))->path());
+        tags.append(TagItem::variantToPtr(index.data(Qt::UserRole))->path());
 
     foreach (const QStringList &tag, tags)
     {
-        CTagItem *tagItem = GTagMgr()->findByPath(tag);
+        TagItem *tagItem = GTagMgr()->findByPath(tag);
         if (tagItem)
             tagItem->parent()->removeAt(tagItem->index());
     }
@@ -797,13 +797,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::actMoveTags(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
-    CTagItem *parentItem = GTagMgr()->findByPath(parentTag);
+    TagItem *parentItem = GTagMgr()->findByPath(parentTag);
     if (!parentItem)
         return;
 
     foreach (const QStringList &tag, tags)
     {
-        CTagItem *item = GTagMgr()->findByPath(tag);
+        TagItem *item = GTagMgr()->findByPath(tag);
         if (!item
                 || item == parentItem
                 || item->parent() == parentItem
@@ -817,17 +817,17 @@ void MainWindow::actMoveTags(const QList<QStringList> &tags,
 void MainWindow::actSetTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
-    CTagItem *parentItem = GTagMgr()->findByPath(tag);
+    TagItem *parentItem = GTagMgr()->findByPath(tag);
     if (!parentItem || parentItem == GTagMgr()->rootItem())
         return;
 
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        BookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
         if (!bookmarkItem)
             continue;
 
-        foreach (CTagItem *item, bookmarkItem->tags())
+        foreach (TagItem *item, bookmarkItem->tags())
             if (parentItem != item)
                 item->bookmarkRemove(bookmarkItem);
 
@@ -838,13 +838,13 @@ void MainWindow::actSetTag(const QList<QUrl> &bookmarks,
 void MainWindow::actAddTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
-    CTagItem *parentItem = GTagMgr()->findByPath(tag);
+    TagItem *parentItem = GTagMgr()->findByPath(tag);
     if (!parentItem || parentItem == GTagMgr()->rootItem())
         return;
 
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        BookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
         if (!bookmarkItem)
             continue;
 
@@ -860,11 +860,11 @@ void MainWindow::actClearTags(const QList<QUrl> &bookmarks)
     {
         foreach (const QUrl &url, bookmarks)
         {
-            CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+            BookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
             if (!bookmarkItem)
                 continue;
 
-            foreach (CTagItem *tagItem, bookmarkItem->tags())
+            foreach (TagItem *tagItem, bookmarkItem->tags())
                 tagItem->bookmarkRemove(bookmarkItem);
         }
     }
@@ -874,11 +874,11 @@ void MainWindow::actFavorite(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        BookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
         if (!bookmarkItem)
             continue;
 
-        CBookmark data = bookmarkItem->data();
+        Bookmark data = bookmarkItem->data();
         data.setFavorite(true);
         bookmarkItem->setData(data);
     }
@@ -888,11 +888,11 @@ void MainWindow::actReadItLater(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
-        CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+        BookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
         if (!bookmarkItem)
             continue;
 
-        CBookmark data = bookmarkItem->data();
+        Bookmark data = bookmarkItem->data();
         data.setReadItLater(true);
         bookmarkItem->setData(data);
     }
@@ -907,11 +907,11 @@ void MainWindow::actTrash(const QList<QUrl> &bookmarks)
     {
         foreach (const QUrl &url, bookmarks)
         {
-            CBookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
+            BookmarkItem *bookmarkItem = GBookmarkMgr()->find(url);
             if (!bookmarkItem)
                 continue;
 
-            CBookmark data = bookmarkItem->data();
+            Bookmark data = bookmarkItem->data();
             data.setTrash(true);
             bookmarkItem->setData(data);
         }
@@ -1298,7 +1298,7 @@ QMenu *MainWindow::createRatingMenu()
     QMenu *menu = new QMenu(tr("Rating"), this);
     menu->setIcon(IconTheme::icon("anchor-bookmark-rated"));
 
-    for (int i = Bookmark::MinRating; i <= Bookmark::MaxRating; ++i)
+    for (int i = BookmarkMinRating; i <= BookmarkMaxRating; ++i)
     {
         QAction *action = new QAction(QString::number(i), this);
         connect(action, SIGNAL(triggered()),
@@ -1320,8 +1320,8 @@ void MainWindow::createStatusBar()
 
 void MainWindow::createBookmarkView()
 {
-    m_bookmarkFilter= new CBookmarkFilter(this);
-    m_bookmarkFilterDataModel = new CBookmarkFilterDataModel(this);
+    m_bookmarkFilter= new BookmarkFilter(this);
+    m_bookmarkFilterDataModel = new BookmarkFilterDataModel(this);
     m_bookmarkFilterDataModel->setFilter(m_bookmarkFilter);
     m_bookmarkItemModel = new BookmarkItemModel(this);
     m_bookmarkItemModel->setDataModel(m_bookmarkFilterDataModel);
@@ -1363,7 +1363,7 @@ void MainWindow::createTagView()
 {
     m_navTagItemModel = new NavTagItemModel(this);
     m_navTagItemModel->setNavigationActions(this);
-    m_navTagSortFilterProxyModel = new CTagSortFilterProxyModel(this);
+    m_navTagSortFilterProxyModel = new TagSortFilterProxyModel(this);
     m_navTagSortFilterProxyModel->setSourceModel(m_navTagItemModel);
     m_navTagSortFilterProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     m_navTagSortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -1476,17 +1476,17 @@ void MainWindow::configureActionUpdater()
             this, SLOT(updateActionState()));
     connect(GBookmarkMgr(), SIGNAL(removed(int,int)),
             this, SLOT(updateActionState()));
-    connect(GBookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
+    connect(GBookmarkMgr(), SIGNAL(tagsChanged(BookmarkItem*)),
             this, SLOT(updateActionState()));
-    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
+    connect(GBookmarkMgr(), SIGNAL(dataChanged(BookmarkItem*)),
             this, SLOT(updateActionState()));
-    connect(GTagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
+    connect(GTagMgr(), SIGNAL(inserted(TagItem*,int,int)),
             this, SLOT(updateActionState()));
-    connect(GTagMgr(), SIGNAL(removed(CTagItem*,int,int)),
+    connect(GTagMgr(), SIGNAL(removed(TagItem*,int,int)),
             this, SLOT(updateActionState()));
-    connect(GTagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
+    connect(GTagMgr(), SIGNAL(moved(TagItem*,int,int,TagItem*,int)),
             this, SLOT(updateActionState()));
-    connect(GTagMgr(), SIGNAL(dataChanged(CTagItem*)),
+    connect(GTagMgr(), SIGNAL(dataChanged(TagItem*)),
             this, SLOT(updateActionState()));
 
     // or if selection of bookmark view is changed
@@ -1527,8 +1527,8 @@ void MainWindow::updateBookmarkFilter()
 void MainWindow::updateBookmarkAnchorFilter()
 {
     // default filter options (equal to CNavAnchorItemModel::All)
-    m_bookmarkFilter->setInclusiveOption(~CBookmarkFilter::FilterOptions(CBookmarkFilter::Trash));
-    m_bookmarkFilter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
+    m_bookmarkFilter->setInclusiveOption(~BookmarkFilter::FilterOptions(BookmarkFilter::Trash));
+    m_bookmarkFilter->setRatingRange(BookmarkMinRating, BookmarkMaxRating);
     m_bookmarkFilter->clearTags();
 
     switch (m_navAnchorView->currentIndex().data(Qt::UserRole).toInt())
@@ -1540,21 +1540,21 @@ void MainWindow::updateBookmarkAnchorFilter()
         break;
     case NavAnchorItemModel::Favorites:
         m_bookmarkFilter->setInclusiveOption(
-                    CBookmarkFilter::FilterOptions(
-                        CBookmarkFilter::Favorite|CBookmarkFilter::NotTrash));
+                    BookmarkFilter::FilterOptions(
+                        BookmarkFilter::Favorite|BookmarkFilter::NotTrash));
         break;
     case NavAnchorItemModel::ReadItLater:
         m_bookmarkFilter->setInclusiveOption(
-                    CBookmarkFilter::FilterOptions(
-                        CBookmarkFilter::ReadItLater|CBookmarkFilter::NotTrash));
+                    BookmarkFilter::FilterOptions(
+                        BookmarkFilter::ReadItLater|BookmarkFilter::NotTrash));
         break;
     case NavAnchorItemModel::Rated:
         m_bookmarkFilter->setRatingRange(
-                    Bookmark::MinRating+1, Bookmark::MaxRating);
+                    BookmarkMinRating+1, BookmarkMaxRating);
         break;
     case NavAnchorItemModel::Trash:
         m_bookmarkFilter->setInclusiveOption(
-                    CBookmarkFilter::FilterOptions(CBookmarkFilter::Trash));
+                    BookmarkFilter::FilterOptions(BookmarkFilter::Trash));
         break;
     }
 
@@ -1563,13 +1563,13 @@ void MainWindow::updateBookmarkAnchorFilter()
 
 void MainWindow::updateBookmarkTagFilter()
 {
-    QSet<CTagItem *> selectedTags;
+    QSet<TagItem *> selectedTags;
     foreach (const QModelIndex &index,
              m_navTagView->selectionModel()->selectedRows())
-        selectedTags.insert(CTagItem::variantToPtr(index.data(Qt::UserRole)));
+        selectedTags.insert(TagItem::variantToPtr(index.data(Qt::UserRole)));
 
-    m_bookmarkFilter->setInclusiveOption(~CBookmarkFilter::FilterOptions(CBookmarkFilter::Trash));
-    m_bookmarkFilter->setRatingRange(Bookmark::MinRating, Bookmark::MaxRating);
+    m_bookmarkFilter->setInclusiveOption(~BookmarkFilter::FilterOptions(BookmarkFilter::Trash));
+    m_bookmarkFilter->setRatingRange(BookmarkMinRating, BookmarkMaxRating);
     m_bookmarkFilter->setTags(selectedTags);
     m_bookmarkFilter->update();
 }

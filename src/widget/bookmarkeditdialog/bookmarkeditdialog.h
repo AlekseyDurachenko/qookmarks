@@ -15,11 +15,11 @@
 #ifndef BOOKMARKEDITDIALOG_H
 #define BOOKMARKEDITDIALOG_H
 
-#include "cbookmarkitem.h"
+#include "bookmarkitem.h"
 #include "singleton.h"
 #include <QDialog>
-class CTagSortFilterProxyModel;
-class CCheckedTagItemModel;
+class TagSortFilterProxyModel;
+class CheckedTagItemModel;
 
 
 namespace Ui {
@@ -33,11 +33,11 @@ public:
     explicit BookmarkEditDialog(QWidget *parent = 0);
     virtual ~BookmarkEditDialog();
 
-    CBookmark toData() const;
-    void setData(const CBookmark &toData);
+    Bookmark toData() const;
+    void setData(const Bookmark &toData);
 
-    const QSet<CTagItem *> toCheckedTags() const;
-    void setCheckedTags(const QSet<CTagItem *> &toCheckedTags);
+    const QSet<TagItem *> toCheckedTags() const;
+    void setCheckedTags(const QSet<TagItem *> &toCheckedTags);
 
     QIcon toFavicon() const;
     void setFavicon(const QIcon &icon) const;
@@ -67,10 +67,10 @@ private:
     void writeSettings();
 private:
     Ui::BookmarkEditDialog *ui;
-    CCheckedTagItemModel *m_checkedTagItemModel;
-    CTagSortFilterProxyModel *m_tagSortFilterProxyModel;
+    CheckedTagItemModel *m_checkedTagItemModel;
+    TagSortFilterProxyModel *m_tagSortFilterProxyModel;
 
-    CBookmark m_data;
+    Bookmark m_data;
 
     CDownloadFaviconReply *m_faviconReply;
     CDownloadWebPageInfoReply *m_pageinfoReply;

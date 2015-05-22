@@ -12,19 +12,25 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CTAGSORTFILTERPROXYMODEL_H
-#define CTAGSORTFILTERPROXYMODEL_H
+#ifndef ABSTRACTBOOKMARKFILTER_H
+#define ABSTRACTBOOKMARKFILTER_H
 
-#include <QSortFilterProxyModel>
+#include <QObject>
+class BookmarkItem;
 
 
-class CTagSortFilterProxyModel : public QSortFilterProxyModel
+class AbstractBookmarkFilter : public QObject
 {
+    Q_OBJECT
 public:
-    explicit CTagSortFilterProxyModel(QObject *parent = 0);
-protected:
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    explicit AbstractBookmarkFilter(QObject *parent = 0);
+    virtual ~AbstractBookmarkFilter();
+
+    virtual bool validate(const BookmarkItem *item) const = 0;
+    void update();
+signals:
+    void changed();
 };
 
 
-#endif // CTAGSORTFILTERPROXYMODEL_H
+#endif // ABSTRACTBOOKMARKFILTER_H

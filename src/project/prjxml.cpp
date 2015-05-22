@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "prjxml.h"
-#include "cbookmarkitem.h"
-#include "cbookmarkmgr.h"
-#include "cmanager.h"
-#include "ctagitem.h"
-#include "ctagmgr.h"
+#include "bookmarkitem.h"
+#include "bookmarkmgr.h"
+#include "manager.h"
+#include "tagitem.h"
+#include "tagmgr.h"
 #include <QIODevice>
 #include <QStack>
 
@@ -66,7 +66,7 @@ bool PrjXml::saveEmptyXml(QIODevice *output, QString *reason)
     return saveXml(0, output, reason);
 }
 
-bool PrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
+bool PrjXml::saveXml(Manager *manager, QIODevice *output, QString *reason)
 {
     try
     {
@@ -94,7 +94,7 @@ bool PrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
     return false;
 }
 
-bool PrjXml::loadXml(CManager *manager, QIODevice *input, QString *reason)
+bool PrjXml::loadXml(Manager *manager, QIODevice *input, QString *reason)
 {
     try
     {
@@ -117,7 +117,7 @@ bool PrjXml::loadXml(CManager *manager, QIODevice *input, QString *reason)
     return false;
 }
 
-QDomElement PrjXml::createBookmarkMgrElem(QDomDocument doc, CBookmarkMgr *mgr)
+QDomElement PrjXml::createBookmarkMgrElem(QDomDocument doc, BookmarkMgr *mgr)
 {
     QDomElement elem = doc.createElement(nsBookmarkMgr);
     for (int i = 0; i < mgr->count(); ++i)
@@ -127,7 +127,7 @@ QDomElement PrjXml::createBookmarkMgrElem(QDomDocument doc, CBookmarkMgr *mgr)
 }
 
 QDomElement PrjXml::createBookmarkItemElem(QDomDocument doc,
-        CBookmarkItem *item)
+        BookmarkItem *item)
 {
     QDomElement elem = doc.createElement(nsBookmarkItem);
     elem.setAttribute("title",  item->data().title());
@@ -149,13 +149,13 @@ QDomElement PrjXml::createBookmarkItemElem(QDomDocument doc,
     elem.setAttribute("httpReasonPhrase",   item->data().httpReasonPhrase());
     elem.setAttribute("httpCheckDateTime",  dateTimeToString(item->data().httpCheckDateTime()));
 
-    foreach (CTagItem *tagItem, item->tags())
+    foreach (TagItem *tagItem, item->tags())
         elem.appendChild(createBookmarkTagElem(doc, tagItem));
 
     return elem;
 }
 
-QDomElement PrjXml::createBookmarkTagElem(QDomDocument doc, CTagItem *item)
+QDomElement PrjXml::createBookmarkTagElem(QDomDocument doc, TagItem *item)
 {
     QDomElement elem = doc.createElement(nsBookmarkTag);
     foreach (const QString &path, item->path())
@@ -168,7 +168,7 @@ QDomElement PrjXml::createBookmarkTagElem(QDomDocument doc, CTagItem *item)
     return elem;
 }
 
-QDomElement PrjXml::createTagItemElem(QDomDocument doc, CTagItem *item)
+QDomElement PrjXml::createTagItemElem(QDomDocument doc, TagItem *item)
 {
     QDomElement elem = doc.createElement(nsTagItem);
     elem.setAttribute("name", item->data().name());
@@ -179,7 +179,7 @@ QDomElement PrjXml::createTagItemElem(QDomDocument doc, CTagItem *item)
     return elem;
 }
 
-void PrjXml::parsePrjNode(CManager *manager, QDomNode node)
+void PrjXml::parsePrjNode(Manager *manager, QDomNode node)
 {
     while (!node.isNull())
     {
@@ -203,24 +203,24 @@ void PrjXml::parsePrjNode(CManager *manager, QDomNode node)
     }
 }
 
-void PrjXml::parseTagNode(CTagItem *parentTag, QDomNode node)
+void PrjXml::parseTagNode(TagItem *parentTag, QDomNode node)
 {
     while (!node.isNull())
     {
         if (node.nodeName() == nsTagItem)
         {
-            CTagItem *tag = parentTag->add(createTagData(node.toElement()));
+            TagItem *tag = parentTag->add(createTagData(node.toElement()));
             parseTagNode(tag, node.firstChild());
         }
         node = node.nextSibling();
     }
 }
 
-void PrjXml::parseBookmarkNode(CManager *manager, QDomNode node)
+void PrjXml::parseBookmarkNode(Manager *manager, QDomNode node)
 {
     QDomElement elem = node.toElement();
-    CBookmark bookmarkData = createBookmarkData(elem);
-    CBookmarkItem *bookmarkItem = manager->bookmarkMgr()->add(bookmarkData);
+    Bookmark bookmarkData = createBookmarkData(elem);
+    BookmarkItem *bookmarkItem = manager->bookmarkMgr()->add(bookmarkData);
 
     node = node.firstChild();
     while (!node.isNull())
@@ -228,7 +228,7 @@ void PrjXml::parseBookmarkNode(CManager *manager, QDomNode node)
         if (node.nodeName() == nsBookmarkTag)
         {
             QStringList tagPath = createBookmarkTagPath(node.firstChild());
-            CTagItem *tagItem = manager->tagMgr()->findByPath(tagPath);
+            TagItem *tagItem = manager->tagMgr()->findByPath(tagPath);
             if (tagItem)
                 tagItem->bookmarkAdd(bookmarkItem);
         }
@@ -236,16 +236,16 @@ void PrjXml::parseBookmarkNode(CManager *manager, QDomNode node)
     }
 }
 
-CTag PrjXml::createTagData(QDomElement elem)
+Tag PrjXml::createTagData(QDomElement elem)
 {
-    CTag tag;
+    Tag tag;
     tag.setName(elem.attribute("name", "unknow"));
     return tag;
 }
 
-CBookmark PrjXml::createBookmarkData(QDomElement elem)
+Bookmark PrjXml::createBookmarkData(QDomElement elem)
 {
-    CBookmark bookmark;
+    Bookmark bookmark;
     bookmark.setTitle(elem.attribute("title", "untitled"));
     bookmark.setUrl(elem.attribute("url", ""));
     bookmark.setDescription(elem.attribute("description", ""));

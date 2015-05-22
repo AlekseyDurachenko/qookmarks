@@ -12,19 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkfilterdatamodel.h"
-#include "cmanager.h"
-#include "ctagmgr.h"
-#include "cbookmarkmgr.h"
-#include "cbookmarkitem.h"
-#include "cbookmarkfilter.h"
+#include "bookmarkfilterdatamodel.h"
+#include "manager.h"
+#include "tagmgr.h"
+#include "bookmarkmgr.h"
+#include "bookmarkitem.h"
+#include "bookmarkfilter.h"
 #include "singleton.h"
 #include "prj.h"
 #include <QDebug>
 
 
-CBookmarkFilterDataModel::CBookmarkFilterDataModel(QObject *parent) :
-     CAbstractBookmarkDataModel(parent)
+BookmarkFilterDataModel::BookmarkFilterDataModel(QObject *parent) :
+     AbstractBookmarkDataModel(parent)
 {
     m_filter = 0;
 
@@ -32,17 +32,17 @@ CBookmarkFilterDataModel::CBookmarkFilterDataModel(QObject *parent) :
             this, SLOT(bookmarkMgr_inserted(int,int)));
     connect(GBookmarkMgr(), SIGNAL(aboutToBeRemoved(int,int)),
             this, SLOT(bookmarkMgr_aboutToBeRemoved(int,int)));
-    connect(GBookmarkMgr(), SIGNAL(dataChanged(CBookmarkItem*)),
-            this, SLOT(bookmarkMgr_dataChanged(CBookmarkItem*)));
-    connect(GBookmarkMgr(), SIGNAL(tagsChanged(CBookmarkItem*)),
-            this, SLOT(bookmarkMgr_tagsChanged(CBookmarkItem*)));
+    connect(GBookmarkMgr(), SIGNAL(dataChanged(BookmarkItem*)),
+            this, SLOT(bookmarkMgr_dataChanged(BookmarkItem*)));
+    connect(GBookmarkMgr(), SIGNAL(tagsChanged(BookmarkItem*)),
+            this, SLOT(bookmarkMgr_tagsChanged(BookmarkItem*)));
 }
 
-CBookmarkFilterDataModel::~CBookmarkFilterDataModel()
+BookmarkFilterDataModel::~BookmarkFilterDataModel()
 {
 }
 
-void CBookmarkFilterDataModel::setFilter(CAbstractBookmarkFilter *filter)
+void BookmarkFilterDataModel::setFilter(AbstractBookmarkFilter *filter)
 {
     if (m_filter == filter)
         return;
@@ -61,28 +61,28 @@ void CBookmarkFilterDataModel::setFilter(CAbstractBookmarkFilter *filter)
     invalidate();
 }
 
-int CBookmarkFilterDataModel::count() const
+int BookmarkFilterDataModel::count() const
 {
     return m_bookmarks.count();
 }
 
-CBookmarkItem *CBookmarkFilterDataModel::at(int index) const
+BookmarkItem *BookmarkFilterDataModel::at(int index) const
 {
     return m_bookmarks.at(index);
 }
 
-void CBookmarkFilterDataModel::invalidate()
+void BookmarkFilterDataModel::invalidate()
 {
     m_bookmarks.clear();
     if (m_filter)
-        foreach (CBookmarkItem *item, GBookmarkMgr()->bookmarks())
+        foreach (BookmarkItem *item, GBookmarkMgr()->bookmarks())
             if (m_filter->validate(item))
                 m_bookmarks.push_back(item);
 
     emit reseted();
 }
 
-void CBookmarkFilterDataModel::invalidate(CBookmarkItem *item,
+void BookmarkFilterDataModel::invalidate(BookmarkItem *item,
         bool hasDataChanges)
 {
     if (!m_filter)
@@ -99,7 +99,7 @@ void CBookmarkFilterDataModel::invalidate(CBookmarkItem *item,
         emit dataChanged(index, index);
 }
 
-void CBookmarkFilterDataModel::insert(CBookmarkItem *item)
+void BookmarkFilterDataModel::insert(BookmarkItem *item)
 {
     int index = m_bookmarks.count();
     emit aboutToBeInserted(index, index);
@@ -107,31 +107,31 @@ void CBookmarkFilterDataModel::insert(CBookmarkItem *item)
     emit inserted(index, index);
 }
 
-void CBookmarkFilterDataModel::remove(int index)
+void BookmarkFilterDataModel::remove(int index)
 {
     emit aboutToBeRemoved(index, index);
     m_bookmarks.removeAt(index);
     emit removed(index, index);
 }
 
-void CBookmarkFilterDataModel::filter_changed()
+void BookmarkFilterDataModel::filter_changed()
 {
     invalidate();
 }
 
-void CBookmarkFilterDataModel::filter_destroyed()
+void BookmarkFilterDataModel::filter_destroyed()
 {
     m_filter = 0;
     invalidate();
 }
 
-void CBookmarkFilterDataModel::bookmarkMgr_inserted(int first, int last)
+void BookmarkFilterDataModel::bookmarkMgr_inserted(int first, int last)
 {
     for (int i = first; i <= last; ++i)
         invalidate(GBookmarkMgr()->at(i));
 }
 
-void CBookmarkFilterDataModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
+void BookmarkFilterDataModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
 {
     for (int i = first; i <= last; ++i)
     {
@@ -141,12 +141,12 @@ void CBookmarkFilterDataModel::bookmarkMgr_aboutToBeRemoved(int first, int last)
     }
 }
 
-void CBookmarkFilterDataModel::bookmarkMgr_dataChanged(CBookmarkItem *item)
+void BookmarkFilterDataModel::bookmarkMgr_dataChanged(BookmarkItem *item)
 {
     invalidate(item, true);
 }
 
-void CBookmarkFilterDataModel::bookmarkMgr_tagsChanged(CBookmarkItem *item)
+void BookmarkFilterDataModel::bookmarkMgr_tagsChanged(BookmarkItem *item)
 {
     invalidate(item);
 }

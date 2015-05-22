@@ -12,60 +12,60 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkfilter.h"
-#include "cmanager.h"
-#include "ctagmgr.h"
-#include "cbookmarkmgr.h"
-#include "ctagitem.h"
-#include "cbookmarkitem.h"
+#include "bookmarkfilter.h"
+#include "manager.h"
+#include "tagmgr.h"
+#include "bookmarkmgr.h"
+#include "tagitem.h"
+#include "bookmarkitem.h"
 #include "prj.h"
 #include "singleton.h"
 #include <QDebug>
 
 
-CBookmarkFilter::CBookmarkFilter(QObject *parent) :
-    CAbstractBookmarkFilter(parent)
+BookmarkFilter::BookmarkFilter(QObject *parent) :
+    AbstractBookmarkFilter(parent)
 {
-    m_inclusiveFilter = ~CBookmarkFilter::FilterOptions(CBookmarkFilter::Trash);
-    m_minRating = Bookmark::MinRating;
-    m_maxRating = Bookmark::MaxRating;
+    m_inclusiveFilter = ~BookmarkFilter::FilterOptions(BookmarkFilter::Trash);
+    m_minRating = BookmarkMinRating;
+    m_maxRating = BookmarkMaxRating;
 
-    connect(GTagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
-            this, SLOT(tagMgr_aboutToBeRemoved(CTagItem*,int,int)));
+    connect(GTagMgr(), SIGNAL(aboutToBeRemoved(TagItem*,int,int)),
+            this, SLOT(tagMgr_aboutToBeRemoved(TagItem*,int,int)));
 }
 
-CBookmarkFilter::~CBookmarkFilter()
+BookmarkFilter::~BookmarkFilter()
 {
 }
 
-void CBookmarkFilter::setTags(const QSet<CTagItem *> &tags)
+void BookmarkFilter::setTags(const QSet<TagItem *> &tags)
 {
     m_tags = tags;
 }
 
-void CBookmarkFilter::setTag(CTagItem *tag)
+void BookmarkFilter::setTag(TagItem *tag)
 {
     m_tags.clear();
     m_tags.insert(tag);
 }
 
-void CBookmarkFilter::clearTags()
+void BookmarkFilter::clearTags()
 {
     m_tags.clear();
 }
 
-void CBookmarkFilter::setInclusiveOption(const CBookmarkFilter::FilterOptions &options)
+void BookmarkFilter::setInclusiveOption(const BookmarkFilter::FilterOptions &options)
 {
     m_inclusiveFilter = options;
 }
 
-void CBookmarkFilter::setRatingRange(int min, int max)
+void BookmarkFilter::setRatingRange(int min, int max)
 {
     m_minRating = qMin(min, max);
     m_maxRating = qMax(min, max);
 }
 
-bool CBookmarkFilter::validate(const CBookmarkItem *item) const
+bool BookmarkFilter::validate(const BookmarkItem *item) const
 {
     if (!m_tags.isEmpty())
     {
@@ -74,7 +74,7 @@ bool CBookmarkFilter::validate(const CBookmarkItem *item) const
             if (!item->tags().isEmpty())
                 return false;
         }
-        else if (!CTagItem::checkIntersection(m_tags, item->tags()))
+        else if (!TagItem::checkIntersection(m_tags, item->tags()))
         {
             return false;
         }
@@ -85,34 +85,34 @@ bool CBookmarkFilter::validate(const CBookmarkItem *item) const
             || item->data().rating() > m_maxRating)
         return false;
 
-    if (m_inclusiveFilter.testFlag(CBookmarkFilter::Favorite)
-            || m_inclusiveFilter.testFlag(CBookmarkFilter::NotFavorite))
-        if (!((m_inclusiveFilter.testFlag(CBookmarkFilter::Favorite)
+    if (m_inclusiveFilter.testFlag(BookmarkFilter::Favorite)
+            || m_inclusiveFilter.testFlag(BookmarkFilter::NotFavorite))
+        if (!((m_inclusiveFilter.testFlag(BookmarkFilter::Favorite)
              && item->data().isFavorite() == true) ||
-                (m_inclusiveFilter.testFlag(CBookmarkFilter::NotFavorite)
+                (m_inclusiveFilter.testFlag(BookmarkFilter::NotFavorite)
                  && item->data().isFavorite() == false)))
             return false;
 
-    if (m_inclusiveFilter.testFlag(CBookmarkFilter::ReadItLater)
-            || m_inclusiveFilter.testFlag(CBookmarkFilter::NotReadItLater))
-        if (!((m_inclusiveFilter.testFlag(CBookmarkFilter::ReadItLater)
+    if (m_inclusiveFilter.testFlag(BookmarkFilter::ReadItLater)
+            || m_inclusiveFilter.testFlag(BookmarkFilter::NotReadItLater))
+        if (!((m_inclusiveFilter.testFlag(BookmarkFilter::ReadItLater)
              && item->data().isReadItLater() == true) ||
-                (m_inclusiveFilter.testFlag(CBookmarkFilter::NotReadItLater)
+                (m_inclusiveFilter.testFlag(BookmarkFilter::NotReadItLater)
                  && item->data().isReadItLater() == false)))
             return false;
 
-    if (m_inclusiveFilter.testFlag(CBookmarkFilter::Trash)
-            || m_inclusiveFilter.testFlag(CBookmarkFilter::NotTrash))
-        if (!((m_inclusiveFilter.testFlag(CBookmarkFilter::Trash)
+    if (m_inclusiveFilter.testFlag(BookmarkFilter::Trash)
+            || m_inclusiveFilter.testFlag(BookmarkFilter::NotTrash))
+        if (!((m_inclusiveFilter.testFlag(BookmarkFilter::Trash)
              && item->data().isTrash() == true) ||
-                (m_inclusiveFilter.testFlag(CBookmarkFilter::NotTrash)
+                (m_inclusiveFilter.testFlag(BookmarkFilter::NotTrash)
                  && item->data().isTrash() == false)))
             return false;
 
     return true;
 }
 
-void CBookmarkFilter::tagMgr_aboutToBeRemoved(CTagItem *parent,
+void BookmarkFilter::tagMgr_aboutToBeRemoved(TagItem *parent,
         int first, int last)
 {
     for (int i = first; i <= last; ++i)

@@ -19,16 +19,6 @@ INCLUDEPATH    +=                                                       \
 
 HEADERS        +=                                                       \
     $$PWD/src/bookmarkimport/bookmarkimportchromium.h                   \
-    $$PWD/src/manager/cabstractbookmarkfilter.h                         \
-    $$PWD/src/manager/cbookmark.h                                       \
-    $$PWD/src/manager/cbookmarkfilter.h                                 \
-    $$PWD/src/manager/cbookmarkfilterdatamodel.h                        \
-    $$PWD/src/manager/cbookmarkitem.h                                   \
-    $$PWD/src/manager/cbookmarkmgr.h                                    \
-    $$PWD/src/manager/cmanager.h                                        \
-    $$PWD/src/manager/ctag.h                                            \
-    $$PWD/src/manager/ctagitem.h                                        \
-    $$PWD/src/manager/ctagmgr.h                                         \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
     $$PWD/src/settings.h \
@@ -50,12 +40,8 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cnetworkmgr.h \
     $$PWD/src/network/cdownloadfaviconrequest.h \
     $$PWD/src/network/cdownloadfaviconreply.h \
-    $$PWD/src/manager/ccheckedtagitemmodel.h \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
     $$PWD/src/network/cdownloadwebpageinforequest.h \
-    $$PWD/src/manager/cabstractbookmarkdatamodel.h \
-    $$PWD/src/manager/ctagitemmodel.h \
-    $$PWD/src/manager/ctagsortfilterproxymodel.h \
     $$PWD/src/browser/browser.h \
     $$PWD/src/icontheme/icontheme.h \
     $$PWD/src/mainwindow.h \
@@ -75,21 +61,25 @@ HEADERS        +=                                                       \
     $$PWD/src/common/indexlist.h \
     $$PWD/src/project/prj.h \
     $$PWD/src/project/prjxml.h \
-    $$PWD/src/widget/navigationview/actinterface.h
+    $$PWD/src/widget/navigationview/actinterface.h \
+    $$PWD/src/manager/abstractbookmarkdatamodel.h \
+    $$PWD/src/manager/abstractbookmarkfilter.h \
+    $$PWD/src/manager/bookmark.h \
+    $$PWD/src/manager/bookmarkfilter.h \
+    $$PWD/src/manager/bookmarkfilterdatamodel.h \
+    $$PWD/src/manager/bookmarkitem.h \
+    $$PWD/src/manager/bookmarkmgr.h \
+    $$PWD/src/manager/manager.h \
+    $$PWD/src/manager/tag.h \
+    $$PWD/src/manager/tagitem.h \
+    $$PWD/src/manager/checkedtagitemmodel.h \
+    $$PWD/src/manager/tagitemmodel.h \
+    $$PWD/src/manager/tagmgr.h \
+    $$PWD/src/manager/tagsortfilterproxymodel.h
 
 
 SOURCES        +=                                                       \
     $$PWD/src/bookmarkimport/bookmarkimportchromium.cpp                 \
-    $$PWD/src/manager/cabstractbookmarkfilter.cpp                       \
-    $$PWD/src/manager/cbookmark.cpp                                     \
-    $$PWD/src/manager/cbookmarkfilter.cpp                               \
-    $$PWD/src/manager/cbookmarkfilterdatamodel.cpp                      \
-    $$PWD/src/manager/cbookmarkitem.cpp                                 \
-    $$PWD/src/manager/cbookmarkmgr.cpp                                  \
-    $$PWD/src/manager/cmanager.cpp                                      \
-    $$PWD/src/manager/ctag.cpp                                          \
-    $$PWD/src/manager/ctagitem.cpp                                      \
-    $$PWD/src/manager/ctagmgr.cpp                                       \
     $$PWD/src/version.cpp                                               \
     $$PWD/src/network/cwebfiledownloader.cpp \
     $$PWD/src/network/cwebpagedownloader.cpp \
@@ -108,12 +98,8 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cnetworkmgr.cpp \
     $$PWD/src/network/cdownloadfaviconrequest.cpp \
     $$PWD/src/network/cdownloadfaviconreply.cpp \
-    $$PWD/src/manager/ccheckedtagitemmodel.cpp \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
     $$PWD/src/network/cdownloadwebpageinforequest.cpp \
-    $$PWD/src/manager/cabstractbookmarkdatamodel.cpp \
-    $$PWD/src/manager/ctagitemmodel.cpp \
-    $$PWD/src/manager/ctagsortfilterproxymodel.cpp \
     $$PWD/src/browser/browser.cpp \
     $$PWD/src/icontheme/icontheme.cpp \
     $$PWD/src/mainwindow.cpp \
@@ -132,7 +118,21 @@ SOURCES        +=                                                       \
     $$PWD/src/bookmarkimportwizard/bookmarkimportwizard.cpp \
     $$PWD/src/common/indexlist.cpp \
     $$PWD/src/project/prj.cpp \
-    $$PWD/src/project/prjxml.cpp
+    $$PWD/src/project/prjxml.cpp \
+    $$PWD/src/manager/tagsortfilterproxymodel.cpp \
+    $$PWD/src/manager/tagmgr.cpp \
+    $$PWD/src/manager/tagitemmodel.cpp \
+    $$PWD/src/manager/tagitem.cpp \
+    $$PWD/src/manager/tag.cpp \
+    $$PWD/src/manager/manager.cpp \
+    $$PWD/src/manager/checkedtagitemmodel.cpp \
+    $$PWD/src/manager/bookmarkmgr.cpp \
+    $$PWD/src/manager/abstractbookmarkdatamodel.cpp \
+    $$PWD/src/manager/abstractbookmarkfilter.cpp \
+    $$PWD/src/manager/bookmark.cpp \
+    $$PWD/src/manager/bookmarkfilter.cpp \
+    $$PWD/src/manager/bookmarkfilterdatamodel.cpp \
+    $$PWD/src/manager/bookmarkitem.cpp
 
 
 FORMS          +=                                                       \

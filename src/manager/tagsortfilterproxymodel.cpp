@@ -12,18 +12,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ctagsortfilterproxymodel.h"
+#include "tagsortfilterproxymodel.h"
 #include <QDebug>
 
 
-CTagSortFilterProxyModel::CTagSortFilterProxyModel(
+TagSortFilterProxyModel::TagSortFilterProxyModel(
         QObject *parent) :QSortFilterProxyModel(parent)
 {
 }
 
 // this solution was taken from:
 // http://stackoverflow.com/questions/250890/using-qsortfilterproxymodel-with-a-tree-model
-bool CTagSortFilterProxyModel::filterAcceptsRow(int source_row,
+bool TagSortFilterProxyModel::filterAcceptsRow(int source_row,
         const QModelIndex &source_parent) const
 {
     if(filterRegExp().isEmpty() == false)

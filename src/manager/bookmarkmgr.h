@@ -12,36 +12,36 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKMGR_H
-#define CBOOKMARKMGR_H
+#ifndef BOOKMARKMGR_H
+#define BOOKMARKMGR_H
 
 #include <QObject>
-#include "cbookmark.h"
-class CManager;
-class CTagMgr;
-class CBookmarkItem;
+#include "bookmark.h"
+class Manager;
+class TagMgr;
+class BookmarkItem;
 
-class CBookmarkMgr : public QObject
+class BookmarkMgr : public QObject
 {
     Q_OBJECT
 
-    friend class CBookmarkItem;
-    friend class CTagMgr;
-    friend class CManager;
+    friend class BookmarkItem;
+    friend class TagMgr;
+    friend class Manager;
 private:
-    explicit CBookmarkMgr(CManager *mgr = 0);
-    virtual ~CBookmarkMgr();
+    explicit BookmarkMgr(Manager *mgr = 0);
+    virtual ~BookmarkMgr();
 public:
-    inline CManager *mgr() const;
+    inline Manager *mgr() const;
 
     inline int count() const;
-    int indexOf(CBookmarkItem *item) const;
+    int indexOf(BookmarkItem *item) const;
     int indexOf(const QUrl &url) const;
-    inline const QList<CBookmarkItem *> &bookmarks() const;
-    inline CBookmarkItem *at(int index) const;
-    CBookmarkItem *find(const QUrl &url) const;
-    CBookmarkItem *add(const CBookmark &data);
-    CBookmarkItem *replace(const CBookmark &data);
+    inline const QList<BookmarkItem *> &bookmarks() const;
+    inline BookmarkItem *at(int index) const;
+    BookmarkItem *find(const QUrl &url) const;
+    BookmarkItem *add(const Bookmark &data);
+    BookmarkItem *replace(const Bookmark &data);
     void removeAt(int index);
     void removeAll();
 
@@ -64,26 +64,26 @@ signals:
     void inserted(int first, int last);
     void aboutToBeRemoved(int first, int last);
     void removed(int first, int last);
-    void aboutToBeDataChanged(CBookmarkItem *item);
-    void dataChanged(CBookmarkItem *item);
-    void aboutToBeTagsChanged(CBookmarkItem *item);
-    void tagsChanged(CBookmarkItem *item);
+    void aboutToBeDataChanged(BookmarkItem *item);
+    void dataChanged(BookmarkItem *item);
+    void aboutToBeTagsChanged(BookmarkItem *item);
+    void tagsChanged(BookmarkItem *item);
 private:
-    void callbackAboutToBeDataChanged(CBookmarkItem *item);
-    void callbackDataChanged(CBookmarkItem *item);
-    void callbackAboutToBeTagsChanged(CBookmarkItem *item);
-    void callbackTagsChanged(CBookmarkItem *item);
+    void callbackAboutToBeDataChanged(BookmarkItem *item);
+    void callbackDataChanged(BookmarkItem *item);
+    void callbackAboutToBeTagsChanged(BookmarkItem *item);
+    void callbackTagsChanged(BookmarkItem *item);
 private:
-    void counterAboutToBeTagsChanged(CBookmarkItem *item);
-    void counterTagsChanged(CBookmarkItem *item);
-    void counterAboutToBeDataChanged(CBookmarkItem *item);
-    void counterDataChanged(CBookmarkItem *item);
-    void counterItemRemove(CBookmarkItem *item);
-    void counterItemInsert(CBookmarkItem *item);
+    void counterAboutToBeTagsChanged(BookmarkItem *item);
+    void counterTagsChanged(BookmarkItem *item);
+    void counterAboutToBeDataChanged(BookmarkItem *item);
+    void counterDataChanged(BookmarkItem *item);
+    void counterItemRemove(BookmarkItem *item);
+    void counterItemInsert(BookmarkItem *item);
     void counterReset();
 private:
-    QList<CBookmarkItem *> m_bookmarkItems;
-    CManager *m_mgr;
+    QList<BookmarkItem *> m_bookmarkItems;
+    Manager *m_mgr;
     int m_counterFavorite;
     int m_counterReadItLater;
     int m_counterRated;
@@ -95,94 +95,94 @@ private:
     int m_counterTrashUntagged;
 };
 
-CManager *CBookmarkMgr::mgr() const
+Manager *BookmarkMgr::mgr() const
 {
     return m_mgr;
 }
 
-int CBookmarkMgr::count() const
+int BookmarkMgr::count() const
 {
     return m_bookmarkItems.count();
 }
 
-const QList<CBookmarkItem *> &CBookmarkMgr::bookmarks() const
+const QList<BookmarkItem *> &BookmarkMgr::bookmarks() const
 {
     return m_bookmarkItems;
 }
 
-CBookmarkItem *CBookmarkMgr::at(int index) const
+BookmarkItem *BookmarkMgr::at(int index) const
 {
     return m_bookmarkItems.at(index);
 }
 
-int CBookmarkMgr::favoriteCount() const
+int BookmarkMgr::favoriteCount() const
 {
     return m_counterFavorite;
 }
 
-int CBookmarkMgr::readItLaterCount() const
+int BookmarkMgr::readItLaterCount() const
 {
     return m_counterReadItLater;
 }
 
-int CBookmarkMgr::ratedCount() const
+int BookmarkMgr::ratedCount() const
 {
     return m_counterRated;
 }
 
-int CBookmarkMgr::untaggedCount() const
+int BookmarkMgr::untaggedCount() const
 {
     return m_counterUntagged;
 }
 
-int CBookmarkMgr::trashCount() const
+int BookmarkMgr::trashCount() const
 {
     return m_counterTrash;
 }
 
-int CBookmarkMgr::trashFavoriteCount() const
+int BookmarkMgr::trashFavoriteCount() const
 {
     return m_counterTrashFavorite;
 }
 
-int CBookmarkMgr::trashReadItLaterCount() const
+int BookmarkMgr::trashReadItLaterCount() const
 {
     return m_counterTrashReadItLater;
 }
 
-int CBookmarkMgr::trashRatedCount() const
+int BookmarkMgr::trashRatedCount() const
 {
     return m_counterTrashRated;
 }
 
-int CBookmarkMgr::trashUntaggedCount() const
+int BookmarkMgr::trashUntaggedCount() const
 {
     return m_counterTrashUntagged;
 }
 
-int CBookmarkMgr::notTrashCount() const
+int BookmarkMgr::notTrashCount() const
 {
     return m_bookmarkItems.count() - m_counterTrash;
 }
 
-int CBookmarkMgr::notTrashFavoriteCount() const
+int BookmarkMgr::notTrashFavoriteCount() const
 {
     return m_counterFavorite - m_counterTrashFavorite;
 }
 
-int CBookmarkMgr::notTrashReadItLaterCount() const
+int BookmarkMgr::notTrashReadItLaterCount() const
 {
     return m_counterReadItLater - m_counterTrashReadItLater;
 }
 
-int CBookmarkMgr::notTrashRatedCount() const
+int BookmarkMgr::notTrashRatedCount() const
 {
     return m_counterRated - m_counterTrashRated;
 }
 
-int CBookmarkMgr::notTrashUntaggedCount() const
+int BookmarkMgr::notTrashUntaggedCount() const
 {
     return m_counterUntagged - m_counterTrashUntagged;
 }
 
-#endif // CBOOKMARKMGR_H
+#endif // BOOKMARKMGR_H

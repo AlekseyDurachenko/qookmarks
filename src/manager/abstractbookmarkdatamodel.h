@@ -12,21 +12,21 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CABSTRACTBOOKMARKDATAMODEL_H
-#define CABSTRACTBOOKMARKDATAMODEL_H
+#ifndef ABSTRACTBOOKMARKDATAMODEL_H
+#define ABSTRACTBOOKMARKDATAMODEL_H
 
 #include <QObject>
-class CBookmarkItem;
+class BookmarkItem;
 
 
-class CAbstractBookmarkDataModel : public QObject
+class AbstractBookmarkDataModel : public QObject
 {
     Q_OBJECT
 public:
-    explicit CAbstractBookmarkDataModel(QObject *parent = 0);
+    explicit AbstractBookmarkDataModel(QObject *parent = 0);
 
     virtual int count() const = 0;
-    virtual CBookmarkItem *at(int index) const = 0;
+    virtual BookmarkItem *at(int index) const = 0;
 signals:
     void aboutToBeInserted(int first, int last);
     void inserted(int first, int last);
@@ -39,4 +39,4 @@ signals:
 };
 
 
-#endif // CABSTRACTBOOKMARKDATAMODEL_H
+#endif // ABSTRACTBOOKMARKDATAMODEL_H

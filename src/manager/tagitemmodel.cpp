@@ -12,36 +12,36 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ctagitemmodel.h"
+#include "tagitemmodel.h"
 #include "icontheme.h"
 #include "singleton.h"
 
 
-CTagItemModel::CTagItemModel(QObject *parent) :
+TagItemModel::TagItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
-    connect(GTagMgr(), SIGNAL(aboutToBeInserted(CTagItem*,int,int)),
-            this, SLOT(tagMgr_aboutToBeInserted(CTagItem*,int,int)));
-    connect(GTagMgr(), SIGNAL(inserted(CTagItem*,int,int)),
-            this, SLOT(tagMgr_inserted(CTagItem*,int,int)));
-    connect(GTagMgr(), SIGNAL(aboutToBeRemoved(CTagItem*,int,int)),
-            this, SLOT(tagMgr_aboutToBeRemoved(CTagItem*,int,int)));
-    connect(GTagMgr(), SIGNAL(removed(CTagItem*,int,int)),
-            this, SLOT(tagMgr_removed(CTagItem*,int,int)));
-    connect(GTagMgr(), SIGNAL(aboutToBeMoved(CTagItem*,int,int,CTagItem*,int)),
-            this, SLOT(tagMgr_aboutToBeMoved(CTagItem*,int,int,CTagItem*,int)));
-    connect(GTagMgr(), SIGNAL(moved(CTagItem*,int,int,CTagItem*,int)),
-            this, SLOT(tagMgr_moved(CTagItem*,int,int,CTagItem*,int)));
-    connect(GTagMgr(), SIGNAL(dataChanged(CTagItem*)),
-            this, SLOT(tagMgr_dataChanged(CTagItem*)));
+    connect(GTagMgr(), SIGNAL(aboutToBeInserted(TagItem*,int,int)),
+            this, SLOT(tagMgr_aboutToBeInserted(TagItem*,int,int)));
+    connect(GTagMgr(), SIGNAL(inserted(TagItem*,int,int)),
+            this, SLOT(tagMgr_inserted(TagItem*,int,int)));
+    connect(GTagMgr(), SIGNAL(aboutToBeRemoved(TagItem*,int,int)),
+            this, SLOT(tagMgr_aboutToBeRemoved(TagItem*,int,int)));
+    connect(GTagMgr(), SIGNAL(removed(TagItem*,int,int)),
+            this, SLOT(tagMgr_removed(TagItem*,int,int)));
+    connect(GTagMgr(), SIGNAL(aboutToBeMoved(TagItem*,int,int,TagItem*,int)),
+            this, SLOT(tagMgr_aboutToBeMoved(TagItem*,int,int,TagItem*,int)));
+    connect(GTagMgr(), SIGNAL(moved(TagItem*,int,int,TagItem*,int)),
+            this, SLOT(tagMgr_moved(TagItem*,int,int,TagItem*,int)));
+    connect(GTagMgr(), SIGNAL(dataChanged(TagItem*)),
+            this, SLOT(tagMgr_dataChanged(TagItem*)));
 }
 
-QVariant CTagItemModel::data(const QModelIndex &index, int role) const
+QVariant TagItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
 
-    CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
+    TagItem *item = static_cast<TagItem *>(index.internalPointer());
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
         if (index.column() == 0)
             return QString("%1").arg(item->data().name());
@@ -51,12 +51,12 @@ QVariant CTagItemModel::data(const QModelIndex &index, int role) const
             return IconTheme::icon("tag-icon-default");
 
     if (role == Qt::UserRole)
-        return CTagItem::variantFromPtr(item);
+        return TagItem::variantFromPtr(item);
 
     return QVariant();
 }
 
-Qt::ItemFlags CTagItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags TagItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
@@ -64,7 +64,7 @@ Qt::ItemFlags CTagItemModel::flags(const QModelIndex &index) const
    return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
 }
 
-QVariant CTagItemModel::headerData(int section,
+QVariant TagItemModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal
@@ -75,28 +75,28 @@ QVariant CTagItemModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex CTagItemModel::index(int row, int column,
+QModelIndex TagItemModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    CTagItem *parentItem;
+    TagItem *parentItem;
     if (!parent.isValid())
         parentItem = GTagMgr()->rootItem();
     else
-        parentItem = static_cast<CTagItem *>(parent.internalPointer());
+        parentItem = static_cast<TagItem *>(parent.internalPointer());
 
     return createIndex(row, column, parentItem->at(row));
 }
 
-QModelIndex CTagItemModel::parent(const QModelIndex &index) const
+QModelIndex TagItemModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())
         return QModelIndex();
 
-    CTagItem *childItem = static_cast<CTagItem *>(index.internalPointer());
-    CTagItem *parentItem = childItem->parent();
+    TagItem *childItem = static_cast<TagItem *>(index.internalPointer());
+    TagItem *parentItem = childItem->parent();
 
     if (parentItem == GTagMgr()->rootItem())
         return QModelIndex();
@@ -104,26 +104,26 @@ QModelIndex CTagItemModel::parent(const QModelIndex &index) const
     return createIndex(parentItem->index(), 0, parentItem);
 }
 
-int CTagItemModel::rowCount(const QModelIndex &parent) const
+int TagItemModel::rowCount(const QModelIndex &parent) const
 {
      if (parent.column() > 0)
          return 0;
 
-     CTagItem *parentItem;
+     TagItem *parentItem;
      if (!parent.isValid())
          parentItem = GTagMgr()->rootItem();
      else
-         parentItem = static_cast<CTagItem *>(parent.internalPointer());
+         parentItem = static_cast<TagItem *>(parent.internalPointer());
 
      return parentItem->count();
 }
 
-int CTagItemModel::columnCount(const QModelIndex &/*parent*/) const
+int TagItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
     return 1;
 }
 
-void CTagItemModel::tagMgr_aboutToBeInserted(CTagItem *parent,
+void TagItemModel::tagMgr_aboutToBeInserted(TagItem *parent,
         int first, int last)
 {
     if (parent == GTagMgr()->rootItem())
@@ -132,13 +132,13 @@ void CTagItemModel::tagMgr_aboutToBeInserted(CTagItem *parent,
         beginInsertRows(createIndex(parent->index(), 0, parent), first, last);
 }
 
-void CTagItemModel::tagMgr_inserted(CTagItem */*parent*/,
+void TagItemModel::tagMgr_inserted(TagItem */*parent*/,
         int /*first*/, int /*last*/)
 {
     endInsertRows();
 }
 
-void CTagItemModel::tagMgr_aboutToBeRemoved(CTagItem *parent,
+void TagItemModel::tagMgr_aboutToBeRemoved(TagItem *parent,
         int first, int last)
 {
     if (parent == GTagMgr()->rootItem())
@@ -147,14 +147,14 @@ void CTagItemModel::tagMgr_aboutToBeRemoved(CTagItem *parent,
         beginRemoveRows(createIndex(parent->index(), 0, parent), first, last);
 }
 
-void CTagItemModel::tagMgr_removed(CTagItem */*parent*/,
+void TagItemModel::tagMgr_removed(TagItem */*parent*/,
         int /*first*/, int /*last*/)
 {
     endRemoveRows();
 }
 
-void CTagItemModel::tagMgr_aboutToBeMoved(CTagItem *srcParent,
-        int srcFirst, int srcLast, CTagItem *dstParent, int dstIndex)
+void TagItemModel::tagMgr_aboutToBeMoved(TagItem *srcParent,
+        int srcFirst, int srcLast, TagItem *dstParent, int dstIndex)
 {
     QModelIndex si = QModelIndex();
     QModelIndex di = QModelIndex();
@@ -165,14 +165,14 @@ void CTagItemModel::tagMgr_aboutToBeMoved(CTagItem *srcParent,
     beginMoveRows(si, srcFirst, srcLast, di, dstIndex);
 }
 
-void CTagItemModel::tagMgr_moved(CTagItem */*srcParent*/,
+void TagItemModel::tagMgr_moved(TagItem */*srcParent*/,
         int /*srcFirst*/, int /*srcLast*/,
-        CTagItem */*dstParent*/, int /*dstIndex*/)
+        TagItem */*dstParent*/, int /*dstIndex*/)
 {
     endMoveRows();
 }
 
-void CTagItemModel::tagMgr_dataChanged(CTagItem *item)
+void TagItemModel::tagMgr_dataChanged(TagItem *item)
 {
     int index = item->index();
     emit dataChanged(createIndex(index, 0, item),

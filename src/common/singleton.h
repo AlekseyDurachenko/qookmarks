@@ -16,9 +16,9 @@
 #define SINGLETON_H
 
 #include "prj.h"
-#include "cmanager.h"
-#include "ctagmgr.h"
-#include "cbookmarkmgr.h"
+#include "manager.h"
+#include "tagmgr.h"
+#include "bookmarkmgr.h"
 #include "cnetworkmgr.h"
 
 
@@ -35,12 +35,12 @@ inline Prj *GPrj()
     return singleton<Prj>();
 }
 
-inline CTagMgr *GTagMgr()
+inline TagMgr *GTagMgr()
 {
     return singleton<Prj>()->manager()->tagMgr();
 }
 
-inline CBookmarkMgr *GBookmarkMgr()
+inline BookmarkMgr *GBookmarkMgr()
 {
     return singleton<Prj>()->manager()->bookmarkMgr();
 }

@@ -15,11 +15,11 @@
 #ifndef NAVTAGITEMMODEL_H
 #define NAVTAGITEMMODEL_H
 
-#include "ctagitemmodel.h"
+#include "tagitemmodel.h"
 class ActInterface;
 
 
-class NavTagItemModel : public CTagItemModel
+class NavTagItemModel : public TagItemModel
 {
     Q_OBJECT
 public:
@@ -40,7 +40,7 @@ public:
 private slots:
     void navigationActions_destroyed();
 private:
-    int bookmarkNotTrashedCount(CTagItem *item, bool recursive = true) const;
+    int bookmarkNotTrashedCount(TagItem *item, bool recursive = true) const;
     bool dropMimeTagList(const QMimeData *data,
                          const QStringList &parentTag);
     bool dropMimeBookmarkList(const QMimeData *data,

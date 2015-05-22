@@ -12,18 +12,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CTAGITEMMODEL_H
-#define CTAGITEMMODEL_H
+#ifndef TAGITEMMODEL_H
+#define TAGITEMMODEL_H
 
 #include <QAbstractItemModel>
-#include "ctagitem.h"
+#include "tagitem.h"
 
 
-class CTagItemModel : public QAbstractItemModel
+class TagItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    explicit CTagItemModel(QObject *parent = 0);
+    explicit TagItemModel(QObject *parent = 0);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -35,16 +35,16 @@ public:
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 protected slots:
-    void tagMgr_aboutToBeInserted(CTagItem *parent ,int first, int last);
-    void tagMgr_inserted(CTagItem *parent, int first, int last);
-    virtual void tagMgr_aboutToBeRemoved(CTagItem *parent, int first, int last);
-    void tagMgr_removed(CTagItem *parent, int first, int last);
-    void tagMgr_aboutToBeMoved(CTagItem *srcParent, int srcFirst, int srcLast,
-                               CTagItem *dstParent, int dstIndex);
-    void tagMgr_moved(CTagItem *srcParent, int srcFirst, int srcLast,
-                      CTagItem *dstParent, int dstIndex);
-    void tagMgr_dataChanged(CTagItem *item);
+    void tagMgr_aboutToBeInserted(TagItem *parent ,int first, int last);
+    void tagMgr_inserted(TagItem *parent, int first, int last);
+    virtual void tagMgr_aboutToBeRemoved(TagItem *parent, int first, int last);
+    void tagMgr_removed(TagItem *parent, int first, int last);
+    void tagMgr_aboutToBeMoved(TagItem *srcParent, int srcFirst, int srcLast,
+                               TagItem *dstParent, int dstIndex);
+    void tagMgr_moved(TagItem *srcParent, int srcFirst, int srcLast,
+                      TagItem *dstParent, int dstIndex);
+    void tagMgr_dataChanged(TagItem *item);
 };
 
 
-#endif // CCHECKEDTAGITEMMODEL_H
+#endif // CHECKEDTAGITEMMODEL_H

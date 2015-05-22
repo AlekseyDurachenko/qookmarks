@@ -12,61 +12,61 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKFILTERDATAMODEL_H
-#define CBOOKMARKFILTERDATAMODEL_H
+#ifndef BOOKMARKFILTERDATAMODEL_H
+#define BOOKMARKFILTERDATAMODEL_H
 
 #include <QObject>
-#include "cabstractbookmarkdatamodel.h"
-class CManager;
-class CAbstractBookmarkFilter;
+#include "abstractbookmarkdatamodel.h"
+class Manager;
+class AbstractBookmarkFilter;
 
 
-class CBookmarkFilterDataModel : public CAbstractBookmarkDataModel
+class BookmarkFilterDataModel : public AbstractBookmarkDataModel
 {
     Q_OBJECT
 public:
-    explicit CBookmarkFilterDataModel(QObject *parent = 0);
-    virtual ~CBookmarkFilterDataModel();
+    explicit BookmarkFilterDataModel(QObject *parent = 0);
+    virtual ~BookmarkFilterDataModel();
 
-    inline CAbstractBookmarkFilter *filter() const;
-    void setFilter(CAbstractBookmarkFilter *filter);
+    inline AbstractBookmarkFilter *filter() const;
+    void setFilter(AbstractBookmarkFilter *filter);
 
     virtual int count() const;
-    virtual CBookmarkItem *at(int index) const;
-    inline int indexOf(CBookmarkItem *item) const;
-    inline QList<CBookmarkItem *> bookmarks() const;
+    virtual BookmarkItem *at(int index) const;
+    inline int indexOf(BookmarkItem *item) const;
+    inline QList<BookmarkItem *> bookmarks() const;
 private:
     void invalidate();
-    void invalidate(CBookmarkItem *item, bool hasDataChanges = false);
-    void insert(CBookmarkItem *item);
+    void invalidate(BookmarkItem *item, bool hasDataChanges = false);
+    void insert(BookmarkItem *item);
     void remove(int index);
 private slots:
     void filter_changed();
     void filter_destroyed();
     void bookmarkMgr_inserted(int first, int last);
     void bookmarkMgr_aboutToBeRemoved(int first, int last);
-    void bookmarkMgr_dataChanged(CBookmarkItem *item);
-    void bookmarkMgr_tagsChanged(CBookmarkItem *item);
+    void bookmarkMgr_dataChanged(BookmarkItem *item);
+    void bookmarkMgr_tagsChanged(BookmarkItem *item);
 private:
-    QList<CBookmarkItem *> m_bookmarks;
-    CAbstractBookmarkFilter *m_filter;
+    QList<BookmarkItem *> m_bookmarks;
+    AbstractBookmarkFilter *m_filter;
 };
 
 
-CAbstractBookmarkFilter *CBookmarkFilterDataModel::filter() const
+AbstractBookmarkFilter *BookmarkFilterDataModel::filter() const
 {
     return m_filter;
 }
 
-int CBookmarkFilterDataModel::indexOf(CBookmarkItem *item) const
+int BookmarkFilterDataModel::indexOf(BookmarkItem *item) const
 {
     return m_bookmarks.indexOf(item);
 }
 
-QList<CBookmarkItem *> CBookmarkFilterDataModel::bookmarks() const
+QList<BookmarkItem *> BookmarkFilterDataModel::bookmarks() const
 {
     return m_bookmarks;
 }
 
 
-#endif // CBOOKMARKFILTERDATAMODEL_H
+#endif // BOOKMARKFILTERDATAMODEL_H

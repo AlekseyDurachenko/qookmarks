@@ -12,93 +12,93 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ctagmgr.h"
-#include "cmanager.h"
-#include "ctagitem.h"
-#include "cbookmarkmgr.h"
-#include "cbookmarkitem.h"
+#include "tagmgr.h"
+#include "manager.h"
+#include "tagitem.h"
+#include "bookmarkmgr.h"
+#include "bookmarkitem.h"
 
 
-CTagMgr::CTagMgr(CManager *mgr) : QObject(mgr)
+TagMgr::TagMgr(Manager *mgr) : QObject(mgr)
 {
     m_mgr = mgr;
-    m_rootItem = new CTagItem(CTag(), this, 0);
+    m_rootItem = new TagItem(Tag(), this, 0);
 }
 
-CTagMgr::~CTagMgr()
+TagMgr::~TagMgr()
 {
     delete m_rootItem;
 }
 
-CTagItem *CTagMgr::findByPath(const QStringList &path) const
+TagItem *TagMgr::findByPath(const QStringList &path) const
 {
     if (path.isEmpty())
         return m_rootItem;
 
-    CTagItem *item = rootItem();
+    TagItem *item = rootItem();
     for (int index = 0; index < path.count() && item; ++index)
         item = item->find(path.at(index));
 
     return item;
 }
 
-void CTagMgr::callbackAboutToBeInserted(CTagItem *parent, int first, int last)
+void TagMgr::callbackAboutToBeInserted(TagItem *parent, int first, int last)
 {
     emit aboutToBeInserted(parent, first, last);
 }
 
-void CTagMgr::callbackInserted(CTagItem *parent, int first, int last)
+void TagMgr::callbackInserted(TagItem *parent, int first, int last)
 {
     emit inserted(parent, first, last);
 }
 
-void CTagMgr::callbackAboutToBeRemoved(CTagItem *parent, int first, int last)
+void TagMgr::callbackAboutToBeRemoved(TagItem *parent, int first, int last)
 {
     emit aboutToBeRemoved(parent, first, last);
 }
 
-void CTagMgr::callbackRemoved(CTagItem *parent, int first, int last)
+void TagMgr::callbackRemoved(TagItem *parent, int first, int last)
 {
     emit removed(parent, first, last);
 }
 
-void CTagMgr::callbackAboutToBeMoved(CTagItem *item)
+void TagMgr::callbackAboutToBeMoved(TagItem *item)
 {
-    foreach (CBookmarkItem *bookmark, item->bookmarksRecursively())
+    foreach (BookmarkItem *bookmark, item->bookmarksRecursively())
         m_mgr->bookmarkMgr()->callbackAboutToBeTagsChanged(bookmark);
 }
 
-void CTagMgr::callbackAboutToBeMoved(CTagItem *sourceParent, int sourceFirst,
-        int sourceLast, CTagItem *destinationParent, int destinationIndex)
+void TagMgr::callbackAboutToBeMoved(TagItem *sourceParent, int sourceFirst,
+        int sourceLast, TagItem *destinationParent, int destinationIndex)
 {
     emit aboutToBeMoved(sourceParent, sourceFirst, sourceLast,
                         destinationParent, destinationIndex);
 }
 
-void CTagMgr::callbackMoved(CTagItem *sourceParent, int sourceFirst,
-        int sourceLast, CTagItem *destinationParent, int destinationIndex)
+void TagMgr::callbackMoved(TagItem *sourceParent, int sourceFirst,
+        int sourceLast, TagItem *destinationParent, int destinationIndex)
 {
     emit moved(sourceParent, sourceFirst, sourceLast,
                destinationParent, destinationIndex);
 }
 
-void CTagMgr::callbackMoved(CTagItem *item)
+void TagMgr::callbackMoved(TagItem *item)
 {
-    foreach (CBookmarkItem *bookmark, item->bookmarksRecursively())
+    foreach (BookmarkItem *bookmark, item->bookmarksRecursively())
         m_mgr->bookmarkMgr()->callbackTagsChanged(bookmark);
 }
 
-void CTagMgr::callbackAboutToBeDataChanged(CTagItem *item)
+void TagMgr::callbackAboutToBeDataChanged(TagItem *item)
 {
     emit aboutToBeDataChanged(item);
 }
 
-void CTagMgr::callbackDataChanged(CTagItem *item)
+void TagMgr::callbackDataChanged(TagItem *item)
 {
     emit dataChanged(item);
 }
 
-void CTagMgr::callbackBookmarksChanged(CTagItem *item)
+void TagMgr::callbackBookmarksChanged(TagItem *item)
 {
     emit bookmarksChanged(item);
 }

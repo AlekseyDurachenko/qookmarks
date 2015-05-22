@@ -12,25 +12,25 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CABSTRACTBOOKMARKFILTER_H
-#define CABSTRACTBOOKMARKFILTER_H
-
-#include <QObject>
-class CBookmarkItem;
+#include "abstractbookmarkfilter.h"
 
 
-class CAbstractBookmarkFilter : public QObject
+AbstractBookmarkFilter::AbstractBookmarkFilter(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit CAbstractBookmarkFilter(QObject *parent = 0);
-    virtual ~CAbstractBookmarkFilter();
+}
 
-    virtual bool validate(const CBookmarkItem *item) const = 0;
-    void update();
-signals:
-    void changed();
-};
+AbstractBookmarkFilter::~AbstractBookmarkFilter()
+{
+}
 
+/*!
+ * \brief CAbstractBookmarkFilter::update
+ *
+ * you should call this method after your filter is changed
+ */
+void AbstractBookmarkFilter::update()
+{
+    emit changed();
+}
 
-#endif // CABSTRACTBOOKMARKFILTER_H

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bookmarkratingdelegate.h"
-#include "cbookmarkitem.h"
+#include "bookmarkitem.h"
 #include "consts.h"
 #include "icontheme.h"
 #include <QHeaderView>
@@ -51,7 +51,7 @@ void BookmarkRatingDelegate::paint(QPainter *painter,
         left += size;
     }
 
-    for (; i <= Bookmark::MaxRating; i +=2, left += size)
+    for (; i <= BookmarkMaxRating; i +=2, left += size)
         painter->drawPixmap(left, top, m_disabledIcon.pixmap(QSize(size, size)));
 }
 

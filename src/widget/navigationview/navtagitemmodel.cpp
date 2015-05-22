@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "navtagitemmodel.h"
-#include "cbookmarkitem.h"
+#include "bookmarkitem.h"
 #include "actinterface.h"
 #include "singleton.h"
 #include <QMimeData>
@@ -21,15 +21,15 @@
 
 
 NavTagItemModel::NavTagItemModel(QObject *parent) :
-    CTagItemModel(parent)
+    TagItemModel(parent)
 {
 #if QT_VERSION < 0x050000
     setSupportedDragActions(Qt::CopyAction|Qt::MoveAction);
 #endif
     m_navigationActions = 0;
 
-    connect(GTagMgr(), SIGNAL(bookmarksChanged(CTagItem*)),
-            this, SLOT(tagMgr_dataChanged(CTagItem*)));
+    connect(GTagMgr(), SIGNAL(bookmarksChanged(TagItem*)),
+            this, SLOT(tagMgr_dataChanged(TagItem*)));
 }
 
 void NavTagItemModel::setNavigationActions(ActInterface *interface)
@@ -51,14 +51,14 @@ QVariant NavTagItemModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    CTagItem *item = static_cast<CTagItem *>(index.internalPointer());
+    TagItem *item = static_cast<TagItem *>(index.internalPointer());
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
         if (index.column() == 0)
             return QString("%1 (%2)")
                     .arg(item->data().name())
                     .arg(bookmarkNotTrashedCount(item));
 
-    return CTagItemModel::data(index, role);
+    return TagItemModel::data(index, role);
 }
 
 Qt::ItemFlags NavTagItemModel::flags(const QModelIndex &index) const
@@ -66,7 +66,7 @@ Qt::ItemFlags NavTagItemModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::ItemIsDropEnabled;
 
-    return CTagItemModel::flags(index)
+    return TagItemModel::flags(index)
             |Qt::ItemIsDragEnabled
             |Qt::ItemIsDropEnabled;
 }
@@ -85,7 +85,7 @@ QMimeData *NavTagItemModel::mimeData(const QModelIndexList &indexes) const
         if (!index.isValid())
             continue;
 
-        CTagItem *tagItem = static_cast<CTagItem *>(index.internalPointer());
+        TagItem *tagItem = static_cast<TagItem *>(index.internalPointer());
         if (!tagItem)
             continue;
 
@@ -108,7 +108,7 @@ bool NavTagItemModel::dropMimeData(const QMimeData *data,
         Qt::DropAction action, int /*row*/, int /*column*/,
         const QModelIndex &parent)
 {
-    CTagItem *parentItem = static_cast<CTagItem *>(parent.internalPointer());
+    TagItem *parentItem = static_cast<TagItem *>(parent.internalPointer());
     QStringList path = (parentItem ? parentItem->path() : QStringList());
     if (data->hasFormat("qookmarks/tag-list"))
         return dropMimeTagList(data, path);
@@ -130,11 +130,11 @@ void NavTagItemModel::navigationActions_destroyed()
     m_navigationActions = 0;
 }
 
-int NavTagItemModel::bookmarkNotTrashedCount(CTagItem *item,
+int NavTagItemModel::bookmarkNotTrashedCount(TagItem *item,
         bool /*recursive*/) const
 {
     int count = 0;
-    foreach (const CBookmarkItem *bookmark, item->bookmarks())
+    foreach (const BookmarkItem *bookmark, item->bookmarks())
         if (!bookmark->data().isTrash())
             ++count;
 

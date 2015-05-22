@@ -12,37 +12,37 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CMANAGER_H
-#define CMANAGER_H
+#ifndef MANAGER_H
+#define MANAGER_H
 
 #include <QObject>
-class CBookmarkMgr;
-class CTagMgr;
+class BookmarkMgr;
+class TagMgr;
 
 
-class CManager : public QObject
+class Manager : public QObject
 {
     Q_OBJECT
 public:
-    explicit CManager(QObject *parent = 0);
-    virtual ~CManager();
+    explicit Manager(QObject *parent = 0);
+    virtual ~Manager();
 
-    inline CBookmarkMgr *bookmarkMgr() const;
-    inline CTagMgr *tagMgr() const;
+    inline BookmarkMgr *bookmarkMgr() const;
+    inline TagMgr *tagMgr() const;
 private:
-    CBookmarkMgr *m_bookmarkMgr;
-    CTagMgr *m_tagMgr;
+    BookmarkMgr *m_bookmarkMgr;
+    TagMgr *m_tagMgr;
 };
 
-CBookmarkMgr *CManager::bookmarkMgr() const
+BookmarkMgr *Manager::bookmarkMgr() const
 {
     return m_bookmarkMgr;
 }
 
-CTagMgr *CManager::tagMgr() const
+TagMgr *Manager::tagMgr() const
 {
     return m_tagMgr;
 }
 
 
-#endif // CMANAGER_H
+#endif // MANAGER_H

@@ -16,10 +16,10 @@
 #define BOOKMARKIMPORTCHROMIUM_H
 
 #include <QString>
-class CManager;
+class Manager;
 
 
-bool bookmarkImportChromium(CManager *mgr, const QString &fileName,
+bool bookmarkImportChromium(Manager *mgr, const QString &fileName,
         QString *reason = 0);
 
 

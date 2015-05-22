@@ -12,31 +12,31 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkitem.h"
+#include "bookmarkitem.h"
 #include <QVariant>
-#include "ctagitem.h"
-#include "cbookmarkmgr.h"
+#include "tagitem.h"
+#include "bookmarkmgr.h"
 
 
-CBookmarkItem::CBookmarkItem(const CBookmark &data, CBookmarkMgr *bookmarkMgr)
+BookmarkItem::BookmarkItem(const Bookmark &data, BookmarkMgr *bookmarkMgr)
 {
     m_data = data;
     m_bookmarkMgr = bookmarkMgr;
 }
 
-CBookmarkItem::~CBookmarkItem()
+BookmarkItem::~BookmarkItem()
 {
     notifyTagAboutDestroyed();
 }
 
-int CBookmarkItem::index() const
+int BookmarkItem::index() const
 {
-    return m_bookmarkMgr->indexOf(const_cast<CBookmarkItem *>(this));
+    return m_bookmarkMgr->indexOf(const_cast<BookmarkItem *>(this));
 }
 
-bool CBookmarkItem::setData(const CBookmark &data)
+bool BookmarkItem::setData(const Bookmark &data)
 {
-    CBookmarkItem *item = m_bookmarkMgr->find(data.url());
+    BookmarkItem *item = m_bookmarkMgr->find(data.url());
     if (item && item != this)
         return false;
 
@@ -50,33 +50,33 @@ bool CBookmarkItem::setData(const CBookmark &data)
     return true;
 }
 
-QVariant CBookmarkItem::variantFromPtr(CBookmarkItem *item)
+QVariant BookmarkItem::variantFromPtr(BookmarkItem *item)
 {
     return QVariant::fromValue<void *>(static_cast<void *>(item));
 }
 
-CBookmarkItem *CBookmarkItem::variantToPtr(const QVariant &data)
+BookmarkItem *BookmarkItem::variantToPtr(const QVariant &data)
 {
-    return static_cast<CBookmarkItem *>(data.value<void *>());
+    return static_cast<BookmarkItem *>(data.value<void *>());
 }
 
-void CBookmarkItem::notifyTagAboutDestroyed()
+void BookmarkItem::notifyTagAboutDestroyed()
 {
-    foreach (CTagItem *item, m_tags)
+    foreach (TagItem *item, m_tags)
     {
         m_tags.remove(item);
         item->callbackBookmarkDestroyed(this);
     }
 }
 
-void CBookmarkItem::callbackTagAdd(CTagItem *tag)
+void BookmarkItem::callbackTagAdd(TagItem *tag)
 {
     m_bookmarkMgr->callbackAboutToBeTagsChanged(this);
     m_tags.insert(tag);
     m_bookmarkMgr->callbackTagsChanged(this);
 }
 
-void CBookmarkItem::callbackTagRemove(CTagItem *tag)
+void BookmarkItem::callbackTagRemove(TagItem *tag)
 {
     m_bookmarkMgr->callbackAboutToBeTagsChanged(this);
     m_tags.remove(tag);

@@ -19,9 +19,9 @@
 #include "downloadfaviconreply.h"
 #include "downloadwebpageinforeply.h"
 #include "iconmgr.h"
-#include "tagsortfilterproxymodel.h"
 #include "icontheme.h"
 #include "settings.h"
+#include "tagsortfilterproxymodel.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>

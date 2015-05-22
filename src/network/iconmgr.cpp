@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "iconmgr.h"
+#include "hash_functions.h"
 #include <QDir>
 #include <QSet>
-#include "hash_functions.h"
 
 
 IconMgr::IconMgr()

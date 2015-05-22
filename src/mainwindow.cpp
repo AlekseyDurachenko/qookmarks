@@ -13,6 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mainwindow.h"
+#include "aboutdialog.h"
+#include "bookmarkeditdialog.h"
+#include "bookmarkfilterdatamodel.h"
+#include "bookmarkfilter.h"
+#include "bookmarkheaderview.h"
+#include "bookmarkimportwizard.h"
+#include "bookmarkitemmodel.h"
+#include "bookmarkview.h"
+#include "browser.h"
+#include "iconmgr.h"
+#include "icontheme.h"
+#include "navanchoritemmodel.h"
+#include "navtagitemmodel.h"
+#include "navtagview.h"
+#include "settings.h"
+#include "tageditdialog.h"
+#include "tagsortfilterproxymodel.h"
 #include <QApplication>
 #include <QClipboard>
 #include <QCloseEvent>
@@ -28,23 +45,6 @@
 #include <QStatusBar>
 #include <QToolBar>
 #include <QToolButton>
-#include "aboutdialog.h"
-#include "bookmarkeditdialog.h"
-#include "bookmarkfilterdatamodel.h"
-#include "bookmarkfilter.h"
-#include "bookmarkheaderview.h"
-#include "bookmarkimportwizard.h"
-#include "bookmarkitemmodel.h"
-#include "bookmarkview.h"
-#include "iconmgr.h"
-#include "navanchoritemmodel.h"
-#include "navtagitemmodel.h"
-#include "navtagview.h"
-#include "tageditdialog.h"
-#include "tagsortfilterproxymodel.h"
-#include "browser.h"
-#include "icontheme.h"
-#include "settings.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :

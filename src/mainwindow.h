@@ -15,22 +15,22 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "actinterface.h"
 #include <QMainWindow>
 #include <QModelIndex>
-#include "actinterface.h"
-class QSortFilterProxyModel;
-class QTreeView;
-class BookmarkView;
-class BookmarkItemModel;
-class BookmarkFilterDataModel;
 class BookmarkFilter;
+class BookmarkFilterDataModel;
 class BookmarkItem;
+class BookmarkItemModel;
+class BookmarkView;
 class NavAnchorItemModel;
-class NavTagView;
 class NavTagItemModel;
+class NavTagView;
 class TagSortFilterProxyModel;
 class QLineEdit;
+class QSortFilterProxyModel;
 class QSplitter;
+class QTreeView;
 
 
 class MainWindow : public QMainWindow, ActInterface

@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "downloadwebpageinforeply.h"
-#include <QTextCodec>
 #include <libxml2/libxml/parser.h>
 #include <libxml2/libxml/HTMLparser.h>
+#include <QTextCodec>
 #include <QDebug>
 
 

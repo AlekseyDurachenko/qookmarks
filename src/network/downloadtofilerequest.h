@@ -15,7 +15,6 @@
 #ifndef DOWNLOADTOFILEREQUEST_H
 #define DOWNLOADTOFILEREQUEST_H
 
-
 #include "abstractdownloadrequest.h"
 
 

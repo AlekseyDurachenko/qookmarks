@@ -13,13 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bookmarkfilterdatamodel.h"
-#include "manager.h"
-#include "tagmgr.h"
-#include "bookmarkmgr.h"
-#include "bookmarkitem.h"
 #include "bookmarkfilter.h"
-#include "singleton.h"
+#include "bookmarkitem.h"
+#include "bookmarkmgr.h"
+#include "manager.h"
 #include "prj.h"
+#include "singleton.h"
+#include "tagmgr.h"
 #include <QDebug>
 
 

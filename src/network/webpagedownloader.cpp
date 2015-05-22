@@ -14,10 +14,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "webpagedownloader.h"
 #include <QDir>
-#include <QDebug>
 #include <QStack>
 #include <QWebElement>
 #include <QWebFrame>
+#include <QDebug>
 
 
 WebPageDownloader::WebPageDownloader(QNetworkAccessManager *network,

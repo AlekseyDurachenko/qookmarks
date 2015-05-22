@@ -15,11 +15,11 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
-#include "prj.h"
-#include "manager.h"
-#include "tagmgr.h"
 #include "bookmarkmgr.h"
+#include "manager.h"
 #include "networkmgr.h"
+#include "prj.h"
+#include "tagmgr.h"
 
 
 // usage: MyClass *MyClass = singleton<MyClass>();

@@ -15,9 +15,9 @@
 #include "bookmarkview.h"
 #include "bookmarkbooleanicondelegate.h"
 #include "bookmarkheaderview.h"
+#include "bookmarkitem.h"
 #include "bookmarkitemmodel.h"
 #include "bookmarkratingdelegate.h"
-#include "bookmarkitem.h"
 #include "icontheme.h"
 #include <QDragMoveEvent>
 #include <QHeaderView>

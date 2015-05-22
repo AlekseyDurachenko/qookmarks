@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bookmarkitem.h"
-#include <QVariant>
-#include "tagitem.h"
 #include "bookmarkmgr.h"
+#include "tagitem.h"
+#include <QVariant>
 
 
 BookmarkItem::BookmarkItem(const Bookmark &data, BookmarkMgr *bookmarkMgr)

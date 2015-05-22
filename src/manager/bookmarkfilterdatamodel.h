@@ -15,8 +15,8 @@
 #ifndef BOOKMARKFILTERDATAMODEL_H
 #define BOOKMARKFILTERDATAMODEL_H
 
-#include <QObject>
 #include "abstractbookmarkdatamodel.h"
+#include <QObject>
 class Manager;
 class AbstractBookmarkFilter;
 

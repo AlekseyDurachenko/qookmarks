@@ -15,10 +15,10 @@
 #ifndef BOOKMARK_H
 #define BOOKMARK_H
 
-#include <QSharedDataPointer>
-#include <QUrl>
 #include <QColor>
 #include <QDateTime>
+#include <QSharedDataPointer>
+#include <QUrl>
 
 
 class BookmarkData : public QSharedData

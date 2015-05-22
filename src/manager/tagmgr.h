@@ -15,11 +15,11 @@
 #ifndef TAGMGR_H
 #define TAGMGR_H
 
-#include <QObject>
 #include "tag.h"
-class TagItem;
+#include <QAbstractItemModel>
 class BookmarkItem;
 class Manager;
+class TagItem;
 
 
 class TagMgr : public QObject

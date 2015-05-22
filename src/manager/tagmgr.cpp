@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tagmgr.h"
+#include "bookmarkitem.h"
+#include "bookmarkmgr.h"
 #include "manager.h"
 #include "tagitem.h"
-#include "bookmarkmgr.h"
-#include "bookmarkitem.h"
 
 
 TagMgr::TagMgr(Manager *mgr) : QObject(mgr)

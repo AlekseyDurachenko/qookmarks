@@ -15,10 +15,10 @@
 #ifndef BOOKMARKFILTER_H
 #define BOOKMARKFILTER_H
 
-#include <QSharedDataPointer>
-#include <QSet>
 #include "abstractbookmarkfilter.h"
 #include "consts.h"
+#include <QSet>
+#include <QSharedDataPointer>
 class Manager;
 class TagItem;
 

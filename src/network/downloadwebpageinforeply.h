@@ -15,10 +15,10 @@
 #ifndef DOWNLOADWEBPAGEINFOREPLY_H
 #define DOWNLOADWEBPAGEINFOREPLY_H
 
-#include <QIcon>
-#include <libxml2/libxml/tree.h>
 #include "abstractdownloadreply.h"
 #include "downloadwebpageinforequest.h"
+#include <libxml2/libxml/tree.h>
+#include <QIcon>
 
 
 class DownloadWebPageInfoReply : public AbstractDownloadReply

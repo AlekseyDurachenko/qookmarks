@@ -14,11 +14,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "webpagescreenshot.h"
 #include <QDir>
-#include <QDebug>
+#include <QPainter>
 #include <QStack>
 #include <QWebElement>
 #include <QWebFrame>
-#include <QPainter>
+#include <QDebug>
 
 
 WebPageScreenshot::WebPageScreenshot(QNetworkAccessManager *network,

@@ -15,10 +15,10 @@
 #ifndef ABSTRACTDOWNLOADREPLY_H
 #define ABSTRACTDOWNLOADREPLY_H
 
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QObject>
 #include <QUrl>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 class QNetworkAccessManager;
 
 

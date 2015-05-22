@@ -19,12 +19,12 @@
 #include "tag.h"
 #include <QDomDocument>
 #include <QDomElement>
-class QString;
-class QIODevice;
-class Manager;
-class BookmarkMgr;
 class BookmarkItem;
+class BookmarkMgr;
+class Manager;
 class TagItem;
+class QIODevice;
+class QString;
 
 
 class PrjXml

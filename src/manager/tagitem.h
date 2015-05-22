@@ -15,11 +15,11 @@
 #ifndef TAGITEM_H
 #define TAGITEM_H
 
+#include "tag.h"
 #include <QSet>
 #include <QVariant>
-#include "tag.h"
-class TagMgr;
 class BookmarkItem;
+class TagMgr;
 
 
 class TagItem

@@ -15,6 +15,7 @@
 #ifndef VERSION_H
 #define VERSION_H
 
+
 // "{APP_MAJOR}.{APP_MINOR}.{APP_PATCH}[.{APP_REV}[.{APP_BUILD_NUMBER}]]"
 const char *appVersion();
 // "{APP_BUILD_DATE}"
@@ -26,5 +27,6 @@ const char *appName();
 const char *appShortName();
 // the full name of the application
 const char *appFullName();
+
 
 #endif // VERSION_H

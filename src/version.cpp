@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "version.h"
 
+
 #define STR_HELPER(x) #x
 #define STR(x) STR_HELPER(x)
 

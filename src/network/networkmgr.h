@@ -15,10 +15,10 @@
 #ifndef NETWORKMGR_H
 #define NETWORKMGR_H
 
-#include <QObject>
-#include "downloadwebpageinforeply.h"
-#include "downloadfaviconrequest.h"
 #include "checkurlrequest.h"
+#include "downloadfaviconrequest.h"
+#include "downloadwebpageinforeply.h"
+#include <QObject>
 class QNetworkAccessManager;
 class DownloadWebPageInfoReply;
 class DownloadFaviconReply;

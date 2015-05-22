@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "browser.h"
+#include "icontheme.h"
 #include <QDesktopServices>
 #include <QProcess>
-#include "icontheme.h"
 
 
 QList<QByteArray> Browser::m_systemBrowsers;

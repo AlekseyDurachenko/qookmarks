@@ -15,10 +15,10 @@
 #ifndef BOOKMARKITEM_H
 #define BOOKMARKITEM_H
 
-#include <QSet>
 #include "bookmark.h"
-class TagItem;
+#include <QSet>
 class BookmarkMgr;
+class TagItem;
 
 
 class BookmarkItem

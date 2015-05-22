@@ -15,10 +15,10 @@
 #ifndef WEBFILEDOWNLOADER_H
 #define WEBFILEDOWNLOADER_H
 
-#include <QObject>
 #include <QFile>
-#include <QNetworkReply>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QObject>
 
 
 class WebFileDownloader : public QObject

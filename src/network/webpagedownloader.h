@@ -15,11 +15,11 @@
 #ifndef WEBPAGEDOWNLOADER_H
 #define WEBPAGEDOWNLOADER_H
 
-#include <QObject>
-#include <QList>
-#include <QWebPage>
-#include <QHash>
 #include "webfiledownloader.h"
+#include <QHash>
+#include <QList>
+#include <QObject>
+#include <QWebPage>
 
 
 class WebPageDownloader : public QObject

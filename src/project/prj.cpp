@@ -17,11 +17,11 @@
 #include "bookmarkitem.h"
 #include "bookmarkmgr.h"
 #include "iconmgr.h"
+#include "icontheme.h"
 #include "manager.h"
 #include "prjxml.h"
 #include "tagitem.h"
 #include "tagmgr.h"
-#include "icontheme.h"
 #include <QDir>
 #include <QFileInfo>
 

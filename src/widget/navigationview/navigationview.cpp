@@ -17,9 +17,9 @@
 #include "bookmarkmgr.h"
 #include "manager.h"
 #include "prj.h"
+#include "singleton.h"
 #include "tagitem.h"
 #include "tagmgr.h"
-#include "singleton.h"
 #include <QMessageBox>
 #include <QPushButton>
 #include <QDebug>

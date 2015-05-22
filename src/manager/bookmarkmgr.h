@@ -15,11 +15,12 @@
 #ifndef BOOKMARKMGR_H
 #define BOOKMARKMGR_H
 
-#include <QObject>
 #include "bookmark.h"
+#include <QObject>
+class BookmarkItem;
 class Manager;
 class TagMgr;
-class BookmarkItem;
+
 
 class BookmarkMgr : public QObject
 {

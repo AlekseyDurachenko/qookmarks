@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "navanchoritemmodel.h"
-#include "bookmarkitem.h"
-#include "tagitem.h"
-#include "icontheme.h"
 #include "actinterface.h"
+#include "bookmarkitem.h"
+#include "icontheme.h"
 #include "singleton.h"
+#include "tagitem.h"
 #include <QMimeData>
 
 

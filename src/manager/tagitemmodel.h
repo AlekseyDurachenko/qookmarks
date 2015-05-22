@@ -15,8 +15,8 @@
 #ifndef TAGITEMMODEL_H
 #define TAGITEMMODEL_H
 
-#include <QAbstractItemModel>
 #include "tagitem.h"
+#include <QAbstractItemModel>
 
 
 class TagItemModel : public QAbstractItemModel

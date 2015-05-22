@@ -15,9 +15,9 @@
 #ifndef DOWNLOADTOFILEREPLY_H
 #define DOWNLOADTOFILEREPLY_H
 
-#include <QFile>
 #include "abstractdownloadreply.h"
 #include "downloadtofilerequest.h"
+#include <QFile>
 
 
 class DownloadToFileReply : public AbstractDownloadReply

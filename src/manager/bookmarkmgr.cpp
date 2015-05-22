@@ -14,8 +14,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bookmarkmgr.h"
 #include "bookmarkitem.h"
-#include "manager.h"
 #include "consts.h"
+#include "manager.h"
 
 
 BookmarkMgr::BookmarkMgr(Manager *mgr) : QObject(mgr)

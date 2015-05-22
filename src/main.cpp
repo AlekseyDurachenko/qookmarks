@@ -12,12 +12,12 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "mainwindow.h"
-#include "singleton.h"
-#include "prj.h"
 #include "browser.h"
 #include "icontheme.h"
+#include "mainwindow.h"
+#include "prj.h"
+#include "singleton.h"
+#include <QApplication>
 #include <QDebug>
 
 

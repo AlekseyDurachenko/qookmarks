@@ -15,9 +15,9 @@
 #ifndef DOWNLOADFAVICONREPLY_H
 #define DOWNLOADFAVICONREPLY_H
 
-#include <QIcon>
 #include "abstractdownloadreply.h"
 #include "downloadfaviconrequest.h"
+#include <QIcon>
 
 
 class DownloadFaviconReply : public AbstractDownloadReply

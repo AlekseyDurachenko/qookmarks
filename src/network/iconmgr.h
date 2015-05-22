@@ -15,8 +15,8 @@
 #ifndef ICONMGR_H
 #define ICONMGR_H
 
-#include <QObject>
 #include <QIcon>
+#include <QObject>
 #include <QUrl>
 class Prj;
 

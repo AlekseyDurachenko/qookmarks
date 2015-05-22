@@ -15,8 +15,8 @@
 #ifndef PRJ_H
 #define PRJ_H
 
-#include <QObject>
 #include <QAction>
+#include <QObject>
 class IconMgr;
 class Manager;
 

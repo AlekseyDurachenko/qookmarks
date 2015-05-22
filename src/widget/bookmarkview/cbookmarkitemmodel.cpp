@@ -90,13 +90,13 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
         case 9:
             return QString(bookmark->data().httpReasonPhrase()).replace("\n", " ").replace("\r", " ");
         case 10:
-            return bookmark->data().httpCheckDateTime().toString(gDateTimeFormat);
+            return bookmark->data().httpCheckDateTime().toString(Bookmark::DateTimeFormat);
         case 11:
-            return bookmark->data().createdDateTime().toString(gDateTimeFormat);
+            return bookmark->data().createdDateTime().toString(Bookmark::DateTimeFormat);
         case 12:
-            return bookmark->data().editedDateTime().toString(gDateTimeFormat);
+            return bookmark->data().editedDateTime().toString(Bookmark::DateTimeFormat);
         case 13:
-            return bookmark->data().lastVisitedDateTime().toString(gDateTimeFormat);
+            return bookmark->data().lastVisitedDateTime().toString(Bookmark::DateTimeFormat);
         case 14:
             return bookmark->data().visitCount();
         case 15:

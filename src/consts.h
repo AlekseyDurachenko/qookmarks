@@ -17,16 +17,21 @@
 
 #include <QtGlobal>
 
+namespace Bookmark
+{
+    const char DateTimeFormat[] = "yyyy-MM-dd HH:mm:ss";
+}
 
-const char gDateTimeFormat[] = "yyyy-MM-dd HH:mm:ss";
-
-namespace Bookmark {
+namespace Bookmark
+{
     const int MinRating = 0;
     const int MaxRating = 10;
 }
 
-namespace Bookmark {
-    enum FilterOption {
+namespace Bookmark
+{
+    enum FilterOption
+    {
         Any             = 0xFFFF,
         ReadItLater     = 0x0001,
         NotReadItLater  = 0x0100,

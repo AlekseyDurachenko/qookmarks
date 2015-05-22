@@ -12,19 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "ctageditdialog.h"
-#include "ui_ctageditdialog.h"
-#include <QPushButton>
-#include "ctagmgr.h"
+#include "tageditdialog.h"
+#include "ui_tageditdialog.h"
 #include "ctagitem.h"
+#include "ctagmgr.h"
+#include <QPushButton>
 
 
-CTagEditDialog::CTagEditDialog(Mode mode, CTagItem *tagParent,
-        QWidget *parent) : QDialog(parent), ui(new Ui::CTagEditDialog)
+TagEditDialog::TagEditDialog(Mode mode, CTagItem *tagParent,
+        QWidget *parent) : QDialog(parent), ui(new Ui::TagEditDialog)
 {
     ui->setupUi(this);
-    connect(ui->lineEdit_name, SIGNAL(textChanged(QString)),
-            this, SLOT(slot_lineEdit_name_textChanged(QString)));
+    connect(ui->name_lineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slot_name_lineEdit_textChanged(QString)));
 
     m_mode = mode;
     switch (m_mode)
@@ -39,28 +39,28 @@ CTagEditDialog::CTagEditDialog(Mode mode, CTagItem *tagParent,
 
     m_tagParent = tagParent;
 
-    slot_lineEdit_name_textChanged(ui->lineEdit_name->text());
+    slot_name_lineEdit_textChanged(ui->name_lineEdit->text());
 }
 
-CTagEditDialog::~CTagEditDialog()
+TagEditDialog::~TagEditDialog()
 {
     delete ui;
 }
 
-CTag CTagEditDialog::toData() const
+CTag TagEditDialog::toData() const
 {
     CTag data;
-    data.setName(ui->lineEdit_name->text());
+    data.setName(ui->name_lineEdit->text());
     return data;
 }
 
-void CTagEditDialog::setData(const CTag &data)
+void TagEditDialog::setData(const CTag &data)
 {
     m_data = data;
-    ui->lineEdit_name->setText(m_data.name());
+    ui->name_lineEdit->setText(m_data.name());
 }
 
-void CTagEditDialog::slot_lineEdit_name_textChanged(const QString &text)
+void TagEditDialog::slot_name_lineEdit_textChanged(const QString &text)
 {
     QPushButton *button = ui->buttonBox->button(QDialogButtonBox::Ok);
     if (!m_tagParent || text.isEmpty())
@@ -79,12 +79,12 @@ void CTagEditDialog::slot_lineEdit_name_textChanged(const QString &text)
 
     if (button->isEnabled())
     {
-        ui->lineEdit_name->setPalette(QPalette());
+        ui->name_lineEdit->setPalette(QPalette());
     }
     else
     {
-        QPalette palette = ui->lineEdit_name->palette();
+        QPalette palette = ui->name_lineEdit->palette();
         palette.setColor(QPalette::Text, Qt::red);
-        ui->lineEdit_name->setPalette(palette);
+        ui->name_lineEdit->setPalette(palette);
     }
 }

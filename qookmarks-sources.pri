@@ -40,7 +40,6 @@ HEADERS        +=                                                       \
     $$PWD/src/network/cwebfiledownloader.h \
     $$PWD/src/network/cwebpagedownloader.h \
     $$PWD/src/network/cwebpagescreenshot.h \
-    $$PWD/src/widget/tageditdialog/ctageditdialog.h \
     $$PWD/src/common/cindexlist.h \
     $$PWD/src/network/cabstractdownloadreply.h \
     $$PWD/src/network/cabstractdownloadrequest.h \
@@ -75,7 +74,8 @@ HEADERS        +=                                                       \
     $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.h \
     $$PWD/src/mainwindow.h \
     $$PWD/src/widget/aboutdialog/aboutdialog.h \
-    $$PWD/src/widget/bookmarkeditdialog/bookmarkeditdialog.h
+    $$PWD/src/widget/bookmarkeditdialog/bookmarkeditdialog.h \
+    $$PWD/src/widget/tageditdialog/tageditdialog.h
 
 
 SOURCES        +=                                                       \
@@ -98,7 +98,6 @@ SOURCES        +=                                                       \
     $$PWD/src/network/cwebfiledownloader.cpp \
     $$PWD/src/network/cwebpagedownloader.cpp \
     $$PWD/src/network/cwebpagescreenshot.cpp \
-    $$PWD/src/widget/tageditdialog/ctageditdialog.cpp \
     $$PWD/src/common/cindexlist.cpp \
     $$PWD/src/network/cabstractdownloadreply.cpp \
     $$PWD/src/network/cabstractdownloadrequest.cpp \
@@ -132,13 +131,14 @@ SOURCES        +=                                                       \
     $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.cpp \
     $$PWD/src/mainwindow.cpp \
     $$PWD/src/widget/aboutdialog/aboutdialog.cpp \
-    $$PWD/src/widget/bookmarkeditdialog/bookmarkeditdialog.cpp
+    $$PWD/src/widget/bookmarkeditdialog/bookmarkeditdialog.cpp \
+    $$PWD/src/widget/tageditdialog/tageditdialog.cpp
 
 
 FORMS          +=                                                       \
-    $$PWD/src/widget/tageditdialog/ctageditdialog.ui \
-    $$PWD/src/widget/bookmarkeditdialog/cbookmarkeditdialog.ui \
-    $$PWD/src/widget/aboutdialog/aboutdialog.ui
+    $$PWD/src/widget/aboutdialog/aboutdialog.ui \
+    $$PWD/src/widget/bookmarkeditdialog/bookmarkeditdialog.ui \
+    $$PWD/src/widget/tageditdialog/tageditdialog.ui
 
 
 RESOURCES      +=                                                       \

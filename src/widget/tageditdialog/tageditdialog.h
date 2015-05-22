@@ -12,19 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CTAGEDITDIALOG_H
-#define CTAGEDITDIALOG_H
+#ifndef TAGEDITDIALOG_H
+#define TAGEDITDIALOG_H
 
-#include <QDialog>
 #include "ctag.h"
+#include <QDialog>
 class CTagItem;
 
 
 namespace Ui {
-class CTagEditDialog;
+class TagEditDialog;
 }
 
-class CTagEditDialog : public QDialog
+class TagEditDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -34,8 +34,8 @@ public:
         Edit    = 1
     };
 public:
-    explicit CTagEditDialog(Mode mode, CTagItem *tagParent, QWidget *parent = 0);
-    virtual ~CTagEditDialog();
+    explicit TagEditDialog(Mode mode, CTagItem *tagParent, QWidget *parent = 0);
+    virtual ~TagEditDialog();
 
     inline Mode mode() const;
     inline CTagItem *tagParent() const;
@@ -43,23 +43,23 @@ public:
     CTag toData() const;
     void setData(const CTag &data);
 private slots:
-    void slot_lineEdit_name_textChanged(const QString &text);
+    void slot_name_lineEdit_textChanged(const QString &text);
 private:
-    Ui::CTagEditDialog *ui;
+    Ui::TagEditDialog *ui;
     CTag m_data;
     CTagItem *m_tagParent;
     Mode m_mode;
 };
 
-CTagEditDialog::Mode CTagEditDialog::mode() const
+TagEditDialog::Mode TagEditDialog::mode() const
 {
     return m_mode;
 }
 
-CTagItem *CTagEditDialog::tagParent() const
+CTagItem *TagEditDialog::tagParent() const
 {
     return m_tagParent;
 }
 
 
-#endif // CTAGEDITDIALOG_H
+#endif // TAGEDITDIALOG_H

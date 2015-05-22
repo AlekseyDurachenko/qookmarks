@@ -40,7 +40,7 @@
 #include "cnavanchoritemmodel.h"
 #include "cnavtagitemmodel.h"
 #include "cnavtagview.h"
-#include "ctageditdialog.h"
+#include "tageditdialog.h"
 #include "ctagsortfilterproxymodel.h"
 #include "browser.h"
 #include "icontheme.h"
@@ -723,7 +723,7 @@ void MainWindow::tagAddAction_triggered()
     if (!selectedIndexes.isEmpty())
         item = CTagItem::variantToPtr(selectedIndexes.first().data(Qt::UserRole));
 
-    CTagEditDialog newTagDialog(CTagEditDialog::New, item, this);
+    TagEditDialog newTagDialog(TagEditDialog::New, item, this);
     if (newTagDialog.exec() == QDialog::Accepted)
         item->add(newTagDialog.toData());
 }
@@ -734,7 +734,7 @@ void MainWindow::tagEditAction_triggered()
                 m_navTagView->selectionModel()->selectedRows().first()
                     .data(Qt::UserRole));
 
-    CTagEditDialog editTagDialog(CTagEditDialog::Edit, item->parent(), this);
+    TagEditDialog editTagDialog(TagEditDialog::Edit, item->parent(), this);
     editTagDialog.setData(item->data());
     if (editTagDialog.exec() == QDialog::Accepted)
         item->setData(editTagDialog.toData());

@@ -16,7 +16,7 @@
 #include "bookmarkimportchromium.h"
 #include "bookmarkitem.h"
 #include "bookmarkmgr.h"
-#include "ciconmgr.h"
+#include "iconmgr.h"
 #include "manager.h"
 #include "prjxml.h"
 #include "tagitem.h"
@@ -38,7 +38,7 @@ Prj::Prj(QObject *parent) : QObject(parent)
     m_closeAction->setIcon(IconTheme::icon("action-collection-close"));
 
     m_manager = new Manager(this);
-    m_iconMgr = new CIconMgr();
+    m_iconMgr = new IconMgr();
     connect(m_manager->tagMgr(), SIGNAL(inserted(TagItem*,int,int)),
             this, SLOT(somethingChanged()));
     connect(m_manager->tagMgr(), SIGNAL(removed(TagItem*,int,int)),

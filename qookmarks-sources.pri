@@ -22,26 +22,8 @@ HEADERS        +=                                                       \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
     $$PWD/src/settings.h \
-    $$PWD/src/network/cwebfiledownloader.h \
-    $$PWD/src/network/cwebpagedownloader.h \
-    $$PWD/src/network/cwebpagescreenshot.h \
-    $$PWD/src/network/cabstractdownloadreply.h \
-    $$PWD/src/network/cabstractdownloadrequest.h \
-    $$PWD/src/network/cdownloadtobytearrayrequest.h \
-    $$PWD/src/network/cdownloadtobytearrayreply.h \
-    $$PWD/src/network/cdownloadtofilerequest.h \
-    $$PWD/src/network/cdownloadtofilereply.h \
-    $$PWD/src/network/cdownloadmgr.h \
-    $$PWD/src/network/ccheckurlrequest.h \
-    $$PWD/src/network/ccheckurlreply.h \
-    $$PWD/src/network/ciconmgr.h \
     $$PWD/src/common/hash_functions.h \
     $$PWD/src/common/singleton.h \
-    $$PWD/src/network/cnetworkmgr.h \
-    $$PWD/src/network/cdownloadfaviconrequest.h \
-    $$PWD/src/network/cdownloadfaviconreply.h \
-    $$PWD/src/network/cdownloadwebpageinforeply.h \
-    $$PWD/src/network/cdownloadwebpageinforequest.h \
     $$PWD/src/browser/browser.h \
     $$PWD/src/icontheme/icontheme.h \
     $$PWD/src/mainwindow.h \
@@ -75,31 +57,31 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/checkedtagitemmodel.h \
     $$PWD/src/manager/tagitemmodel.h \
     $$PWD/src/manager/tagmgr.h \
-    $$PWD/src/manager/tagsortfilterproxymodel.h
+    $$PWD/src/manager/tagsortfilterproxymodel.h \
+    $$PWD/src/network/abstractdownloadreply.h \
+    $$PWD/src/network/abstractdownloadrequest.h \
+    $$PWD/src/network/checkurlreply.h \
+    $$PWD/src/network/checkurlrequest.h \
+    $$PWD/src/network/downloadfaviconreply.h \
+    $$PWD/src/network/downloadfaviconrequest.h \
+    $$PWD/src/network/downloadmgr.h \
+    $$PWD/src/network/downloadtobytearrayreply.h \
+    $$PWD/src/network/downloadtobytearrayrequest.h \
+    $$PWD/src/network/downloadtofilereply.h \
+    $$PWD/src/network/downloadtofilerequest.h \
+    $$PWD/src/network/downloadwebpageinforeply.h \
+    $$PWD/src/network/downloadwebpageinforequest.h \
+    $$PWD/src/network/iconmgr.h \
+    $$PWD/src/network/networkmgr.h \
+    $$PWD/src/network/webfiledownloader.h \
+    $$PWD/src/network/webpagedownloader.h \
+    $$PWD/src/network/webpagescreenshot.h
 
 
 SOURCES        +=                                                       \
     $$PWD/src/bookmarkimport/bookmarkimportchromium.cpp                 \
     $$PWD/src/version.cpp                                               \
-    $$PWD/src/network/cwebfiledownloader.cpp \
-    $$PWD/src/network/cwebpagedownloader.cpp \
-    $$PWD/src/network/cwebpagescreenshot.cpp \
-    $$PWD/src/network/cabstractdownloadreply.cpp \
-    $$PWD/src/network/cabstractdownloadrequest.cpp \
-    $$PWD/src/network/cdownloadtobytearrayrequest.cpp \
-    $$PWD/src/network/cdownloadtobytearrayreply.cpp \
-    $$PWD/src/network/cdownloadtofilerequest.cpp \
-    $$PWD/src/network/cdownloadtofilereply.cpp \
-    $$PWD/src/network/cdownloadmgr.cpp \
-    $$PWD/src/network/ccheckurlrequest.cpp \
-    $$PWD/src/network/ccheckurlreply.cpp \
-    $$PWD/src/network/ciconmgr.cpp \
     $$PWD/src/common/hash_functions.cpp \
-    $$PWD/src/network/cnetworkmgr.cpp \
-    $$PWD/src/network/cdownloadfaviconrequest.cpp \
-    $$PWD/src/network/cdownloadfaviconreply.cpp \
-    $$PWD/src/network/cdownloadwebpageinforeply.cpp \
-    $$PWD/src/network/cdownloadwebpageinforequest.cpp \
     $$PWD/src/browser/browser.cpp \
     $$PWD/src/icontheme/icontheme.cpp \
     $$PWD/src/mainwindow.cpp \
@@ -132,7 +114,25 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/bookmark.cpp \
     $$PWD/src/manager/bookmarkfilter.cpp \
     $$PWD/src/manager/bookmarkfilterdatamodel.cpp \
-    $$PWD/src/manager/bookmarkitem.cpp
+    $$PWD/src/manager/bookmarkitem.cpp \
+    $$PWD/src/network/abstractdownloadreply.cpp \
+    $$PWD/src/network/abstractdownloadrequest.cpp \
+    $$PWD/src/network/checkurlreply.cpp \
+    $$PWD/src/network/checkurlrequest.cpp \
+    $$PWD/src/network/downloadfaviconreply.cpp \
+    $$PWD/src/network/downloadfaviconrequest.cpp \
+    $$PWD/src/network/downloadmgr.cpp \
+    $$PWD/src/network/downloadtobytearrayreply.cpp \
+    $$PWD/src/network/downloadtobytearrayrequest.cpp \
+    $$PWD/src/network/downloadtofilereply.cpp \
+    $$PWD/src/network/downloadtofilerequest.cpp \
+    $$PWD/src/network/downloadwebpageinforeply.cpp \
+    $$PWD/src/network/downloadwebpageinforequest.cpp \
+    $$PWD/src/network/iconmgr.cpp \
+    $$PWD/src/network/networkmgr.cpp \
+    $$PWD/src/network/webfiledownloader.cpp \
+    $$PWD/src/network/webpagedownloader.cpp \
+    $$PWD/src/network/webpagescreenshot.cpp
 
 
 FORMS          +=                                                       \

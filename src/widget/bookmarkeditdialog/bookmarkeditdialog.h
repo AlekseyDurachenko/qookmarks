@@ -72,9 +72,9 @@ private:
 
     Bookmark m_data;
 
-    CDownloadFaviconReply *m_faviconReply;
-    CDownloadWebPageInfoReply *m_pageinfoReply;
-    CCheckUrlReply *m_httpCheckReply;
+    DownloadFaviconReply *m_faviconReply;
+    DownloadWebPageInfoReply *m_pageinfoReply;
+    CheckUrlReply *m_httpCheckReply;
 };
 
 

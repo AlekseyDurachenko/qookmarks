@@ -36,7 +36,7 @@
 #include "bookmarkimportwizard.h"
 #include "bookmarkitemmodel.h"
 #include "bookmarkview.h"
-#include "ciconmgr.h"
+#include "iconmgr.h"
 #include "navanchoritemmodel.h"
 #include "navtagitemmodel.h"
 #include "navtagview.h"

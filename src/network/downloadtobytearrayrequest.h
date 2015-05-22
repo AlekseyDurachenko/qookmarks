@@ -12,35 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "mainwindow.h"
-#include "singleton.h"
-#include "prj.h"
-#include "browser.h"
-#include "icontheme.h"
-#include <QDebug>
+#ifndef DOWNLOADTOBYTEARRAYREQUEST_H
+#define DOWNLOADTOBYTEARRAYREQUEST_H
+
+#include "abstractdownloadrequest.h"
 
 
-int main(int argc, char *argv[])
+class DownloadToByteArrayRequest : public AbstractDownloadRequest
 {
-    QApplication a(argc, argv);
+public:
+    explicit DownloadToByteArrayRequest(const QUrl &url = QUrl(),
+                                        int maxRetryCount = 9,
+                                        int maxRedirectCount = 9);
+};
 
-    IconTheme::init();
-    Browser::init();
 
-    qDebug() << Browser::browsers();
-
-    // create singletons
-    singleton<NetworkMgr>();
-    singleton<Prj>();
-
-    MainWindow w;
-    w.show();
-    int ret = a.exec();
-
-    // destroy singletons
-    //delete singleton<CPrj>();
-    //delete singleton<CNetworkMgr>();
-
-    return ret;
-}
+#endif // DOWNLOADTOBYTEARRAYREQUEST_H

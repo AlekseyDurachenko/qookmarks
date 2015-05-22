@@ -12,35 +12,31 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "mainwindow.h"
-#include "singleton.h"
-#include "prj.h"
-#include "browser.h"
-#include "icontheme.h"
-#include <QDebug>
+#ifndef DOWNLOADMGR_H
+#define DOWNLOADMGR_H
+
+#include <QObject>
+class QNetworkAccessManager;
 
 
-int main(int argc, char *argv[])
+class DownloadMgr : public QObject
 {
-    QApplication a(argc, argv);
+    Q_OBJECT
+public:
+    explicit DownloadMgr(QNetworkAccessManager *network, QObject *parent = 0);
+    virtual ~DownloadMgr();
+signals:
+    void itemInserted(int first, int last);
+    void itemRemoved(int first, int last);
+    void itemDataChanged(int first, int last);
 
-    IconTheme::init();
-    Browser::init();
+    void onlineStateChanged(bool state);
+    void pauseStateChanged(bool state);
+    void queueSizeChanged(int count);
+public slots:
+private:
+    QNetworkAccessManager *m_network;
+};
 
-    qDebug() << Browser::browsers();
 
-    // create singletons
-    singleton<NetworkMgr>();
-    singleton<Prj>();
-
-    MainWindow w;
-    w.show();
-    int ret = a.exec();
-
-    // destroy singletons
-    //delete singleton<CPrj>();
-    //delete singleton<CNetworkMgr>();
-
-    return ret;
-}
+#endif // DOWNLOADMGR_H

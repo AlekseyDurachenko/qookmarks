@@ -12,35 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "mainwindow.h"
-#include "singleton.h"
-#include "prj.h"
-#include "browser.h"
-#include "icontheme.h"
-#include <QDebug>
+#include "downloadtofilerequest.h"
 
 
-int main(int argc, char *argv[])
+DownloadToFileRequest::DownloadToFileRequest(const QUrl &url,
+        const QString &fileName, int maxRetryCount, int maxRedirectCount)
 {
-    QApplication a(argc, argv);
+    setUrl(url);
+    setFileName(fileName);
+    setMaxRetryCount(maxRetryCount);
+    setMaxRedirectCount(maxRedirectCount);
+}
 
-    IconTheme::init();
-    Browser::init();
-
-    qDebug() << Browser::browsers();
-
-    // create singletons
-    singleton<NetworkMgr>();
-    singleton<Prj>();
-
-    MainWindow w;
-    w.show();
-    int ret = a.exec();
-
-    // destroy singletons
-    //delete singleton<CPrj>();
-    //delete singleton<CNetworkMgr>();
-
-    return ret;
+void DownloadToFileRequest::setFileName(const QString &fileName)
+{
+    m_fileName = fileName;
 }

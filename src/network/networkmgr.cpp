@@ -12,48 +12,39 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef SINGLETON_H
-#define SINGLETON_H
-
-#include "prj.h"
-#include "manager.h"
-#include "tagmgr.h"
-#include "bookmarkmgr.h"
 #include "networkmgr.h"
+#include <QNetworkAccessManager>
+#include "downloadwebpageinforeply.h"
+#include "downloadfaviconreply.h"
+#include "checkurlreply.h"
 
 
-// usage: MyClass *MyClass = singleton<MyClass>();
-template <class Type>
-inline Type *singleton()
+NetworkMgr::NetworkMgr(QObject *parent) : QObject(parent)
 {
-    static Type *x = new Type;
-    return x;
+    m_network = 0;
 }
 
-inline Prj *GPrj()
+NetworkMgr::~NetworkMgr()
 {
-    return singleton<Prj>();
 }
 
-inline TagMgr *GTagMgr()
+void NetworkMgr::setNetwork(QNetworkAccessManager *network)
 {
-    return singleton<Prj>()->manager()->tagMgr();
+    m_network = network;
 }
 
-inline BookmarkMgr *GBookmarkMgr()
+DownloadWebPageInfoReply *NetworkMgr::webPageInfo(const DownloadWebPageInfoRequest &request)
 {
-    return singleton<Prj>()->manager()->bookmarkMgr();
+    return new DownloadWebPageInfoReply(request, m_network, this);
 }
 
-inline IconMgr *GIconMgr()
+DownloadFaviconReply *NetworkMgr::favicon(
+        const DownloadFaviconRequest &request)
 {
-    return singleton<Prj>()->iconMgr();
+    return new DownloadFaviconReply(request, m_network, this);
 }
 
-inline NetworkMgr *GNetworkMgr()
+CheckUrlReply *NetworkMgr::checkUrl(const CheckUrlRequest &request)
 {
-    return singleton<NetworkMgr>();
+    return new CheckUrlReply(request, m_network, this);
 }
-
-#endif // SINGLETON_H
-

@@ -12,35 +12,13 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "mainwindow.h"
-#include "singleton.h"
-#include "prj.h"
-#include "browser.h"
-#include "icontheme.h"
-#include <QDebug>
+#include "downloadfaviconrequest.h"
 
 
-int main(int argc, char *argv[])
+DownloadFaviconRequest::DownloadFaviconRequest(const QUrl &url,
+        int maxRetryCount, int maxRedirectCount)
 {
-    QApplication a(argc, argv);
-
-    IconTheme::init();
-    Browser::init();
-
-    qDebug() << Browser::browsers();
-
-    // create singletons
-    singleton<NetworkMgr>();
-    singleton<Prj>();
-
-    MainWindow w;
-    w.show();
-    int ret = a.exec();
-
-    // destroy singletons
-    //delete singleton<CPrj>();
-    //delete singleton<CNetworkMgr>();
-
-    return ret;
+    setUrl(url);
+    setMaxRetryCount(maxRetryCount);
+    setMaxRedirectCount(maxRedirectCount);
 }

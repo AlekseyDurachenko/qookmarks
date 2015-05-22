@@ -17,7 +17,7 @@
 
 #include <QObject>
 #include <QAction>
-class CIconMgr;
+class IconMgr;
 class Manager;
 
 
@@ -29,7 +29,7 @@ public:
     virtual ~Prj();
 
     inline Manager *manager() const;
-    inline CIconMgr *iconMgr() const;
+    inline IconMgr *iconMgr() const;
 
     inline bool isOpen() const;
     inline bool hasChanges() const;
@@ -63,7 +63,7 @@ private:
     void updateActions();
 private:
     Manager *m_manager;
-    CIconMgr *m_iconMgr;
+    IconMgr *m_iconMgr;
     QAction *m_createAction;
     QAction *m_openAction;
     QAction *m_saveAction;
@@ -77,7 +77,7 @@ Manager *Prj::manager() const
     return m_manager;
 }
 
-CIconMgr *Prj::iconMgr() const
+IconMgr *Prj::iconMgr() const
 {
     return m_iconMgr;
 }

@@ -15,7 +15,7 @@
 #include "bookmarkitemmodel.h"
 #include "abstractbookmarkdatamodel.h"
 #include "bookmarkitem.h"
-#include "ciconmgr.h"
+#include "iconmgr.h"
 #include "consts.h"
 #include "prj.h"
 #include "icontheme.h"

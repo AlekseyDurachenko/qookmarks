@@ -15,10 +15,10 @@
 #include "bookmarkeditdialog.h"
 #include "ui_bookmarkeditdialog.h"
 #include "checkedtagitemmodel.h"
-#include "ccheckurlreply.h"
-#include "cdownloadfaviconreply.h"
-#include "cdownloadwebpageinforeply.h"
-#include "ciconmgr.h"
+#include "checkurlreply.h"
+#include "downloadfaviconreply.h"
+#include "downloadwebpageinforeply.h"
+#include "iconmgr.h"
 #include "tagsortfilterproxymodel.h"
 #include "icontheme.h"
 #include "settings.h"
@@ -179,7 +179,7 @@ void BookmarkEditDialog::on_favicon_toolButton_clicked()
 {
     ui->favicon_toolButton->setEnabled(false);
 
-    CDownloadFaviconRequest request(ui->url_lineEdit->text());
+    DownloadFaviconRequest request(ui->url_lineEdit->text());
     m_faviconReply = GNetworkMgr()->favicon(request);
     connect(m_faviconReply, SIGNAL(finished()),
             this, SLOT(faviconReply_finished()));
@@ -202,7 +202,7 @@ void BookmarkEditDialog::on_httpCheck_toolButton_clicked()
     ui->httpReasonPhrase_lineEdit->setEnabled(false);
     ui->httpCheck_dateTimeEdit->setEnabled(false);
 
-    CCheckUrlRequest request(ui->url_lineEdit->text());
+    CheckUrlRequest request(ui->url_lineEdit->text());
     m_httpCheckReply = GNetworkMgr()->checkUrl(request);
     connect(m_httpCheckReply, SIGNAL(finished()),
             this, SLOT(httpCheckReply_finished()));
@@ -215,13 +215,13 @@ void BookmarkEditDialog::httpCheckReply_finished()
     ui->httpReasonPhrase_lineEdit->setEnabled(true);
     ui->httpCheck_dateTimeEdit->setEnabled(true);
 
-    if (m_httpCheckReply->error() == CAbstractDownloadReply::NoError)
+    if (m_httpCheckReply->error() == AbstractDownloadReply::NoError)
     {
         ui->httpStatusCode_spinBox->setValue(m_httpCheckReply->httpStatusCode());
         ui->httpReasonPhrase_lineEdit->setText(m_httpCheckReply->httpReasonPhrase());
         ui->httpCheck_dateTimeEdit->setDateTime(QDateTime::currentDateTime());
     }
-    else if (m_httpCheckReply->error() == CAbstractDownloadReply::NetworkError)
+    else if (m_httpCheckReply->error() == AbstractDownloadReply::NetworkError)
     {
         switch (m_httpCheckReply->networkError())
         {
@@ -246,7 +246,7 @@ void BookmarkEditDialog::on_pageinfo_toolButton_clicked()
     ui->description_lineEdit->setEnabled(false);
     ui->keywords_lineEdit->setEnabled(false);
 
-    CDownloadWebPageInfoRequest request(ui->url_lineEdit->text());
+    DownloadWebPageInfoRequest request(ui->url_lineEdit->text());
     m_pageinfoReply = GNetworkMgr()->webPageInfo(request);
     connect(m_pageinfoReply, SIGNAL(finished()),
             this, SLOT(pageinfoReply_finished()));
@@ -259,7 +259,7 @@ void BookmarkEditDialog::pageinfoReply_finished()
     ui->description_lineEdit->setEnabled(true);
     ui->keywords_lineEdit->setEnabled(true);
 
-    if (m_pageinfoReply->error() == CAbstractDownloadReply::NoError
+    if (m_pageinfoReply->error() == AbstractDownloadReply::NoError
             && m_pageinfoReply->mimeType() == "text/html")
     {
         ui->title_lineEdit->setText(m_pageinfoReply->title());

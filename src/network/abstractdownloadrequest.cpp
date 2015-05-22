@@ -12,35 +12,26 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "mainwindow.h"
-#include "singleton.h"
-#include "prj.h"
-#include "browser.h"
-#include "icontheme.h"
-#include <QDebug>
+#include "abstractdownloadrequest.h"
 
 
-int main(int argc, char *argv[])
+AbstractDownloadRequest::AbstractDownloadRequest()
 {
-    QApplication a(argc, argv);
+    m_maxRetryCount = 0;
+    m_maxRedirectCount = 999;
+}
 
-    IconTheme::init();
-    Browser::init();
+void AbstractDownloadRequest::setUrl(const QUrl &url)
+{
+    m_url = url;
+}
 
-    qDebug() << Browser::browsers();
+void AbstractDownloadRequest::setMaxRetryCount(int maxRetryCount)
+{
+    m_maxRetryCount = maxRetryCount;
+}
 
-    // create singletons
-    singleton<NetworkMgr>();
-    singleton<Prj>();
-
-    MainWindow w;
-    w.show();
-    int ret = a.exec();
-
-    // destroy singletons
-    //delete singleton<CPrj>();
-    //delete singleton<CNetworkMgr>();
-
-    return ret;
+void AbstractDownloadRequest::setMaxRedirectCount(int maxRedirectCount)
+{
+    m_maxRedirectCount = maxRedirectCount;
 }

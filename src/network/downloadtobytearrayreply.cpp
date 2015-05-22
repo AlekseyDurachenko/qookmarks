@@ -12,35 +12,24 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "mainwindow.h"
-#include "singleton.h"
-#include "prj.h"
-#include "browser.h"
-#include "icontheme.h"
+#include "downloadtobytearrayreply.h"
 #include <QDebug>
 
 
-int main(int argc, char *argv[])
+DownloadToByteArrayReply::DownloadToByteArrayReply(
+        const DownloadToByteArrayRequest &request,
+        QNetworkAccessManager *network, QObject *parent) :
+    AbstractDownloadReply(network, parent)
 {
-    QApplication a(argc, argv);
+    m_request = request;
+    fetchUrl(request.url(),
+             request.maxRetryCount(),
+             request.maxRedirectCount(),
+             true);
+}
 
-    IconTheme::init();
-    Browser::init();
-
-    qDebug() << Browser::browsers();
-
-    // create singletons
-    singleton<NetworkMgr>();
-    singleton<Prj>();
-
-    MainWindow w;
-    w.show();
-    int ret = a.exec();
-
-    // destroy singletons
-    //delete singleton<CPrj>();
-    //delete singleton<CNetworkMgr>();
-
-    return ret;
+void DownloadToByteArrayReply::processEnd()
+{
+    m_data = readAll();
+    qDebug() << m_data;
 }

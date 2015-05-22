@@ -12,35 +12,30 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <QApplication>
-#include "mainwindow.h"
-#include "singleton.h"
-#include "prj.h"
-#include "browser.h"
-#include "icontheme.h"
-#include <QDebug>
+#ifndef CHECKURLREPLY_H
+#define CHECKURLREPLY_H
+
+#include "abstractdownloadreply.h"
+#include "checkurlrequest.h"
 
 
-int main(int argc, char *argv[])
+class CheckUrlReply : public AbstractDownloadReply
 {
-    QApplication a(argc, argv);
+    Q_OBJECT
+public:
+    CheckUrlReply(const CheckUrlRequest &request,
+                  QNetworkAccessManager *network,
+                  QObject *parent = 0);
 
-    IconTheme::init();
-    Browser::init();
+    inline const CheckUrlRequest &request() const;
+private:
+    CheckUrlRequest m_request;
+};
 
-    qDebug() << Browser::browsers();
-
-    // create singletons
-    singleton<NetworkMgr>();
-    singleton<Prj>();
-
-    MainWindow w;
-    w.show();
-    int ret = a.exec();
-
-    // destroy singletons
-    //delete singleton<CPrj>();
-    //delete singleton<CNetworkMgr>();
-
-    return ret;
+const CheckUrlRequest &CheckUrlReply::request() const
+{
+    return m_request;
 }
+
+
+#endif // CHECKURLREPLY_H

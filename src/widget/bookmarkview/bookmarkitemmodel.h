@@ -12,18 +12,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKITEMMODEL_H
-#define CBOOKMARKITEMMODEL_H
+#ifndef BOOKMARKITEMMODEL_H
+#define BOOKMARKITEMMODEL_H
 
 #include <QAbstractItemModel>
 class CAbstractBookmarkDataModel;
 
 
-class CBookmarkItemModel : public QAbstractItemModel
+class BookmarkItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    explicit CBookmarkItemModel(QObject *parent = 0);
+    explicit BookmarkItemModel(QObject *parent = 0);
 
     inline CAbstractBookmarkDataModel *dataModel() const;
     void setDataModel(CAbstractBookmarkDataModel *dataModel);
@@ -51,10 +51,10 @@ private:
     CAbstractBookmarkDataModel *m_dataModel;
 };
 
-CAbstractBookmarkDataModel *CBookmarkItemModel::dataModel() const
+CAbstractBookmarkDataModel *BookmarkItemModel::dataModel() const
 {
     return m_dataModel;
 }
 
 
-#endif // CBOOKMARKITEMMODEL_H
+#endif // BOOKMARKITEMMODEL_H

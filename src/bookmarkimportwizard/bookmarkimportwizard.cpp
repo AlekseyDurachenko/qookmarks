@@ -12,31 +12,31 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkimportwizard.h"
+#include "bookmarkimportwizard.h"
+#include "bookmarkimportchromium.h"
+#include "icontheme.h"
+#include "settings.h"
+#include "singleton.h"
 #include <QActionGroup>
 #include <QCheckBox>
-#include <QRadioButton>
-#include <QVBoxLayout>
-#include <QListWidget>
 #include <QDir>
-#include <QMessageBox>
-#include <QLineEdit>
-#include <QToolButton>
-#include <QSettings>
 #include <QFileDialog>
-#include "icontheme.h"
-#include "singleton.h"
-#include "settings.h"
-#include "bookmarkimportchromium.h"
+#include <QLineEdit>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QRadioButton>
+#include <QSettings>
+#include <QToolButton>
+#include <QVBoxLayout>
 #include <QDebug>
 
 
-CBookmarkImportWizard::CBookmarkImportWizard(QWidget *parent) :
+BookmarkImportWizard::BookmarkImportWizard(QWidget *parent) :
     QWizard(parent)
 {
-    setPage(Page_SelectMode, new CBookmarkImportSelectModeWizardPage);
-    setPage(Page_SystemBrowser, new CBookmarkImportSystemBrowserWizardPage);
-    setPage(Page_File, new CBookmarkImportFileWizardPage);
+    setPage(Page_SelectMode, new BookmarkImportSelectModeWizardPage);
+    setPage(Page_SystemBrowser, new BookmarkImportSystemBrowserWizardPage);
+    setPage(Page_File, new BookmarkImportFileWizardPage);
 
     setStartId(Page_SelectMode);
     setWindowTitle(tr("Import bookmark collection"));
@@ -44,7 +44,7 @@ CBookmarkImportWizard::CBookmarkImportWizard(QWidget *parent) :
 
 
 
-CBookmarkImportSelectModeWizardPage::CBookmarkImportSelectModeWizardPage(
+BookmarkImportSelectModeWizardPage::BookmarkImportSelectModeWizardPage(
         QWidget *parent) : QWizardPage(parent)
 {
     setTitle(tr("Select the bookmark collection location"));
@@ -63,17 +63,17 @@ CBookmarkImportSelectModeWizardPage::CBookmarkImportSelectModeWizardPage(
     setLayout(layout);
 }
 
-int CBookmarkImportSelectModeWizardPage::nextId() const
+int BookmarkImportSelectModeWizardPage::nextId() const
 {
     if (m_systemBrowserRadioButton->isChecked())
-        return CBookmarkImportWizard::Page_SystemBrowser;
+        return BookmarkImportWizard::Page_SystemBrowser;
     else
-        return CBookmarkImportWizard::Page_File;
+        return BookmarkImportWizard::Page_File;
 }
 
 
 
-CBookmarkImportSystemBrowserWizardPage::CBookmarkImportSystemBrowserWizardPage(
+BookmarkImportSystemBrowserWizardPage::BookmarkImportSystemBrowserWizardPage(
         QWidget *parent) : QWizardPage(parent)
 {
     setTitle("Import bookmark collection from the system browser");
@@ -98,12 +98,12 @@ CBookmarkImportSystemBrowserWizardPage::CBookmarkImportSystemBrowserWizardPage(
     setLayout(layout);
 }
 
-int CBookmarkImportSystemBrowserWizardPage::nextId() const
+int BookmarkImportSystemBrowserWizardPage::nextId() const
 {
     return -1;
 }
 
-bool CBookmarkImportSystemBrowserWizardPage::isComplete() const
+bool BookmarkImportSystemBrowserWizardPage::isComplete() const
 {
     if (m_browserList->currentItem())
         return true;
@@ -111,7 +111,7 @@ bool CBookmarkImportSystemBrowserWizardPage::isComplete() const
         return false;
 }
 
-bool CBookmarkImportSystemBrowserWizardPage::validatePage()
+bool BookmarkImportSystemBrowserWizardPage::validatePage()
 {
     if (m_browserList->currentItem()->data(Qt::UserRole) == "chromium")
     {
@@ -126,7 +126,7 @@ bool CBookmarkImportSystemBrowserWizardPage::validatePage()
     return true;
 }
 
-QString CBookmarkImportSystemBrowserWizardPage::chromiumBookmarkCollection() const
+QString BookmarkImportSystemBrowserWizardPage::chromiumBookmarkCollection() const
 {
 #ifdef Q_OS_UNIX
     return QDir::homePath() + "/.config/chromium/Default/Bookmarks";
@@ -137,7 +137,7 @@ QString CBookmarkImportSystemBrowserWizardPage::chromiumBookmarkCollection() con
 
 
 
-CBookmarkImportFileWizardPage::CBookmarkImportFileWizardPage(QWidget *parent) :
+BookmarkImportFileWizardPage::BookmarkImportFileWizardPage(QWidget *parent) :
     QWizardPage(parent)
 {
     setTitle("Import bookmark collection from the file");
@@ -171,12 +171,12 @@ CBookmarkImportFileWizardPage::CBookmarkImportFileWizardPage(QWidget *parent) :
     setLayout(layout);
 }
 
-int CBookmarkImportFileWizardPage::nextId() const
+int BookmarkImportFileWizardPage::nextId() const
 {
     return -1;
 }
 
-bool CBookmarkImportFileWizardPage::isComplete() const
+bool BookmarkImportFileWizardPage::isComplete() const
 {
     if (m_browserList->currentItem()
             && !m_fileNameLineEdit->text().isEmpty())
@@ -185,7 +185,7 @@ bool CBookmarkImportFileWizardPage::isComplete() const
         return false;
 }
 
-bool CBookmarkImportFileWizardPage::validatePage()
+bool BookmarkImportFileWizardPage::validatePage()
 {
     if (m_browserList->currentItem()->data(Qt::UserRole) == "chromium")
     {
@@ -200,7 +200,7 @@ bool CBookmarkImportFileWizardPage::validatePage()
     return true;
 }
 
-void CBookmarkImportFileWizardPage::selectFileName_toggled()
+void BookmarkImportFileWizardPage::selectFileName_toggled()
 {
     G_SETTINGS_INIT();
 

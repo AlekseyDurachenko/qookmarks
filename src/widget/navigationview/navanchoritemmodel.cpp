@@ -12,16 +12,16 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cnavanchoritemmodel.h"
-#include <QMimeData>
-#include "ctagitem.h"
+#include "navanchoritemmodel.h"
 #include "cbookmarkitem.h"
-#include "inavigationactions.h"
-#include "singleton.h"
+#include "ctagitem.h"
 #include "icontheme.h"
+#include "actinterface.h"
+#include "singleton.h"
+#include <QMimeData>
 
 
-CNavAnchorItemModel::CNavAnchorItemModel(QObject *parent) :
+NavAnchorItemModel::NavAnchorItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_navigationActions = 0;
@@ -41,7 +41,7 @@ CNavAnchorItemModel::CNavAnchorItemModel(QObject *parent) :
     endResetModel();
 }
 
-void CNavAnchorItemModel::setNavigationActions(INavigationActions *interface)
+void NavAnchorItemModel::setNavigationActions(ActInterface *interface)
 {
     QObject *obj = dynamic_cast<QObject *>(m_navigationActions);
     if (obj)
@@ -55,7 +55,7 @@ void CNavAnchorItemModel::setNavigationActions(INavigationActions *interface)
     m_navigationActions = interface;
 }
 
-QVariant CNavAnchorItemModel::data(const QModelIndex &index, int role) const
+QVariant NavAnchorItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -75,7 +75,7 @@ QVariant CNavAnchorItemModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags CNavAnchorItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags NavAnchorItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
@@ -88,13 +88,13 @@ Qt::ItemFlags CNavAnchorItemModel::flags(const QModelIndex &index) const
     return flags;
 }
 
-QStringList CNavAnchorItemModel::mimeTypes() const
+QStringList NavAnchorItemModel::mimeTypes() const
 {
     return QStringList() << "qookmarks/tag-list"
                          << "qookmarks/bookmark-list";
 }
 
-bool CNavAnchorItemModel::dropMimeData(const QMimeData *data,
+bool NavAnchorItemModel::dropMimeData(const QMimeData *data,
         Qt::DropAction /*action*/, int /*row*/, int /*column*/,
         const QModelIndex &parent)
 {
@@ -117,15 +117,15 @@ bool CNavAnchorItemModel::dropMimeData(const QMimeData *data,
         switch (type)
         {
         case Untagged:
-            m_navigationActions->navActClearTags(bookmarkList);
+            m_navigationActions->actClearTags(bookmarkList);
         case Favorites:
-            m_navigationActions->navActFavorite(bookmarkList);
+            m_navigationActions->actFavorite(bookmarkList);
             break;
         case ReadItLater:
-            m_navigationActions->navActReadItLater(bookmarkList);
+            m_navigationActions->actReadItLater(bookmarkList);
             break;
         case Trash:
-            m_navigationActions->navActTrash(bookmarkList);
+            m_navigationActions->actTrash(bookmarkList);
             break;
         default:
             ;
@@ -135,7 +135,7 @@ bool CNavAnchorItemModel::dropMimeData(const QMimeData *data,
     return false;
 }
 
-QVariant CNavAnchorItemModel::headerData(int section,
+QVariant NavAnchorItemModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal
@@ -146,7 +146,7 @@ QVariant CNavAnchorItemModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex CNavAnchorItemModel::index(int row, int column,
+QModelIndex NavAnchorItemModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -155,12 +155,12 @@ QModelIndex CNavAnchorItemModel::index(int row, int column,
     return createIndex(row, column, m_anchorItems.at(row));
 }
 
-QModelIndex CNavAnchorItemModel::parent(const QModelIndex &/*index*/) const
+QModelIndex NavAnchorItemModel::parent(const QModelIndex &/*index*/) const
 {
     return QModelIndex();
 }
 
-int CNavAnchorItemModel::rowCount(const QModelIndex &parent) const
+int NavAnchorItemModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
@@ -168,23 +168,23 @@ int CNavAnchorItemModel::rowCount(const QModelIndex &parent) const
     return m_anchorItems.count();
 }
 
-int CNavAnchorItemModel::columnCount(const QModelIndex &/*parent*/) const
+int NavAnchorItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
     return 1;
 }
 
-void CNavAnchorItemModel::updateAnchorItems()
+void NavAnchorItemModel::updateAnchorItems()
 {
     emit dataChanged(createIndex(0, 0),
                      createIndex(m_anchorItems.count()-1, 0));
 }
 
-void CNavAnchorItemModel::navigationActions_destroyed()
+void NavAnchorItemModel::navigationActions_destroyed()
 {
     m_navigationActions = 0;
 }
 
-void CNavAnchorItemModel::initAnchorItems()
+void NavAnchorItemModel::initAnchorItems()
 {
     m_anchorItems
             << All
@@ -195,7 +195,7 @@ void CNavAnchorItemModel::initAnchorItems()
             << Trash;
 }
 
-QString CNavAnchorItemModel::anchorName(CNavAnchorItemModel::AnchorType type) const
+QString NavAnchorItemModel::anchorName(NavAnchorItemModel::AnchorType type) const
 {
     switch (type)
     {
@@ -216,7 +216,7 @@ QString CNavAnchorItemModel::anchorName(CNavAnchorItemModel::AnchorType type) co
     return QString();
 }
 
-QIcon CNavAnchorItemModel::anchorIcon(CNavAnchorItemModel::AnchorType type) const
+QIcon NavAnchorItemModel::anchorIcon(NavAnchorItemModel::AnchorType type) const
 {
     switch (type)
     {
@@ -240,7 +240,7 @@ QIcon CNavAnchorItemModel::anchorIcon(CNavAnchorItemModel::AnchorType type) cons
     return QIcon();
 }
 
-QList<QStringList> CNavAnchorItemModel::fromMimeTagList(const QMimeData *data)
+QList<QStringList> NavAnchorItemModel::fromMimeTagList(const QMimeData *data)
 {
     QByteArray encodedData = data->data("qookmarks/tag-list");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -250,7 +250,7 @@ QList<QStringList> CNavAnchorItemModel::fromMimeTagList(const QMimeData *data)
     return tagPaths;
 }
 
-QList<QUrl> CNavAnchorItemModel::fromMimeBookmarkList(const QMimeData *data)
+QList<QUrl> NavAnchorItemModel::fromMimeBookmarkList(const QMimeData *data)
 {
     QByteArray encodedData = data->data("qookmarks/bookmark-list");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);

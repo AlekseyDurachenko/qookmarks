@@ -12,26 +12,26 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkitemmodel.h"
+#include "bookmarkitemmodel.h"
 #include "cabstractbookmarkdatamodel.h"
 #include "cbookmarkitem.h"
-#include "cprj.h"
 #include "ciconmgr.h"
-#include "singleton.h"
 #include "consts.h"
+#include "prj.h"
+#include "icontheme.h"
+#include "singleton.h"
 #include <QIcon>
 #include <QMimeData>
 #include <QDebug>
-#include "icontheme.h"
 
 
-CBookmarkItemModel::CBookmarkItemModel(QObject *parent) :
+BookmarkItemModel::BookmarkItemModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     m_dataModel = 0;
 }
 
-void CBookmarkItemModel::setDataModel(CAbstractBookmarkDataModel *dataModel)
+void BookmarkItemModel::setDataModel(CAbstractBookmarkDataModel *dataModel)
 {
     if (m_dataModel)
         disconnect(m_dataModel, 0, this, 0);
@@ -59,7 +59,7 @@ void CBookmarkItemModel::setDataModel(CAbstractBookmarkDataModel *dataModel)
     endResetModel();
 }
 
-QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
+QVariant BookmarkItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || !m_dataModel)
         return QVariant();
@@ -115,7 +115,7 @@ QVariant CBookmarkItemModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags CBookmarkItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags BookmarkItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
@@ -127,7 +127,7 @@ Qt::ItemFlags CBookmarkItemModel::flags(const QModelIndex &index) const
     return f;
 }
 
-QMimeData *CBookmarkItemModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *BookmarkItemModel::mimeData(const QModelIndexList &indexes) const
 {
     QList<QUrl> bookmarkUrls;
     foreach (QModelIndex index, indexes)
@@ -143,7 +143,7 @@ QMimeData *CBookmarkItemModel::mimeData(const QModelIndexList &indexes) const
     return mimeData;
 }
 
-QVariant CBookmarkItemModel::headerData(int section,
+QVariant BookmarkItemModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::TextAlignmentRole)
@@ -208,7 +208,7 @@ QVariant CBookmarkItemModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex CBookmarkItemModel::index(int row, int column,
+QModelIndex BookmarkItemModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent) || !m_dataModel)
@@ -217,12 +217,12 @@ QModelIndex CBookmarkItemModel::index(int row, int column,
     return createIndex(row, column, m_dataModel->at(row));
 }
 
-QModelIndex CBookmarkItemModel::parent(const QModelIndex &) const
+QModelIndex BookmarkItemModel::parent(const QModelIndex &) const
 {
     return QModelIndex();
 }
 
-int CBookmarkItemModel::rowCount(const QModelIndex &parent) const
+int BookmarkItemModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid() || !m_dataModel)
         return 0;
@@ -230,49 +230,49 @@ int CBookmarkItemModel::rowCount(const QModelIndex &parent) const
     return m_dataModel->count();
 }
 
-int CBookmarkItemModel::columnCount(const QModelIndex &/*parent*/) const
+int BookmarkItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
     return 16;
 }
 
-Qt::DropActions CBookmarkItemModel::supportedDropActions() const
+Qt::DropActions BookmarkItemModel::supportedDropActions() const
 {
     return Qt::CopyAction|Qt::MoveAction;
 }
 
-void CBookmarkItemModel::dataModel_aboutToBeInserted(int first, int last)
+void BookmarkItemModel::dataModel_aboutToBeInserted(int first, int last)
 {
     beginInsertRows(QModelIndex(), first, last);
 }
 
-void CBookmarkItemModel::dataModel_inserted(int /*first*/, int /*last*/)
+void BookmarkItemModel::dataModel_inserted(int /*first*/, int /*last*/)
 {
     endInsertRows();
 }
 
-void CBookmarkItemModel::dataModel_aboutToBeRemoved(int first, int last)
+void BookmarkItemModel::dataModel_aboutToBeRemoved(int first, int last)
 {
     beginRemoveRows(QModelIndex(), first, last);
 }
 
-void CBookmarkItemModel::dataModel_removed(int /*first*/, int /*last*/)
+void BookmarkItemModel::dataModel_removed(int /*first*/, int /*last*/)
 {
     endRemoveRows();
 }
 
-void CBookmarkItemModel::dataModel_dataChanged(int first, int last)
+void BookmarkItemModel::dataModel_dataChanged(int first, int last)
 {
     emit dataChanged(createIndex(first, 0),
                      createIndex(last, columnCount()-1));
 }
 
-void CBookmarkItemModel::dataModel_reseted()
+void BookmarkItemModel::dataModel_reseted()
 {
     beginResetModel();
     endResetModel();
 }
 
-void CBookmarkItemModel::dataModel_destroyed()
+void BookmarkItemModel::dataModel_destroyed()
 {
     m_dataModel = 0;
     beginResetModel();

@@ -12,15 +12,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cnavtagitemmodel.h"
-#include <QMimeData>
+#include "navtagitemmodel.h"
 #include "cbookmarkitem.h"
-#include "inavigationactions.h"
+#include "actinterface.h"
 #include "singleton.h"
+#include <QMimeData>
 #include <QDebug>
 
 
-CNavTagItemModel::CNavTagItemModel(QObject *parent) :
+NavTagItemModel::NavTagItemModel(QObject *parent) :
     CTagItemModel(parent)
 {
 #if QT_VERSION < 0x050000
@@ -32,7 +32,7 @@ CNavTagItemModel::CNavTagItemModel(QObject *parent) :
             this, SLOT(tagMgr_dataChanged(CTagItem*)));
 }
 
-void CNavTagItemModel::setNavigationActions(INavigationActions *interface)
+void NavTagItemModel::setNavigationActions(ActInterface *interface)
 {
     QObject *obj = dynamic_cast<QObject *>(m_navigationActions);
     if (obj)
@@ -46,7 +46,7 @@ void CNavTagItemModel::setNavigationActions(INavigationActions *interface)
     m_navigationActions = interface;
 }
 
-QVariant CNavTagItemModel::data(const QModelIndex &index, int role) const
+QVariant NavTagItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -61,7 +61,7 @@ QVariant CNavTagItemModel::data(const QModelIndex &index, int role) const
     return CTagItemModel::data(index, role);
 }
 
-Qt::ItemFlags CNavTagItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags NavTagItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::ItemIsDropEnabled;
@@ -71,13 +71,13 @@ Qt::ItemFlags CNavTagItemModel::flags(const QModelIndex &index) const
             |Qt::ItemIsDropEnabled;
 }
 
-QStringList CNavTagItemModel::mimeTypes() const
+QStringList NavTagItemModel::mimeTypes() const
 {
     return QStringList() << "qookmarks/tag-list"
                          << "qookmarks/bookmark-list";
 }
 
-QMimeData *CNavTagItemModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *NavTagItemModel::mimeData(const QModelIndexList &indexes) const
 {
     QList<QStringList> tagPaths;
     foreach (const QModelIndex &index, indexes)
@@ -104,7 +104,7 @@ QMimeData *CNavTagItemModel::mimeData(const QModelIndexList &indexes) const
     return mimeData;
 }
 
-bool CNavTagItemModel::dropMimeData(const QMimeData *data,
+bool NavTagItemModel::dropMimeData(const QMimeData *data,
         Qt::DropAction action, int /*row*/, int /*column*/,
         const QModelIndex &parent)
 {
@@ -125,12 +125,12 @@ Qt::DropActions CNavTagItemModel::supportedDropActions() const
 }
 #endif
 
-void CNavTagItemModel::navigationActions_destroyed()
+void NavTagItemModel::navigationActions_destroyed()
 {
     m_navigationActions = 0;
 }
 
-int CNavTagItemModel::bookmarkNotTrashedCount(CTagItem *item,
+int NavTagItemModel::bookmarkNotTrashedCount(CTagItem *item,
         bool /*recursive*/) const
 {
     int count = 0;
@@ -141,27 +141,27 @@ int CNavTagItemModel::bookmarkNotTrashedCount(CTagItem *item,
     return count;
 }
 
-bool CNavTagItemModel::dropMimeTagList(const QMimeData *data,
+bool NavTagItemModel::dropMimeTagList(const QMimeData *data,
         const QStringList &parentTag)
 {
     if (m_navigationActions)
-        m_navigationActions->navActMoveTags(fromMimeTagList(data), parentTag);
+        m_navigationActions->actMoveTags(fromMimeTagList(data), parentTag);
 
     return true;
 }
 
-bool CNavTagItemModel::dropMimeBookmarkList(const QMimeData *data,
+bool NavTagItemModel::dropMimeBookmarkList(const QMimeData *data,
         const QStringList &parentTag, Qt::DropAction action)
 {
     if (m_navigationActions && action == Qt::MoveAction)
-        m_navigationActions->navActSetTag(fromMimeBookmarkList(data), parentTag);
+        m_navigationActions->actSetTag(fromMimeBookmarkList(data), parentTag);
     else if (m_navigationActions && action == Qt::CopyAction)
-        m_navigationActions->navActAddTag(fromMimeBookmarkList(data), parentTag);
+        m_navigationActions->actAddTag(fromMimeBookmarkList(data), parentTag);
 
     return true;
 }
 
-QList<QStringList> CNavTagItemModel::fromMimeTagList(const QMimeData *data)
+QList<QStringList> NavTagItemModel::fromMimeTagList(const QMimeData *data)
 {
     QByteArray encodedData = data->data("qookmarks/tag-list");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -171,7 +171,7 @@ QList<QStringList> CNavTagItemModel::fromMimeTagList(const QMimeData *data)
     return tagPaths;
 }
 
-QList<QUrl> CNavTagItemModel::fromMimeBookmarkList(const QMimeData *data)
+QList<QUrl> NavTagItemModel::fromMimeBookmarkList(const QMimeData *data)
 {
     QByteArray encodedData = data->data("qookmarks/bookmark-list");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);

@@ -15,7 +15,7 @@
 #include <QApplication>
 #include "mainwindow.h"
 #include "singleton.h"
-#include "cprj.h"
+#include "prj.h"
 #include "browser.h"
 #include "icontheme.h"
 #include <QDebug>
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
     // create singletons
     singleton<CNetworkMgr>();
-    singleton<CPrj>();
+    singleton<Prj>();
 
     MainWindow w;
     w.show();

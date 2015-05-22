@@ -12,22 +12,22 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKIMPORTWIZARD_H
-#define CBOOKMARKIMPORTWIZARD_H
+#ifndef BOOKMARKIMPORTWIZARD_H
+#define BOOKMARKIMPORTWIZARD_H
 
 #include <QWizard>
-class QRadioButton;
-class QListWidget;
-class QToolButton;
 class QLineEdit;
+class QListWidget;
+class QRadioButton;
+class QToolButton;
 
 
-class CBookmarkImportWizard : public QWizard
+class BookmarkImportWizard : public QWizard
 {
     Q_OBJECT
-    friend class CBookmarkImportSelectModeWizardPage;
-    friend class CBookmarkImportSystemBrowserWizardPage;
-    friend class CBookmarkImportFileWizardPage;
+    friend class BookmarkImportSelectModeWizardPage;
+    friend class BookmarkImportSystemBrowserWizardPage;
+    friend class BookmarkImportFileWizardPage;
 private:
     enum
     {
@@ -36,16 +36,16 @@ private:
         Page_File
     };
 public:
-    explicit CBookmarkImportWizard(QWidget *parent = 0);
+    explicit BookmarkImportWizard(QWidget *parent = 0);
 };
 
 
 
-class CBookmarkImportSelectModeWizardPage : public QWizardPage
+class BookmarkImportSelectModeWizardPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    CBookmarkImportSelectModeWizardPage(QWidget *parent = 0);
+    BookmarkImportSelectModeWizardPage(QWidget *parent = 0);
     virtual int nextId() const;
 private:
     QRadioButton *m_systemBrowserRadioButton;
@@ -54,11 +54,11 @@ private:
 
 
 
-class CBookmarkImportSystemBrowserWizardPage : public QWizardPage
+class BookmarkImportSystemBrowserWizardPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    CBookmarkImportSystemBrowserWizardPage(QWidget *parent = 0);
+    BookmarkImportSystemBrowserWizardPage(QWidget *parent = 0);
     virtual int nextId() const;
     virtual bool isComplete() const;
     virtual bool validatePage();
@@ -70,11 +70,11 @@ private:
 
 
 
-class CBookmarkImportFileWizardPage : public QWizardPage
+class BookmarkImportFileWizardPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    CBookmarkImportFileWizardPage(QWidget *parent = 0);
+    BookmarkImportFileWizardPage(QWidget *parent = 0);
     virtual int nextId() const;
     virtual bool isComplete() const;
     virtual bool validatePage();
@@ -87,4 +87,4 @@ private:
 };
 
 
-#endif // CBOOKMARKIMPORTWIZARD_H
+#endif // BOOKMARKIMPORTWIZARD_H

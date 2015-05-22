@@ -12,16 +12,16 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkratingdelegate.h"
+#include "bookmarkratingdelegate.h"
+#include "cbookmarkitem.h"
+#include "consts.h"
+#include "icontheme.h"
+#include <QHeaderView>
 #include <QPainter>
 #include <QTreeView>
-#include <QHeaderView>
-#include "cbookmarkitem.h"
-#include "icontheme.h"
-#include "consts.h"
 
 
-CBookmarkRatingDelegate::CBookmarkRatingDelegate(QObject *parent) :
+BookmarkRatingDelegate::BookmarkRatingDelegate(QObject *parent) :
     QItemDelegate(parent)
 {
     m_starIcon = IconTheme::icon("rating-bookmark-star");
@@ -29,7 +29,7 @@ CBookmarkRatingDelegate::CBookmarkRatingDelegate(QObject *parent) :
     m_disabledIcon = IconTheme::icon("rating-bookmark-star-disabled");
 }
 
-void CBookmarkRatingDelegate::paint(QPainter *painter,
+void BookmarkRatingDelegate::paint(QPainter *painter,
         const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     drawBackground(painter, option, index);
@@ -55,7 +55,7 @@ void CBookmarkRatingDelegate::paint(QPainter *painter,
         painter->drawPixmap(left, top, m_disabledIcon.pixmap(QSize(size, size)));
 }
 
-QSize CBookmarkRatingDelegate::sizeHint(const QStyleOptionViewItem &option,
+QSize BookmarkRatingDelegate::sizeHint(const QStyleOptionViewItem &option,
         const QModelIndex &index) const
 {
     QSize size = QItemDelegate::sizeHint(option, index);

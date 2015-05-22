@@ -12,18 +12,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CINDEXLIST_H
-#define CINDEXLIST_H
+#ifndef INDEXLIST_H
+#define INDEXLIST_H
 
 #include <QList>
 #include <QHash>
 
 
 template<typename T>
-class CIndexList
+class IndexList
 {
 public:
-    CIndexList();
+    IndexList();
 
     inline int count() const;
     inline T *at(int index) const;
@@ -42,43 +42,43 @@ private:
 
 
 template<typename T>
-CIndexList<T>::CIndexList()
+IndexList<T>::IndexList()
 {
 }
 
 template<typename T>
-int CIndexList<T>::count() const
+int IndexList<T>::count() const
 {
     return m_items.count();
 }
 
 template<typename T>
-T *CIndexList<T>::at(int index) const
+T *IndexList<T>::at(int index) const
 {
     return m_items.at(index);
 }
 
 template<typename T>
-T *CIndexList<T>::value(int index) const
+T *IndexList<T>::value(int index) const
 {
     return m_items.value(index);
 }
 
 template<typename T>
-int CIndexList<T>::indexOf(const T *value) const
+int IndexList<T>::indexOf(const T *value) const
 {
     return m_indexes.value(value, -1);
 }
 
 template<typename T>
-void CIndexList<T>::push_back(T *value)
+void IndexList<T>::push_back(T *value)
 {
     m_indexes.insert(value, m_items.count());
     m_items.push_back(value);
 }
 
 template<typename T>
-void CIndexList<T>::push_front(T *value)
+void IndexList<T>::push_front(T *value)
 {
     typename QHash<const T *, int>::iterator i;
     for (i = m_indexes.begin(); i != m_indexes.end(); ++i)
@@ -89,7 +89,7 @@ void CIndexList<T>::push_front(T *value)
 }
 
 template<typename T>
-void CIndexList<T>::removeAt(int index)
+void IndexList<T>::removeAt(int index)
 {
     m_indexes.remove(m_items.at(index));
     m_items.removeAt(index);
@@ -98,7 +98,7 @@ void CIndexList<T>::removeAt(int index)
 }
 
 template<typename T>
-void CIndexList<T>::removeFirst()
+void IndexList<T>::removeFirst()
 {
     m_indexes.remove(m_items.first());
     m_items.removeFirst();
@@ -109,18 +109,18 @@ void CIndexList<T>::removeFirst()
 }
 
 template<typename T>
-void CIndexList<T>::removeLast()
+void IndexList<T>::removeLast()
 {
     m_indexes.remove(m_items.last());
     m_items.removeLast();
 }
 
 template<typename T>
-void CIndexList<T>::clear()
+void IndexList<T>::clear()
 {
     m_items.clear();
     m_indexes.clear();
 }
 
 
-#endif // CINDEXLIST_H
+#endif // INDEXLIST_H

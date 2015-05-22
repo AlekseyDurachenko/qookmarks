@@ -12,20 +12,21 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKHEADERVIEW_H
-#define CBOOKMARKHEADERVIEW_H
-
-#include <QHeaderView>
+#include "navtagview.h"
+#include <QDragMoveEvent>
 
 
-class CBookmarkHeaderView : public QHeaderView
+NavTagView::NavTagView(QWidget *parent) : QTreeView(parent)
 {
-public:
-    explicit CBookmarkHeaderView(Qt::Orientation orientation,
-                                 QWidget *parent = 0);
-protected:
-    QSize sectionSizeFromContents(int logicalIndex) const;
-};
+}
 
+void NavTagView::dropEvent(QDropEvent *event)
+{
+    // HACK: it can be incorrect usage of the dragAction modification
+    if (event->keyboardModifiers() & Qt::ControlModifier)
+        event->setDropAction(Qt::CopyAction);
+    else
+        event->setDropAction(Qt::MoveAction);
 
-#endif // CBOOKMARKHEADERVIEW_H
+    QTreeView::dropEvent(event);
+}

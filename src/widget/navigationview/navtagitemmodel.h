@@ -12,21 +12,21 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CNAVTAGITEMMODEL_H
-#define CNAVTAGITEMMODEL_H
+#ifndef NAVTAGITEMMODEL_H
+#define NAVTAGITEMMODEL_H
 
 #include "ctagitemmodel.h"
-class INavigationActions;
+class ActInterface;
 
 
-class CNavTagItemModel : public CTagItemModel
+class NavTagItemModel : public CTagItemModel
 {
     Q_OBJECT
 public:
-    explicit CNavTagItemModel(QObject *parent = 0);
+    explicit NavTagItemModel(QObject *parent = 0);
 
-    inline INavigationActions *navigationActions() const;
-    void setNavigationActions(INavigationActions *navigationActions);
+    inline ActInterface *navigationActions() const;
+    void setNavigationActions(ActInterface *navigationActions);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -49,13 +49,13 @@ private:
     QList<QStringList> fromMimeTagList(const QMimeData *data);
     QList<QUrl> fromMimeBookmarkList(const QMimeData *data);
 private:
-    INavigationActions *m_navigationActions;
+    ActInterface *m_navigationActions;
 };
 
-INavigationActions *CNavTagItemModel::navigationActions() const
+ActInterface *NavTagItemModel::navigationActions() const
 {
     return m_navigationActions;
 }
 
 
-#endif // CNAVTAGITEMMODEL_H
+#endif // NAVTAGITEMMODEL_H

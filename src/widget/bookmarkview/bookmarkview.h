@@ -12,30 +12,39 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CNAVIGATIONVIEW_H
-#define CNAVIGATIONVIEW_H
+#ifndef BOOKMARKVIEW_H
+#define BOOKMARKVIEW_H
 
 #include <QTreeView>
-#include "inavigationactions.h"
-class CManager;
+class QSortFilterProxyModel;
+class BookmarkItemModel;
+class CBookmarkItem;
 
 
-class CNavigationView : public QTreeView, public INavigationActions
+class BookmarkView : public QTreeView
 {
     Q_OBJECT
 public:
-    CNavigationView(QWidget *parent = 0);
-    virtual ~CNavigationView();
+    BookmarkView(QWidget *parent = 0);
+
+    inline BookmarkItemModel *bookmarkModel() const;
+    void setBookmarkModel(BookmarkItemModel *model);
+
+    QList<CBookmarkItem *> selectedBookmarks() const;
+    QList<QUrl> selectedUrls() const;
+public slots:
+    void setFilterFixedString(const QString &filter);
 protected:
-    virtual void navActMoveTags(const QList<QStringList> &tags,
-                                const QStringList &parentTag);
-    virtual void navActSetTag(const QList<QUrl> &bookmarks,
-                                    const QStringList& tag);
-    virtual void navActFavorite(const QList<QUrl> &bookmarks);
-    virtual void navActReadItLater(const QList<QUrl> &bookmarks);
-    virtual void navActTrash(const QList<QUrl> &bookmarks);
-    virtual void navActClearTags(const QList<QUrl> &bookmarks);
+    virtual void setModel(QAbstractItemModel *model);
+private:
+    BookmarkItemModel *m_bookmarkItemModel;
+    QSortFilterProxyModel *m_sortFilterProxyModel;
 };
 
+BookmarkItemModel *BookmarkView::bookmarkModel() const
+{
+    return m_bookmarkItemModel;
+}
 
-#endif // CNAVIGATIONVIEW_H
+
+#endif // CBOOKMARKVIEW_H

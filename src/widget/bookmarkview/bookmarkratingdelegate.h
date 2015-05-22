@@ -12,19 +12,28 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CNAVTAGVIEW_H
-#define CNAVTAGVIEW_H
+#ifndef BOOKMARKRATIONDELEGATE_H
+#define BOOKMARKRATIONDELEGATE_H
 
-#include <QTreeView>
+#include <QItemDelegate>
+class QTreeView;
 
 
-class CNavTagView : public QTreeView
+class BookmarkRatingDelegate : public QItemDelegate
 {
+    Q_OBJECT
 public:
-    CNavTagView(QWidget *parent = 0);
-protected:
-    virtual void dropEvent(QDropEvent *event);
+    explicit BookmarkRatingDelegate(QObject *parent = 0);
+
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                       const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option,
+                           const QModelIndex &index) const;
+private:
+    QIcon m_starIcon;
+    QIcon m_halfIcon;
+    QIcon m_disabledIcon;
 };
 
 
-#endif // CNAVTAGVIEW_H
+#endif // BOOKMARKRATIONDELEGATE_H

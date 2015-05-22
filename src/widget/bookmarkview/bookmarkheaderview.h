@@ -12,28 +12,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKRATIONDELEGATE_H
-#define CBOOKMARKRATIONDELEGATE_H
+#ifndef BOOKMARKHEADERVIEW_H
+#define BOOKMARKHEADERVIEW_H
 
-#include <QItemDelegate>
-class QTreeView;
+#include <QHeaderView>
 
 
-class CBookmarkRatingDelegate : public QItemDelegate
+class BookmarkHeaderView : public QHeaderView
 {
-    Q_OBJECT
 public:
-    explicit CBookmarkRatingDelegate(QObject *parent = 0);
-
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                       const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem &option,
-                           const QModelIndex &index) const;
-private:
-    QIcon m_starIcon;
-    QIcon m_halfIcon;
-    QIcon m_disabledIcon;
+    explicit BookmarkHeaderView(Qt::Orientation orientation,
+                                 QWidget *parent = 0);
+protected:
+    QSize sectionSizeFromContents(int logicalIndex) const;
 };
 
 
-#endif // CBOOKMARKRATIONDELEGATE_H
+#endif // BOOKMARKHEADERVIEW_H

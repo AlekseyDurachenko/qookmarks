@@ -17,23 +17,23 @@
 
 #include <QMainWindow>
 #include <QModelIndex>
-#include "inavigationactions.h"
+#include "actinterface.h"
 class QSortFilterProxyModel;
 class QTreeView;
-class CBookmarkView;
-class CBookmarkItemModel;
+class BookmarkView;
+class BookmarkItemModel;
 class CBookmarkFilterDataModel;
 class CBookmarkFilter;
 class CBookmarkItem;
-class CNavAnchorItemModel;
-class CNavTagView;
-class CNavTagItemModel;
+class NavAnchorItemModel;
+class NavTagView;
+class NavTagItemModel;
 class CTagSortFilterProxyModel;
 class QLineEdit;
 class QSplitter;
 
 
-class MainWindow : public QMainWindow, INavigationActions
+class MainWindow : public QMainWindow, ActInterface
 {
     Q_OBJECT
 public:
@@ -95,16 +95,16 @@ private slots:
 protected:
     void closeEvent(QCloseEvent *event);
 protected:
-    virtual void navActMoveTags(const QList<QStringList> &tags,
+    virtual void actMoveTags(const QList<QStringList> &tags,
                                 const QStringList &parentTag);
-    virtual void navActSetTag(const QList<QUrl> &bookmarks,
+    virtual void actSetTag(const QList<QUrl> &bookmarks,
                               const QStringList& tag);
-    virtual void navActAddTag(const QList<QUrl> &bookmarks,
+    virtual void actAddTag(const QList<QUrl> &bookmarks,
                               const QStringList &tag);
-    virtual void navActClearTags(const QList<QUrl> &bookmarks);
-    virtual void navActFavorite(const QList<QUrl> &bookmarks);
-    virtual void navActReadItLater(const QList<QUrl> &bookmarks);
-    virtual void navActTrash(const QList<QUrl> &bookmarks);
+    virtual void actClearTags(const QList<QUrl> &bookmarks);
+    virtual void actFavorite(const QList<QUrl> &bookmarks);
+    virtual void actReadItLater(const QList<QUrl> &bookmarks);
+    virtual void actTrash(const QList<QUrl> &bookmarks);
 private:
     void createMenuBar();
     void createToolbars();
@@ -205,18 +205,18 @@ private:
     QStatusBar *m_windowStatusBar;
 
     // bookmark view
-    CBookmarkView *m_bookmarkView;
+    BookmarkView *m_bookmarkView;
     CBookmarkFilter *m_bookmarkFilter;
     CBookmarkFilterDataModel *m_bookmarkFilterDataModel;
-    CBookmarkItemModel *m_bookmarkItemModel;
+    BookmarkItemModel *m_bookmarkItemModel;
 
     // anchor view
     QTreeView *m_navAnchorView;
-    CNavAnchorItemModel *m_navAnchorItemModel;
+    NavAnchorItemModel *m_navAnchorItemModel;
 
     // tag view
-    CNavTagView *m_navTagView;
-    CNavTagItemModel *m_navTagItemModel;
+    NavTagView *m_navTagView;
+    NavTagItemModel *m_navTagItemModel;
     CTagSortFilterProxyModel *m_navTagSortFilterProxyModel;
 
     // search

@@ -12,15 +12,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CNAVANCHORITEMMODEL_H
-#define CNAVANCHORITEMMODEL_H
+#ifndef NAVANCHORITEMMODEL_H
+#define NAVANCHORITEMMODEL_H
 
 #include <QAbstractItemModel>
 #include <QVector>
-class INavigationActions;
+class ActInterface;
 
 
-class CNavAnchorItemModel : public QAbstractItemModel
+class NavAnchorItemModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_FLAGS(AnchorType)
@@ -35,10 +35,10 @@ public:
         Trash           = 0x05
     };
 public:
-    explicit CNavAnchorItemModel(QObject *parent = 0);
+    explicit NavAnchorItemModel(QObject *parent = 0);
 
-    inline INavigationActions *navigationActions() const;
-    void setNavigationActions(INavigationActions *interface);
+    inline ActInterface *navigationActions() const;
+    void setNavigationActions(ActInterface *interface);
 
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -57,19 +57,19 @@ private slots:
     void navigationActions_destroyed();
 private:
     void initAnchorItems();
-    QString anchorName(CNavAnchorItemModel::AnchorType type) const;
-    QIcon anchorIcon(CNavAnchorItemModel::AnchorType type) const;
+    QString anchorName(NavAnchorItemModel::AnchorType type) const;
+    QIcon anchorIcon(NavAnchorItemModel::AnchorType type) const;
     QList<QStringList> fromMimeTagList(const QMimeData *data);
     QList<QUrl> fromMimeBookmarkList(const QMimeData *data);
 private:
-    INavigationActions *m_navigationActions;
+    ActInterface *m_navigationActions;
     QVector<AnchorType> m_anchorItems;
 };
 
-INavigationActions *CNavAnchorItemModel::navigationActions() const
+ActInterface *NavAnchorItemModel::navigationActions() const
 {
     return m_navigationActions;
 }
 
 
-#endif // CNAVANCHORITEMMODEL_H
+#endif // NAVANCHORITEMMODEL_H

@@ -12,25 +12,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef INAVIGATIONACTIONS_H
-#define INAVIGATIONACTIONS_H
+#ifndef NAVTAGVIEW_H
+#define NAVTAGVIEW_H
 
-#include <QUrl>
-#include <QList>
-#include <QStringList>
+#include <QTreeView>
 
 
-class INavigationActions
+class NavTagView : public QTreeView
 {
 public:
-    virtual void navActMoveTags(const QList<QStringList> &tags, const QStringList &parentTag) = 0;
-    virtual void navActSetTag(const QList<QUrl> &bookmarks, const QStringList &tag) = 0;
-    virtual void navActAddTag(const QList<QUrl> &bookmarks, const QStringList &tag) = 0;
-    virtual void navActClearTags(const QList<QUrl> &bookmarks) = 0;
-    virtual void navActFavorite(const QList<QUrl> &bookmarks) = 0;
-    virtual void navActReadItLater(const QList<QUrl> &bookmarks) = 0;
-    virtual void navActTrash(const QList<QUrl> &bookmarks) = 0;
+    NavTagView(QWidget *parent = 0);
+protected:
+    virtual void dropEvent(QDropEvent *event);
 };
 
 
-#endif // INAVIGATIONACTIONS_H
+#endif // NAVTAGVIEW_H

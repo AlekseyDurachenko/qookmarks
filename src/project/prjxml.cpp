@@ -12,14 +12,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cprjxml.h"
+#include "prjxml.h"
+#include "cbookmarkitem.h"
+#include "cbookmarkmgr.h"
+#include "cmanager.h"
+#include "ctagitem.h"
+#include "ctagmgr.h"
 #include <QIODevice>
 #include <QStack>
-#include "cmanager.h"
-#include "ctagmgr.h"
-#include "ctagitem.h"
-#include "cbookmarkmgr.h"
-#include "cbookmarkitem.h"
 
 
 const char *dtFormat = "yyyy-MM-dd,HH:mm:ss.zzz";
@@ -61,12 +61,12 @@ static QString colorToString(const QColor &color)
         return "";
 }
 
-bool CPrjXml::saveEmptyXml(QIODevice *output, QString *reason)
+bool PrjXml::saveEmptyXml(QIODevice *output, QString *reason)
 {
     return saveXml(0, output, reason);
 }
 
-bool CPrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
+bool PrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
 {
     try
     {
@@ -94,7 +94,7 @@ bool CPrjXml::saveXml(CManager *manager, QIODevice *output, QString *reason)
     return false;
 }
 
-bool CPrjXml::loadXml(CManager *manager, QIODevice *input, QString *reason)
+bool PrjXml::loadXml(CManager *manager, QIODevice *input, QString *reason)
 {
     try
     {
@@ -117,7 +117,7 @@ bool CPrjXml::loadXml(CManager *manager, QIODevice *input, QString *reason)
     return false;
 }
 
-QDomElement CPrjXml::createBookmarkMgrElem(QDomDocument doc, CBookmarkMgr *mgr)
+QDomElement PrjXml::createBookmarkMgrElem(QDomDocument doc, CBookmarkMgr *mgr)
 {
     QDomElement elem = doc.createElement(nsBookmarkMgr);
     for (int i = 0; i < mgr->count(); ++i)
@@ -126,7 +126,7 @@ QDomElement CPrjXml::createBookmarkMgrElem(QDomDocument doc, CBookmarkMgr *mgr)
     return elem;
 }
 
-QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
+QDomElement PrjXml::createBookmarkItemElem(QDomDocument doc,
         CBookmarkItem *item)
 {
     QDomElement elem = doc.createElement(nsBookmarkItem);
@@ -155,7 +155,7 @@ QDomElement CPrjXml::createBookmarkItemElem(QDomDocument doc,
     return elem;
 }
 
-QDomElement CPrjXml::createBookmarkTagElem(QDomDocument doc, CTagItem *item)
+QDomElement PrjXml::createBookmarkTagElem(QDomDocument doc, CTagItem *item)
 {
     QDomElement elem = doc.createElement(nsBookmarkTag);
     foreach (const QString &path, item->path())
@@ -168,7 +168,7 @@ QDomElement CPrjXml::createBookmarkTagElem(QDomDocument doc, CTagItem *item)
     return elem;
 }
 
-QDomElement CPrjXml::createTagItemElem(QDomDocument doc, CTagItem *item)
+QDomElement PrjXml::createTagItemElem(QDomDocument doc, CTagItem *item)
 {
     QDomElement elem = doc.createElement(nsTagItem);
     elem.setAttribute("name", item->data().name());
@@ -179,7 +179,7 @@ QDomElement CPrjXml::createTagItemElem(QDomDocument doc, CTagItem *item)
     return elem;
 }
 
-void CPrjXml::parsePrjNode(CManager *manager, QDomNode node)
+void PrjXml::parsePrjNode(CManager *manager, QDomNode node)
 {
     while (!node.isNull())
     {
@@ -203,7 +203,7 @@ void CPrjXml::parsePrjNode(CManager *manager, QDomNode node)
     }
 }
 
-void CPrjXml::parseTagNode(CTagItem *parentTag, QDomNode node)
+void PrjXml::parseTagNode(CTagItem *parentTag, QDomNode node)
 {
     while (!node.isNull())
     {
@@ -216,7 +216,7 @@ void CPrjXml::parseTagNode(CTagItem *parentTag, QDomNode node)
     }
 }
 
-void CPrjXml::parseBookmarkNode(CManager *manager, QDomNode node)
+void PrjXml::parseBookmarkNode(CManager *manager, QDomNode node)
 {
     QDomElement elem = node.toElement();
     CBookmark bookmarkData = createBookmarkData(elem);
@@ -236,14 +236,14 @@ void CPrjXml::parseBookmarkNode(CManager *manager, QDomNode node)
     }
 }
 
-CTag CPrjXml::createTagData(QDomElement elem)
+CTag PrjXml::createTagData(QDomElement elem)
 {
     CTag tag;
     tag.setName(elem.attribute("name", "unknow"));
     return tag;
 }
 
-CBookmark CPrjXml::createBookmarkData(QDomElement elem)
+CBookmark PrjXml::createBookmarkData(QDomElement elem)
 {
     CBookmark bookmark;
     bookmark.setTitle(elem.attribute("title", "untitled"));
@@ -267,7 +267,7 @@ CBookmark CPrjXml::createBookmarkData(QDomElement elem)
     return bookmark;
 }
 
-QStringList CPrjXml::createBookmarkTagPath(QDomNode node)
+QStringList PrjXml::createBookmarkTagPath(QDomNode node)
 {
     QStringList path;
     while (!node.isNull())

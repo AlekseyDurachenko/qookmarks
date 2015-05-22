@@ -12,20 +12,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cnavigationview.h"
-#include <QMessageBox>
-#include <QPushButton>
+#include "navigationview.h"
+#include "cbookmarkitem.h"
+#include "cbookmarkmgr.h"
 #include "cmanager.h"
+#include "prj.h"
 #include "ctagitem.h"
 #include "ctagmgr.h"
-#include "cbookmarkmgr.h"
-#include "cbookmarkitem.h"
 #include "singleton.h"
-#include "cprj.h"
+#include <QMessageBox>
+#include <QPushButton>
 #include <QDebug>
 
 
-CNavigationView::CNavigationView(QWidget *parent) :
+NavigationView::NavigationView(QWidget *parent) :
     QTreeView(parent)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -35,12 +35,12 @@ CNavigationView::CNavigationView(QWidget *parent) :
     setDropIndicatorShown(true);
 }
 
-CNavigationView::~CNavigationView()
+NavigationView::~NavigationView()
 {
 
 }
 
-void CNavigationView::navActMoveTags(const QList<QStringList> &tags,
+void NavigationView::actMoveTags(const QList<QStringList> &tags,
         const QStringList &parentTag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(parentTag);
@@ -58,7 +58,7 @@ void CNavigationView::navActMoveTags(const QList<QStringList> &tags,
     }
 }
 
-void CNavigationView::navActSetTag(const QList<QUrl> &bookmarks,
+void NavigationView::actSetTag(const QList<QUrl> &bookmarks,
         const QStringList &tag)
 {
     CTagItem *parentItem = GTagMgr()->findByPath(tag);
@@ -94,7 +94,7 @@ void CNavigationView::navActSetTag(const QList<QUrl> &bookmarks,
     }
 }
 
-void CNavigationView::navActFavorite(const QList<QUrl> &bookmarks)
+void NavigationView::actFavorite(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
@@ -105,7 +105,7 @@ void CNavigationView::navActFavorite(const QList<QUrl> &bookmarks)
     }
 }
 
-void CNavigationView::navActReadItLater(const QList<QUrl> &bookmarks)
+void NavigationView::actReadItLater(const QList<QUrl> &bookmarks)
 {
     foreach (const QUrl &url, bookmarks)
     {
@@ -116,7 +116,7 @@ void CNavigationView::navActReadItLater(const QList<QUrl> &bookmarks)
     }
 }
 
-void CNavigationView::navActTrash(const QList<QUrl> &bookmarks)
+void NavigationView::actTrash(const QList<QUrl> &bookmarks)
 {
     if (QMessageBox::question(this, tr("Move to trash"), tr("Are you shure?"),
             QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)
@@ -131,7 +131,7 @@ void CNavigationView::navActTrash(const QList<QUrl> &bookmarks)
     }
 }
 
-void CNavigationView::navActClearTags(const QList<QUrl> &bookmarks)
+void NavigationView::actClearTags(const QList<QUrl> &bookmarks)
 {
     if (QMessageBox::question(this, tr("Clear tags"), tr("Are you shure?"),
             QMessageBox::Yes|QMessageBox::Cancel) == QMessageBox::Yes)

@@ -12,30 +12,30 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cprj.h"
-#include <QFileInfo>
-#include <QDir>
+#include "prj.h"
+#include "bookmarkimportchromium.h"
+#include "cbookmarkitem.h"
+#include "cbookmarkmgr.h"
 #include "ciconmgr.h"
 #include "cmanager.h"
-#include "ctagmgr.h"
+#include "prjxml.h"
 #include "ctagitem.h"
-#include "cbookmarkmgr.h"
-#include "cbookmarkitem.h"
-#include "cprjxml.h"
-#include "bookmarkimportchromium.h"
+#include "ctagmgr.h"
 #include "icontheme.h"
+#include <QDir>
+#include <QFileInfo>
 
 
-CPrj::CPrj(QObject *parent) : QObject(parent)
+Prj::Prj(QObject *parent) : QObject(parent)
 {
-    m_actionCreate = new QAction(tr("New Bookmark Collection..."), this);
-    m_actionCreate->setIcon(IconTheme::icon("action-collection-create"));
-    m_actionOpen = new QAction(tr("Open Bookmark Collection..."), this);
-    m_actionOpen->setIcon(IconTheme::icon("action-collection-open"));
-    m_actionSave = new QAction(tr("Save Bookmark Collection"), this);
-    m_actionSave->setIcon(IconTheme::icon("action-collection-save"));
-    m_actionClose = new QAction(tr("Close Bookmark Collection..."), this);
-    m_actionClose->setIcon(IconTheme::icon("action-collection-close"));
+    m_createAction = new QAction(tr("New Bookmark Collection..."), this);
+    m_createAction->setIcon(IconTheme::icon("action-collection-create"));
+    m_openAction = new QAction(tr("Open Bookmark Collection..."), this);
+    m_openAction->setIcon(IconTheme::icon("action-collection-open"));
+    m_saveAction = new QAction(tr("Save Bookmark Collection"), this);
+    m_saveAction->setIcon(IconTheme::icon("action-collection-save"));
+    m_closeAction = new QAction(tr("Close Bookmark Collection..."), this);
+    m_closeAction->setIcon(IconTheme::icon("action-collection-close"));
 
     m_manager = new CManager(this);
     m_iconMgr = new CIconMgr();
@@ -61,12 +61,12 @@ CPrj::CPrj(QObject *parent) : QObject(parent)
     updateActions();
 }
 
-CPrj::~CPrj()
+Prj::~Prj()
 {
     delete m_iconMgr;
 }
 
-bool CPrj::create(const QString &path, QString *reason)
+bool Prj::create(const QString &path, QString *reason)
 {
     try
     {
@@ -90,7 +90,7 @@ bool CPrj::create(const QString &path, QString *reason)
             throw file.errorString();
 
         // write empty xml document
-        return CPrjXml::saveEmptyXml(&file, reason);
+        return PrjXml::saveEmptyXml(&file, reason);
     }
     catch (const QString &error)
     {
@@ -100,7 +100,7 @@ bool CPrj::create(const QString &path, QString *reason)
     return false;
 }
 
-bool CPrj::open(const QString &path, QString *reason)
+bool Prj::open(const QString &path, QString *reason)
 {
     try
     {
@@ -112,7 +112,7 @@ bool CPrj::open(const QString &path, QString *reason)
             throw file.errorString();
 
         blockSignals(true);
-        bool state = CPrjXml::loadXml(m_manager, &file, reason);
+        bool state = PrjXml::loadXml(m_manager, &file, reason);
         blockSignals(false);
         if (!state)
             return false;
@@ -139,7 +139,7 @@ bool CPrj::open(const QString &path, QString *reason)
     return false;
 }
 
-bool CPrj::save(QString *reason)
+bool Prj::save(QString *reason)
 {
     try
     {
@@ -150,7 +150,7 @@ bool CPrj::save(QString *reason)
         if (!file.open(QIODevice::WriteOnly))
             throw file.errorString();
 
-        bool state = CPrjXml::saveXml(m_manager, &file, reason);
+        bool state = PrjXml::saveXml(m_manager, &file, reason);
         if (state)
             m_hasChanges = false;
         updateActions();
@@ -165,7 +165,7 @@ bool CPrj::save(QString *reason)
     return false;
 }
 
-void CPrj::close()
+void Prj::close()
 {
     blockSignals(true);
     m_manager->bookmarkMgr()->removeAll();
@@ -181,35 +181,35 @@ void CPrj::close()
     emit closed();
 }
 
-QString CPrj::xmlPath(const QString &path)
+QString Prj::xmlPath(const QString &path)
 {
     return path + QDir::separator() + "qookmarks.xml";
 }
 
-QString CPrj::iconPath(const QString &path)
+QString Prj::iconPath(const QString &path)
 {
     return path + QDir::separator() + "icons";
 }
 
-QString CPrj::screenshotPath(const QString &path)
+QString Prj::screenshotPath(const QString &path)
 {
     return path + QDir::separator() + "screenshots";
 }
 
-QString CPrj::downloadsPath(const QString &path)
+QString Prj::downloadsPath(const QString &path)
 {
     return path + QDir::separator() + "downloads";
 }
 
-void CPrj::somethingChanged()
+void Prj::somethingChanged()
 {
     m_hasChanges = true;
     updateActions();
 }
 
-void CPrj::updateActions()
+void Prj::updateActions()
 {
     // TODO: realize the correct updates
-    m_actionSave->setEnabled(hasChanges());
-    m_actionClose->setEnabled(isOpen());
+    m_saveAction->setEnabled(hasChanges());
+    m_closeAction->setEnabled(isOpen());
 }

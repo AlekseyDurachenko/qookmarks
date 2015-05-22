@@ -15,7 +15,7 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
-#include "cprj.h"
+#include "prj.h"
 #include "cmanager.h"
 #include "ctagmgr.h"
 #include "cbookmarkmgr.h"
@@ -30,24 +30,24 @@ inline Type *singleton()
     return x;
 }
 
-inline CPrj *GPrj()
+inline Prj *GPrj()
 {
-    return singleton<CPrj>();
+    return singleton<Prj>();
 }
 
 inline CTagMgr *GTagMgr()
 {
-    return singleton<CPrj>()->manager()->tagMgr();
+    return singleton<Prj>()->manager()->tagMgr();
 }
 
 inline CBookmarkMgr *GBookmarkMgr()
 {
-    return singleton<CPrj>()->manager()->bookmarkMgr();
+    return singleton<Prj>()->manager()->bookmarkMgr();
 }
 
 inline CIconMgr *GIconMgr()
 {
-    return singleton<CPrj>()->iconMgr();
+    return singleton<Prj>()->iconMgr();
 }
 
 inline CNetworkMgr *GNetworkMgr()

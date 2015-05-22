@@ -18,7 +18,7 @@
 #include <QObject>
 #include <QIcon>
 #include <QUrl>
-class CPrj;
+class Prj;
 
 
 class CIconMgr

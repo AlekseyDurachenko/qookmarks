@@ -12,27 +12,28 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkbooleanicondelegate.h"
+#include "bookmarkbooleanicondelegate.h"
 #include "cbookmarkitem.h"
 #include <QPainter>
 #include <QDebug>
 
-CBookmarkBooleanIconDelegate::CBookmarkBooleanIconDelegate(QObject *parent) :
+
+BookmarkBooleanIconDelegate::BookmarkBooleanIconDelegate(QObject *parent) :
     QItemDelegate(parent)
 {
 }
 
-void CBookmarkBooleanIconDelegate::setIconOn(const QIcon &icon)
+void BookmarkBooleanIconDelegate::setIconOn(const QIcon &icon)
 {
     m_iconOn = icon;
 }
 
-void CBookmarkBooleanIconDelegate::setIconOff(const QIcon &icon)
+void BookmarkBooleanIconDelegate::setIconOff(const QIcon &icon)
 {
     m_iconOff = icon;
 }
 
-void CBookmarkBooleanIconDelegate::paint(QPainter *painter,
+void BookmarkBooleanIconDelegate::paint(QPainter *painter,
         const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     drawBackground(painter, option, index);
@@ -53,7 +54,7 @@ void CBookmarkBooleanIconDelegate::paint(QPainter *painter,
     }
 }
 
-QSize CBookmarkBooleanIconDelegate::sizeHint(const QStyleOptionViewItem &option,
+QSize BookmarkBooleanIconDelegate::sizeHint(const QStyleOptionViewItem &option,
         const QModelIndex &index) const
 {
     QSize size = QItemDelegate::sizeHint(option, index);

@@ -12,21 +12,21 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CPRJ_H
-#define CPRJ_H
+#ifndef PRJ_H
+#define PRJ_H
 
 #include <QObject>
 #include <QAction>
-class CManager;
 class CIconMgr;
+class CManager;
 
 
-class CPrj : public QObject
+class Prj : public QObject
 {
     Q_OBJECT
 public:
-    explicit CPrj(QObject *parent = 0);
-    virtual ~CPrj();
+    explicit Prj(QObject *parent = 0);
+    virtual ~Prj();
 
     inline CManager *manager() const;
     inline CIconMgr *iconMgr() const;
@@ -45,10 +45,10 @@ public:
     inline QString screenshotPath() const;
     inline QString downloadsPath() const;
 
-    inline QAction *actionCreate() const;
-    inline QAction *actionOpen() const;
-    inline QAction *actionSave() const;
-    inline QAction *actionClose() const;
+    inline QAction *createAction() const;
+    inline QAction *openAction() const;
+    inline QAction *saveAction() const;
+    inline QAction *closeAction() const;
 public:
     static QString xmlPath(const QString &path);
     static QString iconPath(const QString &path);
@@ -64,78 +64,78 @@ private:
 private:
     CManager *m_manager;
     CIconMgr *m_iconMgr;
-    QAction *m_actionCreate;
-    QAction *m_actionOpen;
-    QAction *m_actionSave;
-    QAction *m_actionClose;
+    QAction *m_createAction;
+    QAction *m_openAction;
+    QAction *m_saveAction;
+    QAction *m_closeAction;
     QString m_path;
     bool m_hasChanges;
 };
 
-CManager *CPrj::manager() const
+CManager *Prj::manager() const
 {
     return m_manager;
 }
 
-CIconMgr *CPrj::iconMgr() const
+CIconMgr *Prj::iconMgr() const
 {
     return m_iconMgr;
 }
 
-bool CPrj::isOpen() const
+bool Prj::isOpen() const
 {
     return (!m_path.isEmpty());
 }
 
-bool CPrj::hasChanges() const
+bool Prj::hasChanges() const
 {
     return m_hasChanges;
 }
 
-QString CPrj::path() const
+QString Prj::path() const
 {
     return m_path;
 }
 
-QString CPrj::xmlPath() const
+QString Prj::xmlPath() const
 {
     return xmlPath(m_path);
 }
 
-QString CPrj::iconPath() const
+QString Prj::iconPath() const
 {
     return iconPath(m_path);
 }
 
-QString CPrj::screenshotPath() const
+QString Prj::screenshotPath() const
 {
     return screenshotPath(m_path);
 }
 
-QString CPrj::downloadsPath() const
+QString Prj::downloadsPath() const
 {
     return downloadsPath(m_path);
 }
 
-QAction *CPrj::actionCreate() const
+QAction *Prj::createAction() const
 {
-    return m_actionCreate;
+    return m_createAction;
 }
 
-QAction *CPrj::actionOpen() const
+QAction *Prj::openAction() const
 {
-    return m_actionOpen;
+    return m_openAction;
 }
 
-QAction *CPrj::actionSave() const
+QAction *Prj::saveAction() const
 {
-    return m_actionSave;
+    return m_saveAction;
 }
 
-QAction *CPrj::actionClose() const
+QAction *Prj::closeAction() const
 {
-    return m_actionClose;
+    return m_closeAction;
 }
 
 
-#endif // CPRJ_H
+#endif // PRJ_H

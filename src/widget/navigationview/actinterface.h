@@ -12,21 +12,25 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cnavtagview.h"
-#include <QDragMoveEvent>
+#ifndef ACTINTERFACE_H
+#define ACTINTERFACE_H
+
+#include <QUrl>
+#include <QList>
+#include <QStringList>
 
 
-CNavTagView::CNavTagView(QWidget *parent) : QTreeView(parent)
+class ActInterface
 {
-}
+public:
+    virtual void actMoveTags(const QList<QStringList> &tags, const QStringList &parentTag) = 0;
+    virtual void actSetTag(const QList<QUrl> &bookmarks, const QStringList &tag) = 0;
+    virtual void actAddTag(const QList<QUrl> &bookmarks, const QStringList &tag) = 0;
+    virtual void actClearTags(const QList<QUrl> &bookmarks) = 0;
+    virtual void actFavorite(const QList<QUrl> &bookmarks) = 0;
+    virtual void actReadItLater(const QList<QUrl> &bookmarks) = 0;
+    virtual void actTrash(const QList<QUrl> &bookmarks) = 0;
+};
 
-void CNavTagView::dropEvent(QDropEvent *event)
-{
-    // HACK: it can be incorrect usage of the dragAction modification
-    if (event->keyboardModifiers() & Qt::ControlModifier)
-        event->setDropAction(Qt::CopyAction);
-    else
-        event->setDropAction(Qt::MoveAction);
 
-    QTreeView::dropEvent(event);
-}
+#endif // ACTINTERFACE_H

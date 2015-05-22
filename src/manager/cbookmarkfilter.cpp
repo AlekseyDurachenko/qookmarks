@@ -18,7 +18,7 @@
 #include "cbookmarkmgr.h"
 #include "ctagitem.h"
 #include "cbookmarkitem.h"
-#include "cprj.h"
+#include "prj.h"
 #include "singleton.h"
 #include <QDebug>
 

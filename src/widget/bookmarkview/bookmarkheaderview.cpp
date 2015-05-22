@@ -12,15 +12,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkheaderview.h"
+#include "bookmarkheaderview.h"
 
 
-CBookmarkHeaderView::CBookmarkHeaderView(Qt::Orientation orientation,
+BookmarkHeaderView::BookmarkHeaderView(Qt::Orientation orientation,
         QWidget *parent) : QHeaderView(orientation, parent)
 {
 }
 
-QSize CBookmarkHeaderView::sectionSizeFromContents(int logicalIndex) const
+QSize BookmarkHeaderView::sectionSizeFromContents(int logicalIndex) const
 {
     QSize size = QHeaderView::sectionSizeFromContents(logicalIndex);
 

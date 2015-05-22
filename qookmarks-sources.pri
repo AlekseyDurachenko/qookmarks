@@ -31,16 +31,10 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/ctagmgr.h                                         \
     $$PWD/src/consts.h                                                  \
     $$PWD/src/version.h                                                 \
-    $$PWD/src/widget/navigationview/inavigationactions.h \
-    $$PWD/src/widget/navigationview/cnavigationview.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkview.h \
-    $$PWD/src/project/cprj.h \
-    $$PWD/src/project/cprjxml.h \
     $$PWD/src/settings.h \
     $$PWD/src/network/cwebfiledownloader.h \
     $$PWD/src/network/cwebpagedownloader.h \
     $$PWD/src/network/cwebpagescreenshot.h \
-    $$PWD/src/common/cindexlist.h \
     $$PWD/src/network/cabstractdownloadreply.h \
     $$PWD/src/network/cabstractdownloadrequest.h \
     $$PWD/src/network/cdownloadtobytearrayrequest.h \
@@ -59,23 +53,29 @@ HEADERS        +=                                                       \
     $$PWD/src/manager/ccheckedtagitemmodel.h \
     $$PWD/src/network/cdownloadwebpageinforeply.h \
     $$PWD/src/network/cdownloadwebpageinforequest.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkheaderview.h \
-    $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.h \
     $$PWD/src/manager/cabstractbookmarkdatamodel.h \
     $$PWD/src/manager/ctagitemmodel.h \
-    $$PWD/src/widget/navigationview/cnavanchoritemmodel.h \
     $$PWD/src/manager/ctagsortfilterproxymodel.h \
-    $$PWD/src/widget/navigationview/cnavtagitemmodel.h \
-    $$PWD/src/widget/navigationview/cnavtagview.h \
     $$PWD/src/browser/browser.h \
     $$PWD/src/icontheme/icontheme.h \
-    $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.h \
     $$PWD/src/mainwindow.h \
     $$PWD/src/widget/aboutdialog/aboutdialog.h \
     $$PWD/src/widget/bookmarkeditdialog/bookmarkeditdialog.h \
-    $$PWD/src/widget/tageditdialog/tageditdialog.h
+    $$PWD/src/widget/tageditdialog/tageditdialog.h \
+    $$PWD/src/widget/bookmarkview/bookmarkbooleanicondelegate.h \
+    $$PWD/src/widget/bookmarkview/bookmarkheaderview.h \
+    $$PWD/src/widget/bookmarkview/bookmarkitemmodel.h \
+    $$PWD/src/widget/bookmarkview/bookmarkratingdelegate.h \
+    $$PWD/src/widget/bookmarkview/bookmarkview.h \
+    $$PWD/src/widget/navigationview/navanchoritemmodel.h \
+    $$PWD/src/widget/navigationview/navigationview.h \
+    $$PWD/src/widget/navigationview/navtagitemmodel.h \
+    $$PWD/src/widget/navigationview/navtagview.h \
+    $$PWD/src/bookmarkimportwizard/bookmarkimportwizard.h \
+    $$PWD/src/common/indexlist.h \
+    $$PWD/src/project/prj.h \
+    $$PWD/src/project/prjxml.h \
+    $$PWD/src/widget/navigationview/actinterface.h
 
 
 SOURCES        +=                                                       \
@@ -91,14 +91,9 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/ctagitem.cpp                                      \
     $$PWD/src/manager/ctagmgr.cpp                                       \
     $$PWD/src/version.cpp                                               \
-    $$PWD/src/widget/navigationview/cnavigationview.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkview.cpp \
-    $$PWD/src/project/cprj.cpp \
-    $$PWD/src/project/cprjxml.cpp \
     $$PWD/src/network/cwebfiledownloader.cpp \
     $$PWD/src/network/cwebpagedownloader.cpp \
     $$PWD/src/network/cwebpagescreenshot.cpp \
-    $$PWD/src/common/cindexlist.cpp \
     $$PWD/src/network/cabstractdownloadreply.cpp \
     $$PWD/src/network/cabstractdownloadrequest.cpp \
     $$PWD/src/network/cdownloadtobytearrayrequest.cpp \
@@ -116,23 +111,28 @@ SOURCES        +=                                                       \
     $$PWD/src/manager/ccheckedtagitemmodel.cpp \
     $$PWD/src/network/cdownloadwebpageinforeply.cpp \
     $$PWD/src/network/cdownloadwebpageinforequest.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkbooleanicondelegate.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkratingdelegate.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkheaderview.cpp \
-    $$PWD/src/widget/bookmarkview/cbookmarkitemmodel.cpp \
     $$PWD/src/manager/cabstractbookmarkdatamodel.cpp \
     $$PWD/src/manager/ctagitemmodel.cpp \
-    $$PWD/src/widget/navigationview/cnavanchoritemmodel.cpp \
     $$PWD/src/manager/ctagsortfilterproxymodel.cpp \
-    $$PWD/src/widget/navigationview/cnavtagitemmodel.cpp \
-    $$PWD/src/widget/navigationview/cnavtagview.cpp \
     $$PWD/src/browser/browser.cpp \
     $$PWD/src/icontheme/icontheme.cpp \
-    $$PWD/src/bookmarkimportwizard/cbookmarkimportwizard.cpp \
     $$PWD/src/mainwindow.cpp \
     $$PWD/src/widget/aboutdialog/aboutdialog.cpp \
     $$PWD/src/widget/bookmarkeditdialog/bookmarkeditdialog.cpp \
-    $$PWD/src/widget/tageditdialog/tageditdialog.cpp
+    $$PWD/src/widget/tageditdialog/tageditdialog.cpp \
+    $$PWD/src/widget/bookmarkview/bookmarkbooleanicondelegate.cpp \
+    $$PWD/src/widget/bookmarkview/bookmarkheaderview.cpp \
+    $$PWD/src/widget/bookmarkview/bookmarkitemmodel.cpp \
+    $$PWD/src/widget/bookmarkview/bookmarkratingdelegate.cpp \
+    $$PWD/src/widget/bookmarkview/bookmarkview.cpp \
+    $$PWD/src/widget/navigationview/navanchoritemmodel.cpp \
+    $$PWD/src/widget/navigationview/navtagview.cpp \
+    $$PWD/src/widget/navigationview/navtagitemmodel.cpp \
+    $$PWD/src/widget/navigationview/navigationview.cpp \
+    $$PWD/src/bookmarkimportwizard/bookmarkimportwizard.cpp \
+    $$PWD/src/common/indexlist.cpp \
+    $$PWD/src/project/prj.cpp \
+    $$PWD/src/project/prjxml.cpp
 
 
 FORMS          +=                                                       \

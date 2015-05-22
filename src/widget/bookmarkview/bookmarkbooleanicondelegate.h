@@ -12,17 +12,17 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKBOOLEANICONDELEGATE_H
-#define CBOOKMARKBOOLEANICONDELEGATE_H
+#ifndef BOOKMARKBOOLEANICONDELEGATE_H
+#define BOOKMARKBOOLEANICONDELEGATE_H
 
 #include <QItemDelegate>
 
 
-class CBookmarkBooleanIconDelegate : public QItemDelegate
+class BookmarkBooleanIconDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    explicit CBookmarkBooleanIconDelegate(QObject *parent = 0);
+    explicit BookmarkBooleanIconDelegate(QObject *parent = 0);
 
     inline const QIcon &iconOn() const;
     void setIconOn(const QIcon &icon);
@@ -39,15 +39,15 @@ private:
     QIcon m_iconOff;
 };
 
-const QIcon &CBookmarkBooleanIconDelegate::iconOn() const
+const QIcon &BookmarkBooleanIconDelegate::iconOn() const
 {
     return m_iconOn;
 }
 
-const QIcon &CBookmarkBooleanIconDelegate::iconOff() const
+const QIcon &BookmarkBooleanIconDelegate::iconOff() const
 {
     return m_iconOff;
 }
 
 
-#endif // CBOOKMARKBOOLEANICONDELEGATE_H
+#endif // BOOKMARKBOOLEANICONDELEGATE_H

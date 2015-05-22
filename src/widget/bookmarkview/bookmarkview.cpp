@@ -12,20 +12,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "cbookmarkview.h"
-#include <QHeaderView>
-#include <QSortFilterProxyModel>
-#include <QDragMoveEvent>
-#include "cbookmarkbooleanicondelegate.h"
-#include "cbookmarkratingdelegate.h"
-#include "cbookmarkheaderview.h"
-#include "cbookmarkitemmodel.h"
+#include "bookmarkview.h"
+#include "bookmarkbooleanicondelegate.h"
+#include "bookmarkheaderview.h"
+#include "bookmarkitemmodel.h"
+#include "bookmarkratingdelegate.h"
 #include "cbookmarkitem.h"
 #include "icontheme.h"
+#include <QDragMoveEvent>
+#include <QHeaderView>
+#include <QSortFilterProxyModel>
 #include <QDebug>
 
 
-CBookmarkView::CBookmarkView(QWidget *parent) :
+BookmarkView::BookmarkView(QWidget *parent) :
     QTreeView(parent)
 {
     setSortingEnabled(true);
@@ -45,7 +45,7 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
     setModel(m_sortFilterProxyModel);
 
     // header view
-    setHeader(new CBookmarkHeaderView(Qt::Horizontal, this));
+    setHeader(new BookmarkHeaderView(Qt::Horizontal, this));
     // some hack for width (default width is too wide for icon)
     header()->setMinimumSectionSize(10);
 #if QT_VERSION >= 0x050000
@@ -55,28 +55,28 @@ CBookmarkView::CBookmarkView(QWidget *parent) :
 #endif
 
     // rating
-    setItemDelegateForColumn(4, new CBookmarkRatingDelegate(this));
+    setItemDelegateForColumn(4, new BookmarkRatingDelegate(this));
 
     // favorite
-    CBookmarkBooleanIconDelegate *favoriteItemDelegate = new CBookmarkBooleanIconDelegate(this);
+    BookmarkBooleanIconDelegate *favoriteItemDelegate = new BookmarkBooleanIconDelegate(this);
     favoriteItemDelegate->setIconOn(IconTheme::icon("anchor-bookmark-favorite"));
     favoriteItemDelegate->setIconOff(IconTheme::icon("anchor-bookmark-favorite-disabled"));
     setItemDelegateForColumn(5, favoriteItemDelegate);
 
     // read it later
-    CBookmarkBooleanIconDelegate *readItLaterItemDelegate = new CBookmarkBooleanIconDelegate(this);
+    BookmarkBooleanIconDelegate *readItLaterItemDelegate = new BookmarkBooleanIconDelegate(this);
     readItLaterItemDelegate->setIconOn(IconTheme::icon("anchor-bookmark-readitlater"));
     readItLaterItemDelegate->setIconOff(IconTheme::icon("anchor-bookmark-readitlater-disabled"));
     setItemDelegateForColumn(6, readItLaterItemDelegate);
 
     // trash
-    CBookmarkBooleanIconDelegate *trashItemDelegate = new CBookmarkBooleanIconDelegate(this);
+    BookmarkBooleanIconDelegate *trashItemDelegate = new BookmarkBooleanIconDelegate(this);
     trashItemDelegate->setIconOn(IconTheme::icon("anchor-bookmark-trash"));
     trashItemDelegate->setIconOff(IconTheme::icon("anchor-bookmark-trash-disabled"));
     setItemDelegateForColumn(7, trashItemDelegate);
 }
 
-void CBookmarkView::setBookmarkModel(CBookmarkItemModel *model)
+void BookmarkView::setBookmarkModel(BookmarkItemModel *model)
 {
     m_bookmarkItemModel = model;
     m_sortFilterProxyModel->setSourceModel(model);
@@ -94,7 +94,7 @@ void CBookmarkView::setBookmarkModel(CBookmarkItemModel *model)
 #endif
 }
 
-QList<CBookmarkItem *> CBookmarkView::selectedBookmarks() const
+QList<CBookmarkItem *> BookmarkView::selectedBookmarks() const
 {
     QList<CBookmarkItem *> bookmarks;
     foreach (const QModelIndex &index, selectionModel()->selectedRows())
@@ -103,7 +103,7 @@ QList<CBookmarkItem *> CBookmarkView::selectedBookmarks() const
     return bookmarks;
 }
 
-QList<QUrl> CBookmarkView::selectedUrls() const
+QList<QUrl> BookmarkView::selectedUrls() const
 {
     QList<QUrl> urls;
     foreach (const QModelIndex &index, selectionModel()->selectedRows())
@@ -112,12 +112,12 @@ QList<QUrl> CBookmarkView::selectedUrls() const
     return urls;
 }
 
-void CBookmarkView::setFilterFixedString(const QString &filter)
+void BookmarkView::setFilterFixedString(const QString &filter)
 {
     m_sortFilterProxyModel->setFilterFixedString(filter);
 }
 
-void CBookmarkView::setModel(QAbstractItemModel *model)
+void BookmarkView::setModel(QAbstractItemModel *model)
 {
     QTreeView::setModel(model);
 }

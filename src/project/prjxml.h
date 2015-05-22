@@ -12,13 +12,13 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CPRJXML_H
-#define CPRJXML_H
+#ifndef PRJXML_H
+#define PRJXML_H
 
+#include "cbookmark.h"
+#include "ctag.h"
 #include <QDomDocument>
 #include <QDomElement>
-#include "ctag.h"
-#include "cbookmark.h"
 class QString;
 class QIODevice;
 class CManager;
@@ -27,7 +27,7 @@ class CBookmarkItem;
 class CTagItem;
 
 
-class CPrjXml
+class PrjXml
 {
 public:
     static bool saveEmptyXml(QIODevice *output, QString *reason = 0);
@@ -47,4 +47,4 @@ private:
 };
 
 
-#endif // CPRJXML_H
+#endif // PRJXML_H

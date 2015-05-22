@@ -15,9 +15,9 @@
 #ifndef BROWSER_H
 #define BROWSER_H
 
-#include <QUrl>
 #include <QHash>
 #include <QIcon>
+#include <QUrl>
 
 
 class Browser

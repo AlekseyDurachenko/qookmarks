@@ -12,26 +12,26 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef CBOOKMARKEDITDIALOG_H
-#define CBOOKMARKEDITDIALOG_H
+#ifndef BOOKMARKEDITDIALOG_H
+#define BOOKMARKEDITDIALOG_H
 
-#include <QDialog>
 #include "cbookmarkitem.h"
 #include "singleton.h"
+#include <QDialog>
 class CTagSortFilterProxyModel;
 class CCheckedTagItemModel;
 
 
 namespace Ui {
-class CBookmarkEditDialog;
+class BookmarkEditDialog;
 }
 
-class CBookmarkEditDialog : public QDialog
+class BookmarkEditDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CBookmarkEditDialog(QWidget *parent = 0);
-    virtual ~CBookmarkEditDialog();
+    explicit BookmarkEditDialog(QWidget *parent = 0);
+    virtual ~BookmarkEditDialog();
 
     CBookmark toData() const;
     void setData(const CBookmark &toData);
@@ -45,28 +45,28 @@ public:
     bool isAddToDownloadQueue() const;
     void setAddToDownloadQueue(bool state);
 private slots:
-    void on_toolButton_favicon_clicked();
+    void on_favicon_toolButton_clicked();
     void faviconReply_finished();
 
-    void on_toolButton_httpCheck_clicked();
+    void on_httpCheck_toolButton_clicked();
     void httpCheckReply_finished();
 
-    void on_toolButton_pageinfo_clicked();
+    void on_pageinfo_toolButton_clicked();
     void pageinfoReply_finished();
 
-    void on_lineEdit_url_textChanged(const QString &text);
-    void on_toolButton_showExtendedOptions_toggled(bool checked);
-    void on_lineEdit_tagFind_textChanged(const QString &text);
+    void on_url_lineEdit_textChanged(const QString &text);
+    void on_showExtendedOptions_toolButton_toggled(bool checked);
+    void on_tagFind_lineEdit_textChanged(const QString &text);
 
-    void on_toolButton_loadFromFile_clicked();
-    void on_toolButton_saveToFile_clicked();
-    void on_toolButton_clear_clicked();
-    void on_toolButton_textWrap_toggled(bool checked);
+    void on_loadFromFile_toolButton_clicked();
+    void on_saveToFile_toolButton_clicked();
+    void on_clear_toolButton_clicked();
+    void on_textWrap_toolButton_toggled(bool checked);
 private:
     void readSettings();
     void writeSettings();
 private:
-    Ui::CBookmarkEditDialog *ui;
+    Ui::BookmarkEditDialog *ui;
     CCheckedTagItemModel *m_checkedTagItemModel;
     CTagSortFilterProxyModel *m_tagSortFilterProxyModel;
 
@@ -78,4 +78,4 @@ private:
 };
 
 
-#endif // CBOOKMARKEDITDIALOG_H
+#endif // BOOKMARKEDITDIALOG_H

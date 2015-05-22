@@ -29,7 +29,7 @@
 #include <QToolBar>
 #include <QToolButton>
 #include "aboutdialog.h"
-#include "cbookmarkeditdialog.h"
+#include "bookmarkeditdialog.h"
 #include "cbookmarkfilterdatamodel.h"
 #include "cbookmarkfilter.h"
 #include "cbookmarkheaderview.h"
@@ -598,7 +598,7 @@ void MainWindow::ratingAction_triggered()
 
 void MainWindow::bookmarkAddAction_triggered()
 {
-    CBookmarkEditDialog newBookmarkDialog(this);
+    BookmarkEditDialog newBookmarkDialog(this);
     newBookmarkDialog.setWindowTitle(tr("Create bookmark"));
     newBookmarkDialog.setCheckedTags(m_bookmarkFilter->tags());
     if (QUrl(QApplication::clipboard()->text()).isValid())
@@ -636,7 +636,7 @@ void MainWindow::bookmarkEditAction_triggered()
 {
     CBookmarkItem *bookmarkItem = m_bookmarkView->selectedBookmarks().first();
 
-    CBookmarkEditDialog editBookmarkDialog(this);
+    BookmarkEditDialog editBookmarkDialog(this);
     editBookmarkDialog.setWindowTitle(tr("Edit bookmark"));
     editBookmarkDialog.setData(bookmarkItem->data());
     editBookmarkDialog.setFavicon(GIconMgr()->icon(bookmarkItem->data().url()));

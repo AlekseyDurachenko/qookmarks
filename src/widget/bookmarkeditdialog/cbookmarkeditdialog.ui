@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CBookmarkEditDialog</class>
- <widget class="QDialog" name="CBookmarkEditDialog">
+ <class>BookmarkEditDialog</class>
+ <widget class="QDialog" name="BookmarkEditDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -25,34 +25,34 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab_general">
+     <widget class="QWidget" name="general_tab">
       <attribute name="title">
        <string>General</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QGridLayout" name="gridLayout_general">
+        <layout class="QGridLayout" name="general_gridLayout">
          <item row="5" column="0">
-          <widget class="QLabel" name="label_rating">
+          <widget class="QLabel" name="rating_label">
            <property name="text">
             <string>Rating</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_url">
+          <widget class="QLabel" name="url_label">
            <property name="text">
             <string>URL</string>
            </property>
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QLineEdit" name="lineEdit_keywords"/>
+          <widget class="QLineEdit" name="keywords_lineEdit"/>
          </item>
          <item row="9" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_httpCheck">
+          <layout class="QHBoxLayout" name="httpCheck_horizontalLayout">
            <item>
-            <widget class="QSpinBox" name="spinBox_httpStatusCode">
+            <widget class="QSpinBox" name="httpStatusCode_spinBox">
              <property name="minimum">
               <number>-999999</number>
              </property>
@@ -62,10 +62,10 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_httpReasonPhrase"/>
+            <widget class="QLineEdit" name="httpReasonPhrase_lineEdit"/>
            </item>
            <item>
-            <widget class="QDateTimeEdit" name="dateTimeEdit_httpCheck">
+            <widget class="QDateTimeEdit" name="httpCheck_dateTimeEdit">
              <property name="displayFormat">
               <string>yyyy-MM-dd HH:mm:ss</string>
              </property>
@@ -77,81 +77,81 @@
           </layout>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="lineEdit_url"/>
+          <widget class="QLineEdit" name="url_lineEdit"/>
          </item>
          <item row="0" column="2">
-          <widget class="QToolButton" name="toolButton_favicon">
+          <widget class="QToolButton" name="favicon_toolButton">
            <property name="toolTip">
             <string>Get a web site favicon</string>
            </property>
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QCheckBox" name="checkBox_favorite">
+          <widget class="QCheckBox" name="favorite_checkBox">
            <property name="text">
             <string>favorite</string>
            </property>
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QToolButton" name="toolButton_pageinfo">
+          <widget class="QToolButton" name="pageinfo_toolButton">
            <property name="toolTip">
             <string>Get a page information</string>
            </property>
           </widget>
          </item>
          <item row="7" column="1">
-          <widget class="QCheckBox" name="checkBox_readItLater">
+          <widget class="QCheckBox" name="readItLater_checkBox">
            <property name="text">
             <string>read it later</string>
            </property>
           </widget>
          </item>
          <item row="9" column="0">
-          <widget class="QLabel" name="label_httpStatusCode">
+          <widget class="QLabel" name="httpStatusCode_label">
            <property name="text">
             <string>Status</string>
            </property>
           </widget>
          </item>
          <item row="8" column="1">
-          <widget class="QCheckBox" name="checkBox_trash">
+          <widget class="QCheckBox" name="trash_checkBox">
            <property name="text">
             <string>trash</string>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QLineEdit" name="lineEdit_description"/>
+          <widget class="QLineEdit" name="description_lineEdit"/>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label_keywords">
+          <widget class="QLabel" name="keywords_label">
            <property name="text">
             <string>Keywords</string>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_title">
+          <widget class="QLabel" name="title_label">
            <property name="text">
             <string>Title</string>
            </property>
           </widget>
          </item>
          <item row="9" column="2">
-          <widget class="QToolButton" name="toolButton_httpCheck"/>
+          <widget class="QToolButton" name="httpCheck_toolButton"/>
          </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="label_description">
+          <widget class="QLabel" name="description_label">
            <property name="text">
             <string>Description</string>
            </property>
           </widget>
          </item>
          <item row="5" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_rating">
+          <layout class="QHBoxLayout" name="rating_horizontalLayout">
            <item>
-            <widget class="QSlider" name="horizontalSlider_rating">
+            <widget class="QSlider" name="rating_horizontalSlider">
              <property name="maximum">
               <number>10</number>
              </property>
@@ -164,7 +164,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBox_rating">
+            <widget class="QSpinBox" name="rating_spinBox">
              <property name="maximum">
               <number>10</number>
              </property>
@@ -173,12 +173,12 @@
           </layout>
          </item>
          <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_title"/>
+          <widget class="QLineEdit" name="title_lineEdit"/>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QToolButton" name="toolButton_showExtendedOptions">
+        <widget class="QToolButton" name="showExtendedOptions_toolButton">
          <property name="text">
           <string>show extended options</string>
          </property>
@@ -197,7 +197,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="widget_extendedOptions" native="true">
+        <widget class="QWidget" name="extendedOptions_widget" native="true">
          <layout class="QGridLayout" name="gridLayout">
           <property name="leftMargin">
            <number>0</number>
@@ -212,14 +212,14 @@
            <number>0</number>
           </property>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_metadata_lastVisited">
+           <widget class="QLabel" name="metadata_lastVisited_label">
             <property name="text">
              <string>Date of last visit</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QDateTimeEdit" name="dateTimeEdit_created">
+           <widget class="QDateTimeEdit" name="created_dateTimeEdit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -235,7 +235,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QDateTimeEdit" name="dateTimeEdit_lastVisited">
+           <widget class="QDateTimeEdit" name="lastVisited_dateTimeEdit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -251,21 +251,21 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_metadata_created">
+           <widget class="QLabel" name="metadata_created_label">
             <property name="text">
              <string>Date of creation</string>
             </property>
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QLabel" name="label_metadata_edited">
+           <widget class="QLabel" name="metadata_edited_label">
             <property name="text">
              <string>Latest editing</string>
             </property>
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="QDateTimeEdit" name="dateTimeEdit_edited">
+           <widget class="QDateTimeEdit" name="edited_dateTimeEdit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -281,14 +281,14 @@
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QLabel" name="label_metadata_visitCount">
+           <widget class="QLabel" name="metadata_visitCount_label">
             <property name="text">
              <string>Number of visits</string>
             </property>
            </widget>
           </item>
           <item row="2" column="3">
-           <widget class="QSpinBox" name="spinBox_visitCount">
+           <widget class="QSpinBox" name="visitCount_spinBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -304,26 +304,26 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_tagFind">
+        <widget class="QLineEdit" name="tagFind_lineEdit">
          <property name="placeholderText">
           <string>type search text here</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTreeView" name="treeView_checkedTags"/>
+        <widget class="QTreeView" name="checkedTags_treeView"/>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_notes">
+     <widget class="QWidget" name="notes_tab">
       <attribute name="title">
        <string>Notes</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_notesButtons">
+        <layout class="QHBoxLayout" name="notesButtons_horizontalLayout">
          <item>
-          <widget class="QToolButton" name="toolButton_loadFromFile">
+          <widget class="QToolButton" name="loadFromFile_toolButton">
            <property name="text">
             <string>Load from file...</string>
            </property>
@@ -333,7 +333,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_saveToFile">
+          <widget class="QToolButton" name="saveToFile_toolButton">
            <property name="text">
             <string>Save to file...</string>
            </property>
@@ -343,7 +343,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_clear">
+          <widget class="QToolButton" name="clear_toolButton">
            <property name="text">
             <string>Clear...</string>
            </property>
@@ -366,7 +366,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_textWrap">
+          <widget class="QToolButton" name="textWrap_toolButton">
            <property name="text">
             <string>Text wrap</string>
            </property>
@@ -381,7 +381,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit_notes">
+        <widget class="QPlainTextEdit" name="notes_plainTextEdit">
          <property name="lineWrapMode">
           <enum>QPlainTextEdit::NoWrap</enum>
          </property>
@@ -392,16 +392,16 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_bottom">
+    <layout class="QHBoxLayout" name="bottom_horizontalLayout">
      <item>
-      <widget class="QCheckBox" name="checkBox_addToDownloadQueue">
+      <widget class="QCheckBox" name="addToDownloadQueue_checkBox">
        <property name="text">
         <string>add this page to the download queue</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_bottom">
+      <spacer name="bottom_horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -429,33 +429,33 @@
  </widget>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>lineEdit_url</tabstop>
-  <tabstop>toolButton_favicon</tabstop>
-  <tabstop>lineEdit_title</tabstop>
-  <tabstop>toolButton_pageinfo</tabstop>
-  <tabstop>lineEdit_description</tabstop>
-  <tabstop>lineEdit_keywords</tabstop>
-  <tabstop>horizontalSlider_rating</tabstop>
-  <tabstop>spinBox_rating</tabstop>
-  <tabstop>checkBox_favorite</tabstop>
-  <tabstop>checkBox_readItLater</tabstop>
-  <tabstop>checkBox_trash</tabstop>
-  <tabstop>spinBox_httpStatusCode</tabstop>
-  <tabstop>lineEdit_httpReasonPhrase</tabstop>
-  <tabstop>dateTimeEdit_httpCheck</tabstop>
-  <tabstop>toolButton_httpCheck</tabstop>
-  <tabstop>toolButton_showExtendedOptions</tabstop>
-  <tabstop>dateTimeEdit_created</tabstop>
-  <tabstop>dateTimeEdit_edited</tabstop>
-  <tabstop>dateTimeEdit_lastVisited</tabstop>
-  <tabstop>spinBox_visitCount</tabstop>
-  <tabstop>treeView_checkedTags</tabstop>
-  <tabstop>toolButton_loadFromFile</tabstop>
-  <tabstop>toolButton_saveToFile</tabstop>
-  <tabstop>toolButton_clear</tabstop>
-  <tabstop>toolButton_textWrap</tabstop>
-  <tabstop>plainTextEdit_notes</tabstop>
-  <tabstop>checkBox_addToDownloadQueue</tabstop>
+  <tabstop>url_lineEdit</tabstop>
+  <tabstop>favicon_toolButton</tabstop>
+  <tabstop>title_lineEdit</tabstop>
+  <tabstop>pageinfo_toolButton</tabstop>
+  <tabstop>description_lineEdit</tabstop>
+  <tabstop>keywords_lineEdit</tabstop>
+  <tabstop>rating_horizontalSlider</tabstop>
+  <tabstop>rating_spinBox</tabstop>
+  <tabstop>favorite_checkBox</tabstop>
+  <tabstop>readItLater_checkBox</tabstop>
+  <tabstop>trash_checkBox</tabstop>
+  <tabstop>httpStatusCode_spinBox</tabstop>
+  <tabstop>httpReasonPhrase_lineEdit</tabstop>
+  <tabstop>httpCheck_dateTimeEdit</tabstop>
+  <tabstop>httpCheck_toolButton</tabstop>
+  <tabstop>showExtendedOptions_toolButton</tabstop>
+  <tabstop>created_dateTimeEdit</tabstop>
+  <tabstop>edited_dateTimeEdit</tabstop>
+  <tabstop>lastVisited_dateTimeEdit</tabstop>
+  <tabstop>visitCount_spinBox</tabstop>
+  <tabstop>checkedTags_treeView</tabstop>
+  <tabstop>loadFromFile_toolButton</tabstop>
+  <tabstop>saveToFile_toolButton</tabstop>
+  <tabstop>clear_toolButton</tabstop>
+  <tabstop>textWrap_toolButton</tabstop>
+  <tabstop>notes_plainTextEdit</tabstop>
+  <tabstop>addToDownloadQueue_checkBox</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
@@ -463,7 +463,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>CBookmarkEditDialog</receiver>
+   <receiver>BookmarkEditDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -479,7 +479,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>CBookmarkEditDialog</receiver>
+   <receiver>BookmarkEditDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -493,9 +493,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSlider_rating</sender>
+   <sender>rating_horizontalSlider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBox_rating</receiver>
+   <receiver>rating_spinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -509,9 +509,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBox_rating</sender>
+   <sender>rating_spinBox</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>horizontalSlider_rating</receiver>
+   <receiver>rating_horizontalSlider</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">

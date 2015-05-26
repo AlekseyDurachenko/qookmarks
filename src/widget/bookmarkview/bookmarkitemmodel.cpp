@@ -90,13 +90,25 @@ QVariant BookmarkItemModel::data(const QModelIndex &index, int role) const
         case 9:
             return QString(bookmark->data().httpReasonPhrase()).replace("\n", " ").replace("\r", " ");
         case 10:
-            return bookmark->data().httpCheckDateTime().toString(BookmarkDateTimeFormat);
+            if (!bookmark->data().httpCheckDateTime().isNull())
+                return bookmark->data().httpCheckDateTime().toString(BookmarkDateTimeFormat);
+            else
+                return tr("Never");
         case 11:
-            return bookmark->data().createdDateTime().toString(BookmarkDateTimeFormat);
+            if (!bookmark->data().createdDateTime().isNull())
+                return bookmark->data().createdDateTime().toString(BookmarkDateTimeFormat);
+            else
+                return tr("Never");
         case 12:
-            return bookmark->data().editedDateTime().toString(BookmarkDateTimeFormat);
+            if (!bookmark->data().editedDateTime().isNull())
+                return bookmark->data().editedDateTime().toString(BookmarkDateTimeFormat);
+            else
+                return tr("Never");
         case 13:
-            return bookmark->data().lastVisitedDateTime().toString(BookmarkDateTimeFormat);
+            if (!bookmark->data().lastVisitedDateTime().isNull())
+                return bookmark->data().lastVisitedDateTime().toString(BookmarkDateTimeFormat);
+            else
+                return tr("Never");
         case 14:
             return bookmark->data().visitCount();
         case 15:

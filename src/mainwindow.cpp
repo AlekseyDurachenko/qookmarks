@@ -700,7 +700,12 @@ void MainWindow::bookmarkRemoveAction_triggered()
             QMessageBox::Yes|QMessageBox::No) == QMessageBox::No)
         return;
 
-    foreach (const QUrl &url, m_bookmarkView->selectedUrls())
+    QList<QUrl> urls = m_bookmarkView->selectedUrls();
+
+    // HACK: for prevent the freeze
+    m_bookmarkView->selectionModel()->clear();
+
+    foreach (const QUrl &url, urls)
         GBookmarkMgr()->removeAt(GBookmarkMgr()->find(url)->index());
 }
 

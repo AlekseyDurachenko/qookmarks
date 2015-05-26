@@ -45,6 +45,7 @@
 #include <QStatusBar>
 #include <QToolBar>
 #include <QToolButton>
+#include <QDebug>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -328,7 +329,9 @@ void MainWindow::bookmarkView_header_showContextMenu(const QPoint &pos)
 
 void MainWindow::bookmarkView_doubleClicked(const QModelIndex &index)
 {
-    Browser::openUrl(BookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url());
+    const QUrl url = BookmarkItem::variantToPtr(index.data(Qt::UserRole))->data().url();
+    if (Browser::openUrl(url))
+        markUrlAsVisited(url);
 }
 
 void MainWindow::navAnchorView_showContextMenu(const QPoint &pos)
@@ -546,16 +549,25 @@ void MainWindow::quitAction_triggered()
 
 void MainWindow::bookmarkOpenUrlAction_triggered()
 {
-    Browser::openUrl(m_bookmarkView->selectedBookmarks().first()->data().url());
+    const QUrl url = m_bookmarkView->selectedBookmarks().first()->data().url();
+    if (Browser::openUrl(url))
+        markUrlAsVisited(url);
 }
 
 void MainWindow::bookmarkOpenUrlExtAction_triggered()
 {
     QAction *action = qobject_cast<QAction *>(sender());
-    if (Browser::openUrl(action->data().toMap().value("browser").toByteArray(),
-                         static_cast<Browser::WindowType>(action->data().toMap().value("windowType").toInt()),
-                         m_bookmarkView->selectedUrls()) == false)
+    if (!Browser::openUrl(action->data().toMap().value("browser").toByteArray(),
+                          static_cast<Browser::WindowType>(action->data().toMap().value("windowType").toInt()),
+                          m_bookmarkView->selectedUrls()))
+    {
         QMessageBox::warning(this, tr("Warning"), tr("Can't open the url(s)"));
+    }
+    else
+    {
+        foreach (const QUrl &url, m_bookmarkView->selectedUrls())
+            markUrlAsVisited(url);
+    }
 }
 
 void MainWindow::bookmarkSelectAllAction_triggered()
@@ -1577,6 +1589,18 @@ void MainWindow::updateBookmarkTagFilter()
     m_bookmarkFilter->setRatingRange(BookmarkMinRating, BookmarkMaxRating);
     m_bookmarkFilter->setTags(selectedTags);
     m_bookmarkFilter->update();
+}
+
+void MainWindow::markUrlAsVisited(const QUrl &url)
+{
+    BookmarkItem *item = GBookmarkMgr()->find(url);
+    if (item)
+    {
+        Bookmark bookmark = item->data();
+        bookmark.setLastVisitedDateTime(QDateTime::currentDateTime());
+        bookmark.setVisitCount(bookmark.visitCount() + 1);
+        item->setData(bookmark);
+    }
 }
 
 void MainWindow::readSettings()

@@ -147,6 +147,8 @@ private:
     void updateBookmarkFilter();
     void updateBookmarkAnchorFilter();
     void updateBookmarkTagFilter();
+
+    void markUrlAsVisited(const QUrl &url);
 private:
     void readSettings();
     void writeSettings();

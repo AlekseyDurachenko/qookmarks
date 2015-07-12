@@ -33,12 +33,10 @@ void IconTheme::init()
     m_icons.insert("rating-bookmark-star",                  QIcon(":/icons/rating-bookmark-star.png"));
     m_icons.insert("rating-bookmark-star-half-disabled",    QIcon(":/icons/rating-bookmark-star-half-disabled.png"));
     m_icons.insert("rating-bookmark-star-disabled",         QIcon(":/icons/rating-bookmark-star-disabled.png"));
-    m_icons.insert("favicon-default",   QIcon(":/icons/favicon-default.png"));
-    m_icons.insert("tag-icon-default",              QIcon(":/icons/tag-icon-default.png"));
-    m_icons.insert("action-note-erase",     QIcon(":/icons/action-note-erase.png"));
-    m_icons.insert("action-note-open",      QIcon(":/icons/action-note-open.png"));
-    m_icons.insert("action-note-save-as",   QIcon(":/icons/action-note-save-as.png"));
-    m_icons.insert("action-note-text-wrap", QIcon(":/icons/action-note-text-wrap.png"));
+    m_icons.insert("action-note-erase",             QIcon(":/icons/action-note-erase.png"));
+    m_icons.insert("action-note-open",              QIcon(":/icons/action-note-open.png"));
+    m_icons.insert("action-note-save-as",           QIcon(":/icons/action-note-save-as.png"));
+    m_icons.insert("action-note-text-wrap",         QIcon(":/icons/action-note-text-wrap.png"));
     m_icons.insert("action-about",                  QIcon(":/icons/action-about.png"));
     m_icons.insert("action-about-qt",               QIcon(":/icons/action-about-qt.png"));
     m_icons.insert("action-check-url",              QIcon(":/icons/action-check-url.png"));
@@ -55,15 +53,17 @@ void IconTheme::init()
     m_icons.insert("action-tag-add",                QIcon(":/icons/action-tag-add.png"));
     m_icons.insert("action-tag-edit",               QIcon(":/icons/action-tag-edit.png"));
     m_icons.insert("action-tag-remove",             QIcon(":/icons/action-tag-remove.png"));
-    m_icons.insert("action-collection-create",         QIcon(":/icons/action-collection-create.png"));
-    m_icons.insert("action-collection-save",           QIcon(":/icons/action-collection-save.png"));
-    m_icons.insert("action-collection-open",           QIcon(":/icons/action-collection-open.png"));
-    m_icons.insert("action-collection-close",          QIcon(":/icons/action-collection-close.png"));
-    m_icons.insert("action-collection-import",         QIcon(":/icons/action-collection-import.png"));
-    m_icons.insert("action-collection-export",         QIcon(":/icons/action-collection-export.png"));
-    m_icons.insert("browser-default",               QIcon(":/icons/browser-default.png"));
-    m_icons.insert("browser-chromium",              QIcon(":/icons/browser-chromium.png"));
-    m_icons.insert("browser-firefox",               QIcon(":/icons/browser-firefox.png"));
+    m_icons.insert("action-collection-create",      QIcon(":/icons/action-collection-create.png"));
+    m_icons.insert("action-collection-save",        QIcon(":/icons/action-collection-save.png"));
+    m_icons.insert("action-collection-open",        QIcon(":/icons/action-collection-open.png"));
+    m_icons.insert("action-collection-close",       QIcon(":/icons/action-collection-close.png"));
+    m_icons.insert("action-collection-import",      QIcon(":/icons/action-collection-import.png"));
+    m_icons.insert("action-collection-export",      QIcon(":/icons/action-collection-export.png"));
+    m_icons.insert("browser-default",   QIcon(":/icons/browser-default.png"));
+    m_icons.insert("browser-chromium",  QIcon(":/icons/browser-chromium.png"));
+    m_icons.insert("browser-firefox",   QIcon(":/icons/browser-firefox.png"));
+    m_icons.insert("favicon-default",   QIcon(":/icons/favicon-default.png"));
+    m_icons.insert("tag-icon-default",  QIcon(":/icons/tag-icon-default.png"));
 }
 
 const QIcon IconTheme::icon(const QByteArray &name, const QIcon &defaultIcon)
